@@ -4,16 +4,9 @@ export const obtenerProveedores = () => {
   return null;
 };
 
-export const loginSesion = (body) => {
-  return API.post("/usuario/login", body, {
-    validateStatus: function (status) {
-      return status < 500;
-    },
-  });
-};
 
 export const iniciaSesion = (body) => {
-  return API.post("/sesion/login", body, {
+  return API.post("/sesion/login?portalId=3", body, {
     validateStatus: function (status) {
       return status < 500;
     },
