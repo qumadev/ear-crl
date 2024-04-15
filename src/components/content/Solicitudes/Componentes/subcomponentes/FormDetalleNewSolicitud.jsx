@@ -8,7 +8,8 @@ import React, { useState } from 'react';
 function FormDetalleNewSolicitud({
     productDialog,
     setProductDialog,
-    proveedores
+    proveedores,
+    
 }) {
 
     const [proveedor, handleChangeProveedor] = useState(null);

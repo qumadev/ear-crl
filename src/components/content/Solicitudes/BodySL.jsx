@@ -13,6 +13,8 @@ export function BodySL({ responsiveSizeMobile }) {
   const [estados, setEstados] = useState([]);
   const [solicitudes, setSolicitudes] = useState([]);
   const { usuario, ruta } = useContext(AppContext);
+  console.log("pintando")
+  console.log(usuario)
 
   const navigate = useNavigate();
 
@@ -186,7 +188,7 @@ export function BodySL({ responsiveSizeMobile }) {
             onClick={() => {
               navigate(ruta + "/solicitudes/agregar");
             }}
-            disabled={(usuario.TipoUsuario != 1) & (usuario.TipoUsuario != 3)}
+            // disabled={(usuario.rol.id != 1)}
           />
           <Button
             label="Exportar"

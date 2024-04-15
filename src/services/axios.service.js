@@ -22,7 +22,19 @@ export const obtenInfoUser = (id) => {
 };
 
 export const obtenerEstados = (filtro) => {
-  return null;
+  return API.get(`/estado?filtro=${filtro}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const createSolicitud = (body) => {
+  return API.post("/solicitudEar",body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 
 export const obtenerEmpleados = () => {

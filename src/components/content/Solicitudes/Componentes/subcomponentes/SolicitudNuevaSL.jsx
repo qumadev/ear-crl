@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Direccion from './Direccion';
-import { obtenerProveedores, obtenerTipoDocs } from '../../../../../services/axios.service';
+import { createSolicitud, obtenerProveedores, obtenerTipoDocs } from '../../../../../services/axios.service';
 import { Dropdown } from 'primereact/dropdown';
 import 'primeflex/primeflex.css';
 import Input from 'postcss/lib/input';
@@ -14,6 +14,73 @@ import { FormDetalle } from '../../../Rendiciones/Componentes/SubComponentes/For
 
 function SolicitudNuevaSL() {
 
+    const [solicitudRD, setSolicitudRD] = useState({
+        "ID": null,
+        "STR_EMPLDREGI":{
+            "usuarioId": 1,
+            "sapID": 3573,
+            "nombres": "MARIA PILAR",
+            "apellidos": "DE LA GRECCA",
+            "email": "",
+            "username": "mdelagrecca",
+            "password": "/favYrs44ORVpQxo+9iMCg==",
+            "rol": {
+              "id": "1",
+              "name": "Usuario"
+            },
+            "filial": {
+              "Code": "CHO002",
+              "Name": "CHO002 - CHORRILLOS",
+              "U_ST_Filial": "001",
+              "U_ST_NombreFilial": "CHORRILLOS",
+              "U_ST_Ref": "Edificio 7 pisos hasta Badminton"
+            }
+          },
+        "STR_EMPLDASIG": {
+          
+            "usuarioId": 1,
+            "sapID": 3573,
+            "nombres": "MARIA PILAR",
+            "apellidos": "DE LA GRECCA",
+            "email": "",
+            "username": "mdelagrecca",
+            "password": "/favYrs44ORVpQxo+9iMCg==",
+            "rol": {
+              "id": "1",
+              "name": "Usuario"
+            },
+            "filial": {
+              "Code": "CHO002",
+              "Name": "CHO002 - CHORRILLOS",
+              "U_ST_Filial": "001",
+              "U_ST_NombreFilial": "CHORRILLOS",
+              "U_ST_Ref": "Edificio 7 pisos hasta Badminton"
+            }
+        },
+        "STR_NRSOLICITUD": null,
+        "STR_NRRENDICION": null,
+        "STR_ESTADO_INFO": "",
+        "STR_ESTADO": 1,
+        "STR_FECHAREGIS": "2024-04-15",
+        "STR_MONEDA": {
+                "id": "SOL",
+                "name":"SOL"
+        },
+        "STR_TIPORENDICION": {
+              "id": "1",
+              "name":"Caja Chica"
+        },
+        "STR_MOTIVORENDICION": {
+              "id": "VIA",
+              "name":"Viaticos"
+        },
+        "STR_TOTALSOLICITADO": 0.0,
+        "STR_MOTIVOMIGR": null,
+        "STR_AREA": "",
+        "STR_DOCENTRY": null,
+        "CREATE": "PWB",
+        "STR_COMENTARIO": "FASFSA"
+      });
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -41,6 +108,17 @@ function SolicitudNuevaSL() {
             </div>
         );
     };
+
+    const crearSolicitud = async () => {
+        try {
+            console.log(solicitudRD);
+            var response = await createSolicitud(solicitudRD);
+            console.log(response)
+        } catch (error) {
+            showError(error.Message);
+            console.log(error.Message);
+          }
+    }
 
 
     async function obtenerData() {
@@ -111,6 +189,10 @@ function SolicitudNuevaSL() {
                 </div>
             </div>
 
+            <Button
+            label="Guardar Borrador"
+            onClick={crearSolicitud}
+            />
             {/* <FormDetalleNewSolicitud
                 productDialog={productDialog}
                 setProductDialog={setProductDialog}
