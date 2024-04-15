@@ -1,0 +1,49 @@
+{
+  "name": "portal-ear-front",
+  "private": true,
+  "version": "0.0.0",
+  "homepage": "http://desktop-clndn92/react-project/",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.1.1",
+    "@mui/material": "^5.15.14",
+    "@syncfusion/ej2-react-splitbuttons": "^25.1.37",
+    "axios": "^1.6.5",
+    "date-fns": "^3.3.1",
+    "file-saver": "^2.0.5",
+    "jspdf": "^2.5.1",
+    "primeflex": "^3.3.1",
+    "primeicons": "^6.0.1",
+    "primereact": "^10.2.1",
+    "primevue": "^3.47.2",
+    "react": "^18.2.0",
+    "react-beforeunload": "^2.6.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.1",
+    "react-split-button": "^1.0.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.13",
+    "dotenv": "^16.4.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.7",
+    "vite": "^5.0.8"
+  }
+}
