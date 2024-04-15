@@ -13,7 +13,7 @@ import { addLocale } from "primereact/api";
 export function Formulario() {
   const [loading, setLoading] = useState(false);
   const { setUsuario, usuario, ruta, config } = useContext(AppContext);
-  console.log(AppContext)
+  // console.log(AppContext)
   const toast = useRef(null);
   //const sociedades = [{ name: "ELECTROPERU", code: "ELPTSERVER" }];
   const sociedades = [{ name: "ELECTROPERU", code: "ELPTSERVER" }];
