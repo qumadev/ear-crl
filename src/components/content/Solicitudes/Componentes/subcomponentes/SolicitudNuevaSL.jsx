@@ -10,31 +10,19 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import FormDetalleNewSolicitud from './FormDetalleNewSolicitud';
 import { Button } from 'primereact/button';
 import { FormDetalle } from '../../../Rendiciones/Componentes/SubComponentes/Formulario/FormDetalle';
+import { AppContext } from '../../../../../App';
+
 
 
 function SolicitudNuevaSL() {
 
+    const { usuario, ruta, config } = useContext(AppContext);
+    console.log(AppContext)
+
     const [solicitudRD, setSolicitudRD] = useState({
         "ID": null,
         "STR_EMPLDREGI":{
-            "usuarioId": 1,
-            "sapID": 3573,
-            "nombres": "MARIA PILAR",
-            "apellidos": "DE LA GRECCA",
-            "email": "",
-            "username": "mdelagrecca",
-            "password": "/favYrs44ORVpQxo+9iMCg==",
-            "rol": {
-              "id": "1",
-              "name": "Usuario"
-            },
-            "filial": {
-              "Code": "CHO002",
-              "Name": "CHO002 - CHORRILLOS",
-              "U_ST_Filial": "001",
-              "U_ST_NombreFilial": "CHORRILLOS",
-              "U_ST_Ref": "Edificio 7 pisos hasta Badminton"
-            }
+            ...usuario
           },
         "STR_EMPLDASIG": {
           
@@ -81,7 +69,6 @@ function SolicitudNuevaSL() {
         "CREATE": "PWB",
         "STR_COMENTARIO": "FASFSA"
       });
-
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
     // const [proveedor, setProveedor] = useState(null);
