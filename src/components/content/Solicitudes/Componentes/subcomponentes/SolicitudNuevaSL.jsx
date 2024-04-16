@@ -102,37 +102,37 @@ function SolicitudNuevaSL() {
     const [comentario, setComentario] = useState('');
 
     const [solicitudRD, setSolicitudRD] = useState({
-        "ID": null,
-        "STR_EMPLDREGI": {
+        ID: null,
+        STR_EMPLDREGI: {
             ...usuario
         },
-        "STR_EMPLDASIG": {
+        STR_EMPLDASIG: {
 
             ...usuario
         },
-        "STR_NRSOLICITUD": null,
-        "STR_NRRENDICION": null,
-        "STR_ESTADO_INFO": "",
-        "STR_ESTADO": 1,
-        "STR_FECHAREGIS": obtieneFecha(new Date()),
-        "STR_MONEDA": {
+        STR_NRSOLICITUD: null,
+        STR_NRRENDICION: null,
+        STR_ESTADO_INFO: "",
+        STR_ESTADO: 1,
+        STR_FECHAREGIS: obtieneFecha(new Date()),
+        STR_MONEDA: {
             "id": "SOL",
             "name": "SOL"
         },
-        "STR_TIPORENDICION": {
+        STR_TIPORENDICION: {
                 "id": "1",
                 "name": "Caja Chica"
         },
-        "STR_MOTIVORENDICION": {
+        STR_MOTIVORENDICION: {
             "id": "VIA",
             "name": "Viaticos"
         },
-        "STR_TOTALSOLICITADO": monto,
-        "STR_MOTIVOMIGR": null,
-        "STR_AREA": "",
-        "STR_DOCENTRY": null,
-        "CREATE": "PWB",
-        "STR_COMENTARIO": comentario
+        STR_TOTALSOLICITADO: monto,
+        STR_MOTIVOMIGR: null,
+        STR_AREA: "",
+        STR_DOCENTRY: null,
+        CREATE: "PWB",
+        STR_COMENTARIO: comentario
     });
 
     const showSolicitudRD = ()=>{
