@@ -18,40 +18,40 @@ function SolicitudNuevaSL() {
     // console.log(AppContext)
     const { usuario, ruta, config } = useContext(AppContext);
     console.log(usuario)
-    console.log(new Date())
+
     const [solicitudRD, setSolicitudRD] = useState({
         "ID": null,
-        "STR_EMPLDREGI":{
+        "STR_EMPLDREGI": {
             ...usuario
-          },
+        },
         "STR_EMPLDASIG": {
-          
+
             ...usuario
         },
         "STR_NRSOLICITUD": null,
         "STR_NRRENDICION": null,
         "STR_ESTADO_INFO": "",
         "STR_ESTADO": 1,
-        "STR_FECHAREGIS": "2024-04-15",
+        "STR_FECHAREGIS": (new Date()).toISOString.split('T')[0],
         "STR_MONEDA": {
-                "id": "SOL",
-                "name":"SOL"
+            "id": "SOL",
+            "name": "SOL"
         },
         "STR_TIPORENDICION": {
-              "id": "1",
-              "name":"Caja Chica"
+            "id": "1",
+            "name": "Caja Chica"
         },
         "STR_MOTIVORENDICION": {
-              "id": "VIA",
-              "name":"Viaticos"
+            "id": "VIA",
+            "name": "Viaticos"
         },
-        "STR_TOTALSOLICITADO": 0.0,
+        "STR_TOTALSOLICITADO": monto,
         "STR_MOTIVOMIGR": null,
         "STR_AREA": "",
         "STR_DOCENTRY": null,
         "CREATE": "PWB",
-        "STR_COMENTARIO": "FASFSA"
-      });
+        "STR_COMENTARIO": comentario
+    });
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
     // const [proveedor, setProveedor] = useState(null);
@@ -87,7 +87,7 @@ function SolicitudNuevaSL() {
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);
-          }
+        }
     }
 
 
@@ -109,6 +109,14 @@ function SolicitudNuevaSL() {
     useEffect(() => {
         obtenerData();
     }, []);
+
+    const [selectedMoneda, setSelectedMoneda] = useState(null);
+    const monedas = [
+        { name: 'SOL', code: 'SOL' },
+        { name: 'USD', code: 'USD' },
+    ];
+    const [monto, setMonto] = useState(0);
+    const [comentario, setComentario] = useState('');
 
     return (
         <div>
@@ -133,26 +141,36 @@ function SolicitudNuevaSL() {
                     /> */}
                     <label htmlFor="">Empleado:</label>
                     <InputText
-                    disabled={true}
+                        value={usuario.nombres +' '+usuario.apellidos}
+                        disabled={true}
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
-                        placeholder='Selecciona Tipo'
+                        placeholder='Seleccione Tipo'
                     />
                     <label htmlFor="">(*)Moneda:</label>
                     <Dropdown
-                        placeholder='Selecciona Moneda'
+                        value={selectedMoneda} 
+                        onChange={(e) => setSelectedMoneda(e.value)} 
+                        options={monedas} 
+                        optionLabel="name"
+                        placeholder='Seleccione Moneda'
+                        className="w-full md:w-14rem"
                     />
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
+                        value={monto} 
+                        onChange={(e) => setMonto(e.target.value)}
                         placeholder='Monto a solicitar'
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
-                        placeholder='Selecciona Motivo'
+                        placeholder='Seleccione Motivo'
                     />
                     <label htmlFor="">(*)Comentario:</label>
                     <InputTextarea
+                        value={comentario} 
+                        onChange={(e) => setComentario(e.target.value)}
                         rows={5}
                         cols={30}
                     />
@@ -160,8 +178,8 @@ function SolicitudNuevaSL() {
             </div>
 
             <Button
-            label="Guardar Borrador"
-            onClick={crearSolicitud}
+                label="Guardar Borrador"
+                onClick={crearSolicitud}
             />
             {/* <FormDetalleNewSolicitud
                 productDialog={productDialog}
