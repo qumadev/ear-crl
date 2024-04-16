@@ -65,18 +65,9 @@ function SolicitudNuevaSL() {
         const response = await Promise.all([
             obtenerMotivos(),
             obtenerTipos()
-            // obtenerProveedores(),
-            // obtenerTipoDocs()
         ]);
-        // setProveedores(response[0].data.Result);
-
-
-        console.log(response)
-        console.log(response[0].data.Result)
-        console.log(response[1].data.Result)
         setMotivos(response[0].data.Result)
         setTipos(response[1].data.Result)
-        console.log(tipos)
     }
 
     const openNew = () => {
@@ -88,9 +79,21 @@ function SolicitudNuevaSL() {
         obtenerData();
     }, []);
 
+    function obtieneFecha(fecha) {
+        const date = new Date(fecha);
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, "0");
+        const day = date.getDate().toString().padStart(2, "0");
+
+        return `${year}/${month}/${day}`;
+    }
 
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
+    const [selectedTipo, setSelectedTipo] = useState(null);
+    const [selectedMotivo, setSelectedMotivo] = useState(null);
+
     const monedas = [
         { name: 'SOL', code: 'SOL' },
         { name: 'USD', code: 'USD' },
@@ -111,14 +114,14 @@ function SolicitudNuevaSL() {
         "STR_NRRENDICION": null,
         "STR_ESTADO_INFO": "",
         "STR_ESTADO": 1,
-        "STR_FECHAREGIS": "2024-04-16",
+        "STR_FECHAREGIS": obtieneFecha(new Date()),
         "STR_MONEDA": {
             "id": "SOL",
             "name": "SOL"
         },
         "STR_TIPORENDICION": {
-            "id": "1",
-            "name": "Caja Chica"
+                "id": "1",
+                "name": "Caja Chica"
         },
         "STR_MOTIVORENDICION": {
             "id": "VIA",
@@ -131,13 +134,18 @@ function SolicitudNuevaSL() {
         "CREATE": "PWB",
         "STR_COMENTARIO": comentario
     });
+
+    const showSolicitudRD = ()=>{
+        console.log(solicitudRD)
+    }
+
     return (
         <div>
 
-            {/* <Button
+            <Button
             label="New"
-            onClick={openNew}
-            /> */}
+            onClick={showSolicitudRD}
+            />
 
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
 
@@ -159,8 +167,8 @@ function SolicitudNuevaSL() {
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
-                        value={selectedMoneda}
-                        onChange={(e) => setSelectedMoneda(e.value)}
+                        value={selectedTipo}
+                        onChange={(e) => setSelectedTipo(e.value)}
                         options={tipos}
                         optionLabel="name"
                         placeholder='Seleccione Tipo'
@@ -181,8 +189,8 @@ function SolicitudNuevaSL() {
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
-                        value={selectedMoneda}
-                        onChange={(e) => setSelectedMoneda(e.value)}
+                        value={selectedMotivo}
+                        onChange={(e) => setSelectedMotivo(e.value)}
                         options={motivos}
                         optionLabel="name"
                         placeholder='Seleccione Motivo'
