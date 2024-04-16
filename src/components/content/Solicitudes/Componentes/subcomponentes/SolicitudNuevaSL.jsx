@@ -57,6 +57,8 @@ function SolicitudNuevaSL() {
             console.log(error.Message);
         }
     }
+    const [tipos, setTipos] = useState(null);
+    const [motivos, setMotivos] = useState(null);
 
 
     async function obtenerData() {
@@ -68,10 +70,11 @@ function SolicitudNuevaSL() {
         ]);
         // setProveedores(response[0].data.Result);
 
-        
+
         console.log(response)
         console.log(response[0].data.Result)
         console.log(response[1].data.Result)
+        setMotivos(response[0].data.Result)
         setTipos(response[1].data.Result)
         console.log(tipos)
     }
@@ -85,7 +88,7 @@ function SolicitudNuevaSL() {
         obtenerData();
     }, []);
 
-    const [tipos, setTipos] = useState([]);
+
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const monedas = [
@@ -151,34 +154,42 @@ function SolicitudNuevaSL() {
                     /> */}
                     <label htmlFor="">Empleado:</label>
                     <InputText
-                        value={usuario.nombres +' '+usuario.apellidos}
+                        value={usuario.nombres + ' ' + usuario.apellidos}
                         disabled={true}
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
+                        value={selectedMoneda}
+                        onChange={(e) => setSelectedMoneda(e.value)}
+                        options={tipos}
+                        optionLabel="name"
                         placeholder='Seleccione Tipo'
                     />
                     <label htmlFor="">(*)Moneda:</label>
                     <Dropdown
-                        value={selectedMoneda} 
-                        onChange={(e) => setSelectedMoneda(e.value)} 
-                        options={monedas} 
+                        value={selectedMoneda}
+                        onChange={(e) => setSelectedMoneda(e.value)}
+                        options={monedas}
                         optionLabel="name"
                         placeholder='Seleccione Moneda'
                     />
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
-                        value={monto} 
+                        value={monto}
                         onChange={(e) => setMonto(e.target.value)}
                         placeholder='Monto a solicitar'
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
+                        value={selectedMoneda}
+                        onChange={(e) => setSelectedMoneda(e.value)}
+                        options={motivos}
+                        optionLabel="name"
                         placeholder='Seleccione Motivo'
                     />
                     <label htmlFor="">(*)Comentario:</label>
                     <InputTextarea
-                        value={comentario} 
+                        value={comentario}
                         onChange={(e) => setComentario(e.target.value)}
                         rows={5}
                         cols={30}
