@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import Direccion from './Direccion';
 import { createSolicitud, obtenerProveedores, obtenerTipoDocs } from '../../../../../services/axios.service';
@@ -15,10 +15,10 @@ import { AppContext } from '../../../../../App';
 
 
 function SolicitudNuevaSL() {
-
+    // console.log(AppContext)
     const { usuario, ruta, config } = useContext(AppContext);
-    console.log(AppContext)
-
+    console.log(usuario)
+    console.log(new Date())
     const [solicitudRD, setSolicitudRD] = useState({
         "ID": null,
         "STR_EMPLDREGI":{
@@ -26,24 +26,7 @@ function SolicitudNuevaSL() {
           },
         "STR_EMPLDASIG": {
           
-            "usuarioId": 1,
-            "sapID": 3573,
-            "nombres": "MARIA PILAR",
-            "apellidos": "DE LA GRECCA",
-            "email": "",
-            "username": "mdelagrecca",
-            "password": "/favYrs44ORVpQxo+9iMCg==",
-            "rol": {
-              "id": "1",
-              "name": "Usuario"
-            },
-            "filial": {
-              "Code": "CHO002",
-              "Name": "CHO002 - CHORRILLOS",
-              "U_ST_Filial": "001",
-              "U_ST_NombreFilial": "CHORRILLOS",
-              "U_ST_Ref": "Edificio 7 pisos hasta Badminton"
-            }
+            ...usuario
         },
         "STR_NRSOLICITUD": null,
         "STR_NRRENDICION": null,
