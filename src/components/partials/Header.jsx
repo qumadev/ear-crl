@@ -100,7 +100,7 @@ export function Header({
             alt="Image"
             height="50"
           />
-          <span className="text-white">ElectroPerú</span>
+          <span className="text-white">EAR - CRL</span>
         </div>
         <div className="flex  mr-2  text-2xl font-medium align-items-center">
           <Button

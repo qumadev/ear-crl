@@ -37,6 +37,14 @@ export const createSolicitud = (body) => {
   });
 };
 
+export const obtenerSolicitud = () => {
+  return API.get("/solicitudEar/6?create=PWB", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerMotivos = () => {
   return API.get("/viatico", {
     validateStatus: function (status) {
