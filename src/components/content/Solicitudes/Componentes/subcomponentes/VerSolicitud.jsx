@@ -41,6 +41,7 @@ function VerSolicitud() {
         setMotivos(response[0].data.Result)
         setTipos(response[1].data.Result)
         setSolicitud(response[2].data.Result[0])
+
     }
 
     useEffect(() => {
@@ -56,7 +57,10 @@ function VerSolicitud() {
     }
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
-    const [selectedTipo, setSelectedTipo] = useState(tipos[0]);
+    const [selectedTipo, setSelectedTipo] = useState(null);
+    // console.log(solicitud?.STR_TIPORENDICION)
+    // console.log(solicitud?.STR_TIPORENDICION)
+    // console.log(selectedTipo)
     const [selectedMotivo, setSelectedMotivo] = useState(null);
 
     const monedas = [
@@ -117,7 +121,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
-                        value={selectedTipo}
+                        value={solicitud?.STR_TIPORENDICION}
                         onChange={
                             (e) => {
                                 setSelectedTipo(e.value);
