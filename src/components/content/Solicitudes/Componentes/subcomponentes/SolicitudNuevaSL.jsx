@@ -17,7 +17,7 @@ import { AppContext } from '../../../../../App';
 function SolicitudNuevaSL() {
     // console.log(AppContext)
     const { usuario, ruta, config } = useContext(AppContext);
-    console.log(usuario)
+    // console.log(usuario)
 
 
     const [productDialog, setProductDialog] = useState(false);
@@ -49,9 +49,9 @@ function SolicitudNuevaSL() {
 
     const crearSolicitud = async () => {
         try {
-            console.log(solicitudRD);
+            // console.log(solicitudRD);
             var response = await createSolicitud(solicitudRD);
-            console.log(response)
+            // console.log(response)
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);
@@ -70,9 +70,9 @@ function SolicitudNuevaSL() {
         setTipos(response[1].data.Result)
     }
 
-    const openNew = () => {
-        setProductDialog(true);
-    };
+    // const openNew = () => {
+    //     setProductDialog(true);
+    // };
 
 
     useEffect(() => {
@@ -135,17 +135,17 @@ function SolicitudNuevaSL() {
         STR_COMENTARIO: comentario
     });
 
-    const showSolicitudRD = () => {
-        console.log(solicitudRD)
-    }
+    // const showSolicitudRD = () => {
+    //     console.log(solicitudRD)
+    // }
 
     return (
         <div>
 
-            <Button
+            {/* <Button
                 label="New"
                 onClick={showSolicitudRD}
-            />
+            /> */}
 
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
 
