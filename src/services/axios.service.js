@@ -37,6 +37,22 @@ export const createSolicitud = (body) => {
   });
 };
 
+export const obtenerMotivos = () => {
+  return API.get("/viatico", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const obtenerTipos = () => {
+  return API.get("/viatico/tipos", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerEmpleados = () => {
   return null;
 };

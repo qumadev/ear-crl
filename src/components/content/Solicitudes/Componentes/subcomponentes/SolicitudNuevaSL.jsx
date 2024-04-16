@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import Direccion from './Direccion';
-import { createSolicitud, obtenerProveedores, obtenerTipoDocs } from '../../../../../services/axios.service';
+import { createSolicitud, obtenerMotivos, obtenerProveedores, obtenerTipoDocs, obtenerTipos } from '../../../../../services/axios.service';
 import { Dropdown } from 'primereact/dropdown';
 import 'primeflex/primeflex.css';
 import Input from 'postcss/lib/input';
@@ -19,39 +19,7 @@ function SolicitudNuevaSL() {
     const { usuario, ruta, config } = useContext(AppContext);
     console.log(usuario)
 
-    const [solicitudRD, setSolicitudRD] = useState({
-        "ID": null,
-        "STR_EMPLDREGI": {
-            ...usuario
-        },
-        "STR_EMPLDASIG": {
 
-            ...usuario
-        },
-        "STR_NRSOLICITUD": null,
-        "STR_NRRENDICION": null,
-        "STR_ESTADO_INFO": "",
-        "STR_ESTADO": 1,
-        "STR_FECHAREGIS": (new Date()).toISOString.split('T')[0],
-        "STR_MONEDA": {
-            "id": "SOL",
-            "name": "SOL"
-        },
-        "STR_TIPORENDICION": {
-            "id": "1",
-            "name": "Caja Chica"
-        },
-        "STR_MOTIVORENDICION": {
-            "id": "VIA",
-            "name": "Viaticos"
-        },
-        "STR_TOTALSOLICITADO": monto,
-        "STR_MOTIVOMIGR": null,
-        "STR_AREA": "",
-        "STR_DOCENTRY": null,
-        "CREATE": "PWB",
-        "STR_COMENTARIO": comentario
-    });
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
     // const [proveedor, setProveedor] = useState(null);
@@ -93,12 +61,19 @@ function SolicitudNuevaSL() {
 
     async function obtenerData() {
         const response = await Promise.all([
-            obtenerProveedores(),
-            obtenerTipoDocs()
+            obtenerMotivos(),
+            obtenerTipos()
+            // obtenerProveedores(),
+            // obtenerTipoDocs()
         ]);
-        setProveedores(response[0].data.Result);
+        // setProveedores(response[0].data.Result);
+
+        
         console.log(response)
+        console.log(response[0].data.Result)
         console.log(response[1].data.Result)
+        setTipos(response[1].data.Result)
+        console.log(tipos)
     }
 
     const openNew = () => {
@@ -110,6 +85,8 @@ function SolicitudNuevaSL() {
         obtenerData();
     }, []);
 
+    const [tipos, setTipos] = useState([]);
+
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const monedas = [
         { name: 'SOL', code: 'SOL' },
@@ -118,6 +95,39 @@ function SolicitudNuevaSL() {
     const [monto, setMonto] = useState(0);
     const [comentario, setComentario] = useState('');
 
+    const [solicitudRD, setSolicitudRD] = useState({
+        "ID": null,
+        "STR_EMPLDREGI": {
+            ...usuario
+        },
+        "STR_EMPLDASIG": {
+
+            ...usuario
+        },
+        "STR_NRSOLICITUD": null,
+        "STR_NRRENDICION": null,
+        "STR_ESTADO_INFO": "",
+        "STR_ESTADO": 1,
+        "STR_FECHAREGIS": "2024-04-16",
+        "STR_MONEDA": {
+            "id": "SOL",
+            "name": "SOL"
+        },
+        "STR_TIPORENDICION": {
+            "id": "1",
+            "name": "Caja Chica"
+        },
+        "STR_MOTIVORENDICION": {
+            "id": "VIA",
+            "name": "Viaticos"
+        },
+        "STR_TOTALSOLICITADO": monto,
+        "STR_MOTIVOMIGR": null,
+        "STR_AREA": "",
+        "STR_DOCENTRY": null,
+        "CREATE": "PWB",
+        "STR_COMENTARIO": comentario
+    });
     return (
         <div>
 
@@ -155,7 +165,6 @@ function SolicitudNuevaSL() {
                         options={monedas} 
                         optionLabel="name"
                         placeholder='Seleccione Moneda'
-                        className="w-full md:w-14rem"
                     />
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
