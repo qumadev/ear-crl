@@ -95,8 +95,8 @@ function SolicitudNuevaSL() {
     const [selectedMotivo, setSelectedMotivo] = useState(null);
 
     const monedas = [
-        { name: 'SOL', code: 'SOL' },
-        { name: 'USD', code: 'USD' },
+        { id: 'SOL', name: 'SOL' },
+        { id: 'USD', name: 'USD' },
     ];
     const [monto, setMonto] = useState(0);
     const [comentario, setComentario] = useState('');
@@ -120,8 +120,8 @@ function SolicitudNuevaSL() {
             "name": "SOL"
         },
         STR_TIPORENDICION: {
-                "id": "1",
-                "name": "Caja Chica"
+            "id": "1",
+            "name": "Caja Chica"
         },
         STR_MOTIVORENDICION: {
             "id": "VIA",
@@ -135,7 +135,7 @@ function SolicitudNuevaSL() {
         STR_COMENTARIO: comentario
     });
 
-    const showSolicitudRD = ()=>{
+    const showSolicitudRD = () => {
         console.log(solicitudRD)
     }
 
@@ -143,8 +143,8 @@ function SolicitudNuevaSL() {
         <div>
 
             <Button
-            label="New"
-            onClick={showSolicitudRD}
+                label="New"
+                onClick={showSolicitudRD}
             />
 
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
@@ -168,7 +168,16 @@ function SolicitudNuevaSL() {
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
                         value={selectedTipo}
-                        onChange={(e) => setSelectedTipo(e.value)}
+                        onChange={
+                            (e) => {
+                                setSelectedTipo(e.value);
+                                setSolicitudRD(prevState => ({
+                                    ...prevState,
+                                    STR_TIPORENDICION: e.value
+
+                                }));
+                            }
+                        }
                         options={tipos}
                         optionLabel="name"
                         placeholder='Seleccione Tipo'
@@ -176,7 +185,14 @@ function SolicitudNuevaSL() {
                     <label htmlFor="">(*)Moneda:</label>
                     <Dropdown
                         value={selectedMoneda}
-                        onChange={(e) => setSelectedMoneda(e.value)}
+                        onChange={(e) => {
+                            setSelectedMoneda(e.value)
+                            setSolicitudRD(prevState => ({
+                                ...prevState,
+                                STR_MONEDA: e.value
+                                
+                            }));
+                        }}
                         options={monedas}
                         optionLabel="name"
                         placeholder='Seleccione Moneda'
@@ -184,13 +200,25 @@ function SolicitudNuevaSL() {
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
                         value={monto}
-                        onChange={(e) => setMonto(e.target.value)}
+                        onChange={(e) => {
+                            setMonto(e.target.value)
+                            setSolicitudRD(prevState => ({
+                                ...prevState,
+                                STR_TOTALSOLICITADO: e.target.value
+                            }));
+                        }}
                         placeholder='Monto a solicitar'
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
                         value={selectedMotivo}
-                        onChange={(e) => setSelectedMotivo(e.value)}
+                        onChange={(e) => {
+                            setSelectedMotivo(e.value)
+                            setSolicitudRD(prevState => ({
+                                ...prevState,
+                                STR_MOTIVORENDICION: e.value
+                            }));
+                        }}
                         options={motivos}
                         optionLabel="name"
                         placeholder='Seleccione Motivo'
@@ -198,7 +226,13 @@ function SolicitudNuevaSL() {
                     <label htmlFor="">(*)Comentario:</label>
                     <InputTextarea
                         value={comentario}
-                        onChange={(e) => setComentario(e.target.value)}
+                        onChange={(e) => {
+                            setComentario(e.target.value)
+                            setSolicitudRD(prevState => ({
+                                ...prevState,
+                                STR_COMENTARIO: e.target.value
+                            }));
+                        }}
                         rows={5}
                         cols={30}
                     />
