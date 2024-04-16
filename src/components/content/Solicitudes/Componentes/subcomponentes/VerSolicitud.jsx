@@ -17,9 +17,7 @@ import { AppContext } from '../../../../../App';
 function VerSolicitud() {
 
     const { usuario, ruta, config } = useContext(AppContext);
-    const [ solicitud, setSolicitud] = useState(null);
-    const [productDialog, setProductDialog] = useState(false);
-    const [visible, setVisible] = useState(false);
+    // const [ solicitud, setSolicitud] = useState(null);
 
     const crearSolicitud = async () => {
         try {
@@ -38,8 +36,11 @@ function VerSolicitud() {
             obtenerTipos(),
             obtenerSolicitud()
         ]);
-        setMotivos(response[0].data.Result)
-        setTipos(response[1].data.Result)
+        setMotivos(response[1].data.Result)
+        setTipos(response[0].data.Result)
+        // setMotivos(response[0].data.Result)
+        // console.log(response[1].data.Result)
+        // setTipos(response[1].data.Result)
         setSolicitud(response[2].data.Result[0])
 
     }
@@ -58,9 +59,6 @@ function VerSolicitud() {
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
-    // console.log(solicitud?.STR_TIPORENDICION)
-    // console.log(solicitud?.STR_TIPORENDICION)
-    // console.log(selectedTipo)
     const [selectedMotivo, setSelectedMotivo] = useState(null);
 
     const monedas = [
@@ -109,6 +107,65 @@ function VerSolicitud() {
         console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
     }
 
+
+    const [solicitud, setSolicitud] = useState({
+        ID: null,
+        STR_EMPLDREGI: {
+            ...usuario
+        },
+        STR_EMPLDASIG: {
+
+            ...usuario
+        },
+        STR_NRSOLICITUD: null,
+        STR_NRRENDICION: null,
+        STR_ESTADO_INFO: "",
+        STR_ESTADO: 1,
+        STR_FECHAREGIS: obtieneFecha(new Date()),
+        STR_MONEDA: {
+            "id": "SOL",
+            "name": "SOL"
+        },
+        STR_TIPORENDICION: {
+            "id": "1",
+            "name": "Caja Chica"
+        },
+        STR_MOTIVORENDICION: {
+            "id": "VIA",
+            "name": "Viaticos"
+        },
+        STR_TOTALSOLICITADO: monto,
+        STR_MOTIVOMIGR: null,
+        STR_AREA: "",
+        STR_DOCENTRY: null,
+        CREATE: "PWB",
+        STR_COMENTARIO: comentario
+    });
+
+    const selectedOptionTemplateItem = (option, props) => {
+        if (option) {
+            return (
+                <div className="flex">
+                    <div>
+                        {option.ItemName}
+                        {/* {option.ItemCode} - {option.ItemName} - {option.U_BPP_TIPUNMED} */}
+                    </div>
+                </div>
+            );
+        }
+        return <span>{props.placeholder}</span>;
+    };
+
+    const complementoOptionTemplateItem = (option) => {
+        return (
+            <div className="flex">
+                <div>
+                    {option.ItemCode} - {option.ItemName}
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div>
             <div className="col-12 md:col-6 lg:col-6">
@@ -121,14 +178,14 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
-                        value={solicitud?.STR_TIPORENDICION}
+                        value={solicitud.STR_TIPORENDICION}
+                        
                         onChange={
                             (e) => {
-                                setSelectedTipo(e.value);
-                                setSolicitudRD(prevState => ({
+                                // setSelectedTipo(e.value);
+                                setSolicitud(prevState => ({
                                     ...prevState,
                                     STR_TIPORENDICION: e.value
-
                                 }));
                             }}
                         options={tipos}
@@ -196,7 +253,7 @@ function VerSolicitud() {
                 label="Guardar Borrador"
                 onClick={crearSolicitud}
             />
-            
+
             <Button
                 label="ver"
                 onClick={showSolicitud}
