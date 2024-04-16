@@ -15,43 +15,14 @@ import { AppContext } from '../../../../../App';
 
 
 function SolicitudNuevaSL() {
-    // console.log(AppContext)
+
     const { usuario, ruta, config } = useContext(AppContext);
-    // console.log(usuario)
-
-
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
-    // const [proveedor, setProveedor] = useState(null);
-    const [proveedores, setProveedores] = useState(null);
-    const [proveedor, handleChangeProveedor] = useState(null);
-    const selectedOptionTemplate = (option, props) => {
-        if (option) {
-            return (
-                <div className="flex">
-                    <div>{option.CardCode}</div>
-                </div>
-            );
-        }
-
-        return <span>{props.placeholder}</span>;
-    };
-
-    const complementoOptionTemplate = (option) => {
-        return (
-            <div className="flex align-items-center border-bottom-1 surface-border w-full">
-                <div>
-                    {option.LicTradNum} - {option.CardName}
-                </div>
-            </div>
-        );
-    };
 
     const crearSolicitud = async () => {
         try {
-            // console.log(solicitudRD);
             var response = await createSolicitud(solicitudRD);
-            // console.log(response)
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);
@@ -59,7 +30,6 @@ function SolicitudNuevaSL() {
     }
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
-
 
     async function obtenerData() {
         const response = await Promise.all([
@@ -70,25 +40,17 @@ function SolicitudNuevaSL() {
         setTipos(response[1].data.Result)
     }
 
-    // const openNew = () => {
-    //     setProductDialog(true);
-    // };
-
-
     useEffect(() => {
         obtenerData();
     }, []);
 
     function obtieneFecha(fecha) {
         const date = new Date(fecha);
-
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, "0");
         const day = date.getDate().toString().padStart(2, "0");
-
         return `${year}/${month}/${day}`;
     }
-
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
@@ -98,7 +60,7 @@ function SolicitudNuevaSL() {
         { id: 'SOL', name: 'SOL' },
         { id: 'USD', name: 'USD' },
     ];
-    const [monto, setMonto] = useState(0);
+    const [monto, setMonto] = useState(null);
     const [comentario, setComentario] = useState('');
 
     const [solicitudRD, setSolicitudRD] = useState({
@@ -135,31 +97,14 @@ function SolicitudNuevaSL() {
         STR_COMENTARIO: comentario
     });
 
-    // const showSolicitudRD = () => {
-    //     console.log(solicitudRD)
-    // }
-
     return (
         <div>
-
-            {/* <Button
-                label="New"
-                onClick={showSolicitudRD}
-            /> */}
 
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
 
             <div className="col-12 md:col-6 lg:col-6">
                 <div className="mb-3 flex flex-column gap-2">
-                    {/* <Dropdown
-                        value={proveedor}
-                        onChange={(e) => handleChangeProveedor(e.value)}
-                        options={proveedores}
-                        optionLabel="CardName"
-                        placeholder="Selecciona Proveedor"
-                        valueTemplate={selectedOptionTemplate}
-                        itemTemplate={complementoOptionTemplate}
-                    /> */}
+
                     <label htmlFor="">Empleado:</label>
                     <InputText
                         value={usuario.nombres + ' ' + usuario.apellidos}
@@ -176,8 +121,7 @@ function SolicitudNuevaSL() {
                                     STR_TIPORENDICION: e.value
 
                                 }));
-                            }
-                        }
+                            }}
                         options={tipos}
                         optionLabel="name"
                         placeholder='Seleccione Tipo'

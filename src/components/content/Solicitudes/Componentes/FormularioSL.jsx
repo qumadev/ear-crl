@@ -1045,16 +1045,9 @@ function FormularioSL() {
       >
         <TabPanel header="Nueva Solicitud de Dinero">
           <SolicitudNuevaSL
-            // solicitudRD={solicitudRD}
-            // setSolicitudRD={setSolicitudRD}
-            // usuario={usuario}
-            // solicitando={solicitando}
-            // setDetalles={setDetalles}
-            // estadosEditables={estadosEditables}
-            //vencimientoRef={vencimientoRef}
           />
         </TabPanel>
-        <TabPanel header="General">
+        {/* <TabPanel header="General">
           <GeneralSL
             solicitudRD={solicitudRD}
             setSolicitudRD={setSolicitudRD}
@@ -1098,7 +1091,7 @@ function FormularioSL() {
             showSuccess={showSuccess}
           />
         </TabPanel>
-        {/* ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) */}
+        {/* ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) }
 
         {[2, 3, 4, 5, 6, 7].includes(solicitudRD.estado) && (
           <TabPanel header="Aprobadores">
@@ -1119,6 +1112,7 @@ function FormularioSL() {
             />
           </TabPanel>
         )}
+         */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
         {usuario.TipoUsuario == 1 ? (
