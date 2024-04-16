@@ -13,8 +13,8 @@ export function BodySL({ responsiveSizeMobile }) {
   const [estados, setEstados] = useState([]);
   const [solicitudes, setSolicitudes] = useState([]);
   const { usuario, ruta } = useContext(AppContext);
-  console.log("pintando")
-  console.log(usuario)
+  
+  console.log(ruta)
 
   const navigate = useNavigate();
 
@@ -28,30 +28,30 @@ export function BodySL({ responsiveSizeMobile }) {
     estados:
       /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1
         ? [
-            {
-              Id: 1,
-              Nombre: "Borrador",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-            {
-              Id: 5,
-              Nombre: "Rechazado SR",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-            {
-              Id: 7,
-              Nombre: "Error Mig SR",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-          ]
+          {
+            Id: 1,
+            Nombre: "Borrador",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+          {
+            Id: 5,
+            Nombre: "Rechazado SR",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+          {
+            Id: 7,
+            Nombre: "Error Mig SR",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+        ]
         : usuario.TipoUsuario == 2
-        ? [
+          ? [
             {
               Id: 2,
               Nombre: "Pendiente",
@@ -67,17 +67,17 @@ export function BodySL({ responsiveSizeMobile }) {
               name: null,
             },
           ]
-        : usuario.TipoUsuario == 4
-        ? [
-            {
-              Id: 7,
-              Nombre: "Error Mig SR",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-          ]
-        : null,
+          : usuario.TipoUsuario == 4
+            ? [
+              {
+                Id: 7,
+                Nombre: "Error Mig SR",
+                Descripcion: null,
+                id: null,
+                name: null,
+              },
+            ]
+            : null,
     empleadoAsig: null,
   });
 
@@ -153,10 +153,9 @@ export function BodySL({ responsiveSizeMobile }) {
     <>
       <div className="flex justify-content-between flex-wrap">
         <div
-          className={`flex ${
-            responsiveSizeMobile ? `text-xl` : `text-2xl`
-          } align-items-center`}
-          // className={`flex  text-2xl align-items-center`}
+          className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
+            } align-items-center`}
+        // className={`flex  text-2xl align-items-center`}
         >
           Lista de Solicitudes
         </div>
@@ -188,7 +187,15 @@ export function BodySL({ responsiveSizeMobile }) {
             onClick={() => {
               navigate(ruta + "/solicitudes/agregar");
             }}
-            // disabled={(usuario.rol.id != 1)}
+          // disabled={(usuario.rol.id != 1)}
+          />
+          <Button
+            label="Ver"
+            icon="pi pi-eye"
+            severity="success"
+            onClick={() => {
+              navigate(ruta + "/solicitudes/6");
+            }}
           />
           <Button
             label="Exportar"

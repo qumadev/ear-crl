@@ -19,6 +19,7 @@ import FormularioRD from "./components/content/Rendiciones/Componentes/SubCompon
 import { obtenerConf } from "./services/axios.service";
 import { Aprobadores } from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Aprobadores";
 import TokenCorreo from "./components/content/Correo/TokenCorreo";
+import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
 
 export const AppContext = createContext(null);
 
@@ -196,6 +197,14 @@ export default function MyApp() {
               element={
                 <Componente>
                   <BodySL />
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/solicitudes/6"}
+              element={
+                <Componente>
+                  <VerSolicitud />
                 </Componente>
               }
             />
