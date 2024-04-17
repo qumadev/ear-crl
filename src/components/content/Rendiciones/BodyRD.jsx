@@ -12,7 +12,7 @@ function BodyRD() {
   const [estados, setEstados] = useState([]);
   const [rendiciones, setRendiciones] = useState([]);
   const [primeraCarga, setPrimeraCarga] = useState(true);
-  const { usuario } = useContext(AppContext);
+  const { usuario,ruta } = useContext(AppContext);
   const navigate = useNavigate();
 
   const now = new Date();
@@ -23,37 +23,37 @@ function BodyRD() {
     estados:
       usuario.TipoUsuario == 1
         ? [
-            {
-              Id: 8,
-              Nombre: "Aperturado",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-            {
-              Id: 9,
-              Nombre: "En carga",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-            {
-              Id: 12,
-              Nombre: "Devuelto",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-            {
-              Id: 15,
-              Nombre: "Rechazado RD",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-          ]
+          {
+            Id: 8,
+            Nombre: "Aperturado",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+          {
+            Id: 9,
+            Nombre: "En carga",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+          {
+            Id: 12,
+            Nombre: "Devuelto",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+          {
+            Id: 15,
+            Nombre: "Rechazado RD",
+            Descripcion: null,
+            id: null,
+            name: null,
+          },
+        ]
         : usuario.TipoUsuario == 2
-        ? [
+          ? [
             {
               Id: 11,
               Nombre: "Revisado",
@@ -69,25 +69,25 @@ function BodyRD() {
               name: null,
             },
           ]
-        : usuario.TipoUsuario == 3
-        ? [
-            {
-              Id: 10,
-              Nombre: "Cargado",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-          ]
-        : [
-            {
-              Id: 17,
-              Nombre: "Error Mig RD",
-              Descripcion: null,
-              id: null,
-              name: null,
-            },
-          ],
+          : usuario.TipoUsuario == 3
+            ? [
+              {
+                Id: 10,
+                Nombre: "Cargado",
+                Descripcion: null,
+                id: null,
+                name: null,
+              },
+            ]
+            : [
+              {
+                Id: 17,
+                Nombre: "Error Mig RD",
+                Descripcion: null,
+                id: null,
+                name: null,
+              },
+            ],
   });
 
   /* Obtiene Estados */
@@ -179,6 +179,14 @@ function BodyRD() {
               });
             }}
             severity="secondary"
+          />
+          <Button
+            label="Ver"
+            icon="pi pi-eye"
+            severity="success"
+            onClick={() => {
+              navigate(ruta + "/rendiciones/ver");
+            }}
           />
           <Button
             label="Exportar"

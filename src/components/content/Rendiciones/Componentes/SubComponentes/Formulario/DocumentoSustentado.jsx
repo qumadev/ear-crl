@@ -34,6 +34,7 @@ function DocumentoSustentado() {
 
     return (
         <div>
+            <h1>Agregar Documento Sustentado:</h1>
             <div className="col-12 md:col-6 lg:col-12">
                 <div className="mb-3 flex flex-column">
                     <div className="flex col-12 align-items-center gap-5">

@@ -41,7 +41,7 @@ function VerSolicitud() {
         ]);
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
-        
+
         console.log(response[0].data.Result)
         console.log(response[1].data.Result)
         console.log(response[2].data.Result)
@@ -148,15 +148,12 @@ function VerSolicitud() {
         STR_COMENTARIO: comentario
     });
 
-    console.log(id)
-
 
     return (
         <div>
-             <p>fasf</p>
             <div className="col-12 md:col-6 lg:col-6">
                 <div className="mb-3 flex flex-column gap-2">
-                <h1>Editar usuario: {id}</h1>
+                <h1>Editar solicitud: {id}</h1>
                     <label htmlFor="">Empleado:</label>
                     <InputText
                         value={solicitud?.STR_EMPLDREGI?.nombres + ' ' + solicitud?.STR_EMPLDREGI?.apellidos}
@@ -239,10 +236,10 @@ function VerSolicitud() {
                 onClick={crearSolicitud}
             />
 
-            <Button
+            {/* <Button
                 label="ver"
                 onClick={showSolicitud}
-            />
+            /> */}
         </div>
     );
 }

@@ -189,14 +189,14 @@ export function BodySL({ responsiveSizeMobile }) {
             }}
           // disabled={(usuario.rol.id != 1)}
           />
-          <Button
+          {/* <Button
             label="Ver"
             icon="pi pi-eye"
             severity="success"
             onClick={() => {
               navigate(ruta + "/solicitudes/6");
             }}
-          />
+          /> */}
           <Button
             label="Exportar"
             icon="pi pi-upload"

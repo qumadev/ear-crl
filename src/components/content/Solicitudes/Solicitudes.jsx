@@ -213,7 +213,7 @@ function Solicitudes({
   const actionBodyTemplate = (rowData) => {
     const items = [
       {
-        label: "Ver",
+        label: "Editar",
         icon: "pi pi-eye",
         command: () => {
           navigate(
@@ -229,7 +229,31 @@ function Solicitudes({
           );
         },
       },
+
     ];
+
+    if(usuario.rol.id==1){
+      items.push(
+        {
+          label: "Aprobar",
+          icon: "pi pi-eye",
+          command: () => {
+            console.log("aprobando solicitud")
+          },
+        },
+      )
+    }
+    if(usuario.rol.id==1){
+      items.push(
+        {
+          label: "Contabilizar",
+          icon: "pi pi-eye",
+          command: () => {
+            console.log("contabilizando")
+          },
+        },
+      )
+    }
 
     if (
       (usuario.TipoUsuario != 1) &
