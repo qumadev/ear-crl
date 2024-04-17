@@ -598,6 +598,8 @@ function Solicitudes({
   };
 
   async function listarSolicitudes() {
+    console.log("listarSolicitudes");
+
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
@@ -615,18 +617,18 @@ function Solicitudes({
     }
 
     await listarSolicitud(
-      usuario.empId,
-      usuario.TipoUsuario == 1
-        ? usuario.empId
+      usuario.sapID,
+      usuario.rol?.id == 1
+        ? usuario.sapID
         : filtrado.empleadoAsig == null
         ? null
         : filtrado.empleadoAsig.id,
-      tipousuario,
+      usuario.rol.id,
       fechaInicial,
       fechaFin,
       nrendicion,
       estado,
-      usuario.SubGerencia
+      0 //usuario.filial.
     )
       .then((response) => {
         console.log(response.data);
@@ -681,7 +683,7 @@ function Solicitudes({
 
   useEffect(() => {
     //obtenerEstadoLocal();
-    if (usuario.TipoUsuario != null) {
+    if (usuario.sapID != null) {
       listarSolicitudes();
     }
   }, [filtrado, usuario]);
@@ -730,7 +732,7 @@ function Solicitudes({
           body={statusBodyTemplate}
         ></Column>
         <Column
-          field="STR_EMPLDASIG"
+          field="STR_EMPLDASIG_ID"
           header="Emp. Asignado"
           style={{ minWidth: "5rem" }}
         ></Column>

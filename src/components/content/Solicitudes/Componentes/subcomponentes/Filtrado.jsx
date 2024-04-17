@@ -56,6 +56,7 @@ export default function Filtrado({
   };
 
   async function obtenerEmpleadosLocal() {
+    /*
     await obtenerEmpleados()
       .then((response) => {
         const listEmpleados = response.data.Result.map((e) => ({
@@ -69,7 +70,7 @@ export default function Filtrado({
       })
       .finally(() => {
         console.log("Termino de obtener Empleados");
-      });
+      });*/
   }
 
   useEffect(() => {

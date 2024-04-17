@@ -4,7 +4,6 @@ export const obtenerProveedores = () => {
   return null;
 };
 
-
 export const iniciaSesion = (body) => {
   return API.post("/sesion/login?portalId=3", body, {
     validateStatus: function (status) {
@@ -30,7 +29,7 @@ export const obtenerEstados = (filtro) => {
 };
 
 export const createSolicitud = (body) => {
-  return API.post("/solicitudEar",body, {
+  return API.post("/solicitudEar", body, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -158,7 +157,14 @@ export const listarSolicitud = (
   estado,
   area
 ) => {
-  return null;
+  return API.get(
+    `/solicitudEar/lista?usrCreate=${usrCreate}&usrAsign=${usrAsign}&perfil=${perfil}&fecini=${fecini}&fecfin=${fecfin}&nrrendi=${nrrendi}&estados=${estado}&area=${area}`,
+    {
+      validateStatus: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const listarRendiciones = (
@@ -171,7 +177,14 @@ export const listarRendiciones = (
   estado,
   area
 ) => {
-  return null;
+  return API.get(
+    `/rendicion/lista?usrCreate=${usrCreate}&usrAsign=${usrAsign}&perfil=${perfil}&fecini=${fecini}&fecfin=${fecfin}&nrrendi=${nrrendi}&estados=${estado}&area=${area}`,
+    {
+      validateStatus: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const obtenerSolicitudR = (id, create) => {

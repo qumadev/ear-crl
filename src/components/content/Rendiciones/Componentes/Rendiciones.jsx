@@ -649,14 +649,18 @@ function Rendiciones({
     }
 
     await listarRendiciones(
-      usuario.empId,
-      usuario.empId,
-      tipousuario,
+      usuario.sapID,
+      usuario.rol?.id == 1
+        ? usuario.sapID
+        : filtrado.empleadoAsig == null
+        ? null
+        : filtrado.empleadoAsig.id,
+      usuario.rol.id,
       fechaInicial,
       fechaFin,
       nrendicion,
-      estado,
-      usuario.SubGerencia
+      "", //estado,
+      0 //usuario.SubGerencia
     )
       .then((response) => {
         setRendiciones(response.data.Result);
@@ -672,7 +676,7 @@ function Rendiciones({
 
   useEffect(() => {
     //obtenerEstadoLocal();
-    if (usuario.TipoUsuario != null) {
+    if (usuario.sapID != null) {
       listarRendicionesLocal();
     }
   }, [filtrado, usuario]);
