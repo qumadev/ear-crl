@@ -142,29 +142,6 @@ function VerSolicitud() {
         STR_COMENTARIO: comentario
     });
 
-    const selectedOptionTemplateItem = (option, props) => {
-        if (option) {
-            return (
-                <div className="flex">
-                    <div>
-                        {option.ItemName}
-                        {/* {option.ItemCode} - {option.ItemName} - {option.U_BPP_TIPUNMED} */}
-                    </div>
-                </div>
-            );
-        }
-        return <span>{props.placeholder}</span>;
-    };
-
-    const complementoOptionTemplateItem = (option) => {
-        return (
-            <div className="flex">
-                <div>
-                    {option.ItemCode} - {option.ItemName}
-                </div>
-            </div>
-        );
-    };
 
     return (
         <div>
