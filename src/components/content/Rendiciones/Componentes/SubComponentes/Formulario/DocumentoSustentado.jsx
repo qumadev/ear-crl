@@ -21,10 +21,12 @@ function DocumentoSustentado() {
     const [selectedTipo, setSelectedTipo] = useState(null);
     const [selectedMotivo, setSelectedMotivo] = useState(null);
     const [selectedProveedor, setSelectedProveedor] = useState(null);
+    // const [proveedor, setProveedor] = useState(null);
 
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
     const [proveedores, setProveedores] = useState(null);
+    const [razon, setRazon] = useState(null);
 
     const articulos = [
         {
@@ -134,7 +136,11 @@ function DocumentoSustentado() {
                         <Dropdown
                             className='col-6'
                             value={proveedor}
-                            onChange={(e) => handleChangeProveedor(e.value)}
+                            onChange={(e) => {
+                                handleChangeProveedor(e.value)
+                                setRazon(e.value.CardName)
+                                console.log(e.value.CardName)
+                            }}
                             options={proveedores}
                             optionLabel="LicTradNum"
                             filter
@@ -149,6 +155,7 @@ function DocumentoSustentado() {
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
+                            value={razon}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
