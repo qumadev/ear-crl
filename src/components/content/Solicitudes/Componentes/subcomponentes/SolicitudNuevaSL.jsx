@@ -30,14 +30,15 @@ function SolicitudNuevaSL() {
     }
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
+    
 
     async function obtenerData() {
         const response = await Promise.all([
             obtenerMotivos(),
             obtenerTipos()
         ]);
-        setMotivos(response[0].data.Result)
-        setTipos(response[1].data.Result)
+        setTipos(response[0].data.Result)
+        setMotivos(response[1].data.Result)
     }
 
     useEffect(() => {
