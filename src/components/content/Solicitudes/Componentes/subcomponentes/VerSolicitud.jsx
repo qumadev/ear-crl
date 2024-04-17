@@ -32,10 +32,11 @@ function VerSolicitud() {
 
     async function obtenerData() {
         const response = await Promise.all([
-            obtenerMotivos(),
             obtenerTipos(),
+            obtenerMotivos(),
             obtenerSolicitud()
         ]);
+        
         setMotivos(response[1].data.Result)
         setTipos(response[0].data.Result)
         // setMotivos(response[0].data.Result)
@@ -198,7 +199,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
-                        value={selectedMotivo}
+                        value={solicitud.STR_MOTIVORENDICION}
                         onChange={(e) => {
                             setSelectedMotivo(e.value)
                             setSolicitudRD(prevState => ({
