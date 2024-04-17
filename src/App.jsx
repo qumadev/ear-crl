@@ -20,6 +20,7 @@ import { obtenerConf } from "./services/axios.service";
 import { Aprobadores } from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Aprobadores";
 import TokenCorreo from "./components/content/Correo/TokenCorreo";
 import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
+import SolicitudNuevaSL from "./components/content/Solicitudes/Componentes/subcomponentes/SolicitudNuevaSL";
 
 export const AppContext = createContext(null);
 
@@ -229,7 +230,8 @@ export default function MyApp() {
               ruta
               element={
                 <Componente>
-                  <FormularioSL />
+                  {/* <FormularioSL /> */}
+                  <SolicitudNuevaSL />
                 </Componente>
               }
             />

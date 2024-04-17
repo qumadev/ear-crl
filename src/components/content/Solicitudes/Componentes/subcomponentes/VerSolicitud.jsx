@@ -11,15 +11,16 @@ import FormDetalleNewSolicitud from './FormDetalleNewSolicitud';
 import { Button } from 'primereact/button';
 import { FormDetalle } from '../../../Rendiciones/Componentes/SubComponentes/Formulario/FormDetalle';
 import { AppContext } from '../../../../../App';
+import { useParams } from 'react-router-dom';
 
 
 
 function VerSolicitud() {
 
+    const { id } = useParams();
+    console.log(id)
     const { usuario, ruta, config } = useContext(AppContext);
-    const [ solicitud, setSolicitud] = useState(null);
-    const [productDialog, setProductDialog] = useState(false);
-    const [visible, setVisible] = useState(false);
+    // const [ solicitud, setSolicitud] = useState(null);
 
     const crearSolicitud = async () => {
         try {
@@ -34,12 +35,17 @@ function VerSolicitud() {
 
     async function obtenerData() {
         const response = await Promise.all([
-            obtenerMotivos(),
             obtenerTipos(),
-            obtenerSolicitud()
+            obtenerMotivos(),
+            obtenerSolicitud(17)
         ]);
-        setMotivos(response[0].data.Result)
-        setTipos(response[1].data.Result)
+        setTipos(response[0].data.Result)
+        setMotivos(response[1].data.Result)
+        
+        console.log(response[0].data.Result)
+        console.log(response[1].data.Result)
+        console.log(response[2].data.Result)
+        
         setSolicitud(response[2].data.Result[0])
 
     }
@@ -58,9 +64,6 @@ function VerSolicitud() {
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
-    // console.log(solicitud?.STR_TIPORENDICION)
-    // console.log(solicitud?.STR_TIPORENDICION)
-    // console.log(selectedTipo)
     const [selectedMotivo, setSelectedMotivo] = useState(null);
 
     const monedas = [
@@ -106,14 +109,51 @@ function VerSolicitud() {
 
     const showSolicitud = () => {
         console.log(solicitud)
-        console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
+        // console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
     }
+
+
+    const [solicitud, setSolicitud] = useState({
+        ID: null,
+        STR_EMPLDREGI: {
+            ...usuario
+        },
+        STR_EMPLDASIG: {
+
+            ...usuario
+        },
+        STR_NRSOLICITUD: null,
+        STR_NRRENDICION: null,
+        STR_ESTADO_INFO: "",
+        STR_ESTADO: 1,
+        STR_FECHAREGIS: obtieneFecha(new Date()),
+        STR_MONEDA: {
+            "id": "SOL",
+            "name": "SOL"
+        },
+        STR_TIPORENDICION: {
+            "id": "1",
+            "name": "Caja Chica"
+        },
+        STR_MOTIVORENDICION: {
+            "id": "VIA",
+            "name": "Viaticos"
+        },
+        STR_TOTALSOLICITADO: monto,
+        STR_MOTIVOMIGR: null,
+        STR_AREA: "",
+        STR_DOCENTRY: null,
+        CREATE: "PWB",
+        STR_COMENTARIO: comentario
+    });
+
 
     return (
         <div>
+            
             <div className="col-12 md:col-6 lg:col-6">
                 <div className="mb-3 flex flex-column gap-2">
-
+                <h1>Editar usuario:</h1>
                     <label htmlFor="">Empleado:</label>
                     <InputText
                         value={solicitud?.STR_EMPLDREGI?.nombres + ' ' + solicitud?.STR_EMPLDREGI?.apellidos}
@@ -121,14 +161,13 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
-                        value={solicitud?.STR_TIPORENDICION}
+                        value={solicitud.STR_TIPORENDICION}
                         onChange={
                             (e) => {
                                 setSelectedTipo(e.value);
-                                setSolicitudRD(prevState => ({
+                                setSolicitud(prevState => ({
                                     ...prevState,
                                     STR_TIPORENDICION: e.value
-
                                 }));
                             }}
                         options={tipos}
@@ -137,7 +176,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Moneda:</label>
                     <Dropdown
-                        value={selectedMoneda}
+                        value={solicitud.STR_MONEDA}
                         onChange={(e) => {
                             setSelectedMoneda(e.value)
                             setSolicitudRD(prevState => ({
@@ -152,7 +191,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
-                        value={monto}
+                        value={solicitud.STR_TOTALSOLICITADO}
                         onChange={(e) => {
                             setMonto(e.target.value)
                             setSolicitudRD(prevState => ({
@@ -164,7 +203,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Motivo:</label>
                     <Dropdown
-                        value={selectedMotivo}
+                        value={solicitud.STR_MOTIVORENDICION}
                         onChange={(e) => {
                             setSelectedMotivo(e.value)
                             setSolicitudRD(prevState => ({
@@ -178,7 +217,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Comentario:</label>
                     <InputTextarea
-                        value={comentario}
+                        value={solicitud.STR_COMENTARIO}
                         onChange={(e) => {
                             setComentario(e.target.value)
                             setSolicitudRD(prevState => ({
@@ -196,7 +235,7 @@ function VerSolicitud() {
                 label="Guardar Borrador"
                 onClick={crearSolicitud}
             />
-            
+
             <Button
                 label="ver"
                 onClick={showSolicitud}

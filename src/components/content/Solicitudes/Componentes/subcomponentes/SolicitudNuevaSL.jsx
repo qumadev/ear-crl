@@ -23,6 +23,7 @@ function SolicitudNuevaSL() {
     const crearSolicitud = async () => {
         try {
             var response = await createSolicitud(solicitudRD);
+            console.log(response)
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);
@@ -31,15 +32,15 @@ function SolicitudNuevaSL() {
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
 
+
     async function obtenerData() {
         const response = await Promise.all([
-            obtenerMotivos(),
-            obtenerTipos()
+            obtenerTipos(),
+            obtenerMotivos()
         ]);
-        setMotivos(response[0].data.Result)
-        setTipos(response[1].data.Result)
+        setTipos(response[0].data.Result)
+        setMotivos(response[1].data.Result)
     }
-
     useEffect(() => {
         obtenerData();
     }, []);
@@ -116,6 +117,7 @@ function SolicitudNuevaSL() {
                         onChange={
                             (e) => {
                                 setSelectedTipo(e.value);
+                                console.log(e.value)
                                 setSolicitudRD(prevState => ({
                                     ...prevState,
                                     STR_TIPORENDICION: e.value
@@ -158,6 +160,7 @@ function SolicitudNuevaSL() {
                         value={selectedMotivo}
                         onChange={(e) => {
                             setSelectedMotivo(e.value)
+                            console.log(e.value)
                             setSolicitudRD(prevState => ({
                                 ...prevState,
                                 STR_MOTIVORENDICION: e.value
