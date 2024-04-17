@@ -38,7 +38,7 @@ export const createSolicitud = (body) => {
 };
 
 export const obtenerSolicitud = () => {
-  return API.get("/solicitudEar/6?create=PWB", {
+  return API.get("/solicitudEar/16?create=PWB", {
     validateStatus: function (status) {
       return status < 500;
     },

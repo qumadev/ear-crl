@@ -36,12 +36,13 @@ function VerSolicitud() {
             obtenerMotivos(),
             obtenerSolicitud()
         ]);
-        
-        setMotivos(response[1].data.Result)
         setTipos(response[0].data.Result)
-        // setMotivos(response[0].data.Result)
-        // console.log(response[1].data.Result)
-        // setTipos(response[1].data.Result)
+        setMotivos(response[1].data.Result)
+        
+        console.log(response[0].data.Result)
+        console.log(response[1].data.Result)
+        console.log(response[2].data.Result)
+        
         setSolicitud(response[2].data.Result[0])
 
     }
@@ -105,7 +106,7 @@ function VerSolicitud() {
 
     const showSolicitud = () => {
         console.log(solicitud)
-        console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
+        // console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
     }
 
 
@@ -157,10 +158,9 @@ function VerSolicitud() {
                     <label htmlFor="">(*)Tipo:</label>
                     <Dropdown
                         value={solicitud.STR_TIPORENDICION}
-                        
                         onChange={
                             (e) => {
-                                // setSelectedTipo(e.value);
+                                setSelectedTipo(e.value);
                                 setSolicitud(prevState => ({
                                     ...prevState,
                                     STR_TIPORENDICION: e.value
@@ -172,7 +172,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Moneda:</label>
                     <Dropdown
-                        value={selectedMoneda}
+                        value={solicitud.STR_MONEDA}
                         onChange={(e) => {
                             setSelectedMoneda(e.value)
                             setSolicitudRD(prevState => ({
@@ -187,7 +187,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Monto:</label>
                     <InputText
-                        value={monto}
+                        value={solicitud.STR_TOTALSOLICITADO}
                         onChange={(e) => {
                             setMonto(e.target.value)
                             setSolicitudRD(prevState => ({
@@ -213,7 +213,7 @@ function VerSolicitud() {
                     />
                     <label htmlFor="">(*)Comentario:</label>
                     <InputTextarea
-                        value={comentario}
+                        value={solicitud.STR_COMENTARIO}
                         onChange={(e) => {
                             setComentario(e.target.value)
                             setSolicitudRD(prevState => ({
