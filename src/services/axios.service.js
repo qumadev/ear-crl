@@ -1,7 +1,11 @@
 import API from "./axios.config";
 
 export const obtenerProveedores = () => {
-  return null;
+  return API.get("/proveedor", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 
 export const iniciaSesion = (body) => {

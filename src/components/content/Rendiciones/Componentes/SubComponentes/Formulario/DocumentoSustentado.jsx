@@ -5,7 +5,9 @@ import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { obtenerMotivos, obtenerProveedores, obtenerTipos } from '../../../../../../services/axios.service';
+import { Calendar } from 'primereact/calendar';
 
 
 function DocumentoSustentado() {
@@ -14,6 +16,15 @@ function DocumentoSustentado() {
     const openNew = () => {
         setProductDialog(true);
     };
+
+    const [selectedMoneda, setSelectedMoneda] = useState(null);
+    const [selectedTipo, setSelectedTipo] = useState(null);
+    const [selectedMotivo, setSelectedMotivo] = useState(null);
+    const [selectedProveedor, setSelectedProveedor] = useState(null);
+
+    const [tipos, setTipos] = useState(null);
+    const [motivos, setMotivos] = useState(null);
+    const [proveedores, setProveedores] = useState(null);
 
     const articulos = [
         {
@@ -32,6 +43,52 @@ function DocumentoSustentado() {
         }
     ]
 
+    async function obtenerData() {
+        const response = await Promise.all([
+            obtenerTipos(),
+            obtenerMotivos(),
+            obtenerProveedores()
+        ]);
+        setTipos(response[0].data.Result)
+        setMotivos(response[1].data.Result)
+        console.log(response[1].data.Result)
+        console.log(response[2].data.Result)
+        setProveedores(response[2].data.Result)
+    }
+    useEffect(() => {
+        obtenerData();
+    }, []);
+
+    const monedas = [
+        { id: 'SOL', name: 'SOL' },
+        { id: 'USD', name: 'USD' },
+    ];
+
+    const [proveedor, handleChangeProveedor] = useState(null);
+
+    const selectedOptionTemplate = (option, props) => {
+        if (option) {
+            return (
+                <div className="flex">
+                    <div>{option.LicTradNum}</div>
+                </div>
+            );
+        }
+
+        return <span>{props.placeholder}</span>;
+    };
+
+    const complementoOptionTemplate = (option) => {
+        return (
+            <div className="flex align-items-center border-bottom-1 surface-border w-full">
+                <div>
+                    {option.LicTradNum} - {option.CardName}
+                </div>
+            </div>
+        );
+    };
+
+
     return (
         <div>
             <h1>Agregar Documento Sustentado:</h1>
@@ -47,6 +104,14 @@ function DocumentoSustentado() {
                         <label className='col-2'>(*)Tipo</label>
                         <Dropdown
                             className='col-6'
+                            value={selectedTipo}
+                            onChange={
+                                (e) => {
+                                    setSelectedTipo(e.value);
+                                    console.log(e.value)
+                                }}
+                            options={tipos}
+                            optionLabel="name"
                             placeholder='Seleccione Tipo'
                         />
                     </div>
@@ -66,8 +131,18 @@ function DocumentoSustentado() {
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
-                        <InputText
+                        <Dropdown
                             className='col-6'
+                            value={proveedor}
+                            onChange={(e) => handleChangeProveedor(e.value)}
+                            options={proveedores}
+                            optionLabel="LicTradNum"
+                            filter
+                            filterBy='LicTradNum'
+                            filterMatchMode="contains"
+                            placeholder="Selecciona Proveedor"
+                            valueTemplate={selectedOptionTemplate}
+                            itemTemplate={complementoOptionTemplate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -87,6 +162,13 @@ function DocumentoSustentado() {
                         <label className='col-2'>(*)Motivo</label>
                         <Dropdown
                             className='col-6'
+                            value={selectedMotivo}
+                            onChange={(e) => {
+                                setSelectedMotivo(e.value)
+                                console.log(e.value)
+                            }}
+                            options={motivos}
+                            optionLabel="name"
                             placeholder='Seleccione Motivo'
                         />
                     </div>
@@ -94,14 +176,24 @@ function DocumentoSustentado() {
                         <label className='col-2'>(*)Moneda</label>
                         <Dropdown
                             className='col-6'
+                            value={selectedMoneda}
+                            onChange={(e) => {
+                                setSelectedMoneda(e.value)
+                            }}
+                            options={monedas}
+                            optionLabel="name"
                             placeholder='Seleccione Moneda'
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Fecha</label>
-                        <InputText
+                        <Calendar
                             className='col-6'
-                            placeholder='Fecha'
+                            // value={}
+                            // readOnlyInput
+                            // disabled
+                            placeholder='Seleccione fecha'
+                            dateFormat="dd/mm/yy"
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -132,12 +224,12 @@ function DocumentoSustentado() {
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         tableStyle={{ minWidth: "12rem" }}
                         header="Detalle de Documento Sustentado"
-                        // loading={loading}
+                    // loading={loading}
                     >
                         <Column
                             header="N°"
                             headerStyle={{ width: "3rem" }}
-                            // body={(data, options) => options.rowIndex + 1}
+                        // body={(data, options) => options.rowIndex + 1}
                         >
                         </Column>
                         <Column
@@ -155,7 +247,7 @@ function DocumentoSustentado() {
                             field="Almacen"
                             header="Almacen"
                             style={{ minWidth: "8rem" }}
-                            // body={statusBodyTemplate}
+                        // body={statusBodyTemplate}
                         ></Column>
                         <Column
                             field="Proyecto"
@@ -171,7 +263,7 @@ function DocumentoSustentado() {
                             field="Filial"
                             header="Filial"
                             style={{ minWidth: "10rem" }}
-                            // body={fecBodyTemplate}
+                        // body={fecBodyTemplate}
                         ></Column>
                         <Column
                             field="Areas"
@@ -183,7 +275,7 @@ function DocumentoSustentado() {
                             field="CentroCosto"
                             header="Centro Costo"
                             style={{ minWidth: "10rem" }}
-                            // body={fecBodyTemplate}
+                        // body={fecBodyTemplate}
                         ></Column>
                         <Column
                             field="IndImpuesto"
