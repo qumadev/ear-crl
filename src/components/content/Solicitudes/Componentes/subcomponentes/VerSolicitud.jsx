@@ -18,7 +18,7 @@ import { useParams } from 'react-router-dom';
 function VerSolicitud() {
 
     const { id } = useParams();
-    console.log(id)
+   
     const { usuario, ruta, config } = useContext(AppContext);
     // const [ solicitud, setSolicitud] = useState(null);
 
@@ -37,7 +37,7 @@ function VerSolicitud() {
         const response = await Promise.all([
             obtenerTipos(),
             obtenerMotivos(),
-            obtenerSolicitud(17)
+            obtenerSolicitud(id)
         ]);
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
@@ -109,6 +109,7 @@ function VerSolicitud() {
 
     const showSolicitud = () => {
         console.log(solicitud)
+        console.log(id)
         // console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
     }
 
@@ -147,13 +148,15 @@ function VerSolicitud() {
         STR_COMENTARIO: comentario
     });
 
+    console.log(id)
+
 
     return (
         <div>
-            
+             <p>fasf</p>
             <div className="col-12 md:col-6 lg:col-6">
                 <div className="mb-3 flex flex-column gap-2">
-                <h1>Editar usuario:</h1>
+                <h1>Editar usuario: {id}</h1>
                     <label htmlFor="">Empleado:</label>
                     <InputText
                         value={solicitud?.STR_EMPLDREGI?.nombres + ' ' + solicitud?.STR_EMPLDREGI?.apellidos}

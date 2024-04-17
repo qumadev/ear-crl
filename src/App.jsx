@@ -231,7 +231,7 @@ export default function MyApp() {
               element={
                 <Componente>
                   {/* <FormularioSL /> */}
-                  <SolicitudNuevaSL />
+                  <VerSolicitud />
                 </Componente>
               }
             />
