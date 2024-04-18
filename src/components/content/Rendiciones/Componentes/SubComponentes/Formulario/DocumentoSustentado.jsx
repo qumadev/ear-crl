@@ -6,7 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useEffect, useState } from 'react';
-import { obtenerMotivos, obtenerProveedores, obtenerTipos } from '../../../../../../services/axios.service';
+import { obtenerArticulos, obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos, obtenerTipos } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
 
@@ -22,13 +22,14 @@ function DocumentoSustentado() {
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
     const [selectedMotivo, setSelectedMotivo] = useState(null);
-    const [selectedProveedor, setSelectedProveedor] = useState(null);
-    // const [proveedor, setProveedor] = useState(null);
+    // const [selectedProveedor, setSelectedProveedor] = useState(null);
 
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
     const [proveedores, setProveedores] = useState(null);
     const [razon, setRazon] = useState(null);
+    const [articles, setArticles] = useState(null);
+    const [filial, setFilial] = useState(null);
 
     const articulos = [
         {
@@ -50,13 +51,20 @@ function DocumentoSustentado() {
         const response = await Promise.all([
             obtenerTipos(),
             obtenerMotivos(),
-            obtenerProveedores()
+            obtenerProveedores(),
+            obtenerArticulos(),
+            obtenerFilial(),
+            obtenerProyectos()
         ]);
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
-        console.log(response[1].data.Result)
-        console.log(response[2].data.Result)
+        // console.log(response[1].data.Result)
+        // console.log(response[2].data.Result)
         setProveedores(response[2].data.Result)
+        setArticles(response[3].data.Result)
+        console.log(response[3].data.Result)
+        console.log(response[4].data.Result)
+        console.log(response[5].data.Result)
     }
     useEffect(() => {
         obtenerData();

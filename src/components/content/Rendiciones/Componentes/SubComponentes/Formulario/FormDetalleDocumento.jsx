@@ -1,4 +1,5 @@
 
+import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
@@ -9,7 +10,7 @@ function FormDetalleDocumento({
     productDialog,
     setProductDialog,
     proveedores,
-    
+
 }) {
 
     const [proveedor, handleChangeProveedor] = useState(null);
@@ -36,13 +37,18 @@ function FormDetalleDocumento({
         );
     };
 
+
+    const addDetDoc = () => {
+
+    }
+
     return (
         <div>
             <Dialog
                 visible={productDialog}
                 onHide={() => setProductDialog(false)}
             >
-                <h2>Nueva Solicitud de Dinero</h2>
+                <h2>Agregar Detalle:</h2>
                 <div className="col-12 md:col-6 lg:col-12">
                     <div className="mb-3 flex flex-column gap-2">
                         <Dropdown
@@ -76,7 +82,12 @@ function FormDetalleDocumento({
                         <label htmlFor="">(*)Comentario:</label>
                         <InputTextarea
                             rows={5}
-                            cols={30}
+                            cols={70}
+                        />
+                        <Button
+                            className='col-12'
+                            label="Agregar"
+                            onClick={addDetDoc}
                         />
                     </div>
                 </div>

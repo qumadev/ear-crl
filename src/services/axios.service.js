@@ -24,6 +24,30 @@ export const obtenInfoUser = (id) => {
   return null;
 };
 
+
+export const obtenerArticulos = () => {
+  return API.get("/item/art?area=002", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const obtenerFilial = () => {
+  return API.get("/dimension/2", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+export const obtenerProyectos = () => {
+  return API.get("/dimension/project", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerEstados = (filtro) => {
   return API.get(`/estado?filtro=${filtro}`, {
     validateStatus: function (status) {
@@ -92,10 +116,6 @@ export const obtenerListaCup = (ceco, posFin, anio) => {
 };
 
 export const obtenerPrecio = (prov, dis, itemCod) => {
-  return null;
-};
-
-export const obtenerProyectos = () => {
   return null;
 };
 
