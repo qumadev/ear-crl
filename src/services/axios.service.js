@@ -33,6 +33,14 @@ export const obtenerArticulos = () => {
   });
 };
 
+export const obtenerUnidadNegocio = () => {
+  return API.get("/dimension/1", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerFilial = () => {
   return API.get("/dimension/2", {
     validateStatus: function (status) {
@@ -40,6 +48,22 @@ export const obtenerFilial = () => {
     },
   });
 };
+export const obtenerAreas = () => {
+  return API.get("/dimension/4", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+export const obtenerCentroCosto = () => {
+  return API.get("/dimension/5", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+
 export const obtenerProyectos = () => {
   return API.get("/dimension/project", {
     validateStatus: function (status) {
@@ -105,9 +129,6 @@ export const obtenerTipoViaticos = () => {
 };
 
 export const obtenerItems = (ear, cta) => {
-  return null;
-};
-export const obtenerCentroCosto = (id) => {
   return null;
 };
 

@@ -9,18 +9,42 @@ import React, { useState } from 'react';
 function FormDetalleDocumento({
     productDialog,
     setProductDialog,
-    proveedores,
-
+    articles,
+    filial,
+    proyectos,
+    areas,
+    centroCostos,
+    unidNegocios,
+    indImpuestos
 }) {
 
-    const [proveedor, handleChangeProveedor] = useState(null);
+    const [article, setArticle] = useState(null);
+    const [proyecto, setProyecto] = useState(null);
+    const [area, setArea] = useState(null);
+    const [fili, setFili] = useState(null);
+    const [centCosto, setCentCosto] = useState(null);
+    const [unidNeg, setUnidNeg] = useState(null);
+    const [indImp, setIndImp] = useState(null);
+
+    const [detDoc, setDetDoc] = useState({
+        articulo: "",
+        concepto: "",
+        almacen: "",
+        proyecto: "",
+        unidNegocio: "",
+        filial: "",
+        area: "",
+        centroCosto: "",
+        indImpuesto: "",
+        precio: 0,
+        cantidad: 0,
+        impuesto: 0
+    });
 
     const selectedOptionTemplate = (option, props) => {
         if (option) {
             return (
-                <div className="flex">
-                    <div>{option.CardCode}</div>
-                </div>
+                    <div>{option.ItemCode}</div>
             );
         }
 
@@ -29,17 +53,14 @@ function FormDetalleDocumento({
 
     const complementoOptionTemplate = (option) => {
         return (
-            <div className="flex align-items-center border-bottom-1 surface-border w-full">
                 <div>
-                    {option.LicTradNum} - {option.CardName}
+                    {option.ItemCode} - {option.ItemName}
                 </div>
-            </div>
         );
     };
 
-
     const addDetDoc = () => {
-
+        setProductDialog(false)
     }
 
     return (
@@ -51,38 +72,92 @@ function FormDetalleDocumento({
                 <h2>Agregar Detalle:</h2>
                 <div className="col-12 md:col-6 lg:col-12">
                     <div className="mb-3 flex flex-column gap-2">
+                        <label htmlFor="">(*)Cod. Articulo/Servicio:</label>
                         <Dropdown
-                            value={proveedor}
-                            onChange={(e) => handleChangeProveedor(e.value)}
-                            options={proveedores}
-                            optionLabel="CardName"
-                            placeholder="Selecciona Proveedor"
+                            value={article}
+                            onChange={(e) => {
+                                setArticle(e.value)
+                            }}
+                            options={articles}
+                            optionLabel="ItemCode"
+                            placeholder='Seleccione Articulo/Servicio'
                             valueTemplate={selectedOptionTemplate}
                             itemTemplate={complementoOptionTemplate}
                         />
-                        <label htmlFor="">Empleado:</label>
+                        <label htmlFor="">(*)Proyecto:</label>
+                        <Dropdown
+                            value={proyecto}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setProyecto(e.value)
+                            }}
+                            options={proyectos}
+                            optionLabel="name"
+                            placeholder='Seleccione Proyecto'
+                        />
+                        <label htmlFor="">(*)Unidad de Negocio:</label>
+                        <Dropdown
+                            value={unidNeg}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setUnidNeg(e.value)
+                            }}
+                            options={areas}
+                            optionLabel="name"
+                            placeholder='Seleccione Unidad de Negocio'
+                        />
+                        <label htmlFor="">(*)Filial:</label>
+                        <Dropdown
+                            value={fili}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setFili(e.value)
+                            }}
+                            options={filial}
+                            optionLabel="name"
+                            placeholder='Seleccione Filial'
+                        />
+                        <label htmlFor="">(*)Area:</label>
+                        <Dropdown
+                            value={area}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setArea(e.value)
+                            }}
+                            options={areas}
+                            optionLabel="name"
+                            placeholder='Seleccione Area'
+                        />
+                        <label htmlFor="">(*)Centro Costo:</label>
+                        <Dropdown
+                            value={centCosto}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setCentCosto(e.value)
+                            }}
+                            options={centroCostos}
+                            optionLabel="name"
+                            placeholder='Seleccione Centro Costo'
+                        />
+                        <label htmlFor="">(*)Ind. Impuesto:</label>
+                        <Dropdown
+                            value={indImp}
+                            onChange={(e) => {
+                                console.log(e.value)
+                                setIndImp(e.value)
+                            }}
+                            options={indImpuestos}
+                            optionLabel="name"
+                            placeholder='Seleccione Ind. Impuesto'
+                        />
+                        <label htmlFor="">(*)Precio:</label>
                         <InputText
                         />
-                        <label htmlFor="">(*)Tipo:</label>
-                        <Dropdown
-                            placeholder='Selecciona Tipo'
-                        />
-                        <label htmlFor="">(*)Moneda:</label>
-                        <Dropdown
-                            placeholder='Selecciona Moneda'
-                        />
-                        <label htmlFor="">(*)Monto:</label>
+                        <label htmlFor="">(*)Cantidad:</label>
                         <InputText
-                            placeholder='Monto a solicitar'
                         />
-                        <label htmlFor="">(*)Motivo:</label>
-                        <Dropdown
-                            placeholder='Selecciona Motivo'
-                        />
-                        <label htmlFor="">(*)Comentario:</label>
-                        <InputTextarea
-                            rows={5}
-                            cols={70}
+                        <label htmlFor="">(*)Impuesto:</label>
+                        <InputText
                         />
                         <Button
                             className='col-12'

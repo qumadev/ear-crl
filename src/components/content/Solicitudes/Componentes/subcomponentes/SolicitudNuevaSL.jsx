@@ -117,7 +117,6 @@ function SolicitudNuevaSL() {
                         onChange={
                             (e) => {
                                 setSelectedTipo(e.value);
-                                console.log(e.value)
                                 setSolicitudRD(prevState => ({
                                     ...prevState,
                                     STR_TIPORENDICION: e.value

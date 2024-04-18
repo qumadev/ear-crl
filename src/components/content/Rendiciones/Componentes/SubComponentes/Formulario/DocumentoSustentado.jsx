@@ -6,7 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useEffect, useState } from 'react';
-import { obtenerArticulos, obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos, obtenerTipos } from '../../../../../../services/axios.service';
+import { obtenerAreas, obtenerArticulos, obtenerCentroCosto, obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos, obtenerTipos, obtenerUnidadNegocio } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
 
@@ -27,10 +27,14 @@ function DocumentoSustentado() {
     const [tipos, setTipos] = useState(null);
     const [motivos, setMotivos] = useState(null);
     const [proveedores, setProveedores] = useState(null);
-    const [razon, setRazon] = useState(null);
     const [articles, setArticles] = useState(null);
     const [filial, setFilial] = useState(null);
+    const [proyectos, setProyectos] = useState(null);
+    const [areas, setAreas] = useState(null);
+    const [centroCostos, setCentroCostos] = useState(null);
+    const [unidNegocios, setUnidNegocios] = useState(null);
 
+    const [razon, setRazon] = useState(null);
     const articulos = [
         {
             "Cod": "00001",
@@ -54,17 +58,20 @@ function DocumentoSustentado() {
             obtenerProveedores(),
             obtenerArticulos(),
             obtenerFilial(),
-            obtenerProyectos()
+            obtenerProyectos(),
+            obtenerAreas(),
+            obtenerCentroCosto(),
+            obtenerUnidadNegocio()
         ]);
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
-        // console.log(response[1].data.Result)
-        // console.log(response[2].data.Result)
         setProveedores(response[2].data.Result)
         setArticles(response[3].data.Result)
-        console.log(response[3].data.Result)
-        console.log(response[4].data.Result)
-        console.log(response[5].data.Result)
+        setFilial(response[4].data.Result)
+        setProyectos(response[5].data.Result)
+        setAreas(response[6].data.Result)
+        setCentroCostos(response[7].data.Result)
+        setUnidNegocios(response[8].data.Result)
     }
     useEffect(() => {
         obtenerData();
@@ -73,6 +80,11 @@ function DocumentoSustentado() {
     const monedas = [
         { id: 'SOL', name: 'SOL' },
         { id: 'USD', name: 'USD' },
+    ];
+
+    const indImpuestos = [
+        { id: 'IGV', name: 'IGV' },
+        { id: 'ONV', name: 'ONV' },
     ];
 
     const [proveedor, handleChangeProveedor] = useState(null);
@@ -327,7 +339,13 @@ function DocumentoSustentado() {
             <FormDetalleDocumento
                 productDialog={productDialog}
                 setProductDialog={setProductDialog}
-                proveedores={proveedores}
+                articles={articles}
+                filial={filial}
+                proyectos={proyectos}
+                areas={areas}
+                centroCostos={centroCostos}
+                unidNegocios={unidNegocios}
+                indImpuestos={indImpuestos}
             >
             </FormDetalleDocumento>
             
