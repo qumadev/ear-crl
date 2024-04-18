@@ -32,7 +32,7 @@ function FormDetalleDocumento({
     const [impuesto, setImpuesto] = useState(null);
 
     const [detDoc, setDetDoc] = useState({
-        "Cod": "00001",
+        "Cod": article,
         "Concepto": "Producto 1",
         "Almacen": "ALMACEN 01",
         "Proyecto": "PROYECTO 01",
@@ -67,6 +67,7 @@ function FormDetalleDocumento({
     const addDetDoc = () => {
         setArticulos([...articulos, detDoc]);
         setProductDialog(false)
+        setDetDoc(null)
     }
 
     return (
@@ -80,9 +81,9 @@ function FormDetalleDocumento({
                     <div className="mb-3 flex flex-column gap-2">
                         <label htmlFor="">(*)Cod. Articulo/Servicio:</label>
                         <Dropdown
-                            value={article}
+                            value={detDoc?.article}
                             onChange={(e) => {
-                                setArticle(e.value)
+                                // setArticle(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Cod: e.value.ItemCode
