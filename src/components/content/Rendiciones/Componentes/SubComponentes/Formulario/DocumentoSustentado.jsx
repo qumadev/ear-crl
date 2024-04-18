@@ -35,7 +35,7 @@ function DocumentoSustentado() {
     const [unidNegocios, setUnidNegocios] = useState(null);
 
     const [razon, setRazon] = useState(null);
-    const articulos = [
+    const [articulos,setArticulos] = useState([
         {
             "Cod": "00001",
             "Concepto": "Producto 1",
@@ -47,9 +47,10 @@ function DocumentoSustentado() {
             "CentroCosto": "CENTRO COSTO 01",
             "IndImpuesto": "SI",
             "Precio": 100.00,
-            "Cantidad": 10, "Impuesto": 10.00
+            "Cantidad": 10, 
+            "Impuesto": 10.00
         }
-    ]
+    ])
 
     async function obtenerData() {
         const response = await Promise.all([
@@ -337,6 +338,8 @@ function DocumentoSustentado() {
             </div>
 
             <FormDetalleDocumento
+                articulos={articulos}
+                setArticulos={setArticulos}
                 productDialog={productDialog}
                 setProductDialog={setProductDialog}
                 articles={articles}

@@ -7,6 +7,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useState } from 'react';
 
 function FormDetalleDocumento({
+    articulos,
+    setArticulos,
     productDialog,
     setProductDialog,
     articles,
@@ -25,26 +27,29 @@ function FormDetalleDocumento({
     const [centCosto, setCentCosto] = useState(null);
     const [unidNeg, setUnidNeg] = useState(null);
     const [indImp, setIndImp] = useState(null);
+    const [precio, setPrecio] = useState(null);
+    const [cantidad, setCantidad] = useState(null);
+    const [impuesto, setImpuesto] = useState(null);
 
     const [detDoc, setDetDoc] = useState({
-        articulo: "",
-        concepto: "",
-        almacen: "",
-        proyecto: "",
-        unidNegocio: "",
-        filial: "",
-        area: "",
-        centroCosto: "",
-        indImpuesto: "",
-        precio: 0,
-        cantidad: 0,
-        impuesto: 0
+        "Cod": "00001",
+        "Concepto": "Producto 1",
+        "Almacen": "ALMACEN 01",
+        "Proyecto": "PROYECTO 01",
+        "UnidadNegocio": "UNIDAD DE NEGOCIO 01",
+        "Filial": "FITAL 01",
+        "Areas": "AREAS 01",
+        "CentroCosto": "CENTRO COSTO 01",
+        "IndImpuesto": "SI",
+        "Precio": 100.00,
+        "Cantidad": 10,
+        "Impuesto": 10.00
     });
 
     const selectedOptionTemplate = (option, props) => {
         if (option) {
             return (
-                    <div>{option.ItemCode}</div>
+                <div>{option.ItemCode}</div>
             );
         }
 
@@ -53,13 +58,14 @@ function FormDetalleDocumento({
 
     const complementoOptionTemplate = (option) => {
         return (
-                <div>
-                    {option.ItemCode} - {option.ItemName}
-                </div>
+            <div>
+                {option.ItemCode} - {option.ItemName}
+            </div>
         );
     };
 
     const addDetDoc = () => {
+        setArticulos([...articulos, detDoc]);
         setProductDialog(false)
     }
 
@@ -77,6 +83,10 @@ function FormDetalleDocumento({
                             value={article}
                             onChange={(e) => {
                                 setArticle(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Cod: e.value.ItemCode
+                                }));
                             }}
                             options={articles}
                             optionLabel="ItemCode"
@@ -88,8 +98,11 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={proyecto}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setProyecto(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Proyecto: e.value.name
+                                }));
                             }}
                             options={proyectos}
                             optionLabel="name"
@@ -99,10 +112,13 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={unidNeg}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setUnidNeg(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    UnidadNegocio: e.value.name
+                                }));
                             }}
-                            options={areas}
+                            options={unidNegocios}
                             optionLabel="name"
                             placeholder='Seleccione Unidad de Negocio'
                         />
@@ -110,8 +126,11 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={fili}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setFili(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Filial: e.value.name
+                                }));
                             }}
                             options={filial}
                             optionLabel="name"
@@ -121,8 +140,11 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={area}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setArea(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Areas: e.value.name
+                                }));
                             }}
                             options={areas}
                             optionLabel="name"
@@ -132,8 +154,11 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={centCosto}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setCentCosto(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    CentroCosto: e.value.name
+                                }));
                             }}
                             options={centroCostos}
                             optionLabel="name"
@@ -143,8 +168,11 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={indImp}
                             onChange={(e) => {
-                                console.log(e.value)
                                 setIndImp(e.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    IndImpuesto: e.value.name
+                                }));
                             }}
                             options={indImpuestos}
                             optionLabel="name"
@@ -152,12 +180,37 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
+                            value={precio}
+                            onChange={(e) => {
+                                setPrecio(e.target.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Precio: e.target.value
+                                }));
+                            }}
                         />
                         <label htmlFor="">(*)Cantidad:</label>
                         <InputText
+                            value={cantidad}
+                            onChange={(e) => {
+                                setCantidad(e.target.value)
+                                console.log(e.target.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Cantidad: e.target.value
+                                }));
+                            }}
                         />
                         <label htmlFor="">(*)Impuesto:</label>
                         <InputText
+                            value={impuesto}
+                            onChange={(e) => {
+                                setImpuesto(e.target.value)
+                                setDetDoc(prevState => ({
+                                    ...prevState,
+                                    Impuesto: e.target.value
+                                }));
+                            }}
                         />
                         <Button
                             className='col-12'
