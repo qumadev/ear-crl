@@ -8,11 +8,13 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useEffect, useState } from 'react';
 import { obtenerMotivos, obtenerProveedores, obtenerTipos } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
+import FormDetalleDocumento from './FormDetalleDocumento';
 
 
 function DocumentoSustentado() {
 
     const [productDialog, setProductDialog] = useState(false);
+    const [visible, setVisible] = useState(false);
     const openNew = () => {
         setProductDialog(true);
     };
@@ -40,8 +42,7 @@ function DocumentoSustentado() {
             "CentroCosto": "CENTRO COSTO 01",
             "IndImpuesto": "SI",
             "Precio": 100.00,
-            "Cantidad": 10,
-            "Impuesto": 10.00
+            "Cantidad": 10, "Impuesto": 10.00
         }
     ]
 
@@ -90,9 +91,11 @@ function DocumentoSustentado() {
         );
     };
 
+    const saveDocumento = () => { }
 
     return (
         <div>
+            {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
             <h1>Agregar Documento Sustentado:</h1>
             <div className="col-12 md:col-6 lg:col-12">
                 <div className="mb-3 flex flex-column">
@@ -139,7 +142,6 @@ function DocumentoSustentado() {
                             onChange={(e) => {
                                 handleChangeProveedor(e.value)
                                 setRazon(e.value.CardName)
-                                console.log(e.value.CardName)
                             }}
                             options={proveedores}
                             optionLabel="LicTradNum"
@@ -156,10 +158,11 @@ function DocumentoSustentado() {
                         <InputText
                             className='col-6'
                             value={razon}
+                            disabled
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
-                        <label className='col-2'>(*)Direccion</label>
+                        <label className='col-2'>Direccion</label>
                         <InputText
                             className='col-6'
                             placeholder='Direccion'
@@ -172,7 +175,6 @@ function DocumentoSustentado() {
                             value={selectedMotivo}
                             onChange={(e) => {
                                 setSelectedMotivo(e.value)
-                                console.log(e.value)
                             }}
                             options={motivos}
                             optionLabel="name"
@@ -305,8 +307,22 @@ function DocumentoSustentado() {
                             style={{ minWidth: "7rem" }}
                         ></Column>
                     </DataTable>
+
+                    <Button
+                        className='col-4'
+                        label="Guardar Cambios"
+                        onClick={saveDocumento}
+                    />
                 </div>
             </div>
+
+            <FormDetalleDocumento
+                productDialog={productDialog}
+                setProductDialog={setProductDialog}
+                proveedores={proveedores}
+            >
+            </FormDetalleDocumento>
+            
         </div>
     );
 }

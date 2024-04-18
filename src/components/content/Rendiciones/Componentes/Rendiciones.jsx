@@ -394,6 +394,18 @@ function Rendiciones({
       },
     ];
 
+    if(usuario.rol.id==2){
+      items.push(
+        {
+          label: "Aprobar",
+          icon: "pi pi-eye",
+          command: () => {
+            console.log("aprobando solicitud")
+          },
+        },
+      )
+    }
+
     if (
       ((usuario.TipoUsuario == 1) &
         ((rowData.STR_ESTADO == 8) |
