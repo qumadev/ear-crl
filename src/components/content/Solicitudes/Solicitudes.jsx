@@ -232,7 +232,7 @@ function Solicitudes({
 
     ];
 
-    if(usuario.rol.id==1){
+    if(usuario.rol.id==2){
       items.push(
         {
           label: "Aprobar",
@@ -243,7 +243,7 @@ function Solicitudes({
         },
       )
     }
-    if(usuario.rol.id==1){
+    if(usuario.rol.id==3){
       items.push(
         {
           label: "Contabilizar",

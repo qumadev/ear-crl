@@ -24,6 +24,7 @@ function SolicitudNuevaSL() {
         try {
             var response = await createSolicitud(solicitudRD);
             console.log(response)
+            navigate(ruta + "/solicitudes");
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);

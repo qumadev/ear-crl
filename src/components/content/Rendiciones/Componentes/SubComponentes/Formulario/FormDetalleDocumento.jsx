@@ -99,7 +99,6 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={detDoc?.proyecto}
                             onChange={(e) => {
-                                setProyecto(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Proyecto: e.value.name
@@ -113,14 +112,14 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={detDoc?.unidNeg}
                             onChange={(e) => {
-                                setUnidNeg(e.value)
+                                // setUnidNeg(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     UnidadNegocio: e.value.name
                                 }));
                             }}
                             options={unidNegocios}
-                            optionLabel="name"
+                            optionLabel={"name"}
                             placeholder='Seleccione Unidad de Negocio'
                         />
                         <label htmlFor="">(*)Filial:</label>
