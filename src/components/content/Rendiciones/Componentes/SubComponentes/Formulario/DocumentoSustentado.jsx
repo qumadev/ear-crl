@@ -35,22 +35,7 @@ function DocumentoSustentado() {
     const [unidNegocios, setUnidNegocios] = useState(null);
 
     const [razon, setRazon] = useState(null);
-    const [articulos,setArticulos] = useState([
-        {
-            "Cod": "00001",
-            "Concepto": "Producto 1",
-            "Almacen": "ALMACEN 01",
-            "Proyecto": "PROYECTO 01",
-            "UnidadNegocio": "UNIDAD DE NEGOCIO 01",
-            "Filial": "FITAL 01",
-            "Areas": "AREAS 01",
-            "CentroCosto": "CENTRO COSTO 01",
-            "IndImpuesto": "SI",
-            "Precio": 100.00,
-            "Cantidad": 10, 
-            "Impuesto": 10.00
-        }
-    ])
+    const [articulos,setArticulos] = useState([])
 
     async function obtenerData() {
         const response = await Promise.all([

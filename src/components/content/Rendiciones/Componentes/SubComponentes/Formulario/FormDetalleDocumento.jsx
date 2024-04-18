@@ -35,15 +35,15 @@ function FormDetalleDocumento({
         "Cod": article,
         "Concepto": "Producto 1",
         "Almacen": "ALMACEN 01",
-        "Proyecto": "PROYECTO 01",
-        "UnidadNegocio": "UNIDAD DE NEGOCIO 01",
-        "Filial": "FITAL 01",
-        "Areas": "AREAS 01",
-        "CentroCosto": "CENTRO COSTO 01",
-        "IndImpuesto": "SI",
-        "Precio": 100.00,
-        "Cantidad": 10,
-        "Impuesto": 10.00
+        "Proyecto": proyecto,
+        "UnidadNegocio": unidNeg,
+        "Filial": fili,
+        "Areas": area,
+        "CentroCosto": centCosto,
+        "IndImpuesto": indImp,
+        "Precio": precio,
+        "Cantidad": cantidad,
+        "Impuesto": impuesto
     });
 
     const selectedOptionTemplate = (option, props) => {
@@ -97,7 +97,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Proyecto:</label>
                         <Dropdown
-                            value={proyecto}
+                            value={detDoc?.proyecto}
                             onChange={(e) => {
                                 setProyecto(e.value)
                                 setDetDoc(prevState => ({
@@ -111,7 +111,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Unidad de Negocio:</label>
                         <Dropdown
-                            value={unidNeg}
+                            value={detDoc?.unidNeg}
                             onChange={(e) => {
                                 setUnidNeg(e.value)
                                 setDetDoc(prevState => ({
@@ -125,7 +125,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Filial:</label>
                         <Dropdown
-                            value={fili}
+                            value={detDoc?.fili}
                             onChange={(e) => {
                                 setFili(e.value)
                                 setDetDoc(prevState => ({
@@ -139,7 +139,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Area:</label>
                         <Dropdown
-                            value={area}
+                            value={detDoc?.area}
                             onChange={(e) => {
                                 setArea(e.value)
                                 setDetDoc(prevState => ({
@@ -153,7 +153,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Centro Costo:</label>
                         <Dropdown
-                            value={centCosto}
+                            value={detDoc?.centCosto}
                             onChange={(e) => {
                                 setCentCosto(e.value)
                                 setDetDoc(prevState => ({
@@ -167,7 +167,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Ind. Impuesto:</label>
                         <Dropdown
-                            value={indImp}
+                            value={detDoc?.indImp}
                             onChange={(e) => {
                                 setIndImp(e.value)
                                 setDetDoc(prevState => ({
@@ -181,7 +181,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
-                            value={precio}
+                            value={detDoc?.precio}
                             onChange={(e) => {
                                 setPrecio(e.target.value)
                                 setDetDoc(prevState => ({
@@ -192,7 +192,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Cantidad:</label>
                         <InputText
-                            value={cantidad}
+                            value={detDoc?.cantidad}
                             onChange={(e) => {
                                 setCantidad(e.target.value)
                                 console.log(e.target.value)
@@ -204,7 +204,7 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Impuesto:</label>
                         <InputText
-                            value={impuesto}
+                            value={detDoc?.impuesto}
                             onChange={(e) => {
                                 setImpuesto(e.target.value)
                                 setDetDoc(prevState => ({
