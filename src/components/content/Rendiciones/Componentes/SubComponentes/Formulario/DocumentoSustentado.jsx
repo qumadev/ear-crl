@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { obtenerAreas, obtenerArticulos, obtenerCentroCosto, obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos, obtenerTipos, obtenerUnidadNegocio } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
+import { CodeBracketIcon } from '@heroicons/react/16/solid';
 
 
 function DocumentoSustentado() {
@@ -35,7 +36,29 @@ function DocumentoSustentado() {
             "STR_RD_ID": null,
             "STR_TOTALDOC": null,
             "STR_RAZONSOCIAL": null,
-            "DocumentoDet":[]
+            "DocumentoDet":[
+                {
+                    Cod: {
+                      ItemCode: null,
+                      ItemName: null,
+                      U_BPP_TIPUNMED: null,
+                      WhsCode: null,
+                      Stock: 0,
+                      Precio: 0
+                    },
+                    Concepto: null,
+                    Almacen: null,
+                    Proyecto: null,
+                    UnidadNegocio: null,
+                    Filial: null,
+                    Areas: null,
+                    CentroCosto: null,
+                    IndImpuesto: null,
+                    Precio: 0,
+                    Cantidad: 0,
+                    Impuesto: 0
+                  }
+            ]
         }
 
     );
@@ -100,7 +123,7 @@ function DocumentoSustentado() {
 
     const indImpuestos = [
         { id: 'IGV', name: 'IGV' },
-        { id: 'ONV', name: 'ONV' },
+        { id: 'ORV', name: 'ORV' },
     ];
 
     const [proveedor, handleChangeProveedor] = useState(null);
@@ -269,7 +292,7 @@ function DocumentoSustentado() {
                         <Button
                             className='col-6'
                             label="Eliminar Seleccionados"
-                            onClick={openNew}
+                            onClick={()=>{}}
                         />
                     </div>
                     <DataTable
@@ -289,52 +312,52 @@ function DocumentoSustentado() {
                         >
                         </Column>
                         <Column
-                            field="Cod"
+                            field="Cod.ItemCode"
                             header="Cod. Articulo/Servicio"
                             style={{ width: "3rem" }}
                             className="font-bold"
                         ></Column>
                         <Column
-                            field="Concepto"
+                            field="Cod.ItemName"
                             header="Concepto"
                             style={{ minWidth: "12rem" }}
                         ></Column>
                         <Column
-                            field="Almacen"
+                            field="Cod.WhsCode"
                             header="Almacen"
                             style={{ minWidth: "8rem" }}
                         // body={statusBodyTemplate}
                         ></Column>
                         <Column
-                            field="Proyecto"
+                            field="Proyecto.name"
                             header="Proyecto"
                             style={{ minWidth: "5rem" }}
                         ></Column>
                         <Column
-                            field="UnidadNegocio"
+                            field="UnidadNegocio.name"
                             header="Unidad de Negocio"
                             style={{ minWidth: "8rem" }}
                         ></Column>
                         <Column
-                            field="Filial"
+                            field="Filial.name"
                             header="Filial"
                             style={{ minWidth: "10rem" }}
                         // body={fecBodyTemplate}
                         ></Column>
                         <Column
-                            field="Areas"
+                            field="Areas.name"
                             // body={priceBodyTemplate}
                             header="Areas"
                             style={{ minWidth: "12rem" }}
                         ></Column>
                         <Column
-                            field="CentroCosto"
+                            field="CentroCosto.name"
                             header="Centro Costo"
                             style={{ minWidth: "10rem" }}
                         // body={fecBodyTemplate}
                         ></Column>
                         <Column
-                            field="IndImpuesto"
+                            field="IndImpuesto.name"
                             header="Ind. Impuesto"
                             style={{ minWidth: "7rem" }}
                         ></Column>
