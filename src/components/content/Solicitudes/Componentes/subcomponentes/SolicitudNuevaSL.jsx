@@ -11,6 +11,7 @@ import FormDetalleNewSolicitud from './FormDetalleNewSolicitud';
 import { Button } from 'primereact/button';
 import { FormDetalle } from '../../../Rendiciones/Componentes/SubComponentes/Formulario/FormDetalle';
 import { AppContext } from '../../../../../App';
+import { Navigate } from 'react-router-dom';
 
 
 
@@ -24,7 +25,7 @@ function SolicitudNuevaSL() {
         try {
             var response = await createSolicitud(solicitudRD);
             console.log(response)
-            navigate(ruta + "/solicitudes");
+            Navigate(ruta + "/solicitudes");
         } catch (error) {
             showError(error.Message);
             console.log(error.Message);

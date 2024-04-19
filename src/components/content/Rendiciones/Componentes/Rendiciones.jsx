@@ -388,8 +388,7 @@ function Rendiciones({
             }
           } catch (error) {
           } finally {
-            navigate(ruta + "/rendiciones/ver");
-            // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+            navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
           }
         },
       },
@@ -577,7 +576,8 @@ function Rendiciones({
               }
             } catch (error) {
             } finally {
-              navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+              navigate(ruta + "/rendiciones/ver");
+              // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
             }
           }}
           severity="success"
