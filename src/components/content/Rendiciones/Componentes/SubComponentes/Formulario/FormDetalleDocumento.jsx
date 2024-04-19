@@ -104,7 +104,10 @@ function FormDetalleDocumento({
         <div>
             <Dialog
                 visible={productDialog}
-                onHide={() => setProductDialog(false)}
+                onHide={() => (
+                    setProductDialog(false),
+                    setDetDoc(null)
+                )}
                 style={{ width: '50vw' }} 
             >
                 <h2>Agregar Detalle:</h2>
@@ -225,30 +228,32 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
-                            value={detDoc?.precio}
+                            value={detDoc?.Precio}
                             onChange={(e) => {
                                 setPrecio(e.target.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Precio: e.target.value
+                                    Precio: e.target.value,
+                                    Impuesto: (e.target.value*detDoc?.Cantidad*0.18).toFixed(2)
                                 }));
                             }}
                         />
                         <label htmlFor="">(*)Cantidad:</label>
                         <InputText
-                            value={detDoc?.cantidad}
+                            value={detDoc?.Cantidad}
                             onChange={(e) => {
                                 setCantidad(e.target.value)
-                                console.log(e.target.value)
+                                
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Cantidad: e.target.value
+                                    Cantidad: e.target.value,
+                                    Impuesto: (e.target.value*detDoc?.Precio*0.18).toFixed(2)
                                 }));
                             }}
                         />
                         <label htmlFor="">(*)Impuesto:</label>
                         <InputText
-                            value={detDoc?.impuesto}
+                            value={detDoc?.Impuesto}
                             onChange={(e) => {
                                 setImpuesto(e.target.value)
                                 setDetDoc(prevState => ({
