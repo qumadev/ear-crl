@@ -7,6 +7,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useState } from 'react';
 
 function FormDetalleDocumento({
+    documento,
+    setDocumento,
     articulos,
     setArticulos,
     productDialog,
@@ -46,6 +48,26 @@ function FormDetalleDocumento({
         "Impuesto": impuesto
     });
 
+    // const [documentoDet, setDocumentoDet] = useState(
+    //     {
+    //         "ID": null,
+    //         "STR_CODARTICULO": null,
+    //         "STR_CONCEPTO": null,
+    //         "STR_ALMACEN": null,
+    //         "STR_SUBTOTAL": null,
+    //         "STR_INDIC_IMPUESTO": null,
+    //         "STR_DIM1": null,
+    //         "STR_DIM2": null,
+    //         "STR_DIM3": null,
+    //         "STR_DIM4": null,
+    //         "STR_DIM5": null,
+    //         "STR_DOC_ID": null,
+    //         "STR_CANTIDAD": null,
+    //         "STR_TPO_OPERACION": null
+    //     }
+    // );
+
+
     const selectedOptionTemplate = (option, props) => {
         if (option) {
             return (
@@ -66,6 +88,11 @@ function FormDetalleDocumento({
 
     const addDetDoc = () => {
         setArticulos([...articulos, detDoc]);
+        setDocumento(prevState => ({
+            ...prevState,
+            DocumentoDet: articulos
+        }))
+        // setDocumento([...documento,documento.DocumentoDet])
         setProductDialog(false)
         setDetDoc(null)
     }
@@ -75,21 +102,24 @@ function FormDetalleDocumento({
             <Dialog
                 visible={productDialog}
                 onHide={() => setProductDialog(false)}
+                style={{ width: '50vw' }} 
             >
                 <h2>Agregar Detalle:</h2>
                 <div className="col-12 md:col-6 lg:col-12">
                     <div className="mb-3 flex flex-column gap-2">
                         <label htmlFor="">(*)Cod. Articulo/Servicio:</label>
                         <Dropdown
-                            value={detDoc?.article}
+                            value={detDoc.Cod}
                             onChange={(e) => {
                                 // setArticle(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Cod: e.value.ItemCode
+                                    Cod: e.target.value
                                 }));
                             }}
                             options={articles}
+                            filter
+                            filterBy='ItemName'
                             optionLabel="ItemCode"
                             placeholder='Seleccione Articulo/Servicio'
                             valueTemplate={selectedOptionTemplate}
@@ -97,84 +127,95 @@ function FormDetalleDocumento({
                         />
                         <label htmlFor="">(*)Proyecto:</label>
                         <Dropdown
-                            value={detDoc?.proyecto}
+                            value={detDoc.Proyecto}
                             onChange={(e) => {
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Proyecto: e.value.name
+                                    Proyecto: e.target.value
                                 }));
                             }}
                             options={proyectos}
+                            filter
+                            filterBy='name'
                             optionLabel="name"
                             placeholder='Seleccione Proyecto'
                         />
                         <label htmlFor="">(*)Unidad de Negocio:</label>
                         <Dropdown
-                            value={detDoc?.unidNeg}
+                            value={detDoc.UnidadNegocio}
                             onChange={(e) => {
-                                // setUnidNeg(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    UnidadNegocio: e.value.name
+                                    UnidadNegocio: e.target.value
                                 }));
                             }}
                             options={unidNegocios}
+                            filter
+                            filterBy='name'
                             optionLabel={"name"}
                             placeholder='Seleccione Unidad de Negocio'
                         />
                         <label htmlFor="">(*)Filial:</label>
                         <Dropdown
-                            value={detDoc?.fili}
+                            value={detDoc.Filial}
                             onChange={(e) => {
                                 setFili(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Filial: e.value.name
+                                    Filial: e.target.value
                                 }));
                             }}
                             options={filial}
+                            filter
+                            filterBy='name'
                             optionLabel="name"
                             placeholder='Seleccione Filial'
                         />
                         <label htmlFor="">(*)Area:</label>
                         <Dropdown
-                            value={detDoc?.area}
+                            value={detDoc.Areas}
                             onChange={(e) => {
                                 setArea(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    Areas: e.value.name
+                                    Areas: e.target.value
                                 }));
                             }}
                             options={areas}
+                            filter
+                            filterBy='name'
                             optionLabel="name"
                             placeholder='Seleccione Area'
                         />
                         <label htmlFor="">(*)Centro Costo:</label>
                         <Dropdown
-                            value={detDoc?.centCosto}
+                            value={detDoc.CentroCosto}
                             onChange={(e) => {
                                 setCentCosto(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    CentroCosto: e.value.name
+                                    CentroCosto: e.target.value
                                 }));
                             }}
                             options={centroCostos}
+                            filter
+                            filterBy='name'
                             optionLabel="name"
                             placeholder='Seleccione Centro Costo'
                         />
                         <label htmlFor="">(*)Ind. Impuesto:</label>
                         <Dropdown
-                            value={detDoc?.indImp}
+                            value={detDoc.IndImpuesto}
                             onChange={(e) => {
                                 setIndImp(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: e.value.name
+                                    IndImpuesto: e.target.value
                                 }));
                             }}
                             options={indImpuestos}
+                            filter
+                            filterBy='name'
                             optionLabel="name"
                             placeholder='Seleccione Ind. Impuesto'
                         />

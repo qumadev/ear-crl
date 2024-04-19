@@ -13,6 +13,33 @@ import FormDetalleDocumento from './FormDetalleDocumento';
 
 function DocumentoSustentado() {
 
+    const [documento, setDocumento] = useState(
+        {
+            "ID": null,
+            "STR_RENDICION": null,
+            "STR_FECHA_CONTABILIZA": null,
+            "STR_FECHA_DOC": null,
+            "STR_FECHA_VENCIMIENTO": null,
+            "STR_PROVEEDOR": null,
+            "STR_RUC": null,
+            "STR_TIPO_AGENTE": null,
+            "STR_MONEDA": null,
+            "STR_COMENTARIOS": null,
+            "STR_TIPO_DOC": null,
+            "STR_SERIE_DOC": null,
+            "STR_CORR_DOC": null,
+            "STR_VALIDA_SUNAT": null,
+            "STR_ANEXO_ADJUNTO": null,
+            "STR_OPERACION": null,
+            "STR_PARTIDAFLUJO": null,
+            "STR_RD_ID": null,
+            "STR_TOTALDOC": null,
+            "STR_RAZONSOCIAL": null,
+            "DocumentoDet":[]
+        }
+
+    );
+
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
     const openNew = () => {
@@ -35,7 +62,8 @@ function DocumentoSustentado() {
     const [unidNegocios, setUnidNegocios] = useState(null);
 
     const [razon, setRazon] = useState(null);
-    const [articulos,setArticulos] = useState([])
+    const [articulos, setArticulos] = useState([])
+    const [DocumentoDet, setDocumentoDet] = useState([]);
 
     async function obtenerData() {
         const response = await Promise.all([
@@ -61,6 +89,8 @@ function DocumentoSustentado() {
     }
     useEffect(() => {
         obtenerData();
+        setDocumentoDet(articulos)
+        // setDocumento(...documento, DocumentoDet)
     }, []);
 
     const monedas = [
@@ -97,8 +127,13 @@ function DocumentoSustentado() {
         );
     };
 
+
     const saveDocumento = () => { }
 
+    const showDoc = () => { 
+        console.log(documento)
+        console.log(articulos)
+    }
     return (
         <div>
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
@@ -123,6 +158,8 @@ function DocumentoSustentado() {
                                 }}
                             options={tipos}
                             optionLabel="name"
+                            filter
+                            filterBy='name'
                             placeholder='Seleccione Tipo'
                         />
                     </div>
@@ -152,7 +189,7 @@ function DocumentoSustentado() {
                             options={proveedores}
                             optionLabel="LicTradNum"
                             filter
-                            filterBy='LicTradNum'
+                            filterBy='CardName,LicTradNum'
                             filterMatchMode="contains"
                             placeholder="Selecciona Proveedor"
                             valueTemplate={selectedOptionTemplate}
@@ -184,6 +221,8 @@ function DocumentoSustentado() {
                             }}
                             options={motivos}
                             optionLabel="name"
+                            filter
+                            filterBy='name'
                             placeholder='Seleccione Motivo'
                         />
                     </div>
@@ -197,6 +236,8 @@ function DocumentoSustentado() {
                             }}
                             options={monedas}
                             optionLabel="name"
+                            filter
+                            filterBy='name'
                             placeholder='Seleccione Moneda'
                         />
                     </div>
@@ -323,6 +364,8 @@ function DocumentoSustentado() {
             </div>
 
             <FormDetalleDocumento
+                documento={documento}
+                setDocumento={setDocumento}
                 articulos={articulos}
                 setArticulos={setArticulos}
                 productDialog={productDialog}
@@ -336,7 +379,13 @@ function DocumentoSustentado() {
                 indImpuestos={indImpuestos}
             >
             </FormDetalleDocumento>
-            
+
+            <Button
+                className='col-4'
+                label="Show Doc"
+                onClick={showDoc}
+            />
+
         </div>
     );
 }
