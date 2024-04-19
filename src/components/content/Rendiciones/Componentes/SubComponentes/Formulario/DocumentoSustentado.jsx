@@ -151,6 +151,20 @@ function DocumentoSustentado() {
     };
 
 
+    const [numero, setNumero] = useState('');
+    const [esValido, setEsValido] = useState(true);
+
+    const handleNumeroChange = (e) => {
+        const inputValue = e.target.value;
+        const regex = /^\d{8}$/; // Expresión regular para validar 8 dígitos
+        if (regex.test(inputValue)) {
+            setNumero(inputValue);
+            setEsValido(true);
+        } else {
+            setEsValido(false);
+        }
+    };
+
     const saveDocumento = () => { }
 
     const showDoc = () => { 
@@ -198,7 +212,10 @@ function DocumentoSustentado() {
                         <InputText
                             className='col-6'
                             placeholder='Correlativo'
+                            value={numero}
+                            onChange={handleNumeroChange}
                         />
+                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
