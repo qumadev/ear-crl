@@ -43,9 +43,9 @@ function FormDetalleDocumento({
         "Areas": null,
         "CentroCosto": null,
         "IndImpuesto": null,
-        "Precio": 0,
-        "Cantidad": 0,
-        "Impuesto": 0
+        "Precio": null,
+        "Cantidad": null,
+        "Impuesto": null
     });
 
     // const [documentoDet, setDocumentoDet] = useState(
@@ -87,19 +87,49 @@ function FormDetalleDocumento({
     };
 
     const addDetDoc = () => {
-        setArticulos([...articulos, detDoc]);
-        setDocumento(prevState => ({
-            ...prevState,
-            DocumentoDet: articulos
-        }))
-        // setDocumento([...documento,documento.DocumentoDet])
-        setProductDialog(false)
-        setDetDoc(null)
+        if (validarCampos()) {
+            setArticulos([...articulos, detDoc]);
+            setDocumento(prevState => ({
+                ...prevState,
+                DocumentoDet: articulos
+            }))
+            // setDocumento([...documento,documento.DocumentoDet])
+            setProductDialog(false)
+            setDetDoc(null)
+        } else {
+            alert('Por favor complete todos los campos requeridos.');
+        }
     }
 
     const showCampos = () => {
         console.log(detDoc)
     }
+
+    const [campoValido, setCampoValido] = useState({
+        Cod: false,
+        Proyecto: false,
+        UnidadNegocio: false,
+        Filial: false,
+        Areas: false,
+        CentroCosto: false,
+        IndImpuesto: false,
+        Precio: false,
+        Cantidad: false,
+        // Impuesto: false
+    });
+
+    const validarCampos = () => {
+        for (let campo in campoValido) {
+            if (!detDoc[campo]) {
+                setCampoValido(prevState => ({
+                    ...prevState,
+                    [campo]: false
+                }));
+                return false;
+            }
+        }
+        return true;
+    };
     return (
         <div>
             <Dialog
@@ -123,6 +153,10 @@ function FormDetalleDocumento({
                                     Concepto: e.target.value.ItemName,
                                     Almacen: e.target.value.WhsCode
                                 }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Cod: !!e.target.value
+                                }));
                             }}
                             options={articles}
                             filter
@@ -140,6 +174,10 @@ function FormDetalleDocumento({
                                     ...prevState,
                                     Proyecto: e.target.value
                                 }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Proyecto: !!e.target.value
+                                }));
                             }}
                             options={proyectos}
                             filter
@@ -154,6 +192,10 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     UnidadNegocio: e.target.value
+                                }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    UnidadNegocio: !!e.target.value
                                 }));
                             }}
                             options={unidNegocios}
@@ -171,6 +213,10 @@ function FormDetalleDocumento({
                                     ...prevState,
                                     Filial: e.target.value
                                 }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Filial: !!e.target.value
+                                }));
                             }}
                             options={filial}
                             filter
@@ -186,6 +232,10 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Areas: e.target.value
+                                }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Areas: !!e.target.value
                                 }));
                             }}
                             options={areas}
@@ -203,6 +253,10 @@ function FormDetalleDocumento({
                                     ...prevState,
                                     CentroCosto: e.target.value
                                 }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    CentroCosto: !!e.target.value
+                                }));
                             }}
                             options={centroCostos}
                             filter
@@ -218,6 +272,10 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     IndImpuesto: e.target.value
+                                }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    IndImpuesto: !!e.target.value
                                 }));
                             }}
                             options={indImpuestos}
@@ -236,6 +294,10 @@ function FormDetalleDocumento({
                                     Precio: e.target.value,
                                     Impuesto: (e.target.value*detDoc?.Cantidad*0.18).toFixed(2)
                                 }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Precio: !!e.target.value
+                                }));
                             }}
                         />
                         <label htmlFor="">(*)Cantidad:</label>
@@ -243,11 +305,14 @@ function FormDetalleDocumento({
                             value={detDoc?.Cantidad}
                             onChange={(e) => {
                                 setCantidad(e.target.value)
-                                
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Cantidad: e.target.value,
                                     Impuesto: (e.target.value*detDoc?.Precio*0.18).toFixed(2)
+                                }));
+                                setCampoValido(prevState => ({
+                                    ...prevState,
+                                    Cantidad: !!e.target.value
                                 }));
                             }}
                         />
@@ -261,11 +326,13 @@ function FormDetalleDocumento({
                                     Impuesto: e.target.value
                                 }));
                             }}
+                            disabled
                         />
                         <Button
                             className='col-12'
                             label="Agregar"
                             onClick={addDetDoc}
+                            disabled={!Object.values(campoValido).every(Boolean)}
                         />
                         <Button
                             className='col-12'
