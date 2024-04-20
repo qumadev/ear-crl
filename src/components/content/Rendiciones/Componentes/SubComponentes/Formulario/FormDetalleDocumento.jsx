@@ -155,7 +155,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Cod: !!e.target.value
+                                    Cod: Boolean(e.target.value)
                                 }));
                             }}
                             options={articles}
@@ -176,7 +176,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Proyecto: !!e.target.value
+                                    Proyecto: Boolean(e.target.value)
                                 }));
                             }}
                             options={proyectos}
@@ -195,7 +195,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    UnidadNegocio: !!e.target.value
+                                    UnidadNegocio: Boolean(e.target.value)
                                 }));
                             }}
                             options={unidNegocios}
@@ -215,7 +215,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Filial: !!e.target.value
+                                    Filial: Boolean(e.target.value)
                                 }));
                             }}
                             options={filial}
@@ -235,7 +235,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Areas: !!e.target.value
+                                    Areas: Boolean(e.target.value)
                                 }));
                             }}
                             options={areas}
@@ -255,7 +255,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    CentroCosto: !!e.target.value
+                                    CentroCosto: Boolean(e.target.value)
                                 }));
                             }}
                             options={centroCostos}
@@ -275,7 +275,7 @@ function FormDetalleDocumento({
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: !!e.target.value
+                                    IndImpuesto: Boolean(e.target.value)
                                 }));
                             }}
                             options={indImpuestos}
@@ -292,11 +292,11 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Precio: e.target.value,
-                                    Impuesto: (e.target.value*detDoc?.Cantidad*0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto?.id=='EXO'||detDoc?.IndImpuesto==null? 0 : (e.target.value*detDoc?.Cantidad*0.18).toFixed(2)
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Precio: !!e.target.value
+                                    Precio: Boolean(e.target.value)
                                 }));
                             }}
                         />
@@ -308,11 +308,11 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Cantidad: e.target.value,
-                                    Impuesto: (e.target.value*detDoc?.Precio*0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto.id=='EXO'||null? 0 :(e.target.value*detDoc?.Precio*0.18).toFixed(2)
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    Cantidad: !!e.target.value
+                                    Cantidad: Boolean(e.target.value)
                                 }));
                             }}
                         />

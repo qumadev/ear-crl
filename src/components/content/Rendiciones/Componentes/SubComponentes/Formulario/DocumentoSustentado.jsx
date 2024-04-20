@@ -123,7 +123,7 @@ function DocumentoSustentado() {
 
     const indImpuestos = [
         { id: 'IGV', name: 'IGV' },
-        { id: 'ORV', name: 'ORV' },
+        { id: 'EXO', name: 'EXO' },
     ];
 
     const [proveedor, handleChangeProveedor] = useState(null);
