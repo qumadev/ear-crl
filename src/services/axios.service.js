@@ -9,7 +9,7 @@ export const obtenerProveedores = () => {
 };
 
 export const iniciaSesion = (body) => {
-  return API.post("/sesion/login?portalId=3", body, {
+  return API.post("/sesion/login?portalId=1", body, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -23,7 +23,6 @@ export const obtenCampoUsr = (id, body) => {
 export const obtenInfoUser = (id) => {
   return null;
 };
-
 
 export const obtenerArticulos = () => {
   return API.get("/item/art?area=002", {
@@ -62,7 +61,6 @@ export const obtenerCentroCosto = () => {
     },
   });
 };
-
 
 export const obtenerProyectos = () => {
   return API.get("/dimension/project", {
@@ -156,8 +154,12 @@ export const crearSolicitud = (body) => {
   return null;
 };
 
-export const actualizarSolicitud = (id, body) => {
-  return null;
+export const actualizarSolicitud = (body) => {
+  return API.patch(`/solicitudEar`, body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 
 export const actualizarSolicitudDet = (id, body) => {
@@ -169,9 +171,12 @@ export const eliminarDetalleSolicitud = (id) => {
 };
 
 export const enviarSolicitudAproba = (id, body) => {
-  return null;
+  return API.post(`/solicitudEar/aprobacion/${id}`, body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
-
 export const validacionSolicitud = (id) => {
   return null;
 };
@@ -240,8 +245,20 @@ export const obtenerSolicitudDet = (id) => {
   return null;
 };
 
-export const aceptarSolicitudSR = (solicitudId, aprobadorId, areaAprobador) => {
-  return null;
+export const aceptarSolicitudSR = (
+  solicitudId,
+  aprobadorId,
+  areaAprobador,
+  estado
+) => {
+  return API.patch(
+    `/solicitudEar/aprobacion/acepta?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}`,
+    {
+      ValidityState: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const rechazarSolicitudSR = (
@@ -376,7 +393,11 @@ export const generaPDFRendicion = (num) => {
 };
 
 export const obtieneAprobadoresSL = (id) => {
-  return null;
+  return API.get(`solicitudEar/aprobadores?idSolicitud=${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 
 export const obtieneAprobadoresRd = (id) => {

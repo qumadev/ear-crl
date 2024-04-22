@@ -28,7 +28,7 @@ export function Header({
 
   function obtenePerfil(perfil) {
     switch (perfil) {
-      case 1:
+      case "1":
         return "Usuario";
       case 2:
         return "Autorizador";
@@ -153,11 +153,12 @@ export function Header({
                 style={{ color: "#97E723" }}
               ></Button>
               <span className="text-xs perfil " style={{ color: "#ffffff" }}>
-                {usuario.Nombres && capitalizarNombres(usuario.Nombres)}
+                {usuario.nombres && capitalizarNombres(usuario.nombres)}
               </span>
               <span className="text-xs perfil" style={{ color: "#ffffff" }}>
-                Perfil: {obtenePerfil(usuario.TipoUsuario)} - Sede:{" "}
-                {usuario.fax}
+                Perfil: {obtenePerfil(usuario.rol?.id)} - Sede:{" "}
+                {usuario.filial &&
+                  capitalizarNombres(usuario.filial.U_ST_NombreFilial)}
               </span>
             </div>
           )}

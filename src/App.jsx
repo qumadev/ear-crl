@@ -232,7 +232,7 @@ export default function MyApp() {
               element={
                 <Componente>
                   {/* <FormularioSL /> */}
-                  <VerSolicitud />
+                  <FormularioSL />
                 </Componente>
               }
             />

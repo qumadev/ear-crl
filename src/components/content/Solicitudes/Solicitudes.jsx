@@ -229,34 +229,10 @@ function Solicitudes({
           );
         },
       },
-
     ];
 
-    if(usuario.rol.id==2){
-      items.push(
-        {
-          label: "Aprobar",
-          icon: "pi pi-eye",
-          command: () => {
-            console.log("aprobando solicitud")
-          },
-        },
-      )
-    }
-    if(usuario.rol.id==3){
-      items.push(
-        {
-          label: "Contabilizar",
-          icon: "pi pi-eye",
-          command: () => {
-            console.log("contabilizando")
-          },
-        },
-      )
-    }
-
     if (
-      (usuario.TipoUsuario != 1) &
+      (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
     ) {
       items.push({
@@ -269,7 +245,7 @@ function Solicitudes({
     }
 
     if (
-      (usuario.TipoUsuario != 1) &
+      (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
     ) {
       items.push({
@@ -282,7 +258,7 @@ function Solicitudes({
     }
     if (
       ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
-      (usuario.TipoUsuario == 1)
+      (usuario.rol.id == 1)
     ) {
       items.push({
         label: "Editar",
@@ -303,7 +279,7 @@ function Solicitudes({
       });
     }
 
-    if ((rowData.STR_ESTADO == 7) & (usuario.TipoUsuario == 4)) {
+    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) {
       items.push({
         label: "Reintentar Migracion",
         icon: "pi pi-pencil",
@@ -329,7 +305,7 @@ function Solicitudes({
       });
     }
 
-    if (rowData.STR_ESTADO == 1 && usuario.TipoUsuario == 1) {
+    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) {
       items.push({
         label: "Enviar Aprobación",
         icon: "pi pi-send",
@@ -417,8 +393,6 @@ function Solicitudes({
     const enviarAprobacion = async (data) => {
       setLoading(true);
       try {
-        let responsValida = await validacionSolicitud(data.ID);
-
         if (responsValida.status != 200) {
           showError(responsValida.data.Message);
           console.log(responsValida.data.Message);
@@ -652,7 +626,7 @@ function Solicitudes({
       fechaFin,
       nrendicion,
       estado,
-      0 //usuario.filial.
+      usuario.branch //usuario.filial.
     )
       .then((response) => {
         console.log(response.data);

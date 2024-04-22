@@ -140,7 +140,7 @@ export default function Filtrado({
                   estados: e.value,
                 }))
               }
-              optionLabel="Nombre"
+              optionLabel="name"
               placeholder="Estado"
               className="p-column-filter"
               maxSelectedLabels={1}
