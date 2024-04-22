@@ -110,6 +110,14 @@ export const obtenerTipos = () => {
   });
 };
 
+export const crearDocumento = (body) => {
+  return API.post("/rendicion/documento", body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerEmpleados = () => {
   return null;
 };
@@ -295,10 +303,6 @@ export const consultaRuc = (id) => {
 };
 
 export const consultaComprobante = (body) => {
-  return null;
-};
-
-export const crearDocumento = (body) => {
   return null;
 };
 

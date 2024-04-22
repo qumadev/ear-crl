@@ -42,6 +42,7 @@ function Rendiciones({
   const { ruta } = useContext(AppContext);
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
+  
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -576,8 +577,10 @@ function Rendiciones({
               }
             } catch (error) {
             } finally {
-              navigate(ruta + "/rendiciones/ver");
+              // navigate(ruta + "/rendiciones/ver");
+              // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
               // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+              navigate(ruta + `/rendiciones/8/documentos/agregar`);
             }
           }}
           severity="success"

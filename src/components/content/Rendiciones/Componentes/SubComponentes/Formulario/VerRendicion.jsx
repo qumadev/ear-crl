@@ -21,7 +21,7 @@ function DocumentoSustentado() {
 
 
     const addDocumentSustentado = () => {
-        Navigate(ruta + "/rendicione/ver");
+        Navigate(ruta + "/rendiciones/ver");
      }
 
     

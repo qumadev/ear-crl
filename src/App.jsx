@@ -20,7 +20,6 @@ import { obtenerConf } from "./services/axios.service";
 import { Aprobadores } from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Aprobadores";
 import TokenCorreo from "./components/content/Correo/TokenCorreo";
 import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
-import SolicitudNuevaSL from "./components/content/Solicitudes/Componentes/subcomponentes/SolicitudNuevaSL";
 import DocumentoSustentado from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/DocumentoSustentado";
 
 export const AppContext = createContext(null);

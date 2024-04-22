@@ -73,39 +73,56 @@ function FormularioRD() {
     },
   ];
   /* Registro de Documentos */
-  const [documento, setDocumento] = useState({
-    ID: null,
-    STR_RENDICION: null,
-    STR_FECHA_CONTABILIZA: new Date(),
-    STR_FECHA_DOC: new Date(),
-    STR_FECHA_VENCIMIENTO: new Date(),
-    STR_PROVEEDOR: {
-      CardCode: null,
-      CardName: null,
-      LicTradNum: null,
-    },
-    STR_TIPO_AGENTE: agentes[0],
-    STR_COMENTARIOS: null,
-    STR_MONEDA: {
-      Descripcion: null,
-      Id: 0,
-      Nombre: null,
-      id: "SOL",
-      name: "SOL",
-    },
-    STR_TIPO_DOC: {
-      id: null,
-      name: null,
-    },
-    STR_SERIE_DOC: null,
-    STR_CORR_DOC: null,
-    STR_VALIDA_SUNAT: false,
-    STR_ANEXO_ADJUNTO: [],
-    STR_TOTALDOC: 0.0,
-    STR_PARTIDAFLUJO: null,
-    STR_OPERACION: config.STR_OPERACION,
-    STR_RD_ID: id,
-  });
+    const [documento, setDocumento] = useState(
+        {
+            ID: null,
+            STR_RENDICION: null,
+            STR_FECHA_CONTABILIZA: null,
+            STR_FECHA_DOC: null,
+            STR_FECHA_VENCIMIENTO: null,
+            STR_PROVEEDOR: null,
+            STR_RUC: null,
+            STR_TIPO_AGENTE: null,
+            STR_MONEDA: null,
+            STR_COMENTARIOS: null,
+            STR_TIPO_DOC: null,
+            STR_SERIE_DOC: null,
+            STR_CORR_DOC: null,
+            STR_VALIDA_SUNAT: null,
+            STR_ANEXO_ADJUNTO: null,
+            STR_OPERACION: null,
+            STR_PARTIDAFLUJO: null,
+            STR_RD_ID: null,
+            STR_TOTALDOC: null,
+            STR_RAZONSOCIAL: null,
+            DocumentoDet:[
+                {
+                    Cod: {
+                      ItemCode: null,
+                      ItemName: null,
+                      U_BPP_TIPUNMED: null,
+                      WhsCode: null,
+                      Stock: 0,
+                      Precio: 0
+                    },
+                    Concepto: null,
+                    Almacen: null,
+                    Proyecto: null,
+                    UnidadNegocio: null,
+                    Filial: null,
+                    Areas: null,
+                    CentroCosto: null,
+                    IndImpuesto: null,
+                    Precio: 0,
+                    Cantidad: 0,
+                    Impuesto: 0
+                  }
+            ]
+        }
+    
+    );
+
+
 
   const [detalles, setDetalles] = useState([]); // Lista de detalles
   const [anexos, setAnexos] = useState([]);
@@ -116,27 +133,6 @@ function FormularioRD() {
 
   const toast = useRef(null);
   const navigate = useNavigate();
-
-  /* Templates para DropDowns y formulario */
-  const selectedOptionTemplate = (option, props) => {
-    if (option) {
-      return (
-        <div className="flex">
-          <div>{option.name}</div>
-        </div>
-      );
-    }
-
-    return <span>{props.placeholder}</span>;
-  };
-
-  const complementoOptionTemplate = (option) => {
-    return (
-      <div className="flex">
-        <div>{option.name}</div>
-      </div>
-    );
-  };
 
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -227,9 +223,9 @@ function FormularioRD() {
           documento.STR_FECHA_VENCIMIENTO.toISOString().split("T")[0],
         detalles: _detalles, // Detalles
         //STR_VALIDA_SUNAT: compExisteSunat,
-        STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
-          ? documento.STR_ANEXO_ADJUNTO.join(", ")
-          : documento.STR_ANEXO_ADJUNTO,
+        // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
+        //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
+        //   : documento.STR_ANEXO_ADJUNTO,
       };
 
       console.log(_documento);
@@ -249,96 +245,96 @@ function FormularioRD() {
     }
   };
 
-  function changeFileTitle() {
-    try {
-      // console.log("changeFileTitle");
-      const fileUploadNode = ReactDOM.findDOMNode(
-        fileUploadRef.current.props.emptyTemplate._owner.child.child.child.child
-          .stateNode
-      );
-      // console.log(fileUploadNode);
-      if (fileUploadNode) {
-        const fileBadgeSpans = fileUploadNode.querySelectorAll(
-          ".p-fileupload-file-badge"
-        );
-        //  console.log(fileBadgeSpans);
-        fileBadgeSpans.forEach((fileBadgeSpan) => {
-          if (documento.STR_ANEXO_ADJUNTO.length > 0) {
-            console.log("cambiando estado");
-            fileBadgeSpan.innerText = "Cargado";
-            fileBadgeSpan.classList.remove("p-badge-warning");
-            fileBadgeSpan.classList.add("p-badge-success");
-          }
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // function changeFileTitle() {
+  //   try {
+  //     // console.log("changeFileTitle");
+  //     const fileUploadNode = ReactDOM.findDOMNode(
+  //       fileUploadRef.current.props.emptyTemplate._owner.child.child.child.child
+  //         .stateNode
+  //     );
+  //     // console.log(fileUploadNode);
+  //     if (fileUploadNode) {
+  //       const fileBadgeSpans = fileUploadNode.querySelectorAll(
+  //         ".p-fileupload-file-badge"
+  //       );
+  //       //  console.log(fileBadgeSpans);
+  //       fileBadgeSpans.forEach((fileBadgeSpan) => {
+  //         if (documento.STR_ANEXO_ADJUNTO.length > 0) {
+  //           console.log("cambiando estado");
+  //           fileBadgeSpan.innerText = "Cargado";
+  //           fileBadgeSpan.classList.remove("p-badge-warning");
+  //           fileBadgeSpan.classList.add("p-badge-success");
+  //         }
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  function getFechaLargo(fechaCorta) {
-    const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
+  // function getFechaLargo(fechaCorta) {
+  //   const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
 
-    const fechaAnio = fechaArray[2];
+  //   const fechaAnio = fechaArray[2];
 
-    const fechaJs = new Date(
-      fechaAnio.substring(0, 4),
-      fechaArray[1] - 1,
-      fechaArray[0]
-    );
+  //   const fechaJs = new Date(
+  //     fechaAnio.substring(0, 4),
+  //     fechaArray[1] - 1,
+  //     fechaArray[0]
+  //   );
 
-    return new Date(`${fechaJs}`);
-  }
+  //   return new Date(`${fechaJs}`);
+  // }
 
-  async function getDocumento() {
-    //setLoadingTemplate(true);
-    try {
-      console.log(idDocumento);
-      let response = await obtenerDocumento(idDocumento);
-      if (response.data.CodRespuesta != "99") {
-        var body = response.data.Result[0];
+  // async function getDocumento() {
+  //   //setLoadingTemplate(true);
+  //   try {
+  //     console.log(idDocumento);
+  //     let response = await obtenerDocumento(idDocumento);
+  //     if (response.data.CodRespuesta != "99") {
+  //       var body = response.data.Result[0];
 
-        // if (body.STR_PROVEEDOR.CardCode == "P99999999999") {
-        //   setProveedores((prevProveedores) =>
-        //     prevProveedores.map((prov) =>
-        //       prov.CardCode == "P99999999999"
-        //         ? {
-        //             ...prov,
-        //             CardName: body.STR_PROVEEDOR.CardName,
-        //             CardCode: body.STR_PROVEEDOR.CardCode,
-        //             LicTradNum: body.STR_PROVEEDOR.LicTradNum,
-        //           }
-        //         : prov
-        //     )
-        //   );
-        //   console.log(proveedores);
-        // }
+  //       // if (body.STR_PROVEEDOR.CardCode == "P99999999999") {
+  //       //   setProveedores((prevProveedores) =>
+  //       //     prevProveedores.map((prov) =>
+  //       //       prov.CardCode == "P99999999999"
+  //       //         ? {
+  //       //             ...prov,
+  //       //             CardName: body.STR_PROVEEDOR.CardName,
+  //       //             CardCode: body.STR_PROVEEDOR.CardCode,
+  //       //             LicTradNum: body.STR_PROVEEDOR.LicTradNum,
+  //       //           }
+  //       //         : prov
+  //       //     )
+  //       //   );
+  //       //   console.log(proveedores);
+  //       // }
 
-        if (body.STR_PROVEEDOR?.CardCode == "P99999999999") {
-          setProveedores((prevProveedores) => [
-            ...prevProveedores,
-            body.STR_PROVEEDOR,
-          ]);
-          console.log(proveedores);
-        }
+  //       if (body.STR_PROVEEDOR?.CardCode == "P99999999999") {
+  //         setProveedores((prevProveedores) => [
+  //           ...prevProveedores,
+  //           body.STR_PROVEEDOR,
+  //         ]);
+  //         console.log(proveedores);
+  //       }
 
-        setDocumento({
-          ...body,
-          STR_FECHA_CONTABILIZA: getFechaLargo(body.STR_FECHA_CONTABILIZA),
-          STR_FECHA_DOC: getFechaLargo(body.STR_FECHA_DOC),
-          STR_FECHA_VENCIMIENTO: getFechaLargo(body.STR_FECHA_VENCIMIENTO),
-        });
+  //       setDocumento({
+  //         ...body,
+  //         STR_FECHA_CONTABILIZA: getFechaLargo(body.STR_FECHA_CONTABILIZA),
+  //         STR_FECHA_DOC: getFechaLargo(body.STR_FECHA_DOC),
+  //         STR_FECHA_VENCIMIENTO: getFechaLargo(body.STR_FECHA_VENCIMIENTO),
+  //       });
 
-        setDetalles(body.detalles);
-      }
-    } catch (error) {
-      showError("Error al obtener Documento");
-      console.log(error);
-    } finally {
-      setLoadingTemplate(false);
-      //setLoadingTemplate(false);
-    }
-  }
+  //       setDetalles(body.detalles);
+  //     }
+  //   } catch (error) {
+  //     showError("Error al obtener Documento");
+  //     console.log(error);
+  //   } finally {
+  //     setLoadingTemplate(false);
+  //     //setLoadingTemplate(false);
+  //   }
+  // }
 
   async function SetDropDowns() {
     setLoadingTemplate(true);
@@ -393,97 +389,136 @@ function FormularioRD() {
     }
   }
 
-  async function getAdjunto() {
-    let response = await obtieneAdjuntosDoc(idDocumento);
-    if (response.status < 300) {
-      let files = response.data.Result;
 
-      const newList = response.data.Result.map((e) => {
-        if (e.data != null) {
-          const base64Data = e.data;
-          const binaryData = atob(base64Data);
-          const arrayBuffer = new ArrayBuffer(binaryData.length);
-          const uint8Array = new Uint8Array(arrayBuffer);
-          for (let i = 0; i < binaryData.length; i++) {
-            uint8Array[i] = binaryData.charCodeAt(i);
-          }
+  // async function getAdjunto() {
+  //   let response = await obtieneAdjuntosDoc(idDocumento);
+  //   if (response.status < 300) {
+  //     let files = response.data.Result;
 
-          // Crear un objeto Blob desde el array buffer
-          const blob = new Blob([arrayBuffer], {
-            type: e.type,
-          });
-          const blobUrl = URL.createObjectURL(blob);
-          //console.log(blobUrl);
-          e.objectURL = blobUrl;
-          /*
-          const blob = new Blob([blobData]);
-          const blobUrl = URL.createObjectURL(blob);
-          e.objectURL = blobUrl;
-          console.log(blobUrl);
-        */
+  //     const newList = response.data.Result.map((e) => {
+  //       if (e.data != null) {
+  //         const base64Data = e.data;
+  //         const binaryData = atob(base64Data);
+  //         const arrayBuffer = new ArrayBuffer(binaryData.length);
+  //         const uint8Array = new Uint8Array(arrayBuffer);
+  //         for (let i = 0; i < binaryData.length; i++) {
+  //           uint8Array[i] = binaryData.charCodeAt(i);
+  //         }
+
+  //         // Crear un objeto Blob desde el array buffer
+  //         const blob = new Blob([arrayBuffer], {
+  //           type: e.type,
+  //         });
+  //         const blobUrl = URL.createObjectURL(blob);
+  //         //console.log(blobUrl);
+  //         e.objectURL = blobUrl;
+  //         /*
+  //         const blob = new Blob([blobData]);
+  //         const blobUrl = URL.createObjectURL(blob);
+  //         e.objectURL = blobUrl;
+  //         console.log(blobUrl);
+  //       */
+  //       }
+  //       return e;
+  //     });
+
+  //     setAnexos(newList);
+  //     setFiles(newList);
+  //   } else {
+  //     console.log("No tiene adjuntos");
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   console.log(fechaSolicitud, editable, tipoRendicion);
+  //   //setLoadingTemplate(true);
+  //   // if (!esModoRegistrar) {
+  //   //   getDocumento();
+  //   // } else {
+  //   SetDropDowns();
+  //   if (!esModoRegistrar) {
+  //     getDocumento();
+  //     getAdjunto();
+  //   }
+  //   //setLoadingTemplate(false);
+  //   //   console.log(config);
+  //   // }
+
+  //   const handleKeyDown = (event) => {
+  //     const isCtrlPressed = event.ctrlKey || event.metaKey;
+
+  //     if (isCtrlPressed) {
+  //       switch (event.key) {
+  //         case "ArrowLeft":
+  //           setActiveIndex((prevIndex) => Math.max(0, prevIndex - 1));
+  //           break;
+  //         case "ArrowRight":
+  //           setActiveIndex((prevIndex) =>
+  //             Math.min(
+  //               tabViewRef.current.props.children.filter((c) => c != false)
+  //                 .length - 1,
+  //               prevIndex + 1
+  //             )
+  //           );
+  //           break;
+  //         default:
+  //           break;
+  //       }
+  //     }
+  //   };
+  //   window.addEventListener("keydown", handleKeyDown);
+
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
+
+  // if (loadingTemplate) {
+  //   return (
+  //     <div className="card flex justify-content-center">
+  //       <Toast ref={toast} />
+  //       <ProgressSpinner />
+  //     </div>
+  //   );
+  // }
+
+  const registrarDocumento = async () => {
+    setLoading(true);
+
+    // let body = obtieneJsonAregistrar();
+    try {
+      console.log("pinta1")
+      if (id != null) {
+        console.log("pinta2")
+        var response = await crearDocumento(documento);
+
+        if (response.status < 300) {
+          let body = response.data.Result[0];
+
+          showSuccess(`Se creó el documento exitosamente con id ${body.ID}`);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          navigate(ruta + "/rendiciones");
+        } else {
+          showError("Se tuvo un error al crear el documento");
         }
-        return e;
-      });
+      } else {
+        var response = await actualizarSolicitud(documento);
+        if (response.status < 300) {
+          //let body = response.data.Result[0];
 
-      setAnexos(newList);
-      setFiles(newList);
-    } else {
-      console.log("No tiene adjuntos");
-    }
-  }
-
-  useEffect(() => {
-    console.log(fechaSolicitud, editable, tipoRendicion);
-    //setLoadingTemplate(true);
-    // if (!esModoRegistrar) {
-    //   getDocumento();
-    // } else {
-    SetDropDowns();
-    if (!esModoRegistrar) {
-      getDocumento();
-      getAdjunto();
-    }
-    //setLoadingTemplate(false);
-    //   console.log(config);
-    // }
-
-    const handleKeyDown = (event) => {
-      const isCtrlPressed = event.ctrlKey || event.metaKey;
-
-      if (isCtrlPressed) {
-        switch (event.key) {
-          case "ArrowLeft":
-            setActiveIndex((prevIndex) => Math.max(0, prevIndex - 1));
-            break;
-          case "ArrowRight":
-            setActiveIndex((prevIndex) =>
-              Math.min(
-                tabViewRef.current.props.children.filter((c) => c != false)
-                  .length - 1,
-                prevIndex + 1
-              )
-            );
-            break;
-          default:
-            break;
+          showSuccess(`Se actualizo exitosamente documento #${documento.ID}`);
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          navigate(ruta + "/solicitudes");
+        } else {
+          showError("Se tuvo un error al actualizar el documento");
         }
       }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  if (loadingTemplate) {
-    return (
-      <div className="card flex justify-content-center">
-        <Toast ref={toast} />
-        <ProgressSpinner />
-      </div>
-    );
-  }
+    } catch (error) {
+      console.log(error.Message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -506,9 +541,13 @@ function FormularioRD() {
         onTabChange={(e) => setActiveIndex(e.index)}
       >
         <TabPanel header="Agregar Documento Sustentado">
-            <DocumentoSustentado></DocumentoSustentado>
+            <DocumentoSustentado 
+              documento = {documento}
+              setDocumento = {setDocumento}
+              moneda={documento.STR_MONEDA}
+            />
         </TabPanel>
-        <TabPanel header="General">
+        {/* <TabPanel header="General">
           <GeneralRD
             fechaContabilizacion={documento.STR_FECHA_CONTABILIZA}
             fechaDocumento={documento.STR_FECHA_DOC}
@@ -597,7 +636,7 @@ function FormularioRD() {
             setFiles={setFiles}
             editable={editable}
           />
-        </TabPanel>
+        </TabPanel> */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
         <Button
@@ -606,8 +645,10 @@ function FormularioRD() {
           size="large"
           style={{ backgroundColor: "black", borderColor: "black" }}
           onClick={(e) => {
-            if (!esModoRegistrar) updateRD();
-            else registrarRD();
+            registrarDocumento();
+            // if (!esModoRegistrar) updateRD();
+            // else registrarRD();
+            // else registrarDocumento();
           }}
           loading={loading}
           disabled={editable}
