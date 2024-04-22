@@ -464,13 +464,13 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)N° de serie</label>
                         <InputText
-                            // value={documento.STR_SERIE_DOC}
-                            // onChange={(e) => {
-                            //     setDocumento((prevState) => ({
-                            //         ...prevState,
-                            //         STR_SERIE_DOC: e.target.value,
-                            //     }));
-                            // }}
+                            value={documento.STR_SERIE_DOC}
+                            onChange={(e) => {
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_SERIE_DOC: e.target.value,
+                                }));
+                            }}
                             className='col-6'
                             placeholder='N° de serie'
                         />
@@ -480,8 +480,15 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <InputText
                             className='col-6'
                             placeholder='Correlativo'
-                            value={numero}
-                            onChange={handleNumeroChange}
+                            value={documento.STR_CORR_DOC}
+                            onChange={(e) => {
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: e.target.value,
+                                }));
+                            }}
+                            // value={numero}
+                            // onChange={handleNumeroChange}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -508,7 +515,14 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
-                            value={razon}
+                            // value={razon}
+                            value={documento.STR_RAZONSOCIAL}
+                            onChange={(e) => {
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_RAZONSOCIAL: e.target.value,
+                                }));
+                            }}
                             disabled
                         />
                     </div>
