@@ -19,7 +19,7 @@ import { AppContext } from '../../../../../../App';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 
-function DocumentoSustentado({ documento, setDocumento, moneda }) {
+function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) {
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
     const { usuario, ruta, config } = useContext(AppContext);
@@ -414,7 +414,6 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
         );
     };
 
-
     const [numero, setNumero] = useState('');
     const [esValido, setEsValido] = useState(true);
 
@@ -433,16 +432,49 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
 
     const quitArticulo = () => { }
 
-
     const showDoc = () => {
-        console.log(documento)
-        console.log(articulos)
+        console.log("d: ",documento)
+        console.log("a: ",articulos)
     }
 
+    // Personalizando campos
+    const transformDataForExport = (articulos) => {
+      return articulos.map((articulo) => {
+        const codValue = articulo.Cod ? articulo.Cod.ItemCode : '';
+        const conceptoValue = articulo.Concepto ? articulo.Concepto : '';
+        const almacenValue = articulo.Almacen ? articulo.Almacen : '';
+        const proyectoValue = articulo.Proyecto ? articulo.Proyecto.name : '';
+        const unidadNegocioValue = articulo.UnidadNegocio ? articulo.UnidadNegocio.name : '';
+        const filialValue = articulo.Filial ? articulo.Filial.name : '';
+        const areasValue = articulo.Areas ? articulo.Areas.name : '';
+        const centroCostoValue = articulo.CentroCosto ? articulo.CentroCosto.name : '';
+        const indImpuestoValue = articulo.IndImpuesto ? articulo.IndImpuesto.name : '';
+        const precioValue = articulo.Precio ? articulo.Precio : '';
+        const cantidadValue = articulo.Cantidad ? articulo.Cantidad : '';
+        const impuestoValue = articulo.Impuesto ? articulo.Impuesto : '';
+
+        return {
+          ...articulo,
+          Cod: codValue,
+          Concepto: conceptoValue,
+          Almacen: almacenValue,
+          Proyecto: proyectoValue,
+          UnidadNegocio: unidadNegocioValue,
+          Filial: filialValue,
+          Areas: areasValue,
+          CentroCosto: centroCostoValue,
+          IndImpuesto: indImpuestoValue,
+          Precio: precioValue,
+          Cantidad: cantidadValue,
+          Impuesto: impuestoValue,
+        };
+      });
+    };
     // Expotar detalle
     const exportExcel = async () => {
       const XLSX = await import("xlsx");
-      const worksheet = XLSX.utils.json_to_sheet(articulos);
+      const transformedData = transformDataForExport(articulos);
+      const worksheet = XLSX.utils.json_to_sheet(transformedData);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
@@ -469,13 +501,14 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
     return (
         <div>
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
-            <h1>Agregar Documento Sustentado:</h1>
+            <h1>{esModoDetail ? "Detalle" : "Agregar"} Documento Sustentado:</h1>
             <div className="col-12 md:col-6 lg:col-12">
                 <div className="mb-3 flex flex-column">
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)¿Es exterior?</label>
                         <Checkbox
                             className='col-6'
+                            disabled={esModoDetail}
                         ></Checkbox>
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -495,6 +528,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             filter
                             filterBy='name'
                             placeholder='Seleccione Tipo'
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -509,6 +543,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             }}
                             className='col-6'
                             placeholder='N° de serie'
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -525,6 +560,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             }}
                         // value={numero}
                         // onChange={handleNumeroChange}
+                        disabled={esModoDetail}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -551,6 +587,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             placeholder="Selecciona Proveedor"
                             valueTemplate={selectedOptionTemplate}
                             itemTemplate={complementoOptionTemplate}
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -573,6 +610,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             }}
                             className='col-6'
                             placeholder='Direccion'
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -592,6 +630,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             filter
                             filterBy='name'
                             placeholder='Seleccione Motivo'
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -612,6 +651,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             filter
                             filterBy='name'
                             placeholder='Seleccione Moneda'
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -623,6 +663,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             // disabled
                             placeholder='Seleccione fecha'
                             dateFormat="dd/mm/yy"
+                            disabled={esModoDetail}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -631,20 +672,24 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             className='col-6'
                             rows={5}
                             cols={30}
+                            disabled={esModoDetail}
                         />
                     </div>
-                    <div className="flex col-12">
-                        <Button
-                            className='col-6'
-                            label="Agregar Detalle"
-                            onClick={openNew}
-                        />
-                        <Button
-                            className='col-6'
-                            label="Eliminar Seleccionados"
-                            onClick={() => { }}
-                        />
-                    </div>
+                    { esModoDetail ? "" : 
+                      <div className="flex col-12">
+                          <Button
+                              className='col-6'
+                              label="Agregar Detalle"
+                              onClick={openNew}
+                          />
+                          <Button
+                              className='col-6'
+                              label="Eliminar Seleccionados"
+                              onClick={() => { }}
+                          />
+                      </div>
+                    }
+                    
 
                     <DataTable
                         value={articulos}
@@ -728,12 +773,13 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             style={{ minWidth: "7rem" }}
                         ></Column>
                     </DataTable>
-
-                    <Button
-                        className='col-4'
-                        label="Guardar Cambios"
-                        onClick={saveDocumento}
-                    />
+                    { esModoDetail ? "" :
+                        <Button
+                            className='col-4'
+                            label="Guardar Cambios"
+                            onClick={saveDocumento}
+                        />
+                    }
                 </div>
             </div>
 

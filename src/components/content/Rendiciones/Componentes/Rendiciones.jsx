@@ -809,7 +809,7 @@ const actionBodyver = (
       <div>
         <Button label="ver" icon="pi pi-eye" severity="success"
             onClick={() => {
-            navigate(ruta + "/rendiciones/8/documentos/detail");
+            navigate(ruta + "/rendiciones/8/documentos/agregar");
           }}
 
         />
