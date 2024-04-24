@@ -617,6 +617,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                             onClick={() => { }}
                         />
                     </div>
+
                     <DataTable
                         value={articulos}
                         sortMode="multiple"

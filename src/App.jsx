@@ -21,6 +21,7 @@ import { Aprobadores } from "./components/content/Rendiciones/Componentes/SubCom
 import TokenCorreo from "./components/content/Correo/TokenCorreo";
 import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
 import DocumentoSustentado from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/DocumentoSustentado";
+import FormDT from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Sub/FormDT";
 
 export const AppContext = createContext(null);
 
@@ -258,6 +259,14 @@ export default function MyApp() {
                   <BodyDocs />{" "}
                 </Componente>
               }
+            />
+            <Route
+            path={ ruta + "/rendiciones/info"}
+            element={
+              <Componente>
+                <FormDT />{""}
+              </Componente>
+            }
             />
             <Route
               path={ruta + "/rendiciones/:id/documentos/agregar"}

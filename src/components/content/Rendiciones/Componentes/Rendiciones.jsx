@@ -21,11 +21,12 @@ import {
 import { AppContext } from "../../../../App";
 import { Tag } from "primereact/tag";
 import { SplitButton } from "primereact/splitbutton";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Button } from "primereact/button";
+import FormDT from "./SubComponentes/Formulario/Sub/FormDT";
 
 function Rendiciones({
   header,
@@ -34,15 +35,17 @@ function Rendiciones({
   filtrado,
   estados,
 }) {
+
+  // const { id } = useParams();
   const navigate = useNavigate();
-  const { usuario } = useContext(AppContext);
+  const { usuario,ruta } = useContext(AppContext);
   const toast = useRef(null);
   const [loading, setLoading] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
-  const { ruta } = useContext(AppContext);
+
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
-  
+
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -375,6 +378,19 @@ function Rendiciones({
       setLoading(false);
     }
   }
+const actionBodyver = (
+<Button
+  label="ver"
+  icon="pi pi-eye"
+   severity="success"
+
+    onClick={() => {
+
+     navigate(ruta + "/rendiciones/info");
+   }}
+
+/>
+ )
 
   const actionBodyTemplate = (rowData) => {
     const items = [
@@ -389,11 +405,12 @@ function Rendiciones({
             }
           } catch (error) {
           } finally {
-            navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+            navigate(ruta + `/rendiciones/${id}/documentos`);
           }
         },
       },
     ];
+
 
     if(usuario.rol.id==2){
       items.push(
@@ -696,7 +713,11 @@ function Rendiciones({
       listarRendicionesLocal();
     }
   }, [filtrado, usuario]);
+  const [productDialog, setProductDialog] = useState(false);
+  const openNew = () => {
 
+    setProductDialog(true);
+};
   return (
     <div>
       <Toast ref={toast} />
@@ -773,7 +794,7 @@ function Rendiciones({
         ></Column>
         <Column
           header="Acciones"
-          body={actionBodyTemplate}
+          body={actionBodyver}
           exportable={false}
           style={{ minWidth: "10rem" }}
           frozen
@@ -785,7 +806,23 @@ function Rendiciones({
           style={{ minWidth: "20rem" }}
         ></Column>
       </DataTable>
+      <div>
+      {/* <Button
+  label="ver"
+  icon="pi pi-eye"
+  severity="success"
+
+    onClick={() => {
+
+    navigate(ruta + "/rendiciones/info");
+  }}
+
+/> */}
+      </div>
+
+
     </div>
+
   );
 }
 
