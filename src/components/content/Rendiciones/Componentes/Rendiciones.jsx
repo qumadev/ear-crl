@@ -45,7 +45,7 @@ function Rendiciones({
 
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
-
+  
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -378,20 +378,29 @@ function Rendiciones({
       setLoading(false);
     }
   }
-const actionBodyver = (
-<Button
-  label="ver"
-  icon="pi pi-eye"
+
+  // const actionBodyver = (rowData) =>{
+  //   const items=[
+  //     {
+  //       label:"ver",
+  //       icon:"pi pi-eye",
+  //       command:async()=>{
+
+  //       }
+  //     }
+  //   ]
+  // }
+  const actionBodyver = (rowData) =>(
+   <Button
+   label="ver"
+   icon="pi pi-eye"
    severity="success"
-
-    onClick={() => {
-
-     navigate(ruta + "/rendiciones/info");
+       onClick={() => {
+    
+     navigate(ruta + `/rendiciones/info`);
    }}
-
-/>
- )
-
+ 
+ />  )
   const actionBodyTemplate = (rowData) => {
     const items = [
       {
@@ -410,7 +419,7 @@ const actionBodyver = (
         },
       },
     ];
-
+    
 
     if(usuario.rol.id==2){
       items.push(
@@ -806,19 +815,19 @@ const actionBodyver = (
           style={{ minWidth: "20rem" }}
         ></Column>
       </DataTable>
-      <div>
-      {/* <Button
+      {/* <div>
+      <Button
   label="ver"
   icon="pi pi-eye"
   severity="success"
-
+  
     onClick={() => {
-
-    navigate(ruta + "/rendiciones/info");
+    
+    navigate(ruta + `/rendiciones/info`);
   }}
-
-/> */}
-      </div>
+ 
+/>
+      </div> */}
 
 
     </div>
