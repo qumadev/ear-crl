@@ -73,54 +73,59 @@ function FormularioRD() {
     },
   ];
   /* Registro de Documentos */
-    const [documento, setDocumento] = useState(
+  const [documento, setDocumento] = useState(
+    {
+      ID: 1,
+      STR_RENDICION: 123,
+      STR_FECHA_CONTABILIZA: "2024-04-22",
+      STR_FECHA_DOC: "2024-04-21",
+      STR_FECHA_VENCIMIENTO: "2024-05-01",
+      STR_PROVEEDOR: { CardCode: "P10081558791", CardName: "MAMANI MARTINEZ MARIA SOLEDAD", LicTradNum: "10081558791" },
+      STR_MONEDA: { id: "SOL", name: "SOL" },
+      STR_COMENTARIOS: "Comentarios sobre el documento",
+      STR_TIPO_DOC: { id: "01", name: "Factura" },
+      STR_SERIE_DOC: null,
+      STR_CORR_DOC: null,
+      STR_VALIDA_SUNAT: true,
+      STR_OPERACION: 1,
+      STR_PARTIDAFLUJO: 456,
+      STR_TOTALDOC: 1234.56,
+      STR_RD_ID: 1,
+      STR_CANTIDAD: 2,
+      STR_ALMACEN: "Almacén ABC",
+      STR_RUC: "12345678901",
+      STR_RAZONSOCIAL: "Razón Social XYZ",
+      STR_DIRECCION: "Nueva Direccion",
+      STR_MOTIVORENDICION: {id:"VIA",name:"Viaticos"},
+      detalles: [
         {
-            ID: null,
-            STR_RENDICION: null,
-            STR_FECHA_CONTABILIZA: null,
-            STR_FECHA_DOC: null,
-            STR_FECHA_VENCIMIENTO: null,
-            STR_PROVEEDOR: null,
-            STR_RUC: null,
-            STR_TIPO_AGENTE: null,
-            STR_MONEDA: null,
-            STR_COMENTARIOS: null,
-            STR_TIPO_DOC: null,
-            STR_SERIE_DOC: null,
-            STR_CORR_DOC: null,
-            STR_VALIDA_SUNAT: null,
-            STR_ANEXO_ADJUNTO: null,
-            STR_OPERACION: null,
-            STR_PARTIDAFLUJO: null,
-            STR_RD_ID: null,
-            STR_TOTALDOC: null,
-            STR_RAZONSOCIAL: null,
-            DocumentoDet:[
-                {
-                    Cod: {
-                      ItemCode: null,
-                      ItemName: null,
-                      U_BPP_TIPUNMED: null,
-                      WhsCode: null,
-                      Stock: 0,
-                      Precio: 0
-                    },
-                    Concepto: null,
-                    Almacen: null,
-                    Proyecto: null,
-                    UnidadNegocio: null,
-                    Filial: null,
-                    Areas: null,
-                    CentroCosto: null,
-                    IndImpuesto: null,
-                    Precio: 0,
-                    Cantidad: 0,
-                    Impuesto: 0
-                  }
-            ]
+          ID: 1,
+          STR_CODARTICULO: {
+            ItemCode: "0050600008",
+            ItemName: "REGISTRO DE BRONCE 4\"",
+            U_BPP_TIPUNMED: "PZA",
+            WhsCode: "ALM002",
+            Stock: 0.0,
+            Precio: 0.0
+          },
+          STR_SUBTOTAL: 100.0,
+          STR_INDIC_IMPUESTO: { id: "IGV", name: "IGV" },
+          STR_DIM1: { id: "01", name: "CLUB" },
+          STR_DIM2: { id: "001", name: "CHORRILLOS" },
+          STR_DIM4: { id: "100", name: "CONSEJO DIRECTIVO" },
+          STR_DIM5: { id: "10001", name: "CONSEJO DE DIRECTIVO" },
+          STR_ALMACEN: "ALM002",
+          STR_CANTIDAD: 2,
+          STR_TPO_OPERACION: "operacion",
+          STR_DOC_ID: 123,
+          STR_CONCEPTO: "Concepto del documento",
+          STR_PROYECTO: { id: "PG", name: "Proyecto Genérico" },
+          STR_PRECIO: 50.0,
+          STR_IMPUESTO: 18
         }
-    
-    );
+      ]
+    }
+  );
 
 
 
@@ -541,11 +546,11 @@ function FormularioRD() {
         onTabChange={(e) => setActiveIndex(e.index)}
       >
         <TabPanel header="Agregar Documento Sustentado">
-            <DocumentoSustentado 
-              documento = {documento}
-              setDocumento = {setDocumento}
-              moneda={documento.STR_MONEDA}
-            />
+          <DocumentoSustentado
+            documento={documento}
+            setDocumento={setDocumento}
+            moneda={documento.STR_MONEDA}
+          />
         </TabPanel>
         {/* <TabPanel header="General">
           <GeneralRD

@@ -118,6 +118,15 @@ export const crearDocumento = (body) => {
   });
 };
 
+
+export const obtenerTipoDocs = () => {
+  return API.get("/tipoear/documentos", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerEmpleados = () => {
   return null;
 };
@@ -147,10 +156,6 @@ export const obtenerPrecio = (prov, dis, itemCod) => {
 };
 
 export const obtenerIndicadores = () => {
-  return null;
-};
-
-export const obtenerTipoDocs = () => {
   return null;
 };
 

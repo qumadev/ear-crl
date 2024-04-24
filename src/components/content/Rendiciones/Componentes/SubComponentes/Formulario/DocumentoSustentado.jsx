@@ -7,7 +7,11 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import React, { useContext, useEffect, useState } from 'react';
-import { obtenerAreas, obtenerArticulos, obtenerCentroCosto, obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos, obtenerTipos, obtenerUnidadNegocio } from '../../../../../../services/axios.service';
+import {
+    obtenerAreas, obtenerArticulos, obtenerCentroCosto,
+    obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
+    obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio
+} from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
 import { CodeBracketIcon } from '@heroicons/react/16/solid';
@@ -71,256 +75,256 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
 
     const actionBodyTemplate = (rowData) => {
         const items = [
-          {
-            label: "Ver",
-            icon: "pi pi-eye",
-            command: async () => {
-              try {
-                if (rowData.STR_ESTADO == 8) {
-                  await actualizarRendiEnCarga(rowData);
-                  await new Promise((resolve) => setTimeout(resolve, 5000));
-                }
-              } catch (error) {
-              } finally {
-                // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                console.log("entra")
-                navigate(ruta + `/rendiciones/8/documentos`);
-              }
-            },
-          },
-        ];
-    
-        if(usuario.rol.id==2){
-          items.push(
             {
-              label: "Aprobar",
-              icon: "pi pi-eye",
-              command: () => {
-                console.log("aprobando solicitud")
-              },
+                label: "Ver",
+                icon: "pi pi-eye",
+                command: async () => {
+                    try {
+                        if (rowData.STR_ESTADO == 8) {
+                            await actualizarRendiEnCarga(rowData);
+                            await new Promise((resolve) => setTimeout(resolve, 5000));
+                        }
+                    } catch (error) {
+                    } finally {
+                        // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                        console.log("entra")
+                        navigate(ruta + `/rendiciones/8/documentos`);
+                    }
+                },
             },
-          )
+        ];
+
+        if (usuario.rol.id == 2) {
+            items.push(
+                {
+                    label: "Aprobar",
+                    icon: "pi pi-eye",
+                    command: () => {
+                        console.log("aprobando solicitud")
+                    },
+                },
+            )
         }
-    
+
         if (
-          ((usuario.TipoUsuario == 1) &
-            ((rowData.STR_ESTADO == 8) |
-              (rowData.STR_ESTADO == 9) |
-              (rowData.STR_ESTADO == 12))) |
-          ((usuario.TipoUsuario == 3) & (rowData.STR_ESTADO == 10))
+            ((usuario.TipoUsuario == 1) &
+                ((rowData.STR_ESTADO == 8) |
+                    (rowData.STR_ESTADO == 9) |
+                    (rowData.STR_ESTADO == 12))) |
+            ((usuario.TipoUsuario == 3) & (rowData.STR_ESTADO == 10))
         ) {
-          items.push({
-            label:
-              rowData.STR_ESTADO == 8 ||
-              rowData.STR_ESTADO == 12 ||
-              rowData.STR_ESTADO == 15
-                ? "Rendir"
-                : "Modificar",
-            icon: "pi pi-pencil",
-            command: () => {
-              try {
-                if (
-                  rowData.STR_ESTADO == 8 ||
-                  rowData.STR_ESTADO == 12 ||
-                  rowData.STR_ESTADO == 15
-                ) {
-                  actualizarRendiEnCarga(rowData);
-                }
-              } catch (error) {
-              } finally {
-                navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-              }
-            },
-          });
+            items.push({
+                label:
+                    rowData.STR_ESTADO == 8 ||
+                        rowData.STR_ESTADO == 12 ||
+                        rowData.STR_ESTADO == 15
+                        ? "Rendir"
+                        : "Modificar",
+                icon: "pi pi-pencil",
+                command: () => {
+                    try {
+                        if (
+                            rowData.STR_ESTADO == 8 ||
+                            rowData.STR_ESTADO == 12 ||
+                            rowData.STR_ESTADO == 15
+                        ) {
+                            actualizarRendiEnCarga(rowData);
+                        }
+                    } catch (error) {
+                    } finally {
+                        navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                    }
+                },
+            });
         }
-    
+
         if (
-          ((usuario.TipoUsuario != 1) &
-            ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-          (rowData.STR_ESTADO == 13)
+            ((usuario.TipoUsuario != 1) &
+                ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
+            (rowData.STR_ESTADO == 13)
         ) {
-          items.push({
-            label: "Aceptar",
-            icon: "pi pi-check",
-            command: () => {
-              confirmAceptacion(
-                rowData.STR_SOLICITUD,
-                usuario.empId,
-                usuario.SubGerencia,
-                rowData.STR_ESTADO_INFO.Id,
-                rowData.ID,
-                usuario.SubGerencia
-              );
-    
-              // aceptacionLocal(rowData);
-            },
-          });
+            items.push({
+                label: "Aceptar",
+                icon: "pi pi-check",
+                command: () => {
+                    confirmAceptacion(
+                        rowData.STR_SOLICITUD,
+                        usuario.empId,
+                        usuario.SubGerencia,
+                        rowData.STR_ESTADO_INFO.Id,
+                        rowData.ID,
+                        usuario.SubGerencia
+                    );
+
+                    // aceptacionLocal(rowData);
+                },
+            });
         }
-    
+
         if (
-          ((usuario.TipoUsuario != 1) &
-            ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-          (rowData.STR_ESTADO == 13)
+            ((usuario.TipoUsuario != 1) &
+                ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
+            (rowData.STR_ESTADO == 13)
         ) {
-          items.push({
-            label: "Rechazar",
-            icon: "pi pi-times",
-            command: () => {
-              confirmRechazo(
-                rowData.STR_SOLICITUD,
-                usuario.empId,
-                usuario.SubGerencia,
-                rowData.STR_ESTADO_INFO.Id,
-                rowData.ID,
-                usuario.SubGerencia
-              );
-              //rechazoLocal(rowData);
-            },
-          });
+            items.push({
+                label: "Rechazar",
+                icon: "pi pi-times",
+                command: () => {
+                    confirmRechazo(
+                        rowData.STR_SOLICITUD,
+                        usuario.empId,
+                        usuario.SubGerencia,
+                        rowData.STR_ESTADO_INFO.Id,
+                        rowData.ID,
+                        usuario.SubGerencia
+                    );
+                    //rechazoLocal(rowData);
+                },
+            });
         }
-    
+
         if (
-          ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
-          (usuario.TipoUsuario == 1)
+            ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
+            (usuario.TipoUsuario == 1)
         ) {
-          items.push({
-            label: "Editar",
-            icon: "pi pi-pencil",
-            command: () => {
-              navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-            },
-          });
+            items.push({
+                label: "Editar",
+                icon: "pi pi-pencil",
+                command: () => {
+                    navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                },
+            });
         }
-    
+
         if (
-          (rowData.STR_ESTADO == 16) |
-          (rowData.STR_ESTADO == 18) |
-          (rowData.STR_ESTADO == 19)
+            (rowData.STR_ESTADO == 16) |
+            (rowData.STR_ESTADO == 18) |
+            (rowData.STR_ESTADO == 19)
         ) {
-          items.push({
-            label: "Descargar Liquidación",
-            icon: "pi pi-file-pdf",
-            command: () => {
-              downloadAndOpenPdf(rowData.STR_NRRENDICION);
-            },
-          });
+            items.push({
+                label: "Descargar Liquidación",
+                icon: "pi pi-file-pdf",
+                command: () => {
+                    downloadAndOpenPdf(rowData.STR_NRRENDICION);
+                },
+            });
         }
-    
+
         if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
-          items.push({
-            label: "Reintentar Migracion",
-            icon: "pi pi-pencil",
-            command: () => {
-              reintentarMigracion(rowData.ID);
-              // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-            },
-          });
+            items.push({
+                label: "Reintentar Migracion",
+                icon: "pi pi-pencil",
+                command: () => {
+                    reintentarMigracion(rowData.ID);
+                    // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
+                },
+            });
         }
-    
+
         if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
-          items.push({
-            label: "Ver Aprobadores",
-            icon: "pi pi-eye",
-            command: () => {
-              //reintentarMigracion(rowData.ID);
-              // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-              navigate(ruta + `rendiciones/aprobadores/${rowData.ID}`);
-              //      navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-            },
-          });
+            items.push({
+                label: "Ver Aprobadores",
+                icon: "pi pi-eye",
+                command: () => {
+                    //reintentarMigracion(rowData.ID);
+                    // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
+                    navigate(ruta + `rendiciones/aprobadores/${rowData.ID}`);
+                    //      navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                },
+            });
         }
-    
+
         if (usuario.TipoUsuario == 1 && rowData.STR_ESTADO == 9) {
-          items.push({
-            label: "Enviar Aprobación",
-            icon: "pi pi-send",
-            command: () => {
-              confirmEnvio(rowData);
-            },
-          });
+            items.push({
+                label: "Enviar Aprobación",
+                icon: "pi pi-send",
+                command: () => {
+                    confirmEnvio(rowData);
+                },
+            });
         }
-    
+
         async function reintentarMigracion(id) {
-          try {
-            setLoading(true);
-            let response = await reintentarRendi(id);
-            if (response.status < 300) {
-              let data = response.data.Result[0];
-              showSuccess(
-                "Se realizó la migración exitosamente con número " + data.DocNum
-              );
-            } else {
-              showError(response.data.Message);
-              console.log(response.data);
-            }
-          } catch (error) {
-            showError(error.response.data.Message);
-            console.log(error);
-          } finally {
-            listarRendicionesLocal();
-            setLoading(false);
-          }
-        }
-    
-        return (
-          <div className="split-button">
-            <Button
-              onClick={() => {
-                try {
-                  if (rowData.STR_ESTADO == 8) {
-                    actualizarRendiEnCarga(rowData);
-                  }
-                } catch (error) {
-                } finally {
-                  // navigate(ruta + "/rendiciones/ver");
-                  // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
-                  // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                  navigate(ruta + `/rendiciones/8/documentos/agregar`);
+            try {
+                setLoading(true);
+                let response = await reintentarRendi(id);
+                if (response.status < 300) {
+                    let data = response.data.Result[0];
+                    showSuccess(
+                        "Se realizó la migración exitosamente con número " + data.DocNum
+                    );
+                } else {
+                    showError(response.data.Message);
+                    console.log(response.data);
                 }
-              }}
-              severity="success"
-            >
-              <div className="flex gap-3 align-items-center justify-content-center">
-                <span>Ver</span>
-                <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-              </div>
-            </Button>
-            <div className="dropdown-content">
-              {items.map((data, key) => (
+            } catch (error) {
+                showError(error.response.data.Message);
+                console.log(error);
+            } finally {
+                listarRendicionesLocal();
+                setLoading(false);
+            }
+        }
+
+        return (
+            <div className="split-button">
                 <Button
-                  key={key}
-                  onClick={() => {
-                    data.command();
-                  }}
+                    onClick={() => {
+                        try {
+                            if (rowData.STR_ESTADO == 8) {
+                                actualizarRendiEnCarga(rowData);
+                            }
+                        } catch (error) {
+                        } finally {
+                            // navigate(ruta + "/rendiciones/ver");
+                            // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
+                            // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                            navigate(ruta + `/rendiciones/8/documentos/agregar`);
+                        }
+                    }}
+                    severity="success"
                 >
-                  <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-                  {data.label}
+                    <div className="flex gap-3 align-items-center justify-content-center">
+                        <span>Ver</span>
+                        <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
+                    </div>
                 </Button>
-              ))}
+                <div className="dropdown-content">
+                    {items.map((data, key) => (
+                        <Button
+                            key={key}
+                            onClick={() => {
+                                data.command();
+                            }}
+                        >
+                            <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
+                            {data.label}
+                        </Button>
+                    ))}
+                </div>
             </div>
-          </div>
-          // <React.Fragment>
-          //   <SplitButton
-          //     label="Ver"
-          //     onClick={() => {
-          //       try {
-          //         if (rowData.STR_ESTADO == 8) {
-          //           actualizarRendiEnCarga(rowData);
-          //         }
-          //       } catch (error) {
-          //       } finally {
-          //         navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-          //       }
-          //     }}
-          //     disabled={rowData.CREATE == "SAP"}
-          //     icon="pi pi-plus"
-          //     model={items}
-          //     rounded
-          //     loading={loadingBtn}
-          //   />
-          // </React.Fragment>
+            // <React.Fragment>
+            //   <SplitButton
+            //     label="Ver"
+            //     onClick={() => {
+            //       try {
+            //         if (rowData.STR_ESTADO == 8) {
+            //           actualizarRendiEnCarga(rowData);
+            //         }
+            //       } catch (error) {
+            //       } finally {
+            //         navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+            //       }
+            //     }}
+            //     disabled={rowData.CREATE == "SAP"}
+            //     icon="pi pi-plus"
+            //     model={items}
+            //     rounded
+            //     loading={loadingBtn}
+            //   />
+            // </React.Fragment>
         );
-      };
+    };
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -349,7 +353,8 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
 
     async function obtenerData() {
         const response = await Promise.all([
-            obtenerTipos(),
+            // obtenerTipos(),
+            obtenerTipoDocs(),
             obtenerMotivos(),
             obtenerProveedores(),
             obtenerArticulos(),
@@ -449,10 +454,13 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)Tipo</label>
                         <Dropdown
                             className='col-6'
-                            value={selectedTipo}
+                            value={documento.STR_TIPO_DOC}
                             onChange={
                                 (e) => {
-                                    setSelectedTipo(e.value);
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_TIPO_DOC: e.target.value,
+                                    }));
                                 }}
                             options={tipos}
                             optionLabel="name"
@@ -487,8 +495,8 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                                     STR_CORR_DOC: e.target.value,
                                 }));
                             }}
-                            // value={numero}
-                            // onChange={handleNumeroChange}
+                        // value={numero}
+                        // onChange={handleNumeroChange}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -496,10 +504,16 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={proveedor}
+                            value={documento.STR_RUC}
                             onChange={(e) => {
-                                handleChangeProveedor(e.value)
-                                setRazon(e.value.CardName)
+                                // handleChangeProveedor(e.value)
+                                // setRazon(e.value.CardName)
+                                console.log(e.target.value)
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_RUC: e.target.value,
+                                    STR_RAZONSOCIAL: e.target.value.CardName
+                                }));
                             }}
                             options={proveedores}
                             optionLabel="LicTradNum"
@@ -515,20 +529,20 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
-                            // value={razon}
                             value={documento.STR_RAZONSOCIAL}
-                            onChange={(e) => {
-                                setDocumento((prevState) => ({
-                                    ...prevState,
-                                    STR_RAZONSOCIAL: e.target.value,
-                                }));
-                            }}
                             disabled
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>Direccion</label>
                         <InputText
+                            value={documento.STR_DIRECCION}
+                            onChange={(e) => {
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_DIRECCION: e.target.value,
+                                }));
+                            }}
                             className='col-6'
                             placeholder='Direccion'
                         />
@@ -537,10 +551,14 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)Motivo</label>
                         <Dropdown
                             className='col-6'
-                            value={selectedMotivo}
-                            onChange={(e) => {
-                                setSelectedMotivo(e.value)
-                            }}
+                            value={documento.STR_MOTIVORENDICION}
+                            onChange={
+                                (e) => {
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_MOTIVORENDICION: e.target.value,
+                                    }));
+                                }}
                             options={motivos}
                             optionLabel="name"
                             filter
@@ -552,10 +570,15 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                         <label className='col-2'>(*)Moneda</label>
                         <Dropdown
                             className='col-6'
-                            value={selectedMoneda}
-                            onChange={(e) => {
-                                setSelectedMoneda(e.value)
-                            }}
+                            value={documento.STR_MONEDA}
+                            onChange={
+                                (e) => {
+                                    // setSelectedTipo(e.value.value);
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_MONEDA: e.target.value,
+                                    }));
+                                }}
                             options={monedas}
                             optionLabel="name"
                             filter
