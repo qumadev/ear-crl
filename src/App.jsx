@@ -32,7 +32,6 @@ export default function MyApp() {
     pass: "",
   });
   const toast = useRef(null);
-
   const ruta = "/ear"; // Servidor"/react-project";
 
   addLocale("es", {
@@ -267,6 +266,14 @@ export default function MyApp() {
                 <FormDT />{""}
               </Componente>
             }
+            />
+           <Route
+              path={ruta + "/rendiciones/:id/documentos/detail"}
+              element={
+                <Componente>
+                  <FormularioRD />{" "}
+                </Componente>
+              }
             />
             <Route
               path={ruta + "/rendiciones/:id/documentos/agregar"}

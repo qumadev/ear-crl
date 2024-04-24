@@ -807,6 +807,12 @@ const actionBodyver = (
         ></Column>
       </DataTable>
       <div>
+        <Button label="ver" icon="pi pi-eye" severity="success"
+            onClick={() => {
+            navigate(ruta + "/rendiciones/8/documentos/detail");
+          }}
+
+        />
       {/* <Button
   label="ver"
   icon="pi pi-eye"

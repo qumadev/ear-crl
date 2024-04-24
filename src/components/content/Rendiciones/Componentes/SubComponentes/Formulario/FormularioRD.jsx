@@ -37,6 +37,8 @@ function FormularioRD() {
   const tabViewRef = useRef(null);
   const location = useLocation();
   const esModoRegistrar = location.pathname.includes("agregar");
+  const esModoDetail = location.pathname.includes("detail");
+
   const { config, ruta } = useContext(AppContext);
   const fileUploadRef = useRef(null);
   const tipoRendicion = location.state && location.state.tipoRendicion;
@@ -47,7 +49,6 @@ function FormularioRD() {
   const editable = location.state && location.state.editable;
   const fechaSolicitud = location.state && location.state.fechaSolicitud;
   const { id } = useParams();
-
   /* Agentes */
   let agentes = [
     {
@@ -644,7 +645,32 @@ function FormularioRD() {
         </TabPanel> */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
-        <Button
+        {esModoDetail ? "" :
+          <>
+            <Button
+            label={esModoRegistrar ? `Guardar Documento` : "Actualizar DocumentoX"}
+            severity="info"
+            size="large"
+            style={{ backgroundColor: "black", borderColor: "black" }}
+            onClick={(e) => {
+              registrarDocumento();
+              // if (!esModoRegistrar) updateRD();
+              // else registrarRD();
+              // else registrarDocumento();
+            }}
+            loading={loading}
+            disabled={editable}
+            //disabled={!estadosEditables.includes(solicitudRD.estado)}
+            />
+            <Button
+              label="Cancelar"
+              severity="secondary"
+              size="large"
+              onClick={() => navigate(ruta + `/rendiciones/${id}/documentos`)}
+            />
+          </>
+        }
+        {/* <Button
           label={esModoRegistrar ? `Guardar Documento` : "Actualizar Documento"}
           severity="info"
           size="large"
@@ -664,7 +690,7 @@ function FormularioRD() {
           severity="secondary"
           size="large"
           onClick={() => navigate(ruta + `/rendiciones/${id}/documentos`)}
-        />
+        /> */}
       </div>
     </div>
   );

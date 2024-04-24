@@ -438,6 +438,34 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
         console.log(documento)
         console.log(articulos)
     }
+
+    // Expotar detalle
+    const exportExcel = async () => {
+      const XLSX = await import("xlsx");
+      const worksheet = XLSX.utils.json_to_sheet(articulos);
+      const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      saveAsExcelFile(excelBuffer, "detalle");
+    };
+    const saveAsExcelFile = async (buffer, fileName) => {
+      const FileSaver = await import("file-saver");
+  
+      if (FileSaver && FileSaver.default) {
+        const EXCEL_TYPE =
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const EXCEL_EXTENSION = ".xlsx";
+        const data = new Blob([buffer], { type: EXCEL_TYPE });
+  
+        FileSaver.default.saveAs(
+          data,
+          fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION
+        );
+      }
+    };
+
     return (
         <div>
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
@@ -730,6 +758,16 @@ function DocumentoSustentado({ documento, setDocumento, moneda }) {
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
+            />
+            <Button
+              className='col-4'
+              label="Exportar"
+              icon="pi pi-upload"
+              severity="secondary"
+              style={{ backgroundColor: "black" }}
+              onClick={() => {
+                exportExcel();
+              }}
             />
 
         </div>
