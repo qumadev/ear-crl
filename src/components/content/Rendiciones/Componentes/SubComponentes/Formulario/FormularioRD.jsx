@@ -537,7 +537,7 @@ function FormularioRD() {
               navigate(ruta + `/rendiciones/${id}/documentos`);
             }}
           ></i>
-          <div>Registro de Documentos a Rendir - #{idDocumento}</div>
+          <div>{esModoDetail ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
         </div>
       </div>
       <Divider />
@@ -546,11 +546,12 @@ function FormularioRD() {
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}
       >
-        <TabPanel header="Agregar Documento Sustentado">
+        <TabPanel header={esModoDetail ? "Detalle" : "Agregar" + " Documento Sustentado"} > {/* "Agregar Documento Sustentado" */}
           <DocumentoSustentado
             documento={documento}
             setDocumento={setDocumento}
-            moneda={documento.STR_MONEDA}
+            moneda={documento.STR_MONEDA} 
+            esModoDetail={esModoDetail}
           />
         </TabPanel>
         {/* <TabPanel header="General">
