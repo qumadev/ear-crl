@@ -3,23 +3,23 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
-import React from 'react'
+import React, { useContext } from 'react'
 import TableDT from './TableDT';
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from 'primereact/calendar';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../../../../../../App';
 
 
 export default function FormDT({ responsiveSizeMobile }) {
-
-
+    const navigate = useNavigate();
+    const { usuario, showError, ruta } = useContext(AppContext);
     const actionBodyTemplate = (rowData) => {
-    const booton = [
+    const items = [
       {
-        label:"Agregar",
-        icon:"pi pi-plus",
-      
-
+        label: "Ver",
+        icon: "pi pi-eye",
         command: async () => {
           try {
             if (rowData.STR_ESTADO == 8) {
@@ -276,18 +276,15 @@ export default function FormDT({ responsiveSizeMobile }) {
                         // }}
                         severity="secondary"
                     />
-                    <div
-                     body={actionBodyTemplate}
-                    >
-                        
-                    </div>
-                    {/* <Button
+                    <Button
                         label="Agregar"
                         icon="pi pi-plus"
                         severity="success"
-                       
+                        onClick={() => {
+                            navigate(ruta + `/rendiciones/8/documentos/agregar`);
+                        }}
                     // disabled={usuario.TipoUsuario != 1}
-                    /> */}
+                    />
                     <Button
                         label="Exportar"
                         icon="pi pi-upload"

@@ -75,19 +75,6 @@ function Rendiciones({
   };
 
   const fecBodyTemplate = (rowData) => {
-    // const memoizedFecha = useMemo(() => {
-    //   const parts = rowData.STR_FECHAREGIS.split(" ");
-    //   const dateParts = parts[0].split("/");
-    //   const timeParts = parts[1].split(":");
-    //   return new Date(
-    //     parseInt(dateParts[2], 10),
-    //     parseInt(dateParts[1], 10) - 1,
-    //     parseInt(dateParts[0], 10),
-    //     parseInt(timeParts[0], 10),
-    //     parseInt(timeParts[1], 10),
-    //     parseInt(timeParts[2], 10)
-    //   );
-    // }, [rowData.STR_FECHAREGIS]);
 
     return <>{rowData.STR_FECHAREGIS}</>;
   };
@@ -390,6 +377,7 @@ function Rendiciones({
   //     }
   //   ]
   // }
+  
   const actionBodyver = (rowData) =>(
    <Button
    label="ver"
@@ -397,25 +385,21 @@ function Rendiciones({
    severity="success"
        onClick={() => {
     
-     navigate(ruta + `/rendiciones/info`);
+     navigate(ruta + "/rendiciones/info");
    }}
  
  />  )
+
+
   const actionBodyTemplate = (rowData) => {
     const items = [
       {
         label: "Ver",
         icon: "pi pi-eye",
         command: async () => {
-          try {
-            if (rowData.STR_ESTADO == 8) {
-              await actualizarRendiEnCarga(rowData);
-              await new Promise((resolve) => setTimeout(resolve, 5000));
-            }
-          } catch (error) {
-          } finally {
-            navigate(ruta + `/rendiciones/${id}/documentos`);
-          }
+          navigate(
+            navigate(ruta + "/rendiciones/info")
+          )
         },
       },
     ];
@@ -817,6 +801,14 @@ function Rendiciones({
       </DataTable>
       {/* <div>
       <Button
+      <div>
+        <Button label="ver" icon="pi pi-eye" severity="success"
+            onClick={() => {
+            navigate(ruta + "/rendiciones/8/documentos/detail");
+          }}
+
+        />
+      {/* <Button
   label="ver"
   icon="pi pi-eye"
   severity="success"
