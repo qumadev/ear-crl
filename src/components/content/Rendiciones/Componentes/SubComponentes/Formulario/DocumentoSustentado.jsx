@@ -776,13 +776,13 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             style={{ minWidth: "7rem" }}
                         ></Column>
                     </DataTable>
-                    { esModoDetail ? "" :
-                        <Button
-                            className='col-4'
-                            label="Guardar Cambios"
-                            onClick={saveDocumento}
-                        />
-                    }
+                    {/* { esModoDetail ? "" :
+                        // <Button
+                        //     className='col-4'
+                        //     label="Guardar Cambios"
+                        //     onClick={saveDocumento}
+                        // />
+                    } */}
                 </div>
             </div>
 
@@ -803,11 +803,11 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
             >
             </FormDetalleDocumento>
 
-            <Button
+            {/* <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            />
+            /> */}
             <Button
               className='col-4'
               label="Exportar"
