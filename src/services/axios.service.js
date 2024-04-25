@@ -118,7 +118,6 @@ export const crearDocumento = (body) => {
   });
 };
 
-
 export const obtenerTipoDocs = () => {
   return API.get("/tipoear/documentos", {
     validateStatus: function (status) {
@@ -284,7 +283,11 @@ export const rechazarSolicitudSR = (
 };
 
 export const reintentarEnvio = (id) => {
-  return null;
+  return API.patch(`solicitudEar/aprobacion/reintentar/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 
 export const reintentarRendi = (id) => {
