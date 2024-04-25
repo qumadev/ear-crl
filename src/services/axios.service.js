@@ -385,7 +385,13 @@ export const enviarAprobRendicion = (
   estado,
   areaAprobador
 ) => {
-  return null;
+  return API.post(
+    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,    {
+      ValidityState: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const aceptarAprobRendicion = (
@@ -396,7 +402,14 @@ export const aceptarAprobRendicion = (
   rendicionId,
   area
 ) => {
-  return null;
+  return API.patch(
+    `/rendicion/aprobacion/acepta?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
+    {
+      ValidityState: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const rechazarAprobRendicion = (
