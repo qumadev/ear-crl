@@ -118,6 +118,14 @@ export const obtenerDocumento = (id) => {
   });
 };
 
+export const obtenerRendicion = (id) => {
+  return API.get(`/rendicion/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 
 export const crearDocumento = (body) => {
   return API.post("/rendicion/documento", body, {
@@ -311,9 +319,6 @@ export const reintentarRendi = (id) => {
   return null;
 };
 
-export const obtenerRendicion = (id) => {
-  return null;
-};
 
 export const obtenerConf = () => {
   return API.get(`/configuracion/cfgeneral`, {
