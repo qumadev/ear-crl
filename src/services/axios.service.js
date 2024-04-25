@@ -111,7 +111,7 @@ export const obtenerTipos = () => {
 };
 
 export const obtenerDocumento = (id) => {
-  return API.post(`/rendicion/documento/${id}`, {
+  return API.get(`/rendicion/documento/${id}`, {
     validateStatus: function (status) {
       return status < 500;
     },

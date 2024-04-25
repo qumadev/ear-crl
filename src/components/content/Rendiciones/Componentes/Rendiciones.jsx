@@ -799,6 +799,14 @@ function Rendiciones({
           style={{ minWidth: "20rem" }}
         ></Column>
       </DataTable>
+      <Button
+        label="ver"
+        icon="pi pi-eye"
+        severity="success"
+        onClick={() => {
+          navigate(ruta + `/rendiciones/31/documentos/editar`);
+        }}
+      />
       {/* <div>
       <Button
       <div>

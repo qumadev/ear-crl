@@ -40,7 +40,9 @@ function FormularioRD() {
   const location = useLocation();
   const esModoRegistrar = location.pathname.includes("agregar");
   const esModoDetail = location.pathname.includes("detail");
-
+  const esModoEditar = location.pathname.includes("editar");
+  const esModo = location.pathname.includes("agregar") ? "Agregar" : 
+  location.pathname.includes("editar") ? "Editar" : "Detalle";
   const { config, ruta } = useContext(AppContext);
   const fileUploadRef = useRef(null);
   const tipoRendicion = location.state && location.state.tipoRendicion;
@@ -75,8 +77,9 @@ function FormularioRD() {
       name: "Detracción",
     },
   ];
+
   /* Registro de Documentos */
-  const [documento, setDocumento] = useState(
+  /*const [documento, setDocumento] = useState(
     {
       ID: 1,
       STR_RENDICION: 123,
@@ -99,7 +102,7 @@ function FormularioRD() {
       STR_RUC: "12345678901",
       STR_RAZONSOCIAL: "Razón Social XYZ",
       STR_DIRECCION: "Nueva Direccion",
-      STR_MOTIVORENDICION: {id:"VIA",name:"Viaticos"},
+      STR_MOTIVORENDICION: { id: "VIA", name: "Viaticos" },
       detalles: [
         {
           ID: 1,
@@ -128,7 +131,26 @@ function FormularioRD() {
         }
       ]
     }
-  );
+  );*/
+  const [documento, setDocumento] = useState([]);
+
+  async function obtenerData() {
+    //let id = 8
+    const response = await Promise.all([
+      // obtenerTipos(),
+      obtenerDocumento(id),
+    ]);
+    console.log("dat: ",response[0].data.Result[0])
+    setDocumento(response[0].data.Result[0])
+  }
+
+  useEffect(() => {
+    obtenerData();
+    //setDocumentoDet(articulos)
+    // setDocumento(...documento, DocumentoDet)
+  }, []);
+
+  
 
 
 
@@ -392,7 +414,7 @@ function FormularioRD() {
       console.log(error);
       showError("Error en el servidor");
     } finally {
-      if (esModoRegistrar) setLoadingTemplate(false);
+      if (esModo==="Agregar") setLoadingTemplate(false);
       //setLoadingTemplate(false);
     }
   }
@@ -539,7 +561,7 @@ function FormularioRD() {
               navigate(ruta + `/rendiciones/${id}/documentos`);
             }}
           ></i>
-          <div>{esModoDetail ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
+          <div>{esModo==="Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
         </div>
       </div>
       <Divider />
@@ -548,12 +570,14 @@ function FormularioRD() {
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}
       >
-        <TabPanel header={esModoDetail ? "Detalle" : "Agregar" + " Documento Sustentado"} > {/* "Agregar Documento Sustentado" */}
+        <TabPanel header={esModo + " Documento Sustentado"} > {/* "Agregar Documento Sustentado" */}
           <DocumentoSustentado
             documento={documento}
             setDocumento={setDocumento}
-            moneda={documento.STR_MONEDA} 
-            esModoDetail={esModoDetail}
+            detalles={documento.detalles}
+            moneda={documento.STR_MONEDA}
+            //esModoDetail={esModoDetail}
+            esModo={esModo}
           />
         </TabPanel>
         {/* <TabPanel header="General">
@@ -648,21 +672,21 @@ function FormularioRD() {
         </TabPanel> */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
-        {esModoDetail ? "" :
+        {esModo === "Detalle" ? "" :
           <>
             <Button
-            label={esModoRegistrar ? `Guardar Documento` : "Actualizar DocumentoX"}
-            severity="info"
-            size="large"
-            style={{ backgroundColor: "black", borderColor: "black" }}
-            onClick={(e) => {
-              registrarDocumento();
-              // if (!esModoRegistrar) updateRD();
-              // else registrarRD();
-              // else registrarDocumento();
-            }}
-            loading={loading}
-            disabled={editable}
+              label={esModo==="Agregar"?"Agregar Documento": esModo==="Editar"?"Actualizar Documento":"Detalle"}
+              severity="info"
+              size="large"
+              style={{ backgroundColor: "black", borderColor: "black" }}
+              onClick={(e) => {
+                registrarDocumento();
+                // if (!esModoRegistrar) updateRD();
+                // else registrarRD();
+                // else registrarDocumento();
+              }}
+              loading={loading}
+              disabled={editable}
             //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
             <Button
