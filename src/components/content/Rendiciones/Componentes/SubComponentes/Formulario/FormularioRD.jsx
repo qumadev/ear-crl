@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 import {
   actualizaDocumento,
+  actualizarDocumento,
+  actualizarSolicitud,
   crearDocumento,
   obtenerCentroCosto,
   obtenerDocumento,
@@ -236,7 +238,7 @@ function FormularioRD() {
 
       console.log(_documento);
 
-      let response = await actualizaDocumento(_documento); // Crea Documento
+      let response = await actualizarDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
         console.log(`Documento actualizado con ID: ${content.id}`);

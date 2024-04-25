@@ -110,8 +110,25 @@ export const obtenerTipos = () => {
   });
 };
 
+export const obtenerDocumento = (id) => {
+  return API.post(`/rendicion/documento/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+
 export const crearDocumento = (body) => {
   return API.post("/rendicion/documento", body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const actualizarDocumento = (body) => {
+  return API.patch("/rendicion/documento", body, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -315,10 +332,6 @@ export const consultaComprobante = (body) => {
 };
 
 export const actualizaDocumento = (body) => {
-  return null;
-};
-
-export const obtenerDocumento = (id) => {
   return null;
 };
 
