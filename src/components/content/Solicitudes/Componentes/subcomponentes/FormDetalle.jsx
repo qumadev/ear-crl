@@ -6,7 +6,7 @@ import { MultiSelect } from "primereact/multiselect";
 import { Toast } from "primereact/toast";
 import React, { useEffect, useRef, useState } from "react";
 
-import { InputNumber } from "primereact/inputnumber";
+
 import { InputText } from "primereact/inputtext";
 import {
   consultarPresupuesto,
@@ -15,6 +15,7 @@ import {
   obtenerListaCup,
   obtenerPrecio,
 } from "../../../../../services/axios.service";
+import { InputNumber } from "primereact/inputnumber";
 
 function FormDetalle({
   submitted,

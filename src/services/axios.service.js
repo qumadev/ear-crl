@@ -265,7 +265,7 @@ export const listarRendiciones = (
     }
   );
 };
-
+ 
 export const obtenerSolicitudR = (id, create) => {
   return null;
 };
@@ -311,9 +311,9 @@ export const reintentarRendi = (id) => {
   return null;
 };
 
-export const obtenerRendicion = (id) => {
-  return null;
-};
+// export const obtenerRendicion = (id) => {
+//   return null;
+// };
 
 export const obtenerConf = () => {
   return API.get(`/configuracion/cfgeneral`, {
@@ -342,6 +342,8 @@ export const borrarDocumento = (id, rdId) => {
 export const borrarDocumentoDet = (id, docId) => {
   return null;
 };
+
+
 
 export const extraerPlantilla = () => {
   return API.get(`rendicion/documento/plantilla`, {

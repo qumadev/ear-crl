@@ -261,15 +261,23 @@ export default function MyApp() {
               }
             />
             <Route
-            path={ ruta + "/rendiciones/info"}
-            element={
-              <Componente>
-                <FormDT />{""}
-              </Componente>
-            }
+              path={ruta + "/rendiciones/info/:id"}
+              element={
+                <Componente>
+                  <FormDT />{""}
+                </Componente>
+              }
             />
             <Route
               path={ruta + "/rendiciones/:id/documentos/agregar"}
+              element={
+                <Componente>
+                  <FormularioRD />{" "}
+                </Componente>
+              }
+            />
+            <Route
+              path={ruta + "/rendiciones/8/documentos/detail"}
               element={
                 <Componente>
                   <FormularioRD />{" "}
