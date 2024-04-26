@@ -490,8 +490,8 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                     label="Agregar Detalle"
                     onClick={openNew}
                 />
-                    <Button
-                   className='flex col-12 align-items-center gap-5'
+                <Button
+                    className='flex col-12 align-items-center gap-5'
                     label="Eliminar Seleccionados"
                     onClick={() => { }}
                 />

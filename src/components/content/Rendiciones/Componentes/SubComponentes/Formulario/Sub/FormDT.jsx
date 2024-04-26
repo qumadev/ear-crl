@@ -4,45 +4,61 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
 import React, { useContext } from 'react'
-import TableDT from './TableDT';
+
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
-import { Calendar } from 'primereact/calendar';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
+import { obtenerRendicion } from '../../../../../../../services/axios.service';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import TableDT from './TableDT';
+import { setDate } from 'date-fns';
+import { Calendar } from 'primereact/calendar';
 
 
-export default function FormDT({ responsiveSizeMobile, rowData }) {
+export default function FormDT({   editable,
+  fechaSolicitud,responsiveSizeMobile, rowData 
+})
+
+{
   const navigate = useNavigate();
   const { usuario, showError, ruta } = useContext(AppContext);
 
-  console.log("pruebas", rowData)
-  let emptyProduct = {
-    STR_ITEM: {
-      ItemCode: null,
-      ItemName: null,
-      U_BPP_TIPUNMED: null,
-      WhsCode: null,
-      Stock: 0,
-    },
+  const { id } = useParams()
 
+  const [rendicion, setRendicion] = useState(null)
+  async function obtenerData() {
+    const response = await
+      obtenerRendicion(id);
 
-    STR_CANTIDAD: 0,
-    STR_COSTO: 0,
+    const documentos = response.data.Result[0]?.documentos|| [];
 
-    STR_FECHAREQ: new Date(),
-    STR_PROVEEDOR: { CardName: null, LicTradNum: null },
-    STR_PROYECTO: { id: null, name: null },
+    const documentosFormateados= documentos.map(doc=>({
+      ID: doc.ID,
+      STR_TIPO_DOC:doc.STR_TIPO_DOC,
+      STR_FECHA_DOC:doc.STR_FECHA_DOC,
+      STR_TOTALDOC:doc.STR_TOTALDOC,
+ 
+      STR_PROVEEDOR: doc.STR_PROVEEDOR,
+      STR_COMENTARIOS: doc.STR_COMENTARIOS,
+    }))
+    console.log(response.data.Result[0])
 
+    setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
+  }
+  const fecBodyTemplate = (rowData) => {
 
-    STR_DIM1: { id: null, name: null },
-    STR_DIM2: { id: null, name: null },
-    STR_DIM3: { id: null, name: null },
-    STR_DIM4: { id: null, name: null },
-    STR_DIM5: { id: null, name: null },
-    STR_COMENTARIO: null,
+    return <>{rowData.STR_FECHAREGIS}</>;
   };
+
+  useEffect(() => {
+    obtenerData();
+  }, []);
+ console.log("fecha",rendicion?.SOLICITUDRD.STR_FECHAREGIS)
+ 
   return (
 
 
@@ -51,7 +67,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
         <div
           className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
             } align-items-center`}>
-          Redicion info
+          Redincion info
         </div>
         <div div className="flex flex-row flex-wrap gap-2">
           <Button
@@ -79,7 +95,8 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
             icon="pi pi-plus"
             severity="success"
             onClick={() => {
-              navigate(ruta + `/rendiciones/8/documentos/agregar`);
+              navigate(ruta + 
+                `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
           // disabled={usuario.TipoUsuario != 1}
           />
@@ -104,7 +121,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               Código:
             </label>
             <InputText
-              value=''
+              value={rendicion?.ID}
               placeholder="codigo"
               disabled
             />
@@ -119,6 +136,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               N° Rendición:
             </label>
             <InputText
+              value={rendicion?.STR_NRRENDICION}
               placeholder=" N° Rendición"
               disabled
             />
@@ -130,6 +148,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               Estado:
             </label>
             <InputText
+              value={rendicion?.STR_ESTADO}
               placeholder="Estado"
               disabled
             />
@@ -141,6 +160,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               Emp.Asignado:
             </label>
             <InputText
+              value={rendicion?.STR_EMPLDASIG}
               placeholder="Emp.Asignado"
               disabled
             />
@@ -152,6 +172,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               N° de la SR:
             </label>
             <InputText
+              value={rendicion?.STR_SOLICITUD}
               placeholder="N° de la SR"
               disabled
             />
@@ -163,8 +184,16 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               Fecha de Solicitud:
             </label>
             <Calendar
-              // value={date} 
-              // onChange={(e) => setDate(e.value)} 
+            value={fecBodyTemplate}
+
+            // onChange={(e)=>setRendicion((prevDetalle)=>({
+            // ...prevDetalle,STR_FECHAREGIS:e.target.value
+            // }))}
+
+            dateFormat="dd/mm/yy"
+            disabled={editable}
+            // minDate={getFechaLargo(fechaSolicitud)}
+              locale='es'
               showIcon />
           </div>
         </div>
@@ -174,6 +203,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               Monto Rendido:
             </label>
             <InputText
+              value={rendicion?.STR_TOTALRENDIDO}
               placeholder=" N° Rendición"
               disabled
             />
@@ -196,6 +226,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               CargaDocs:
             </label>
             <InputText
+            // value={rendicion?.}
               placeholder="CargaDocs"
               disabled
             />
@@ -207,6 +238,7 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
               DocEntry:
             </label>
             <InputText
+            value={rendicion?.STR_DOCENTRY}
               placeholder="DocEntry"
               disabled
             />
@@ -215,12 +247,12 @@ export default function FormDT({ responsiveSizeMobile, rowData }) {
       </div>
       <Divider />
 
-      <Rendiciones
-        emptyProduct={emptyProduct}
+      <TableDT
+      rendicion={rendicion}
+    
       >
-
-      </Rendiciones>
-
+          
+      </TableDT>
 
 
     </>

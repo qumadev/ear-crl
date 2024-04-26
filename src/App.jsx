@@ -275,9 +275,9 @@ export default function MyApp() {
                   <FormularioRD />{" "}
                 </Componente>
               }
-            />
+            /> 
             <Route
-              path={ruta + "/rendiciones/8/documentos/detail"}
+              path={ruta + "/rendiciones/:id/documentos/detail"}
               element={
                 <Componente>
                   <FormularioRD />{" "}

@@ -47,6 +47,12 @@ function Rendiciones({
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
 
+//   const [rendiciones,rendiciones]= useState(
+
+//     {
+// ID:null
+//     }
+//    )
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -554,41 +560,21 @@ function Rendiciones({
           alignFrozen="right"
         ></Column>
       </DataTable>
-      {/* <div>
-      <Button
-      <div>
-        <Button label="ver" icon="pi pi-eye" severity="success"
-            onClick={() => {
-            navigate(ruta + "/rendiciones/8/documentos/detail");
-          }}
+      
 
-        />
-      {/* <Button
-  label="ver"
-  icon="pi pi-eye"
-  severity="success"
-  
-    onClick={() => {
-    
-    navigate(ruta + `/rendiciones/info`);
-  }}
- 
-/>
-      </div> */}
-
-      <Button label="ver" icon="pi pi-eye" severity="success"
+      {/* <Button label="ver" icon="pi pi-eye" severity="success"
         onClick={() => {
           navigate(ruta + "/rendiciones/8/documentos/detail");
         }}
 
-      />
+      /> */}
 
-      <button
+      {/* <button
       consola
       onClick={prueba}
       >
 
-      </button>
+      </button> */}
 
     </div>
 
