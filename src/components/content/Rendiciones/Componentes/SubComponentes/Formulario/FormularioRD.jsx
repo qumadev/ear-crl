@@ -38,9 +38,6 @@ function FormularioRD() {
   const [activeIndex, setActiveIndex] = useState(0);
   const tabViewRef = useRef(null);
   const location = useLocation();
-  const esModoRegistrar = location.pathname.includes("agregar");
-  const esModoDetail = location.pathname.includes("detail");
-  const esModoEditar = location.pathname.includes("editar");
   const esModo = location.pathname.includes("agregar") ? "Agregar" : 
   location.pathname.includes("editar") ? "Editar" : "Detalle";
   const { config, ruta } = useContext(AppContext);
@@ -140,8 +137,7 @@ function FormularioRD() {
       // obtenerTipos(),
       obtenerDocumento(id),
     ]);
-    console.log("obt: ",response)
-    console.log("obt: ",response[0])
+    console.log("obt: ",response[0].data.Result[0])
     setDocumento(response[0].data.Result[0])
   }
 
@@ -157,7 +153,7 @@ function FormularioRD() {
 
   const [detalles, setDetalles] = useState([]); // Lista de detalles
   const [anexos, setAnexos] = useState([]);
-
+  
   const [detalle, setDetalle] = useState({
     // Detalle a Registrar
   });
@@ -295,6 +291,18 @@ function FormularioRD() {
         return typeof e.ID == "number" ? e : { ...e, ID: null };
       });
       console.log("docx: ",documento);
+      console.log("detalle: ",detalle);
+      let _documento = {
+        ...documento,
+        // STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
+        // STR_FECHA_DOC: documento.STR_FECHA_DOC,
+        // STR_FECHA_VENCIMIENTO: documento.STR_FECHA_VENCIMIENTO,
+        detalles: detalle, // Detalles
+        //STR_VALIDA_SUNAT: compExisteSunat,
+        // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
+        //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
+        //   : documento.STR_ANEXO_ADJUNTO,
+      };
       // let _documento = {
       //   ...documento,
       //   STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
@@ -306,7 +314,8 @@ function FormularioRD() {
       //   //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
       //   //   : documento.STR_ANEXO_ADJUNTO,
       // };
-      let response = await actualizarDocumento(documento); // _documento - Crea Documento
+
+      let response = await actualizarDocumento(_documento); // _documento - Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
         console.log(`Documento actualizado con ID: ${content.id}`);
@@ -623,6 +632,7 @@ function FormularioRD() {
             documento={documento}
             setDocumento={setDocumento}
             detalles={documento.detalles}
+            setDetalle={setDetalle}
             moneda={documento.STR_MONEDA}
             //esModoDetail={esModoDetail}
             esModo={esModo}

@@ -20,7 +20,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { Divider } from 'primereact/divider';
 
 
-function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo }) {
+function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo }) {
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
     const [esModoValidate] = useState(esModo==="Detalle"?true:false)
@@ -353,6 +353,10 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
     const [articulos, setArticulos] = useState([])
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
+    useEffect(()=>{
+        setDetalle(articulos);
+    },[articulos])
+
     async function obtenerData() {
         const response = await Promise.all([
             // obtenerTipos(),
@@ -405,6 +409,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
     useEffect(() => {
         obtenerData();
         setDocumentoDet(articulos);
+        console.log("doc3: ",documento)
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
@@ -466,7 +471,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
     }
     const [fecha, setFecha] = useState(new Date("01/01/2024"));
     useEffect(()=>{
-        fecha = new Date(documento.STR_FECHA_DOC);
+        setFecha(new Date(documento.STR_FECHA_DOC));
     },[documento])
     console.log("fecha: ",documento.STR_FECHA_DOC)
     // Personalizando campos
@@ -689,11 +694,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
                         <label className='col-2'>(*)Fecha</label>
                         <Calendar
                             className='col-6'
-                            value={fecha}
+                            value={documento.STR_FECHA_DOC}
                             //value={fecha}
                             // readOnlyInput
                             // disabled
-                            //placeholder='Seleccione fecha'
+                            placeholder={documento.STR_FECHA_DOC}
                             //dateFormat="dd/mm/yyyy"
                             disabled={esModoValidate}
                             locale="es"
@@ -723,7 +728,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
                           />
                       </div>
                     }
-                    
 
                     <Divider />
 
