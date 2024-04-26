@@ -183,6 +183,7 @@ function UpdateSolicitud() {
                             }));
                         }}
                         rows={5}
+                        maxLength={254}
                         cols={30}
                     />
                 </div>

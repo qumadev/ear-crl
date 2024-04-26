@@ -529,6 +529,7 @@ function FormularioSL() {
           <SolicitudNuevaSL
             solicitudRD={solicitudRD}
             setSolicitudRD={setSolicitudRD}
+            estadosEditables={estadosEditables}
           />
         </TabPanel>
         {solicitudRD.STR_ESTADO != "1" && (
