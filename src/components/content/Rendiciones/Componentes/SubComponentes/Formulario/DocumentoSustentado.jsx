@@ -378,22 +378,28 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
     }
 
     useEffect(()=>{
-        // const articles = detalles.map((detalle) => ({
-        //     Cod: detalle.STR_CODARTICULO.ItemCode,
-        //     Concepto: detalle.STR_CODARTICULO.ItemName,
-        //     Almacen: detalle.STR_ALMACEN,
-        //     Proyecto: detalle.STR_PROYECTO.name,
-        //     UnidadNegocio: detalle.STR_UNIDAD_NEGOCIO.name,
-        //     Filial: detalle.STR_FILIAL.name,
-        //     Areas: detalle.STR_AREAS.name,
-        //     CentroCosto: detalle.STR_CENTRO_COSTO.name,
-        //     IndImpuesto: detalle.STR_INDIC_IMPUESTO.id,
-        //     Precio: detalle.STR_PRECIO,
-        //     Cantidad: detalle.STR_CANTIDAD,
-        //     Impuesto: detalle.STR_INDIC_IMPUESTO.name
-        // }));
-        // Actualizamos el estado articulos con el nuevo array de objetos personalizados
-        setArticulos(detalles);
+        if (detalles && detalles.length > 0) {
+            console.log("det2: ",detalles);
+            const articles = detalles.map((detalle) => ({
+                Cod: detalle.STR_CODARTICULO,
+                Concepto: detalle.STR_CONCEPTO,
+                Almacen: detalle.STR_ALMACEN,
+                Proyecto: detalle.STR_PROYECTO,
+                UnidadNegocio: detalle.STR_PROYECTO,
+                Filial: detalle.STR_PROYECTO,
+                Areas: detalle.STR_PROYECTO,
+                CentroCosto: detalle.STR_PROYECTO,
+                IndImpuesto: detalle.STR_INDIC_IMPUESTO,
+                Precio: detalle.STR_PRECIO,
+                Cantidad: detalle.STR_CANTIDAD,
+                Impuesto: detalle.STR_INDIC_IMPUESTO.name
+            }));
+            // Actualizamos el estado articulos con el nuevo array de objetos personalizados
+            setArticulos(articles);
+        }else{
+            setArticulos([]);
+        }
+       
     },[detalles])
 
     useEffect(() => {
@@ -685,6 +691,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
                             placeholder='Seleccione fecha'
                             dateFormat="dd/mm/yy"
                             disabled={esModoValidate}
+                            locale="es"
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">

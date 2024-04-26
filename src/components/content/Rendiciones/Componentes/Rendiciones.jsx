@@ -804,7 +804,7 @@ function Rendiciones({
         icon="pi pi-eye"
         severity="success"
         onClick={() => {
-          navigate(ruta + `/rendiciones/31/documentos/editar`);
+          navigate(ruta + `/rendiciones/34/documentos/editar`);
         }}
       />
       {/* <div>
