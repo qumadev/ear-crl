@@ -19,11 +19,9 @@ import { setDate } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
 
 
-export default function FormDT({   editable,
-  fechaSolicitud,responsiveSizeMobile, rowData 
-})
-
-{
+export default function FormDT({ editable,
+  fechaSolicitud, responsiveSizeMobile, rowData
+}) {
   const navigate = useNavigate();
   const { usuario, showError, ruta } = useContext(AppContext);
 
@@ -34,14 +32,14 @@ export default function FormDT({   editable,
     const response = await
       obtenerRendicion(id);
 
-    const documentos = response.data.Result[0]?.documentos|| [];
+    const documentos = response.data.Result[0]?.documentos || [];
 
-    const documentosFormateados= documentos.map(doc=>({
+    const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
-      STR_TIPO_DOC:doc.STR_TIPO_DOC,
-      STR_FECHA_DOC:doc.STR_FECHA_DOC,
-      STR_TOTALDOC:doc.STR_TOTALDOC,
- 
+      STR_TIPO_DOC: doc.STR_TIPO_DOC,
+      STR_FECHA_DOC: doc.STR_FECHA_DOC,
+      STR_TOTALDOC: doc.STR_TOTALDOC,
+
       STR_PROVEEDOR: doc.STR_PROVEEDOR,
       STR_COMENTARIOS: doc.STR_COMENTARIOS,
     }))
@@ -57,8 +55,8 @@ export default function FormDT({   editable,
   useEffect(() => {
     obtenerData();
   }, []);
- console.log("fecha",rendicion?.SOLICITUDRD.STR_FECHAREGIS)
- 
+  console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
+
   return (
 
 
@@ -95,7 +93,7 @@ export default function FormDT({   editable,
             icon="pi pi-plus"
             severity="success"
             onClick={() => {
-              navigate(ruta + 
+              navigate(ruta +
                 `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
           // disabled={usuario.TipoUsuario != 1}
@@ -184,17 +182,13 @@ export default function FormDT({   editable,
               Fecha de Solicitud:
             </label>
             <Calendar
-            value={fecBodyTemplate}
-
-            // onChange={(e)=>setRendicion((prevDetalle)=>({
-            // ...prevDetalle,STR_FECHAREGIS:e.target.value
-            // }))}
-
-            dateFormat="dd/mm/yy"
-            disabled={editable}
-            // minDate={getFechaLargo(fechaSolicitud)}
+              value={fecBodyTemplate}
+              onChange={(date) => setFecBodyTemplate(date)}
+              dateFormat="dd/mm/yy"
+              disabled={editable}
               locale='es'
               showIcon />
+            <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p>
           </div>
         </div>
         <div className="col-12 md:col-5 lg:col-3">
@@ -226,7 +220,7 @@ export default function FormDT({   editable,
               CargaDocs:
             </label>
             <InputText
-            // value={rendicion?.}
+              // value={rendicion?.}
               placeholder="CargaDocs"
               disabled
             />
@@ -238,7 +232,7 @@ export default function FormDT({   editable,
               DocEntry:
             </label>
             <InputText
-            value={rendicion?.STR_DOCENTRY}
+              value={rendicion?.STR_DOCENTRY}
               placeholder="DocEntry"
               disabled
             />
@@ -248,10 +242,10 @@ export default function FormDT({   editable,
       <Divider />
 
       <TableDT
-      rendicion={rendicion}
-    
+        rendicion={rendicion}
+
       >
-          
+
       </TableDT>
 
 

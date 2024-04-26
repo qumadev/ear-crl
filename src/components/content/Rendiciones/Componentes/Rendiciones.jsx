@@ -385,8 +385,6 @@ function Rendiciones({
           `/rendiciones/info/${rowData.ID}`,
         )
       }}
-      
-
     />
 
   )
