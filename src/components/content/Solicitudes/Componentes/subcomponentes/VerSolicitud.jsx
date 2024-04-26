@@ -227,6 +227,7 @@ function VerSolicitud() {
                         }}
                         rows={5}
                         cols={30}
+                        maxLength={254}
                     />
                 </div>
             </div>

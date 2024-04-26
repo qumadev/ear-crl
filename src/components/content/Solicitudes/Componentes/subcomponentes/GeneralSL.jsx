@@ -298,6 +298,7 @@ function GeneralSL({
                 }
                 rows={5}
                 cols={30}
+                maxLength={254}
                 disabled={!estadosEditables.includes(solicitudRD.estado)}
               />
             </div>
