@@ -464,7 +464,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
         console.log("d: ",documento)
         console.log("a: ",articulos)
     }
-
+    const [fecha, setFecha] = useState(new Date("01/01/2024"));
+    useEffect(()=>{
+        fecha = new Date(documento.STR_FECHA_DOC);
+    },[documento])
+    console.log("fecha: ",documento.STR_FECHA_DOC)
     // Personalizando campos
     const transformDataForExport = (articulos) => {
       return articulos.map((articulo) => {
@@ -685,11 +689,12 @@ function DocumentoSustentado({ documento, setDocumento, detalles, moneda, esModo
                         <label className='col-2'>(*)Fecha</label>
                         <Calendar
                             className='col-6'
-                            // value={}
+                            value={fecha}
+                            //value={fecha}
                             // readOnlyInput
                             // disabled
-                            placeholder='Seleccione fecha'
-                            dateFormat="dd/mm/yy"
+                            //placeholder='Seleccione fecha'
+                            //dateFormat="dd/mm/yyyy"
                             disabled={esModoValidate}
                             locale="es"
                         />
