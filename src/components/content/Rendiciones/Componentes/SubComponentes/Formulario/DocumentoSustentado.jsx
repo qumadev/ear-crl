@@ -21,9 +21,10 @@ import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 
 
-function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) {
+function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo }) {
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
+    const [esModoValidate] = useState(esModo==="Detalle"?true:false)
     const { usuario, ruta, config } = useContext(AppContext);
 
     // const [documento, setDocumento] = useState(
@@ -335,6 +336,10 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
     const [articulos, setArticulos] = useState([])
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
+    useEffect(()=>{
+        setDetalle(articulos);
+    },[articulos])
+
     async function obtenerData() {
         const response = await Promise.all([
             // obtenerTipos(),
@@ -358,9 +363,36 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
         setCentroCostos(response[7].data.Result)
         setUnidNegocios(response[8].data.Result)
     }
+
+    useEffect(()=>{
+        if (detalles && detalles.length > 0) {
+            console.log("det2: ",detalles);
+            const articles = detalles.map((detalle) => ({
+                Cod: detalle.STR_CODARTICULO,
+                Concepto: detalle.STR_CODARTICULO.ItemName,
+                Almacen: detalle.STR_ALMACEN,
+                Proyecto: detalle.STR_PROYECTO,
+                UnidadNegocio: detalle.STR_DIM1,
+                Filial: detalle.STR_DIM2,
+                Areas: detalle.STR_DIM4,
+                CentroCosto: detalle.STR_DIM5,
+                IndImpuesto: detalle.STR_INDIC_IMPUESTO,
+                Precio: detalle.STR_PRECIO,
+                Cantidad: detalle.STR_CANTIDAD,
+                Impuesto: detalle.STR_IMPUESTO
+            }));
+            // Actualizamos el estado articulos con el nuevo array de objetos personalizados
+            setArticulos(articles);
+        }else{
+            setArticulos([]);
+        }
+       
+    },[detalles])
+
     useEffect(() => {
         obtenerData();
-        setDocumentoDet(articulos)
+        setDocumentoDet(articulos);
+        console.log("doc3: ",documento)
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
@@ -420,7 +452,11 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
         console.log("d: ", documento)
         console.log("a: ", articulos)
     }
-
+    const [fecha, setFecha] = useState(new Date("01/01/2024"));
+    useEffect(()=>{
+        setFecha(new Date(documento.STR_FECHA_DOC));
+    },[documento])
+    console.log("fecha: ",documento.STR_FECHA_DOC)
     // Personalizando campos
     const transformDataForExport = (articulos) => {
         return articulos.map((articulo) => {
@@ -510,14 +546,14 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
     return (
         <div>
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
-            <h1>{esModoDetail ? "Detalle" : "Agregar"} Documento Sustentado:</h1>
+            <h1>{esModo} Documento Sustentado:</h1>
             <div className="col-12 md:col-6 lg:col-12">
                 <div className="mb-3 flex flex-column">
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)¿Es exterior?</label>
                         <Checkbox
                             className='col-6'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         ></Checkbox>
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -537,7 +573,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             filter
                             filterBy='name'
                             placeholder='Seleccione Tipo'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -552,7 +588,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             }}
                             className='col-6'
                             placeholder='N° de serie'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -567,9 +603,9 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                                     STR_CORR_DOC: e.target.value,
                                 }));
                             }}
-                            // value={numero}
-                            // onChange={handleNumeroChange}
-                            disabled={esModoDetail}
+                        // value={numero}
+                        // onChange={handleNumeroChange}
+                        disabled={esModoValidate}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -577,11 +613,10 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_RUC}
+                            value={documento.STR_PROVEEDOR}
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
-                                console.log(e.target.value)
                                 setDocumento((prevState) => ({
                                     ...prevState,
                                     STR_RUC: e.target.value,
@@ -596,14 +631,14 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             placeholder="Selecciona Proveedor"
                             valueTemplate={selectedOptionTemplate}
                             itemTemplate={complementoOptionTemplate}
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
-                            value={documento.STR_RAZONSOCIAL}
+                            value={documento.STR_PROVEEDOR ? documento.STR_PROVEEDOR.CardName : ""}
                             disabled
                         />
                     </div>
@@ -619,7 +654,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             }}
                             className='col-6'
                             placeholder='Direccion'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -639,7 +674,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             filter
                             filterBy='name'
                             placeholder='Seleccione Motivo'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -660,36 +695,47 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             filter
                             filterBy='name'
                             placeholder='Seleccione Moneda'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Fecha</label>
                         <Calendar
                             className='col-6'
-                            // value={}
+                            value={documento.STR_FECHA_DOC}
+                            //value={fecha}
                             // readOnlyInput
                             // disabled
-                            placeholder='Seleccione fecha'
-                            dateFormat="dd/mm/yy"
-                            disabled={esModoDetail}
+                            placeholder={documento.STR_FECHA_DOC}
+                            //dateFormat="dd/mm/yyyy"
+                            disabled={esModoValidate}
+                            locale="es"
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Comentario</label>
                         <InputTextarea
+                            value={documento.STR_COMENTARIOS}
                             className='col-6'
                             rows={5}
                             cols={30}
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
-                    {esModoDetail ? "" :
-
-                        <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
+                    { esModoValidate ? "" : 
+                      <div className="flex col-12">
+                          <Button
+                              className='col-6'
+                              label="Agregar Detalle"
+                              onClick={openNew}
+                          />
+                          <Button
+                              className='col-6'
+                              label="Eliminar Seleccionados"
+                              onClick={() => { }}
+                          />
+                      </div>
                     }
-
 
                     <Divider />
 
@@ -802,11 +848,11 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
             >
             </FormDetalleDocumento>
 
-            {/* <Button
+            <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            /> */}
+            />
             <Button
                 className='col-4'
                 label="Exportar"

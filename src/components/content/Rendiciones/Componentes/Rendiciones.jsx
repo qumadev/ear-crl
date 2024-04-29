@@ -891,7 +891,21 @@ function Rendiciones({
           alignFrozen="right"
         ></Column>
       </DataTable>
-      
+      <Button
+        label="ver"
+        icon="pi pi-eye"
+        severity="success"
+        onClick={() => {
+          navigate(ruta + `/rendiciones/6/documentos/editar`);
+        }}
+      />
+      {/* <div>
+      <Button
+      <div>
+        <Button label="ver" icon="pi pi-eye" severity="success"
+            onClick={() => {
+            navigate(ruta + "/rendiciones/8/documentos/agregar");
+          }}
 
       {/* <Button label="ver" icon="pi pi-eye" severity="success"
         onClick={() => {
