@@ -26,7 +26,7 @@ export default function FormDT({ editable,
   const navigate = useNavigate();
   const { usuario, showError, ruta } = useContext(AppContext);
 
-  const { id } = useParams()
+  const { id } = useParams();
 
   const [rendicion, setRendicion] = useState(null)
   async function obtenerData() {
@@ -91,7 +91,7 @@ export default function FormDT({ editable,
           <Button
             className='col-6 md:col-6 lg:col-12'
             icon="pi pi-plus"
-            label="Guardar Borradorq"
+            label="Guardar Borrador"
           // onClick={openNew}
           />
           {/* <Button

@@ -4,38 +4,58 @@ import { DataTable } from 'primereact/datatable'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
+import { SplitButton } from 'primereact/splitbutton'
+
+
 
 export default function TableDT({
     rendicion,
-    setRendicion
+    setRendicion,
+
 }) {
     // console.log("pr", rendicion?.documentos)
 
     const navigate = useNavigate();
     const { usuario, ruta } = useContext(AppContext);
-    
+
+    const items= [
+
+        {
+            label: 'Editar',
+            icon: 'pi pi-external-link',
+            command: () => {
+                window.location.href = `/rendiciones/${documentos.ID}/documentos/detail`;
+            }
+        },
+
+    ];
     const actionverDoc= (documentos) => (
-        <>
-            <Button
-            label="ver"
-            icon="pi pi-eye"
-            severity="success"
-            onClick={() => {
-                navigate(ruta + 
-                    `/rendiciones/${documentos.ID}/documentos/detail`);
-            }}
-            />
-            <Button
-            label="editar"
-            icon="pi pi-pencil"
-            severity="success"
-            onClick={() => {
-                navigate(ruta + 
-                    `/rendiciones/${documentos.ID}/documentos/editar`);
-            }}
-            />
-        </>
+
+        <SplitButton
         
+        label="ver"
+        icon="pi pi-eye"
+        onClick={() => {
+                navigate(ruta + 
+                        `/rendiciones/${documentos.ID}/documentos/detail`);
+                  }} 
+                  model={items}
+
+        />
+
+        // <Button
+        //   label="ver"
+        //   icon="pi pi-eye"
+        //   severity="success"
+        //   onClick={() => {
+        //     navigate(ruta + 
+        //         `/rendiciones/${documentos.ID}/documentos/detail`);
+        //   }}
+
+        // />
+
+
+      
       )
       
     return (
