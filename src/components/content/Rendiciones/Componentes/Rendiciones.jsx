@@ -886,7 +886,8 @@ function Rendiciones({
         ></Column>
         <Column
           header="Acciones"
-          body={actionBodyTemplate}
+          body={actionBodyver}
+          // body={actionBodyTemplate}
           exportable={false}
           style={{ minWidth: "10rem" }}
           frozen

@@ -80,7 +80,42 @@ export default function FormDT({ editable,
     )
   }
 
+  // confirmacion
+  const confirmAutorizarReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de autorizar la reversion de la Rendición con código #${id}?`,
+      header: "Autorizar reversion - Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        autorizarReversionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
 
+  const confirmReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
+      header: "Revertir Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        ReversionAprobacionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
   return (
 
 
@@ -275,12 +310,37 @@ export default function FormDT({ editable,
       </div>
       <Divider />
 
+      <div className="card flex flex-wrap  gap-3 mx-3">
+        {/* Botones por rol */}
+        {usuario.rol.id == "2" ? (
+          <Button
+            label="Revertir Aprobación"
+            size="large"
+            onClick={confirmReversion(rendicion?.ID)}
+            // disabled={
+            //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
+            // }
+          />
+        ) : usuario.rol.id == "3" ? (
+          <Button
+            label="Autorizar Edicion"
+            severity="danger"
+            size="large"
+            onClick={confirmAutorizarReversion(rendicion?.ID)}
+            // disabled={
+            //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+            // }
+          />
+        ) : ""}
+      </div>
+
+
       <TableDT
         rendicion={rendicion}
-
       >
-
       </TableDT>
+
+
 
       <Divider />
       <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
