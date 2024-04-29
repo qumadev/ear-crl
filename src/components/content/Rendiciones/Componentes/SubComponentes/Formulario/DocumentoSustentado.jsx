@@ -876,7 +876,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 onClick={() => {
                     exportExcel();
                 }}
-            /> */
+            />
 
         </div>
     );

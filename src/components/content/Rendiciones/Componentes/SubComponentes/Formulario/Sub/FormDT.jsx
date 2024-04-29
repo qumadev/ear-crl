@@ -33,32 +33,32 @@ export default function FormDT({ editable,
     const response = await
       obtenerRendicion(id);
 
-    // const documentos = response.data.Result[0]?.documentos || [];
+  const documentos = response.data.Result[0]?.documentos || [];
 
-    const documentos = [{
-      ID: 1,
-      STR_TIPO_DOC: "Factura",
-      STR_FECHA_DOC: "2021-08-25",
-      STR_TOTALDOC: 1000,
-      STR_PROVEEDOR: "Proveedor 1",
-      STR_COMENTARIOS: "Comentario 1",
-    },
-    {
-      ID: 2,
-      STR_TIPO_DOC: "Boleta",
-      STR_FECHA_DOC: "2021-08-25",
-      STR_TOTALDOC: 1000,
-      STR_PROVEEDOR: "Proveedor 2",
-      STR_COMENTARIOS: "Comentario 2",
-    },
-    {
-      ID: 6,
-      STR_TIPO_DOC: "Factura",
-      STR_FECHA_DOC: "2021-08-25",
-      STR_TOTALDOC: 1000,
-      STR_PROVEEDOR: "Proveedor 3",
-      STR_COMENTARIOS: "Comentario 3",
-    }]
+    // const documentos = [{
+    //   ID: 1,
+    //   STR_TIPO_DOC: "Factura",
+    //   STR_FECHA_DOC: "2021-08-25",
+    //   STR_TOTALDOC: 1000,
+    //   STR_PROVEEDOR: "Proveedor 1",
+    //   STR_COMENTARIOS: "Comentario 1",
+    // },
+    // {
+    //   ID: 2,
+    //   STR_TIPO_DOC: "Boleta",
+    //   STR_FECHA_DOC: "2021-08-25",
+    //   STR_TOTALDOC: 1000,
+    //   STR_PROVEEDOR: "Proveedor 2",
+    //   STR_COMENTARIOS: "Comentario 2",
+    // },
+    // {
+    //   ID: 6,
+    //   STR_TIPO_DOC: "Factura",
+    //   STR_FECHA_DOC: "2021-08-25",
+    //   STR_TOTALDOC: 1000,
+    //   STR_PROVEEDOR: "Proveedor 3",
+    //   STR_COMENTARIOS: "Comentario 3",
+    // }]
 
     const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
@@ -337,7 +337,7 @@ export default function FormDT({ editable,
 
       <div className="card flex flex-wrap  gap-3 mx-3">
         {/* Botones por rol */}
-        {usuario.rol.id == "2" ? (
+        {usuario.rol?.id == "2" ? (
           <Button
             label="Revertir Aprobación"
             size="large"
@@ -346,7 +346,7 @@ export default function FormDT({ editable,
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
             // }
           />
-        ) : usuario.rol.id == "3" ? (
+        ) : usuario.rol?.id == "3" ? (
           <Button
             label="Autorizar Edicion"
             severity="danger"
