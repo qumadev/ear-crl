@@ -617,10 +617,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_PROVEEDOR}
+                            value={documento.STR_RUC}
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
+                                console.log(e.target.value)
                                 setDocumento((prevState) => ({
                                     ...prevState,
                                     STR_RUC: e.target.value,

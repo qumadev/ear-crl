@@ -33,32 +33,7 @@ export default function FormDT({ editable,
     const response = await
       obtenerRendicion(id);
 
-  const documentos = response.data.Result[0]?.documentos || [];
-
-    // const documentos = [{
-    //   ID: 1,
-    //   STR_TIPO_DOC: "Factura",
-    //   STR_FECHA_DOC: "2021-08-25",
-    //   STR_TOTALDOC: 1000,
-    //   STR_PROVEEDOR: "Proveedor 1",
-    //   STR_COMENTARIOS: "Comentario 1",
-    // },
-    // {
-    //   ID: 2,
-    //   STR_TIPO_DOC: "Boleta",
-    //   STR_FECHA_DOC: "2021-08-25",
-    //   STR_TOTALDOC: 1000,
-    //   STR_PROVEEDOR: "Proveedor 2",
-    //   STR_COMENTARIOS: "Comentario 2",
-    // },
-    // {
-    //   ID: 6,
-    //   STR_TIPO_DOC: "Factura",
-    //   STR_FECHA_DOC: "2021-08-25",
-    //   STR_TOTALDOC: 1000,
-    //   STR_PROVEEDOR: "Proveedor 3",
-    //   STR_COMENTARIOS: "Comentario 3",
-    // }]
+    const documentos = response.data.Result[0]?.documentos || [];
 
     const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
@@ -69,7 +44,7 @@ export default function FormDT({ editable,
       STR_PROVEEDOR: doc.STR_PROVEEDOR,
       STR_COMENTARIOS: doc.STR_COMENTARIOS,
     }))
-    console.log(response.data.Result[0])
+    // console.log(response.data.Result[0])
 
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
   }
@@ -82,7 +57,7 @@ export default function FormDT({ editable,
   useEffect(() => {
     obtenerData();
   }, []);
-  console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
+  // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
   const leftToolbarTemplate = () => {
     return (
@@ -336,6 +311,7 @@ export default function FormDT({ editable,
       <Divider />
 
       <div className="card flex flex-wrap  gap-3 mx-3">
+        
         {/* Botones por rol */}
         {usuario.rol?.id == "2" ? (
           <Button
