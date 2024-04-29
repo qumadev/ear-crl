@@ -69,7 +69,7 @@ export default function FormDT({ editable,
       STR_PROVEEDOR: doc.STR_PROVEEDOR,
       STR_COMENTARIOS: doc.STR_COMENTARIOS,
     }))
-    console.log(response.data.Result[0])
+    // console.log(response.data.Result[0])
 
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
   }
@@ -82,7 +82,7 @@ export default function FormDT({ editable,
   useEffect(() => {
     obtenerData();
   }, []);
-  console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
+  // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
   const leftToolbarTemplate = () => {
     return (
@@ -336,8 +336,9 @@ export default function FormDT({ editable,
       <Divider />
 
       <div className="card flex flex-wrap  gap-3 mx-3">
+        
         {/* Botones por rol */}
-        {usuario.rol.id == "2" ? (
+        {usuario.rol?.id == "2" ? (
           <Button
             label="Revertir Aprobación"
             size="large"
@@ -346,7 +347,7 @@ export default function FormDT({ editable,
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
             // }
           />
-        ) : usuario.rol.id == "3" ? (
+        ) : usuario.rol?.id == "3" ? (
           <Button
             label="Autorizar Edicion"
             severity="danger"

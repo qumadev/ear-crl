@@ -9,26 +9,33 @@ export default function TableDT({
     rendicion,
     setRendicion
 }) {
-    console.log("pr", rendicion?.documentos)
+    // console.log("pr", rendicion?.documentos)
 
     const navigate = useNavigate();
     const { usuario, ruta } = useContext(AppContext);
     
     const actionverDoc= (documentos) => (
-
-        <Button
-          label="ver"
-          icon="pi pi-eye"
-          severity="success"
-          onClick={() => {
-            navigate(ruta + 
-                `/rendiciones/${documentos.ID}/documentos/detail`);
-          }}
-
-        />
-
-
-      
+        <>
+            <Button
+            label="ver"
+            icon="pi pi-eye"
+            severity="success"
+            onClick={() => {
+                navigate(ruta + 
+                    `/rendiciones/${documentos.ID}/documentos/detail`);
+            }}
+            />
+            <Button
+            label="editar"
+            icon="pi pi-pencil"
+            severity="success"
+            onClick={() => {
+                navigate(ruta + 
+                    `/rendiciones/${documentos.ID}/documentos/editar`);
+            }}
+            />
+        </>
+        
       )
       
     return (
