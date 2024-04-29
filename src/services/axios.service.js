@@ -151,6 +151,21 @@ export const obtenerTipoDocs = () => {
   });
 };
 
+export const autorizarReversionAprobRendicion = (idRendicion) => {
+  return API.patch(`/rendicion/autorizar/revertir/${idRendicion}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+export const revertirAprobRendicion = (idRendicion) => {
+  return API.patch(`/rendicion/revertir/${idRendicion}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const obtenerEmpleados = () => {
   return null;
 };
