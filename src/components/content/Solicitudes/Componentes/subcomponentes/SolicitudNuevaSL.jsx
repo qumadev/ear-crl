@@ -19,7 +19,7 @@ import { FormDetalle } from "../../../Rendiciones/Componentes/SubComponentes/For
 import { AppContext } from "../../../../../App";
 import { Navigate } from "react-router-dom";
 
-function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
+function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
   const { usuario, ruta, config } = useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [tipos, setTipos] = useState(null);
@@ -82,6 +82,10 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
             options={tipos}
             optionLabel="name"
             placeholder="Seleccione Tipo"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
           />
           <label htmlFor="">(*)Moneda:</label>
           <Dropdown
@@ -96,6 +100,10 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
             options={monedas}
             optionLabel="name"
             placeholder="Seleccione Moneda"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
           />
           <label htmlFor="">(*)Monto:</label>
           <InputText
@@ -108,6 +116,10 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
               }));
             }}
             placeholder="Monto a solicitar"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
           />
           <label htmlFor="">(*)Motivo:</label>
           <Dropdown
@@ -123,6 +135,10 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
             options={motivos}
             optionLabel="name"
             placeholder="Seleccione Motivo"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
           />
           <label htmlFor="">(*)Comentario:</label>
           <InputTextarea
@@ -135,7 +151,12 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD }) {
               }));
             }}
             rows={5}
+            maxLength={254}
             cols={30}
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
           />
         </div>
       </div>

@@ -1,17 +1,43 @@
+import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
-import React from 'react'
+import React, { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../../../../../../../App'
 
-export default function TableDT(props) {
+export default function TableDT({
+    rendicion,
+    setRendicion
+}) {
+    console.log("pr", rendicion?.documentos)
+
+    const navigate = useNavigate();
+    const { usuario, ruta } = useContext(AppContext);
+    
+    const actionverDoc= (documentos) => (
+
+        <Button
+          label="ver"
+          icon="pi pi-eye"
+          severity="success"
+          onClick={() => {
+            navigate(ruta + 
+                `/rendiciones/${documentos.ID}/documentos/detail`);
+          }}
+
+        />
 
 
+      
+      )
+      
     return (
         <>
 
 
             <div className="card">
                 <DataTable
-                    // value={rendiciones}
+                    value={rendicion?.documentos}
                     sortMode="multiple"
                     paginator
                     rows={5}
@@ -27,75 +53,61 @@ export default function TableDT(props) {
                     ></Column>
 
                     <Column
-                        header="Cod.
-                            Arti/Serv"
-                            style={{ width: "3rem" }}
-                            className="font-bold"
+
+                        header="N° documentado"
+                        field="ID"
+                        style={{ width: "3rem" }}
+                        
                     ></Column>
 
                     <Column
-                        header="Concepto"
+                        field='STR_TIPO_DOC.name'
+                        header="Tipo"
                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        
                     ></Column>
 
                     <Column
-                        header="Almacen"
+                        field='STR_FECHA_DOC'
+                        header="Fecha del Documento"
                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        
                     ></Column>
 
                     <Column
-                        header="Proyecto"
-                          
+                        field='STR_TOTALDOC'
+                        header="Monto Rendido"
+
                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        
                     ></Column>
                     <Column
-                        header="Unidad de negocio"
+                        field='STR_PROVEEDOR.CardName'
+                        header="Proveedor"
                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        
                     ></Column>
                     <Column
-                        header="Filial"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
-                    ></Column>
-                    <Column
-                        header="Areas"
+                        field='STR_COMENTARIOS'
+                        header="Comentario"
                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        
                     ></Column>
                     <Column
-                        header="Centro Costo"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        header="Estado"
+                        style={{ width: "3rem" }}
+                        
                     ></Column>
                     <Column
-                        header="Ind. Impuesto"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
+                        header="Acciones"
+                        style={{ width: "3rem" }}
+                        body={actionverDoc}
+                        exportable={false}
+                     
+                        frozen
+                        alignFrozen="right"
                     ></Column>
-                    <Column
-                        header="Precio"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
-                    ></Column>
-                    <Column
-                        header="Cantidad"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
-                    ></Column>
-                    <Column
-                        header="Impuesto"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
-                    ></Column>
-                    <Column
-                        header="Subtotal"
-                         style={{ width: "3rem" }}
-                        className="font-bold"
-                    ></Column>
+
 
 
                 </DataTable>

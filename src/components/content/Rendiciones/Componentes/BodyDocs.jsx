@@ -499,7 +499,7 @@ export function BodyDocs() {
             <i
               className="pi pi-chevron-left cursor-pointer"
               onClick={() => {
-                navigate(ruta + "/rendiciones");
+                navigate(ruta +"/rendiciones");
               }}
             ></i>
 

@@ -118,6 +118,14 @@ export const obtenerDocumento = (id) => {
   });
 };
 
+export const obtenerRendicion = (id) => {
+  return API.get(`/rendicion/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 
 export const crearDocumento = (body) => {
   return API.post("/rendicion/documento", body, {
@@ -137,6 +145,21 @@ export const actualizarDocumento = (body) => {
 
 export const obtenerTipoDocs = () => {
   return API.get("/tipoear/documentos", {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const autorizarReversionAprobRendicion = (idRendicion) => {
+  return API.patch(`/rendicion/autorizar/revertir/${idRendicion}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+export const revertirAprobRendicion = (idRendicion) => {
+  return API.patch(`/rendicion/revertir/${idRendicion}`, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -265,7 +288,7 @@ export const listarRendiciones = (
     }
   );
 };
-
+ 
 export const obtenerSolicitudR = (id, create) => {
   return null;
 };
@@ -311,9 +334,9 @@ export const reintentarRendi = (id) => {
   return null;
 };
 
-export const obtenerRendicion = (id) => {
-  return null;
-};
+// export const obtenerRendicion = (id) => {
+//   return null;
+// };
 
 export const obtenerConf = () => {
   return API.get(`/configuracion/cfgeneral`, {
@@ -342,6 +365,8 @@ export const borrarDocumento = (id, rdId) => {
 export const borrarDocumentoDet = (id, docId) => {
   return null;
 };
+
+
 
 export const extraerPlantilla = () => {
   return API.get(`rendicion/documento/plantilla`, {
@@ -380,7 +405,13 @@ export const enviarAprobRendicion = (
   estado,
   areaAprobador
 ) => {
-  return null;
+  return API.post(
+    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,    {
+      ValidityState: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const aceptarAprobRendicion = (
@@ -391,7 +422,14 @@ export const aceptarAprobRendicion = (
   rendicionId,
   area
 ) => {
-  return null;
+  return API.patch(
+    `/rendicion/aprobacion/acepta?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
+    {
+      ValidityState: function (status) {
+        return status < 500;
+      },
+    }
+  );
 };
 
 export const rechazarAprobRendicion = (

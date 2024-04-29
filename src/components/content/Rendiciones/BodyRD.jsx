@@ -180,14 +180,14 @@ function BodyRD() {
             }}
             severity="secondary"
           />
-          <Button
+          {/* <Button
             label="Ver"
             icon="pi pi-eye"
             severity="success"
             onClick={() => {
               navigate(ruta + "/rendiciones/ver");
             }}
-          />
+          /> */}
           <Button
             label="Exportar"
             icon="pi pi-upload"

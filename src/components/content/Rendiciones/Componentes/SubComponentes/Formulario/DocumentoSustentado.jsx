@@ -18,6 +18,7 @@ import { CodeBracketIcon } from '@heroicons/react/16/solid';
 import { AppContext } from '../../../../../../App';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { Divider } from 'primereact/divider';
+import { Toolbar } from 'primereact/toolbar';
 
 
 function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo }) {
@@ -90,7 +91,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     } finally {
                         // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
                         console.log("entra")
-                        navigate(ruta + `/rendiciones/8/documentos`);
+                        navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
                     }
                 },
             },
@@ -281,7 +282,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             // navigate(ruta + "/rendiciones/ver");
                             // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
                             // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                            navigate(ruta + `/rendiciones/8/documentos/agregar`);
+                            navigate(ruta + `/rendiciones/${rowData.ID}/documentos/agregar`);
                         }
                     }}
                     severity="success"
@@ -305,26 +306,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     ))}
                 </div>
             </div>
-            // <React.Fragment>
-            //   <SplitButton
-            //     label="Ver"
-            //     onClick={() => {
-            //       try {
-            //         if (rowData.STR_ESTADO == 8) {
-            //           actualizarRendiEnCarga(rowData);
-            //         }
-            //       } catch (error) {
-            //       } finally {
-            //         navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-            //       }
-            //     }}
-            //     disabled={rowData.CREATE == "SAP"}
-            //     icon="pi pi-plus"
-            //     model={items}
-            //     rounded
-            //     loading={loadingBtn}
-            //   />
-            // </React.Fragment>
+
+
         );
     };
 
@@ -471,8 +454,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const quitArticulo = () => { }
 
     const showDoc = () => {
-        console.log("d: ",documento)
-        console.log("a: ",articulos)
+        console.log("d: ", documento)
+        console.log("a: ", articulos)
     }
     const [fecha, setFecha] = useState(new Date("01/01/2024"));
     useEffect(()=>{
@@ -480,64 +463,89 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     },[documento])
     // Personalizando campos
     const transformDataForExport = (articulos) => {
-      return articulos.map((articulo) => {
-        const codValue = articulo.Cod ? articulo.Cod.ItemCode : '';
-        const conceptoValue = articulo.Concepto ? articulo.Concepto : '';
-        const almacenValue = articulo.Almacen ? articulo.Almacen : '';
-        const proyectoValue = articulo.Proyecto ? articulo.Proyecto.name : '';
-        const unidadNegocioValue = articulo.UnidadNegocio ? articulo.UnidadNegocio.name : '';
-        const filialValue = articulo.Filial ? articulo.Filial.name : '';
-        const areasValue = articulo.Areas ? articulo.Areas.name : '';
-        const centroCostoValue = articulo.CentroCosto ? articulo.CentroCosto.name : '';
-        const indImpuestoValue = articulo.IndImpuesto ? articulo.IndImpuesto.name : '';
-        const precioValue = articulo.Precio ? articulo.Precio : '';
-        const cantidadValue = articulo.Cantidad ? articulo.Cantidad : '';
-        const impuestoValue = articulo.Impuesto ? articulo.Impuesto : '';
+        return articulos.map((articulo) => {
+            const codValue = articulo.Cod ? articulo.Cod.ItemCode : '';
+            const conceptoValue = articulo.Concepto ? articulo.Concepto : '';
+            const almacenValue = articulo.Almacen ? articulo.Almacen : '';
+            const proyectoValue = articulo.Proyecto ? articulo.Proyecto.name : '';
+            const unidadNegocioValue = articulo.UnidadNegocio ? articulo.UnidadNegocio.name : '';
+            const filialValue = articulo.Filial ? articulo.Filial.name : '';
+            const areasValue = articulo.Areas ? articulo.Areas.name : '';
+            const centroCostoValue = articulo.CentroCosto ? articulo.CentroCosto.name : '';
+            const indImpuestoValue = articulo.IndImpuesto ? articulo.IndImpuesto.name : '';
+            const precioValue = articulo.Precio ? articulo.Precio : '';
+            const cantidadValue = articulo.Cantidad ? articulo.Cantidad : '';
+            const impuestoValue = articulo.Impuesto ? articulo.Impuesto : '';
 
-        return {
-          ...articulo,
-          Cod: codValue,
-          Concepto: conceptoValue,
-          Almacen: almacenValue,
-          Proyecto: proyectoValue,
-          UnidadNegocio: unidadNegocioValue,
-          Filial: filialValue,
-          Areas: areasValue,
-          CentroCosto: centroCostoValue,
-          IndImpuesto: indImpuestoValue,
-          Precio: precioValue,
-          Cantidad: cantidadValue,
-          Impuesto: impuestoValue,
-        };
-      });
+            return {
+                ...articulo,
+                Cod: codValue,
+                Concepto: conceptoValue,
+                Almacen: almacenValue,
+                Proyecto: proyectoValue,
+                UnidadNegocio: unidadNegocioValue,
+                Filial: filialValue,
+                Areas: areasValue,
+                CentroCosto: centroCostoValue,
+                IndImpuesto: indImpuestoValue,
+                Precio: precioValue,
+                Cantidad: cantidadValue,
+                Impuesto: impuestoValue,
+            };
+        });
     };
     // Expotar detalle
     const exportExcel = async () => {
-      const XLSX = await import("xlsx");
-      const transformedData = transformDataForExport(articulos);
-      const worksheet = XLSX.utils.json_to_sheet(transformedData);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      saveAsExcelFile(excelBuffer, "detalle");
+        const XLSX = await import("xlsx");
+        const transformedData = transformDataForExport(articulos);
+        const worksheet = XLSX.utils.json_to_sheet(transformedData);
+        const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(workbook, {
+            bookType: "xlsx",
+            type: "array",
+        });
+        saveAsExcelFile(excelBuffer, "detalle");
     };
     const saveAsExcelFile = async (buffer, fileName) => {
-      const FileSaver = await import("file-saver");
-  
-      if (FileSaver && FileSaver.default) {
-        const EXCEL_TYPE =
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-        const EXCEL_EXTENSION = ".xlsx";
-        const data = new Blob([buffer], { type: EXCEL_TYPE });
-  
-        FileSaver.default.saveAs(
-          data,
-          fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION
-        );
-      }
+        const FileSaver = await import("file-saver");
+
+        if (FileSaver && FileSaver.default) {
+            const EXCEL_TYPE =
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+            const EXCEL_EXTENSION = ".xlsx";
+            const data = new Blob([buffer], { type: EXCEL_TYPE });
+
+            FileSaver.default.saveAs(
+                data,
+                fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION
+            );
+        }
     };
+
+    
+    const leftToolbarTemplate = () => {
+        return (<div className="">
+            <div className="col-12 md:col-6 lg:col-12">
+                <Button
+                    className='col-6 md:col-6 lg:col-12'
+                    icon="pi pi-plus"
+                    label="Agregar Detalle"
+                    onClick={openNew}
+                />
+                <Button
+                    className='flex col-12 align-items-center gap-5'
+                    label="Eliminar Seleccionados"
+                    onClick={() => { }}
+                />
+
+            </div>
+
+        </div>
+
+
+        )
+    }
+
 
     return (
         <div>
@@ -850,14 +858,14 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 onClick={showDoc}
             />
             <Button
-              className='col-4'
-              label="Exportar"
-              icon="pi pi-upload"
-              severity="secondary"
-              style={{ backgroundColor: "black" }}
-              onClick={() => {
-                exportExcel();
-              }}
+                className='col-4'
+                label="Exportar"
+                icon="pi pi-upload"
+                severity="secondary"
+                style={{ backgroundColor: "black" }}
+                onClick={() => {
+                    exportExcel();
+                }}
             />
 
         </div>
