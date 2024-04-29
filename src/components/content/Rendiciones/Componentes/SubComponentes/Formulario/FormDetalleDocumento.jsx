@@ -334,11 +334,11 @@ function FormDetalleDocumento({
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
                         />
-                        <Button
+                        {/* <Button
                             className='col-12'
                             label="mostrar"
                             onClick={showCampos}
-                        />
+                        /> */}
                     </div>
                 </div>
             </Dialog>

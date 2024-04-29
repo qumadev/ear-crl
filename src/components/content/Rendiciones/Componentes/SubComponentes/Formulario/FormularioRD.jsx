@@ -295,7 +295,7 @@ function FormularioRD() {
         console.log("detx: ",detalle);
         const _detalles = detalle.map((detalle) => ({
             ID: detalle.ID ? detalle.ID : null,
-            STR_CODARTICULO: detalle.STR_CODARTICULO,
+            STR_CODARTICULO: detalle.Cod,
             STR_SUBTOTAL: detalle.STR_SUBTOTAL,
             STR_INDIC_IMPUESTO: detalle.IndImpuesto,
             STR_DIM1:detalle.UnidadNegocio,
@@ -357,7 +357,6 @@ function FormularioRD() {
       // }
     } catch (error) {
       console.log("err: ",error);
-      console.log("errdoc: ",documento)
     } finally {
       setLoading(false);
     }
