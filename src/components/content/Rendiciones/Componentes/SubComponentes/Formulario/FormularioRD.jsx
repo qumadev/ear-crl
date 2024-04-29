@@ -38,9 +38,8 @@ function FormularioRD() {
   const [activeIndex, setActiveIndex] = useState(0);
   const tabViewRef = useRef(null);
   const location = useLocation();
-  const esModoRegistrar = location.pathname.includes("agregar");
-  const esModoDetail = location.pathname.includes("detail");
-
+  const esModo = location.pathname.includes("agregar") ? "Agregar" : 
+  location.pathname.includes("editar") ? "Editar" : "Detalle";
   const { config, ruta } = useContext(AppContext);
   const fileUploadRef = useRef(null);
   const tipoRendicion = location.state && location.state.tipoRendicion;
@@ -75,8 +74,9 @@ function FormularioRD() {
       name: "Detracción",
     },
   ];
+
   /* Registro de Documentos */
-  const [documento, setDocumento] = useState(
+  /*const [documento, setDocumento] = useState(
     {
       ID: 1,
       STR_RENDICION: 123,
@@ -99,7 +99,7 @@ function FormularioRD() {
       STR_RUC: "12345678901",
       STR_RAZONSOCIAL: "Razón Social XYZ",
       STR_DIRECCION: "Nueva Direccion",
-      STR_MOTIVORENDICION: {id:"VIA",name:"Viaticos"},
+      STR_MOTIVORENDICION: { id: "VIA", name: "Viaticos" },
       detalles: [
         {
           ID: 1,
@@ -128,13 +128,32 @@ function FormularioRD() {
         }
       ]
     }
-  );
+  );*/
+  const [documento, setDocumento] = useState([]);
+
+  async function obtenerData() {
+    //let id = 8
+    const response = await Promise.all([
+      // obtenerTipos(),
+      obtenerDocumento(id),
+    ]);
+    console.log("obt: ",response[0].data.Result[0])
+    setDocumento(response[0].data.Result[0])
+  }
+
+  useEffect(() => {
+    obtenerData();
+    //setDocumentoDet(articulos)
+    // setDocumento(...documento, DocumentoDet)
+  }, []);
+
+  
 
 
 
   const [detalles, setDetalles] = useState([]); // Lista de detalles
   const [anexos, setAnexos] = useState([]);
-
+  
   const [detalle, setDetalle] = useState({
     // Detalle a Registrar
   });
@@ -212,33 +231,92 @@ function FormularioRD() {
     }
   };
 
+  const datosState= {
+      "ID": 35,
+      "STR_RENDICION": 123,
+      "STR_FECHA_CONTABILIZA": "2024-04-22",
+      "STR_FECHA_DOC": "2024-04-21",
+      "STR_FECHA_VENCIMIENTO": "2024-05-01",
+      "STR_PROVEEDOR": {"CardCode":"P10081558791","CardName":"MAMANI MARTINEZ MARIA SOLEDAD","LicTradNum":"10081558792"},
+      "STR_MONEDA": {"id":"SOL","name":"SOL"},
+      "STR_COMENTARIOS": "Comentarios sobre el documento",
+      "STR_TIPO_DOC": {"id":"01","name":"Factura"},
+      "STR_SERIE_DOC": "001",
+      "STR_CORR_DOC": "12345688",
+      "STR_VALIDA_SUNAT": true,
+      "STR_OPERACION": 1,
+      "STR_PARTIDAFLUJO": 456,
+      "STR_TOTALDOC": 1234.56,
+      "STR_RD_ID": 1,
+      "STR_CANTIDAD": 2,
+      "STR_ALMACEN": "Almacén ABC",
+      "STR_RUC": "10081558792",
+      "STR_RAZONSOCIAL": "Razón Social XYZ",
+      "STR_DIRECCION": "Direccion 1",
+      "detalles": [
+        {
+          "ID": 4,
+          "STR_CODARTICULO": {
+                "ItemCode": "52830",
+                "ItemName": "Producto Freshmart",
+                "U_BPP_TIPUNMED": "",
+                "WhsCode": "ALM002",
+                "Stock": 0.0,
+                "Precio": 0.0
+            },
+          "STR_SUBTOTAL": 100.0,
+          "STR_INDIC_IMPUESTO": {"id":"IGV","name":"IGV"},
+          "STR_DIM1": {"id":"01","name":"CLUB"},
+          "STR_DIM2": {"id":"001","name":"CHORRILLOS"},
+          "STR_DIM3": {"id":"9120110","name":"REMUNERACIONES"},
+          "STR_DIM4": {"id":"100","name":"CONSEJO"},
+          "STR_DIM5": {"id":"10001","name":"CONSEJO"},
+          "STR_ALMACEN": "ALM002",
+          "STR_CANTIDAD": 2,
+          "STR_TPO_OPERACION": "operacion",
+          "STR_DOC_ID": 33,
+          "STR_CONCEPTO": "Nombre del artículo",
+          "STR_PROYECTO": {"id":"PG","name":"Proyecto Genérico"},
+          "STR_PRECIO": 50.0,
+          "STR_IMPUESTO": 18
+        }
+      ]
+    }
+
+
   const updateRD = async () => {
     setLoading(true);
-
     try {
       let _detalles = detalles.map((e) => {
         return typeof e.ID == "number" ? e : { ...e, ID: null };
       });
-
-      console.log(_detalles);
-
+      console.log("docx: ",documento);
+      console.log("detalle: ",detalle);
       let _documento = {
         ...documento,
-        STR_FECHA_CONTABILIZA:
-          documento.STR_FECHA_CONTABILIZA.toISOString().split("T")[0],
-        STR_FECHA_DOC: documento.STR_FECHA_DOC.toISOString().split("T")[0],
-        STR_FECHA_VENCIMIENTO:
-          documento.STR_FECHA_VENCIMIENTO.toISOString().split("T")[0],
-        detalles: _detalles, // Detalles
+        // STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
+        // STR_FECHA_DOC: documento.STR_FECHA_DOC,
+        // STR_FECHA_VENCIMIENTO: documento.STR_FECHA_VENCIMIENTO,
+        detalles: detalle, // Detalles
         //STR_VALIDA_SUNAT: compExisteSunat,
         // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
         //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
         //   : documento.STR_ANEXO_ADJUNTO,
       };
+      // let _documento = {
+      //   ...documento,
+      //   STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
+      //   STR_FECHA_DOC: documento.STR_FECHA_DOC,
+      //   STR_FECHA_VENCIMIENTO: documento.STR_FECHA_VENCIMIENTO,
+      //   //detalles: _detalles, // Detalles
+      //   //STR_VALIDA_SUNAT: compExisteSunat,
+      //   // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
+      //   //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
+      //   //   : documento.STR_ANEXO_ADJUNTO,
+      // };
+      console.log("envio: ",_documento);
 
-      console.log(_documento);
-
-      let response = await actualizarDocumento(_documento); // Crea Documento
+      let response = await actualizarDocumento(_documento); // _documento - Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
         console.log(`Documento actualizado con ID: ${content.id}`);
@@ -248,6 +326,8 @@ function FormularioRD() {
         showError("Error al Actualizar documento");
       }
     } catch (error) {
+      console.log("err: ",error);
+      console.log(documento)
     } finally {
       setLoading(false);
     }
@@ -392,7 +472,7 @@ function FormularioRD() {
       console.log(error);
       showError("Error en el servidor");
     } finally {
-      if (esModoRegistrar) setLoadingTemplate(false);
+      if (esModo==="Agregar") setLoadingTemplate(false);
       //setLoadingTemplate(false);
     }
   }
@@ -496,7 +576,7 @@ function FormularioRD() {
     // let body = obtieneJsonAregistrar();
     try {
       console.log("pinta1")
-      if (id != null) {
+      if (id == null) {
         console.log("pinta2")
         var response = await crearDocumento(documento);
 
@@ -539,7 +619,7 @@ function FormularioRD() {
               navigate(ruta + `/rendiciones/info/:id`);
             }}
           ></i>
-          <div>{esModoDetail ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
+          <div>{esModo==="Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
         </div>
       </div>
       <Divider />
@@ -548,12 +628,15 @@ function FormularioRD() {
         activeIndex={activeIndex}
         onTabChange={(e) => setActiveIndex(e.index)}
       >
-        <TabPanel header={esModoDetail ? "Detalle" : "Agregar" + " Documento Sustentado"} > {/* "Agregar Documento Sustentado" */}
+        <TabPanel header={esModo + " Documento Sustentado"} > {/* "Agregar Documento Sustentado" */}
           <DocumentoSustentado
             documento={documento}
             setDocumento={setDocumento}
-            moneda={documento.STR_MONEDA} 
-            esModoDetail={esModoDetail}
+            detalles={documento.detalles}
+            setDetalle={setDetalle}
+            moneda={documento.STR_MONEDA}
+            //esModoDetail={esModoDetail}
+            esModo={esModo}
           />
         </TabPanel>
         {/* <TabPanel header="General">
@@ -648,21 +731,22 @@ function FormularioRD() {
         </TabPanel> */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
-        {esModoDetail ? "" :
+        {esModo === "Detalle" ? "" :
           <>
             <Button
-            label={esModoRegistrar ? `Guardar Documento` : "Actualizar DocumentoX"}
-            severity="info"
-            size="large"
-            style={{ backgroundColor: "black", borderColor: "black" }}
-            onClick={(e) => {
-              registrarDocumento();
-              // if (!esModoRegistrar) updateRD();
-              // else registrarRD();
-              // else registrarDocumento();
-            }}
-            loading={loading}
-            disabled={editable}
+              label={esModo==="Agregar"?"Agregar Documento": esModo==="Editar"?"Actualizar Documento":"Detalle"}
+              severity="info"
+              size="large"
+              style={{ backgroundColor: "black", borderColor: "black" }}
+              onClick={(e) => {
+                //registrarDocumento();
+                updateRD();
+                // if (!esModoRegistrar) updateRD();
+                // else registrarRD();
+                // else registrarDocumento();
+              }}
+              loading={loading}
+              disabled={editable}
             //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
             <Button
