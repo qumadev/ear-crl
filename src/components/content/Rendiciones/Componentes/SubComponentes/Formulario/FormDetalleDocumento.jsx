@@ -89,10 +89,10 @@ function FormDetalleDocumento({
     const addDetDoc = () => {
         if (validarCampos()) {
             setArticulos([...articulos, detDoc]);
-            setDocumento(prevState => ({
-                ...prevState,
-                DocumentoDet: articulos
-            }))
+            // setDocumento(prevState => ({
+            //     ...prevState,
+            //     DocumentoDet: articulos
+            // }))
             // setDocumento([...documento,documento.DocumentoDet])
             setProductDialog(false)
             setDetDoc(null)
