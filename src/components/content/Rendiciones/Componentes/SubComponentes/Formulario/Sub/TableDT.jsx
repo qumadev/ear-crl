@@ -29,19 +29,67 @@ export default function TableDT({
         },
 
     ];
-    const actionverDoc= (documentos) => (
+    const actionverDoc= (documentos) => {
+        const items = [
+            {
+              label: "Editar",
+              icon: "pi pi-pencil",
+              command: () => {
+                navigate(
+                  ruta +
+                  `/rendiciones/${documentos.ID}/documentos/editar`
+                );
+              },
+            },
+          ];
+        return (
+            <div className="split-button">
+              <Button
+                onClick={() => {
+                  navigate(
+                    ruta +
+                      `/rendiciones/${documentos.ID}/documentos/detail`
+                  );
+                }}
+                severity="success"
+              >
+                <div className="flex gap-3 align-items-center justify-content-center">
+                  <span>Ver</span>
+                  <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
+                </div>
+              </Button>
+              <div className="dropdown-content">
+                {items.map((data, key) => (
+                  <Button
+                    key={key}
+                    onClick={() => {
+                      data.command();
+                    }}
+                  >
+                    <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
+                    {data.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          );
 
-        <SplitButton
+
+
+
+
+
+        // <SplitButton
         
-        label="ver"
-        icon="pi pi-eye"
-        onClick={() => {
-                navigate(ruta + 
-                        `/rendiciones/${documentos.ID}/documentos/detail`);
-                  }} 
-                  model={items}
+        // label="ver"
+        // icon="pi pi-eye"
+        // onClick={() => {
+        //         navigate(ruta + 
+        //                 `/rendiciones/${documentos.ID}/documentos/detail`);
+        //           }} 
+        //           model={items}
 
-        />
+        // />
 
         // <Button
         //   label="ver"
@@ -56,7 +104,7 @@ export default function TableDT({
 
 
       
-      )
+    }
       
     return (
         <>
