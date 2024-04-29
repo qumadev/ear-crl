@@ -90,7 +90,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                     } finally {
                         // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
                         console.log("entra")
-                        navigate(ruta + `/rendiciones/8/documentos`);
+                        navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
                     }
                 },
             },
@@ -281,7 +281,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             // navigate(ruta + "/rendiciones/ver");
                             // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
                             // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                            navigate(ruta + `/rendiciones/8/documentos/agregar`);
+                            navigate(ruta + `/rendiciones/${rowData.ID}/documentos/agregar`);
                         }
                     }}
                     severity="success"
@@ -481,6 +481,8 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
             );
         }
     };
+
+    
     const leftToolbarTemplate = () => {
         return (<div className="">
             <div className="col-12 md:col-6 lg:col-12">

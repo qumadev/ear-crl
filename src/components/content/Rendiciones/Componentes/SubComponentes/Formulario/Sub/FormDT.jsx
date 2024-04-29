@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import TableDT from './TableDT';
 import { setDate } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
+import { Toolbar } from 'primereact/toolbar';
 
 
 export default function FormDT({ editable,
@@ -47,9 +48,10 @@ export default function FormDT({ editable,
 
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
   }
-  const fecBodyTemplate = (rowData) => {
 
-    return <>{rowData.STR_FECHAREGIS}</>;
+  const fecBodyTemplate = (rendicion) => {
+
+    return <>{rendicion.STR_FECHAREGIS}</>;
   };
 
   useEffect(() => {
@@ -57,16 +59,47 @@ export default function FormDT({ editable,
   }, []);
   console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
+  const leftToolbarTemplate = () => {
+    return (
+      <div className="">
+        <div className="d-flex col-12 md:col-6 lg:col-12">
+          <Button
+            className='col-6 md:col-6 lg:col-12'
+            icon="pi pi-plus"
+            label="Guardar Borradorq"
+          // onClick={openNew}
+          />
+          {/* <Button
+                    className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
+                    icon="pi pi-trash"
+                    label=""
+                    // onClick={() => { }}
+                /> */}
+        </div>
+      </div>
+    )
+  }
+
+
   return (
 
 
     <>
       <div className="flex justify-content-between flex-wrap">
-        <div
-          className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
+        <div className="flex text-2xl align-items-center gap-2">
+          <i
+            className="pi pi-chevron-left cursor-pointer"
+            onClick={() => {
+              navigate(ruta + "/rendiciones");
+            }}
+          ></i>
+          <div className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
             } align-items-center`}>
-          Redincion info
+            Rendición info
+          </div>
         </div>
+
+
         <div div className="flex flex-row flex-wrap gap-2">
           <Button
             icon="pi pi-refresh"
@@ -181,14 +214,14 @@ export default function FormDT({ editable,
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Fecha de Solicitud:
             </label>
-            <Calendar
-              value={fecBodyTemplate}
-              onChange={(date) => setFecBodyTemplate(date)}
+            <InputText
+              value={rendicion?.SOLICITUDRD.STR_FECHAREGIS}
+              // onChange={(rendicion) => fecBodyTemplate(rendicion.value.)}
               dateFormat="dd/mm/yy"
-              disabled={editable}
+              disabled
               locale='es'
               showIcon />
-            <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p>
+            {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p> */}
           </div>
         </div>
         <div className="col-12 md:col-5 lg:col-3">
@@ -208,8 +241,9 @@ export default function FormDT({ editable,
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               FechaRD:
             </label>
-            <Calendar
-              // value={date} 
+            <InputText
+              value={rendicion?.STR_FECHAREGIS} 
+              disabled
               // onChange={(e) => setDate(e.value)} 
               showIcon />
           </div>
@@ -247,6 +281,10 @@ export default function FormDT({ editable,
       >
 
       </TableDT>
+
+      <Divider />
+      <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+
 
 
     </>

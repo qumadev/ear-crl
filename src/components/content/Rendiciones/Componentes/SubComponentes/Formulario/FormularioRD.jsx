@@ -536,7 +536,7 @@ function FormularioRD() {
           <i
             className="pi pi-chevron-left cursor-pointer"
             onClick={() => {
-              navigate(ruta + `/rendiciones/${id}/documentos`);
+              navigate(ruta + `/rendiciones/info/:id`);
             }}
           ></i>
           <div>{esModoDetail ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
