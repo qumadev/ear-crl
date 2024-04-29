@@ -768,8 +768,11 @@ function FormularioRD() {
               size="large"
               style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
+                esModo==="Agregar" ? registrarRD() 
+                : 
+                esModo==="Editar" ? updateRD() : ""
                 //registrarDocumento();
-                updateRD();
+                //updateRD();
                 // if (!esModoRegistrar) updateRD();
                 // else registrarRD();
                 // else registrarDocumento();
