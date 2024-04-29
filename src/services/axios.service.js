@@ -159,7 +159,7 @@ export const autorizarReversionAprobRendicion = (idRendicion) => {
   });
 };
 export const revertirAprobRendicion = (idRendicion) => {
-  return API.patch(`/rendicion/revertir/${idRendicion}`, {
+  return API.patch(`/rendicion/aprobacion/revertir/${idRendicion}`, {
     validateStatus: function (status) {
       return status < 500;
     },
