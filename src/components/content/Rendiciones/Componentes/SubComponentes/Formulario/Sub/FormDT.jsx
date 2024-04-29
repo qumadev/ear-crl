@@ -26,7 +26,7 @@ export default function FormDT({ editable,
   const navigate = useNavigate();
   const { usuario, showError, ruta } = useContext(AppContext);
 
-  const { id } = useParams()
+  const { id } = useParams();
 
   const [rendicion, setRendicion] = useState(null)
   async function obtenerData() {
