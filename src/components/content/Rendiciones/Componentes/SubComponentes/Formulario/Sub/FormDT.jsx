@@ -18,6 +18,7 @@ import TableDT from './TableDT';
 import { setDate } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
 
 export default function FormDT({ editable,
@@ -117,9 +118,9 @@ export default function FormDT({ editable,
     });
   };
   return (
-
-
     <>
+      <Toast ref={toast} />
+      <ConfirmDialog />
       <div className="flex justify-content-between flex-wrap">
         <div className="flex text-2xl align-items-center gap-2">
           <i
@@ -181,7 +182,7 @@ export default function FormDT({ editable,
 
       <Divider />
       <div className="grid mt-3">
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Código:
@@ -196,7 +197,7 @@ export default function FormDT({ editable,
 
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               N° Rendición:
@@ -208,7 +209,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Estado:
@@ -220,7 +221,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Emp.Asignado:
@@ -232,7 +233,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               N° de la SR:
@@ -244,7 +245,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Fecha de Solicitud:
@@ -259,8 +260,8 @@ export default function FormDT({ editable,
             {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p> */}
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
+        <div className="col-12 md:col-6 lg:col-3">
+          <div className="mb-3 flex flex-column justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Monto Rendido:
             </label>
@@ -271,7 +272,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               FechaRD:
@@ -283,7 +284,7 @@ export default function FormDT({ editable,
               showIcon />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               CargaDocs:
@@ -295,7 +296,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               DocEntry:
@@ -308,10 +309,8 @@ export default function FormDT({ editable,
           </div>
         </div>
       </div>
-      <Divider />
 
-      <div className="card flex flex-wrap  gap-3 mx-3">
-        
+      <div className="card flex flex-wrap gap-3 mx-1 mb-2">
         {/* Botones por rol */}
         {usuario.rol?.id == "2" ? (
           <Button
@@ -335,6 +334,7 @@ export default function FormDT({ editable,
         ) : ""}
       </div>
 
+      <Divider />
 
       <TableDT
         rendicion={rendicion}

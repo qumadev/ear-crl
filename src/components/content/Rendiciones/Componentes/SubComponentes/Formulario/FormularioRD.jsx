@@ -314,6 +314,9 @@ function FormularioRD() {
         }));
         let _documento = {
           ...documento,
+          STR_FECHA_CONTABILIZA: null,
+          STR_FECHA_DOC: null,
+          STR_FECHA_VENCIMIENTO: null,
           detalles: _detalles, // Detalles
         };
         console.log("envio: ",_documento);
