@@ -66,7 +66,7 @@ export default function FormDT({ editable,
           <Button
             className='col-6 md:col-6 lg:col-12'
             icon="pi pi-plus"
-            label="Guardar Borradorq"
+            label="Guardar Borrador"
           // onClick={openNew}
           />
           {/* <Button

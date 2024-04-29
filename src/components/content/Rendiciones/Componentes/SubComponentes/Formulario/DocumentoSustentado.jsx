@@ -848,11 +848,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             >
             </FormDetalleDocumento>
 
-            <Button
+            {/* <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            />
+            /> */}
             <Button
                 className='col-4'
                 label="Exportar"
