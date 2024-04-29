@@ -314,6 +314,7 @@ function FormularioRD() {
       //   //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
       //   //   : documento.STR_ANEXO_ADJUNTO,
       // };
+      console.log("envio: ",_documento);
 
       let response = await actualizarDocumento(_documento); // _documento - Crea Documento
       if (response.CodRespuesta != "99") {

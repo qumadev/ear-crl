@@ -386,17 +386,17 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             console.log("det2: ",detalles);
             const articles = detalles.map((detalle) => ({
                 Cod: detalle.STR_CODARTICULO,
-                Concepto: detalle.STR_CONCEPTO,
+                Concepto: detalle.STR_CODARTICULO.ItemName,
                 Almacen: detalle.STR_ALMACEN,
                 Proyecto: detalle.STR_PROYECTO,
-                UnidadNegocio: detalle.STR_PROYECTO,
-                Filial: detalle.STR_PROYECTO,
-                Areas: detalle.STR_PROYECTO,
-                CentroCosto: detalle.STR_PROYECTO,
+                UnidadNegocio: detalle.STR_DIM1,
+                Filial: detalle.STR_DIM2,
+                Areas: detalle.STR_DIM4,
+                CentroCosto: detalle.STR_DIM5,
                 IndImpuesto: detalle.STR_INDIC_IMPUESTO,
                 Precio: detalle.STR_PRECIO,
                 Cantidad: detalle.STR_CANTIDAD,
-                Impuesto: detalle.STR_INDIC_IMPUESTO.name
+                Impuesto: detalle.STR_IMPUESTO
             }));
             // Actualizamos el estado articulos con el nuevo array de objetos personalizados
             setArticulos(articles);
