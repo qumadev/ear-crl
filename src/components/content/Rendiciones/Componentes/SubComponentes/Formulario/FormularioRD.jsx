@@ -287,22 +287,46 @@ function FormularioRD() {
   const updateRD = async () => {
     setLoading(true);
     try {
-      let _detalles = detalles.map((e) => {
-        return typeof e.ID == "number" ? e : { ...e, ID: null };
-      });
+      // let _detalles = detalles.map((e) => {
+      //   return typeof e.ID == "number" ? e : { ...e, ID: null };
+      // });
       console.log("docx: ",documento);
-      console.log("detalle: ",detalle);
-      let _documento = {
-        ...documento,
-        // STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
-        // STR_FECHA_DOC: documento.STR_FECHA_DOC,
-        // STR_FECHA_VENCIMIENTO: documento.STR_FECHA_VENCIMIENTO,
-        detalles: detalle, // Detalles
-        //STR_VALIDA_SUNAT: compExisteSunat,
-        // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
-        //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
-        //   : documento.STR_ANEXO_ADJUNTO,
-      };
+      if (detalle && detalle.length > 0) {
+        console.log("detx: ",detalle);
+        const _detalles = detalle.map((detalle) => ({
+            ID: detalle.ID ? detalle.ID : null,
+            STR_CODARTICULO: detalle.Cod,
+            STR_SUBTOTAL: detalle.STR_SUBTOTAL,
+            STR_INDIC_IMPUESTO: detalle.IndImpuesto,
+            STR_DIM1:detalle.UnidadNegocio,
+            STR_DIM2:detalle.Filial,
+            STR_DIM3:detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
+            STR_DIM4:detalle.Areas,
+            STR_DIM5:detalle.CentroCosto,
+            STR_ALMACEN:detalle.Almacen,
+            STR_CANTIDAD:detalle.Cantidad,
+            STR_TPO_OPERACION:detalle.STR_TPO_OPERACION,
+            STR_DOC_ID:detalle.STR_DOC_ID,
+            STR_CONCEPTO:detalle.Concepto,
+            STR_PROYECTO:detalle.Proyecto,
+            STR_PRECIO:detalle.Precio,
+            STR_IMPUESTO:detalle.Impuesto,
+        }));
+        let _documento = {
+          ...documento,
+          detalles: _detalles, // Detalles
+        };
+        console.log("envio: ",_documento);
+        let response = await actualizarDocumento(_documento); // _documento - Crea Documento
+        if (response.CodRespuesta != "99") {
+          var content = response.data.Result[0];
+          console.log(`Documento actualizado con ID: ${content.id}`);
+          showSuccess(`Documento actualizado con ID: ${content.id}`);
+          //navigate(`/rendiciones/${id}/documentos`);
+        } else {
+          showError("Error al Actualizar documento");
+        }
+    }
       // let _documento = {
       //   ...documento,
       //   STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
@@ -314,20 +338,25 @@ function FormularioRD() {
       //   //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
       //   //   : documento.STR_ANEXO_ADJUNTO,
       // };
-      console.log("envio: ",_documento);
 
-      let response = await actualizarDocumento(_documento); // _documento - Crea Documento
-      if (response.CodRespuesta != "99") {
-        var content = response.data.Result[0];
-        console.log(`Documento actualizado con ID: ${content.id}`);
-        showSuccess(`Documento actualizado con ID: ${content.id}`);
-        //navigate(`/rendiciones/${id}/documentos`);
-      } else {
-        showError("Error al Actualizar documento");
-      }
+
+      // console.log("detalle: ",detalle);
+      // let _documento = {
+      //   ...documento,
+      //   detalles: detalle, // Detalles
+      // };
+      // console.log("envio: ",_documento);
+      // let response = await actualizarDocumento(_documento); // _documento - Crea Documento
+      // if (response.CodRespuesta != "99") {
+      //   var content = response.data.Result[0];
+      //   console.log(`Documento actualizado con ID: ${content.id}`);
+      //   showSuccess(`Documento actualizado con ID: ${content.id}`);
+      //   //navigate(`/rendiciones/${id}/documentos`);
+      // } else {
+      //   showError("Error al Actualizar documento");
+      // }
     } catch (error) {
       console.log("err: ",error);
-      console.log(documento)
     } finally {
       setLoading(false);
     }
@@ -739,8 +768,11 @@ function FormularioRD() {
               size="large"
               style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
+                esModo==="Agregar" ? registrarRD() 
+                : 
+                esModo==="Editar" ? updateRD() : ""
                 //registrarDocumento();
-                updateRD();
+                //updateRD();
                 // if (!esModoRegistrar) updateRD();
                 // else registrarRD();
                 // else registrarDocumento();
@@ -749,6 +781,16 @@ function FormularioRD() {
               disabled={editable}
             //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
+            {/* <Button
+                label="Exportar"
+                icon="pi pi-upload"
+                severity="info"
+                size="large"
+                style={{ backgroundColor: "black", borderColor: "black"  }}
+                onClick={() => {
+                    exportExcel();
+                }}
+            /> */}
             <Button
               label="Cancelar"
               severity="secondary"

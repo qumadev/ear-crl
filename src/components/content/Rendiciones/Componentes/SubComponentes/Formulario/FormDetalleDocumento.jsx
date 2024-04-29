@@ -89,10 +89,10 @@ function FormDetalleDocumento({
     const addDetDoc = () => {
         if (validarCampos()) {
             setArticulos([...articulos, detDoc]);
-            setDocumento(prevState => ({
-                ...prevState,
-                DocumentoDet: articulos
-            }))
+            // setDocumento(prevState => ({
+            //     ...prevState,
+            //     DocumentoDet: articulos
+            // }))
             // setDocumento([...documento,documento.DocumentoDet])
             setProductDialog(false)
             setDetDoc(null)
@@ -334,11 +334,11 @@ function FormDetalleDocumento({
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
                         />
-                        <Button
+                        {/* <Button
                             className='col-12'
                             label="mostrar"
                             onClick={showCampos}
-                        />
+                        /> */}
                     </div>
                 </div>
             </Dialog>

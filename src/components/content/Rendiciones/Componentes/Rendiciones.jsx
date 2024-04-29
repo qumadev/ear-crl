@@ -11,11 +11,13 @@ import { Column } from "primereact/column";
 import {
   aceptarAprobRendicion,
   actualizaRendicion,
+  autorizarReversionAprobRendicion,
   enviarAprobRendicion,
   listarRendiciones,
   obtenerRendicion,
   rechazarAprobRendicion,
   reintentarRendi,
+  revertirAprobRendicion,
   validacionDocumento,
 } from "../../../../services/axios.service";
 import { AppContext } from "../../../../App";
@@ -885,6 +887,7 @@ function Rendiciones({
         <Column
           header="Acciones"
           body={actionBodyver}
+          // body={actionBodyTemplate}
           exportable={false}
           style={{ minWidth: "10rem" }}
           frozen

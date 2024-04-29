@@ -368,8 +368,13 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         if (detalles && detalles.length > 0) {
             console.log("det2: ",detalles);
             const articles = detalles.map((detalle) => ({
+                ID: detalle.ID ? detalle.ID : null,
+                STR_SUBTOTAL: detalle.STR_SUBTOTAL,
+                STR_TPO_OPERACION: detalle.STR_TPO_OPERACION,
+                STR_DOC_ID: detalle.STR_DOC_ID,
+                STR_DIM3: detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
                 Cod: detalle.STR_CODARTICULO,
-                Concepto: detalle.STR_CODARTICULO.ItemName,
+                Concepto: detalle.STR_CONCEPTO,
                 Almacen: detalle.STR_ALMACEN,
                 Proyecto: detalle.STR_PROYECTO,
                 UnidadNegocio: detalle.STR_DIM1,
@@ -456,7 +461,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     useEffect(()=>{
         setFecha(new Date(documento.STR_FECHA_DOC));
     },[documento])
-    console.log("fecha: ",documento.STR_FECHA_DOC)
     // Personalizando campos
     const transformDataForExport = (articulos) => {
         return articulos.map((articulo) => {
@@ -722,23 +726,33 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             disabled={esModoValidate}
                         />
                     </div>
-                    { esModoValidate ? "" : 
-                      <div className="flex col-12">
-                          <Button
-                              className='col-6'
-                              label="Agregar Detalle"
-                              onClick={openNew}
-                          />
-                          <Button
-                              className='col-6'
-                              label="Eliminar Seleccionados"
-                              onClick={() => { }}
-                          />
-                      </div>
-                    }
+                    <div className="flex col-12">
+                        { esModoValidate ? "" :
+                        <>
+                            <Button
+                                className='col-4'
+                                label="Agregar Detalle"
+                                onClick={openNew}
+                            />
+                            <Button
+                                className='col-4'
+                                label="Eliminar Seleccionados"
+                                onClick={() => { }}
+                            />
+                        </> 
+                        }
+                        <Button
+                            className='col-4'
+                            label="Exportar Detalle"
+                            onClick={() => {
+                                exportExcel();
+                            }}
+                        />
+                    </div>
+
 
                     <Divider />
-
+                    
                     <DataTable
                         value={articulos}
                         sortMode="multiple"
@@ -862,7 +876,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 onClick={() => {
                     exportExcel();
                 }}
-            />
+            /> */
 
         </div>
     );

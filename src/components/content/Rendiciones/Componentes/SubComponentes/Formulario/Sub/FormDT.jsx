@@ -33,7 +33,32 @@ export default function FormDT({ editable,
     const response = await
       obtenerRendicion(id);
 
-    const documentos = response.data.Result[0]?.documentos || [];
+    // const documentos = response.data.Result[0]?.documentos || [];
+
+    const documentos = [{
+      ID: 1,
+      STR_TIPO_DOC: "Factura",
+      STR_FECHA_DOC: "2021-08-25",
+      STR_TOTALDOC: 1000,
+      STR_PROVEEDOR: "Proveedor 1",
+      STR_COMENTARIOS: "Comentario 1",
+    },
+    {
+      ID: 2,
+      STR_TIPO_DOC: "Boleta",
+      STR_FECHA_DOC: "2021-08-25",
+      STR_TOTALDOC: 1000,
+      STR_PROVEEDOR: "Proveedor 2",
+      STR_COMENTARIOS: "Comentario 2",
+    },
+    {
+      ID: 6,
+      STR_TIPO_DOC: "Factura",
+      STR_FECHA_DOC: "2021-08-25",
+      STR_TOTALDOC: 1000,
+      STR_PROVEEDOR: "Proveedor 3",
+      STR_COMENTARIOS: "Comentario 3",
+    }]
 
     const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
@@ -80,7 +105,42 @@ export default function FormDT({ editable,
     )
   }
 
+  // confirmacion
+  const confirmAutorizarReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de autorizar la reversion de la Rendición con código #${id}?`,
+      header: "Autorizar reversion - Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        autorizarReversionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
 
+  const confirmReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
+      header: "Revertir Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        ReversionAprobacionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
   return (
 
 
@@ -275,12 +335,37 @@ export default function FormDT({ editable,
       </div>
       <Divider />
 
+      <div className="card flex flex-wrap  gap-3 mx-3">
+        {/* Botones por rol */}
+        {usuario.rol.id == "2" ? (
+          <Button
+            label="Revertir Aprobación"
+            size="large"
+            onClick={confirmReversion(rendicion?.ID)}
+            // disabled={
+            //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
+            // }
+          />
+        ) : usuario.rol.id == "3" ? (
+          <Button
+            label="Autorizar Edicion"
+            severity="danger"
+            size="large"
+            onClick={confirmAutorizarReversion(rendicion?.ID)}
+            // disabled={
+            //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+            // }
+          />
+        ) : ""}
+      </div>
+
+
       <TableDT
         rendicion={rendicion}
-
       >
-
       </TableDT>
+
+
 
       <Divider />
       <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
