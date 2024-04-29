@@ -781,6 +781,16 @@ function FormularioRD() {
               disabled={editable}
             //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
+            {/* <Button
+                label="Exportar"
+                icon="pi pi-upload"
+                severity="info"
+                size="large"
+                style={{ backgroundColor: "black", borderColor: "black"  }}
+                onClick={() => {
+                    exportExcel();
+                }}
+            /> */}
             <Button
               label="Cancelar"
               severity="secondary"

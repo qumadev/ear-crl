@@ -726,23 +726,33 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             disabled={esModoValidate}
                         />
                     </div>
-                    { esModoValidate ? "" : 
-                      <div className="flex col-12">
-                          <Button
-                              className='col-6'
-                              label="Agregar Detalle"
-                              onClick={openNew}
-                          />
-                          <Button
-                              className='col-6'
-                              label="Eliminar Seleccionados"
-                              onClick={() => { }}
-                          />
-                      </div>
-                    }
+                    <div className="flex col-12">
+                        { esModoValidate ? "" :
+                        <>
+                            <Button
+                                className='col-4'
+                                label="Agregar Detalle"
+                                onClick={openNew}
+                            />
+                            <Button
+                                className='col-4'
+                                label="Eliminar Seleccionados"
+                                onClick={() => { }}
+                            />
+                        </> 
+                        }
+                        <Button
+                            className='col-4'
+                            label="Exportar Detalle"
+                            onClick={() => {
+                                exportExcel();
+                            }}
+                        />
+                    </div>
+
 
                     <Divider />
-
+                    
                     <DataTable
                         value={articulos}
                         sortMode="multiple"
@@ -857,7 +867,9 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 label="Show Doc"
                 onClick={showDoc}
             /> */}
-            <Button
+
+            
+            {/* <Button
                 className='col-4'
                 label="Exportar"
                 icon="pi pi-upload"
@@ -866,7 +878,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 onClick={() => {
                     exportExcel();
                 }}
-            />
+            /> */}
 
         </div>
     );
