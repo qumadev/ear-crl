@@ -81,6 +81,68 @@ function Rendiciones({
     });
   };
 
+  async function autorizarReversionLocal(
+    rendicionId
+  ) {
+    setLoading(true);
+    try {
+      let response = await autorizarReversionAprobRendicion(
+        rendicionId
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+
+        // if (body.AprobacionFinalizada == 0) {
+        showSuccess(`Se autorizo la reversion de la rendición`);
+        // } else {
+        //   showSuccess(
+        //     `Se migró a a SAP la rendición con número ${body.DocNum}`
+        //   );
+        // }
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError("Error interno");
+    } finally {
+      listarRendicionesLocal(true);
+      setLoading(false);
+    }
+  }
+
+  async function ReversionAprobacionLocal(
+    rendicionId
+  ) {
+    setLoading(true);
+    try {
+      let response = await revertirAprobRendicion(
+        rendicionId
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+
+        // if (body.AprobacionFinalizada == 0) {
+        showSuccess(`Se revertio la aprobacion de la rendición`);
+        // } else {
+        //   showSuccess(
+        //     `Se migró a a SAP la rendición con número ${body.DocNum}`
+        //   );
+        // }
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError("Error interno");
+    } finally {
+      listarRendicionesLocal(true);
+      setLoading(false);
+    }
+  }
+
   const fecBodyTemplate = (rowData) => {
 
     return <>{rowData.STR_FECHAREGIS}</>;
@@ -214,6 +276,42 @@ function Rendiciones({
       setLoadingBtn(false);
     }
   }
+
+  const confirmAutorizarReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de autorizar la reversion de la Rendición con código #${id}?`,
+      header: "Autorizar reversion - Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        autorizarReversionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
+
+  const confirmReversion = (
+    id
+  ) => {
+    confirmDialog({
+      message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
+      header: "Revertir Rendicion",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        ReversionAprobacionLocal(
+          id
+        ),
+      //reject,
+    });
+  };
 
   const downloadAndOpenPdf = async (numRendi) => {
     setLoading(true);
@@ -389,7 +487,242 @@ function Rendiciones({
 
   )
 
+  const actionBodyTemplate = (rowData) => {
+    const items = [
+      {
+        label: "Ver",
+        icon: "pi pi-eye",
+        command: async () => {
+          try {
+            if (rowData.STR_ESTADO == 8) {
+              await actualizarRendiEnCarga(rowData);
+              await new Promise((resolve) => setTimeout(resolve, 5000));
+            }
+          } catch (error) {
+          } finally {
+            navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+          }
+        },
+      },
+    ];
 
+    if (
+      ((usuario.TipoUsuario == 1) &
+        ((rowData.STR_ESTADO == 8) |
+          (rowData.STR_ESTADO == 9) |
+          (rowData.STR_ESTADO == 12))) |
+      ((usuario.TipoUsuario == 3) & (rowData.STR_ESTADO == 10))
+    ) {
+      items.push({
+        label:
+          rowData.STR_ESTADO == 8 ||
+            rowData.STR_ESTADO == 12 ||
+            rowData.STR_ESTADO == 15
+            ? "Rendir"
+            : "Modificar",
+        icon: "pi pi-pencil",
+        command: () => {
+          try {
+            if (
+              rowData.STR_ESTADO == 8 ||
+              rowData.STR_ESTADO == 12 ||
+              rowData.STR_ESTADO == 15
+            ) {
+              actualizarRendiEnCarga(rowData);
+            }
+          } catch (error) {
+          } finally {
+            navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+          }
+        },
+      });
+    }
+
+
+    if (true) {
+      items.push({
+        label: "Autorizar Reversion",
+        icon: "pi pi-check",
+        command: () => {
+          confirmAutorizarReversion(
+            rowData.ID
+          );
+        },
+      });
+    }
+
+    if (true) {
+      items.push({
+        label: "Confirmar Reversion",
+        icon: "pi pi-check",
+        command: () => {
+          confirmReversion(
+            rowData.ID
+          );
+        },
+      });
+    }
+
+    console.log(usuario.TipoUsuario)
+    console.log(rowData.STR_ESTADO)
+    if (
+      ((usuario.TipoUsuario != 1) &
+        ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
+      (rowData.STR_ESTADO == 13)
+    ) {
+      items.push({
+        label: "Aceptar",
+        icon: "pi pi-check",
+        command: () => {
+          confirmAceptacion(
+            rowData.STR_SOLICITUD,
+            usuario.empId,
+            usuario.SubGerencia,
+            rowData.STR_ESTADO_INFO.Id,
+            rowData.ID,
+            usuario.SubGerencia
+          );
+        },
+      });
+    }
+
+    if (
+      ((usuario.TipoUsuario != 1) &
+        ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
+      (rowData.STR_ESTADO == 13)
+    ) {
+      items.push({
+        label: "Rechazar",
+        icon: "pi pi-times",
+        command: () => {
+          confirmRechazo(
+            rowData.STR_SOLICITUD,
+            usuario.empId,
+            usuario.SubGerencia,
+            rowData.STR_ESTADO_INFO.Id,
+            rowData.ID,
+            usuario.SubGerencia
+          );
+        },
+      });
+    }
+
+    if (
+      ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
+      (usuario.TipoUsuario == 1)
+    ) {
+      items.push({
+        label: "Editar",
+        icon: "pi pi-pencil",
+        command: () => {
+          navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+        },
+      });
+    }
+
+    if (
+      (rowData.STR_ESTADO == 16) |
+      (rowData.STR_ESTADO == 18) |
+      (rowData.STR_ESTADO == 19)
+    ) {
+      items.push({
+        label: "Descargar Liquidación",
+        icon: "pi pi-file-pdf",
+        command: () => {
+          downloadAndOpenPdf(rowData.STR_NRRENDICION);
+        },
+      });
+    }
+
+    if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
+      items.push({
+        label: "Reintentar Migracion",
+        icon: "pi pi-pencil",
+        command: () => {
+          reintentarMigracion(rowData.ID);
+        },
+      });
+    }
+
+    if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
+      items.push({
+        label: "Ver Aprobadores",
+        icon: "pi pi-eye",
+        command: () => {
+          navigate(ruta + `rendiciones/aprobadores/${rowData.ID}`);
+        },
+      });
+    }
+
+    if (usuario.TipoUsuario == 1 && rowData.STR_ESTADO == 9) {
+      items.push({
+        label: "Enviar Aprobación",
+        icon: "pi pi-send",
+        command: () => {
+          confirmEnvio(rowData);
+        },
+      });
+    }
+
+    async function reintentarMigracion(id) {
+      try {
+        setLoading(true);
+        let response = await reintentarRendi(id);
+        if (response.status < 300) {
+          let data = response.data.Result[0];
+          showSuccess(
+            "Se realizó la migración exitosamente con número " + data.DocNum
+          );
+        } else {
+          showError(response.data.Message);
+          console.log(response.data);
+        }
+      } catch (error) {
+        showError(error.response.data.Message);
+        console.log(error);
+      } finally {
+        listarRendicionesLocal();
+        setLoading(false);
+      }
+    }
+
+    return (
+      <div className="split-button">
+        <Button
+          onClick={() => {
+            try {
+              if (rowData.STR_ESTADO == 8) {
+                actualizarRendiEnCarga(rowData);
+              }
+            } catch (error) {
+            } finally {
+              // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+              navigate(ruta + `/rendiciones/8/documentos/agregar`);
+            }
+          }}
+          severity="success"
+        >
+          <div className="flex gap-3 align-items-center justify-content-center">
+            <span>Ver</span>
+            <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
+          </div>
+        </Button>
+        <div className="dropdown-content">
+          {items.map((data, key) => (
+            <Button
+              key={key}
+              onClick={() => {
+                data.command();
+              }}
+            >
+              <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
+              {data.label}
+            </Button>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   const statusBodyTemplate = (rowData) => {
     return (
