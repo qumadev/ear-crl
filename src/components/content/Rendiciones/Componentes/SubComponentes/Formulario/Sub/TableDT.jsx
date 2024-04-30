@@ -6,8 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
 import { SplitButton } from 'primereact/splitbutton'
 
-
-
 export default function TableDT({
     rendicion,
     setRendicion,
