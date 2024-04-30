@@ -646,6 +646,17 @@ function Rendiciones({
       });
     }
 
+    if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
+      items.push({
+        label: "Reintentar Migracion",
+        icon: "pi pi-pencil",
+        command: () => {
+          reintentarMigracion(rowData.ID);
+        },
+      });
+    }
+
+
     if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
       items.push({
         label: "Ver Aprobadores",
@@ -784,7 +795,7 @@ function Rendiciones({
         console.log(err.message);
       })
       .finally(() => {
-        console.log("Se terminó de traer rendicion");
+        console.log("Se terminó de traer solicitud");
         if (!fresh) setLoading(false);
       });
   }
@@ -900,14 +911,6 @@ function Rendiciones({
         severity="success"
         onClick={() => {
           navigate(ruta + `/rendiciones/6/documentos/editar`);
-        }}
-      />
-      <Button
-        label="ver2"
-        icon="pi pi-eye"
-        severity="success"
-        onClick={() => {
-          navigate(ruta + `/rendiciones/info/1`);
         }}
       />
       {/* <div>
