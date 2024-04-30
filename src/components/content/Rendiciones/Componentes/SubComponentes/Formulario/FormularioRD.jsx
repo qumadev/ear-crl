@@ -142,13 +142,12 @@ function FormularioRD() {
   }
 
   useEffect(() => {
-    obtenerData();
+    if(esModo!=="Agregar"){
+        obtenerData();
+    }
     //setDocumentoDet(articulos)
     // setDocumento(...documento, DocumentoDet)
   }, []);
-
-  
-
 
 
   const [detalles, setDetalles] = useState([]); // Lista de detalles
@@ -194,26 +193,58 @@ function FormularioRD() {
   const [existeEnSunat, setExisteEnSunat] = useState(true);
   const [compExisteSunat, setCompExisteSunat] = useState(false);
 
+  // limpiar data del documento en blanco 
+  // useEffect(() => {
+  //   if(esModo==="Agregar"){
+  //     let _documento = {
+  //       ...documento,
+  //       ID: null,
+  //       STR_RENDICION: null,
+  //       STR_FECHA_CONTABILIZA: null,
+  //       STR_FECHA_DOC: null,
+  //       STR_FECHA_VENCIMIENTO: null,
+  //       STR_PROVEEDOR: null,
+  //       STR_MONEDA: null,
+  //       STR_COMENTARIOS: null,
+  //       STR_TIPO_DOC: null,
+  //       STR_SERIE_DOC: null,
+  //       STR_CORR_DOC: null,
+  //       STR_VALIDA_SUNAT: null,
+  //       STR_OPERACION: null,
+  //       STR_PARTIDAFLUJO: null,
+  //       STR_TOTALDOC: null,
+  //       STR_RD_ID: null,
+  //       STR_CANTIDAD: null,
+  //       STR_ALMACEN: null,
+  //       STR_RUC: null,
+  //       STR_RAZONSOCIAL: null,
+  //       STR_DIRECCION: null,
+  //       detalles: null,
+  //     };
+  //     console.log("docagre: ",_documento)
+  //     setDocumento(_documento);
+  //   }
+  // }, [esModo]);
+
   /* Metodo para agregar */
   const registrarRD = async () => {
     setLoading(true);
-
+    console.log("docenviado: ",documento);
+    console.log("detailenv: ",detalle);
     try {
+      console.log("1");
       let _documento = {
         ...documento,
-        STR_FECHA_CONTABILIZA:
-          documento.STR_FECHA_CONTABILIZA.toISOString().split("T")[0],
-        STR_FECHA_DOC: documento.STR_FECHA_DOC.toISOString().split("T")[0],
-        STR_FECHA_VENCIMIENTO:
-          documento.STR_FECHA_VENCIMIENTO.toISOString().split("T")[0],
-        detalles: detalles,
+        STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
+        STR_FECHA_DOC: documento.STR_FECHA_DOC,
+        STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,
+        detalles: detalle,
         //STR_VALIDA_SUNAT: compExisteSunat,
-        STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
-          ? documento.STR_ANEXO_ADJUNTO.join(", ")
-          : documento.STR_ANEXO_ADJUNTO,
+        // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
+        //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
+        //   : documento.STR_ANEXO_ADJUNTO,
       };
-
-      console.log(_documento);
+      console.log("2: ", _documento);
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
@@ -224,7 +255,7 @@ function FormularioRD() {
         showError("Error al crear documento");
       }
     } catch (error) {
-      console.log(error.Message);
+      console.log(error);
       showError("Error al crear documento");
     } finally {
       setLoading(false);
@@ -232,57 +263,29 @@ function FormularioRD() {
   };
 
   const datosState= {
-      "ID": 35,
-      "STR_RENDICION": 123,
-      "STR_FECHA_CONTABILIZA": "2024-04-22",
-      "STR_FECHA_DOC": "2024-04-21",
-      "STR_FECHA_VENCIMIENTO": "2024-05-01",
-      "STR_PROVEEDOR": {"CardCode":"P10081558791","CardName":"MAMANI MARTINEZ MARIA SOLEDAD","LicTradNum":"10081558792"},
-      "STR_MONEDA": {"id":"SOL","name":"SOL"},
-      "STR_COMENTARIOS": "Comentarios sobre el documento",
-      "STR_TIPO_DOC": {"id":"01","name":"Factura"},
-      "STR_SERIE_DOC": "001",
-      "STR_CORR_DOC": "12345688",
-      "STR_VALIDA_SUNAT": true,
-      "STR_OPERACION": 1,
-      "STR_PARTIDAFLUJO": 456,
-      "STR_TOTALDOC": 1234.56,
-      "STR_RD_ID": 1,
-      "STR_CANTIDAD": 2,
-      "STR_ALMACEN": "Almacén ABC",
-      "STR_RUC": "10081558792",
-      "STR_RAZONSOCIAL": "Razón Social XYZ",
-      "STR_DIRECCION": "Direccion 1",
-      "detalles": [
-        {
-          "ID": 4,
-          "STR_CODARTICULO": {
-                "ItemCode": "52830",
-                "ItemName": "Producto Freshmart",
-                "U_BPP_TIPUNMED": "",
-                "WhsCode": "ALM002",
-                "Stock": 0.0,
-                "Precio": 0.0
-            },
-          "STR_SUBTOTAL": 100.0,
-          "STR_INDIC_IMPUESTO": {"id":"IGV","name":"IGV"},
-          "STR_DIM1": {"id":"01","name":"CLUB"},
-          "STR_DIM2": {"id":"001","name":"CHORRILLOS"},
-          "STR_DIM3": {"id":"9120110","name":"REMUNERACIONES"},
-          "STR_DIM4": {"id":"100","name":"CONSEJO"},
-          "STR_DIM5": {"id":"10001","name":"CONSEJO"},
-          "STR_ALMACEN": "ALM002",
-          "STR_CANTIDAD": 2,
-          "STR_TPO_OPERACION": "operacion",
-          "STR_DOC_ID": 33,
-          "STR_CONCEPTO": "Nombre del artículo",
-          "STR_PROYECTO": {"id":"PG","name":"Proyecto Genérico"},
-          "STR_PRECIO": 50.0,
-          "STR_IMPUESTO": 18
-        }
-      ]
+      "ID": null,
+      "STR_RENDICION": null,
+      "STR_FECHA_CONTABILIZA": null,
+      "STR_FECHA_DOC": null,
+      "STR_FECHA_VENCIMIENTO": null,
+      "STR_PROVEEDOR": {"CardCode":null,"CardName":null,"LicTradNum":null},
+      "STR_MONEDA": {"id":null,"name":null},
+      "STR_COMENTARIOS": null,
+      "STR_TIPO_DOC": {"id":null,"name":null},
+      "STR_SERIE_DOC": null,
+      "STR_CORR_DOC": null,
+      "STR_VALIDA_SUNAT": null,
+      "STR_OPERACION": null,
+      "STR_PARTIDAFLUJO": null,
+      "STR_TOTALDOC": null,
+      "STR_RD_ID": null,
+      "STR_CANTIDAD": null,
+      "STR_ALMACEN":null,
+      "STR_RUC": null,
+      "STR_RAZONSOCIAL": null,
+      "STR_DIRECCION": null,
+      "detalles": []
     }
-
 
   const updateRD = async () => {
     setLoading(true);
