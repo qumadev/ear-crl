@@ -905,7 +905,7 @@ function Rendiciones({
           alignFrozen="right"
         ></Column>
       </DataTable>
-      <Button
+      {/* <Button
         label="ver"
         icon="pi pi-eye"
         severity="success"
@@ -913,6 +913,14 @@ function Rendiciones({
           navigate(ruta + `/rendiciones/6/documentos/editar`);
         }}
       />
+      <Button
+        label="ver2"
+        icon="pi pi-eye"
+        severity="success"
+        onClick={() => {
+          navigate(ruta + `/rendiciones/info/1`);
+        }}
+      /> */}
       {/* <div>
       <Button
       <div>

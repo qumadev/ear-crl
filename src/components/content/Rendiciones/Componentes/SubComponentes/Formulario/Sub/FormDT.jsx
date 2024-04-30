@@ -200,7 +200,7 @@ export default function FormDT({ editable,
     //   (doc) => doc.STR_VALIDA_SUNAT === true
     // );
     // if (todosValidados) {
-
+    console.log("user: ",usuario)
     confirm1();
 
 
@@ -247,13 +247,12 @@ export default function FormDT({ editable,
             // loading={loadingBtn}
             // disabled={validaEditable}
           />
-          
-          <Button
-            className='d-flex col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
-            icon="pi pi-trash"
-            label="Agregar "
-          // onClick={() => { }}
-          />
+          {/* <Button
+                    className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
+                    icon="pi pi-trash"
+                    label=""
+                    // onClick={() => { }}
+                /> */}
         </div>
       </div>
     )
