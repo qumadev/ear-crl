@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
@@ -11,7 +11,8 @@ import { InputText } from 'primereact/inputtext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
-import { obtenerRendicion } from '../../../../../../../services/axios.service';
+import { obtenerRendicion,autorizarReversionAprobRendicion,revertirAprobRendicion } 
+from '../../../../../../../services/axios.service';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import TableDT from './TableDT';
@@ -25,11 +26,13 @@ export default function FormDT({ editable,
   fechaSolicitud, responsiveSizeMobile, rowData
 }) {
   const navigate = useNavigate();
-  const { usuario, showError, ruta } = useContext(AppContext);
+  const { usuario, ruta } = useContext(AppContext);
 
   const { id } = useParams();
-
+  const toast = useRef(null);
   const [rendicion, setRendicion] = useState(null)
+  const [loading, setLoading] = useState(false);
+
   async function obtenerData() {
     const response = await
       obtenerRendicion(id);
@@ -80,7 +83,57 @@ export default function FormDT({ editable,
       </div>
     )
   }
+  // messages toast
+  const showSuccess = (mensaje) => {
+    toast.current.show({
+      severity: "success",
+      summary: "Exitoso",
+      detail: mensaje,
+      life: 5000,
+    });
+  };
 
+  const showError = (mensaje) => {
+    toast.current.show({
+      severity: "error",
+      summary: "Error",
+      detail: mensaje,
+      life: 5000,
+    });
+  };
+
+  const showInfo = (mensaje) => {
+    toast.current.show({
+      severity: "info",
+      summary: "Info",
+      detail: mensaje,
+      life: 3000,
+    });
+  };
+  // autorizar
+  async function autorizarReversionLocal(rendicionId) {
+    setLoading(true);
+    try {
+      let response = await autorizarReversionAprobRendicion(
+        rendicionId
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+        showSuccess(`Se autorizo la reversion de la rendición`);
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError("Error interno");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        navigate(ruta + "/rendiciones");
+      }, 1500);
+    }
+  }
   // confirmacion
   const confirmAutorizarReversion = (
     id
@@ -100,9 +153,34 @@ export default function FormDT({ editable,
     });
   };
 
-  const confirmReversion = (
-    id
-  ) => {
+
+
+  // reversion
+  async function ReversionAprobacionLocal(rendicionId) {
+    setLoading(true);
+    try {
+      let response = await revertirAprobRendicion(
+        rendicionId
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+        showSuccess(`Se revertio la aprobacion de la rendición`);
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError("Error interno");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+        navigate(ruta + "/rendiciones");
+      }, 1500);
+    }
+  }
+
+  const confirmReversion = (id) => {
     confirmDialog({
       message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
       header: "Revertir Rendicion",
@@ -114,13 +192,12 @@ export default function FormDT({ editable,
         ReversionAprobacionLocal(
           id
         ),
-      //reject,
     });
   };
   return (
     <>
-      <Toast ref={toast} />
-      <ConfirmDialog />
+      <Toast ref={toast}/>
+      <ConfirmDialog/>
       <div className="flex justify-content-between flex-wrap">
         <div className="flex text-2xl align-items-center gap-2">
           <i
@@ -316,7 +393,7 @@ export default function FormDT({ editable,
           <Button
             label="Revertir Aprobación"
             size="large"
-            onClick={confirmReversion(rendicion?.ID)}
+            onClick={()=>confirmReversion(rendicion?.ID)}
             // disabled={
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
             // }
@@ -326,7 +403,7 @@ export default function FormDT({ editable,
             label="Autorizar Edicion"
             severity="danger"
             size="large"
-            onClick={confirmAutorizarReversion(rendicion?.ID)}
+            onClick={()=>confirmAutorizarReversion(rendicion?.ID)}
             // disabled={
             //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
             // }

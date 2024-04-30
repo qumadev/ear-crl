@@ -866,7 +866,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 label="Show Doc"
                 onClick={showDoc}
             /> */}
-            <Button
+            {/* <Button
                 className='col-4'
                 label="Exportar"
                 icon="pi pi-upload"
@@ -875,7 +875,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 onClick={() => {
                     exportExcel();
                 }}
-            /> */
+            />  */}
 
         </div>
     );
