@@ -730,8 +730,8 @@ function Rendiciones({
     return (
       <Tag
         className="font-bold"
-        value={rowData.STR_ESTADO_INFO.Nombre}
-        severity={getSeverity(rowData.STR_ESTADO_INFO.Id)}
+        value={rowData.STR_ESTADO}
+        severity={getSeverity(rowData.STR_ESTADO)}
       />
     );
   };
@@ -835,7 +835,7 @@ function Rendiciones({
           style={{ minWidth: "12rem" }}
         ></Column>
         <Column
-          field="STR_ESTADO_INFO"
+          field="STR_ESTADO"
           header="Estado"
           style={{ minWidth: "8rem" }}
           body={statusBodyTemplate}
