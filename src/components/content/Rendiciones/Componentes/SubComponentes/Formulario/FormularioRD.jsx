@@ -219,7 +219,7 @@ function FormularioRD() {
         var content = response.data.Result[0];
         console.log(`Documento creado con ID: ${content.id}`);
         showSuccess(`Documento creado con ID: ${content.id}`);
-        navigate(ruta + `/rendiciones/${id}/documentos`);
+        navigate(ruta + `/rendiciones/${id}/documentos/agregar`);
       } else {
         showError("Error al crear documento");
       }

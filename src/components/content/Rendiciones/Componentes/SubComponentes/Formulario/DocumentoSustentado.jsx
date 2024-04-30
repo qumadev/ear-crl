@@ -562,7 +562,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Tipo</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_TIPO_DOC}
+                            value={esModo!=="Agregar" ? documento.STR_TIPO_DOC : ""}
                             onChange={
                                 (e) => {
                                     setDocumento((prevState) => ({
@@ -581,7 +581,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)N° de serie</label>
                         <InputText
-                            value={documento.STR_SERIE_DOC}
+                            value={esModo!=="Agregar" ? documento.STR_SERIE_DOC : ""}
                             onChange={(e) => {
                                 setDocumento((prevState) => ({
                                     ...prevState,
@@ -598,7 +598,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <InputText
                             className='col-6'
                             placeholder='Correlativo'
-                            value={documento.STR_CORR_DOC}
+                            value={esModo!=="Agregar" ? documento.STR_CORR_DOC : ""}
                             onChange={(e) => {
                                 setDocumento((prevState) => ({
                                     ...prevState,
@@ -615,7 +615,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_PROVEEDOR}
+                            value={esModo!=="Agregar" ? documento.STR_PROVEEDOR : ""}
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
@@ -641,14 +641,14 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
-                            value={documento.STR_RAZONSOCIAL}
+                            value={esModo!=="Agregar" ? documento.STR_RAZONSOCIAL : ""}
                             disabled
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>Direccion</label>
                         <InputText
-                            value={documento.STR_DIRECCION}
+                            value={esModo!=="Agregar" ? documento.STR_DIRECCION : ""}
                             onChange={(e) => {
                                 setDocumento((prevState) => ({
                                     ...prevState,
@@ -664,7 +664,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Motivo</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_MOTIVORENDICION}
+                            value={esModo!=="Agregar" ? documento.STR_MOTIVORENDICION : ""}
                             onChange={
                                 (e) => {
                                     setDocumento((prevState) => ({
@@ -684,7 +684,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Moneda</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_MONEDA}
+                            value={esModo!=="Agregar" ? documento.STR_MONEDA : ""}
                             onChange={
                                 (e) => {
                                     // setSelectedTipo(e.value.value);
@@ -705,11 +705,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Fecha</label>
                         <Calendar
                             className='col-6'
-                            value={documento.STR_FECHA_DOC}
+                            value={esModo!=="Agregar" ? documento.STR_FECHA_DOC : ""}
                             //value={fecha}
                             // readOnlyInput
                             // disabled
-                            placeholder={documento.STR_FECHA_DOC}
+                            placeholder={esModo!=="Agregar" ? documento.STR_FECHA_DOC : "Ingresar fecha"}
                             //dateFormat="dd/mm/yyyy"
                             disabled={esModoValidate}
                             locale="es"
@@ -718,7 +718,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Comentario</label>
                         <InputTextarea
-                            value={documento.STR_COMENTARIOS}
+                            value={esModo!=="Agregar" ? documento.STR_COMENTARIOS : ""}
                             className='col-6'
                             rows={5}
                             cols={30}
