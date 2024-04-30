@@ -405,12 +405,16 @@ export const enviarAprobRendicion = (
   estado,
   areaAprobador
 ) => {
+  console.log("body: ", id)
+  console.log("body: ", id,idSolicitud,usuarioId,estado,areaAprobador) 
   return API.post(
-    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`, {
-    ValidityState: function (status) {
-      return status < 500;
-    },
-  }
+    `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,
+    {
+      validateStatus: function (status) {
+        return status < 
+        500;
+      },
+    }
   );
 };
 
@@ -424,9 +428,9 @@ export const aceptarAprobRendicion = (
   area
 ) => {
   return API.patch(
-    `/rendicion/aprobacion/acepta?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
+    `rendicion/aprobacion/acepta?solicitudId=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
     {
-      ValidityState: function (status) {
+      validateStatus: function (status) {
         return status < 500;
       },
     }

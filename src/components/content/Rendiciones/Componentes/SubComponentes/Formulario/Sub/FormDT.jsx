@@ -11,7 +11,14 @@ import { InputText } from 'primereact/inputtext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
+<<<<<<< HEAD
 import { aceptarAprobRendicion, obtenerRendicion } from '../../../../../../../services/axios.service';
+=======
+import { obtenerRendicion,autorizarReversionAprobRendicion,
+  revertirAprobRendicion,validacionDocumento,
+  enviarAprobRendicion } 
+from '../../../../../../../services/axios.service';
+>>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
 import { useState } from 'react';
 import { useEffect } from 'react';
 import TableDT from './TableDT';
@@ -32,21 +39,17 @@ export default function FormDT({ editable,
   const [rendicion, setRendicion] = useState(null)
   async function obtenerData() {
     const response = await
-      obtenerRendicion(id);
-
+    obtenerRendicion(id);
     const documentos = response.data.Result[0]?.documentos || [];
-
     const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
       STR_TIPO_DOC: doc.STR_TIPO_DOC,
       STR_FECHA_DOC: doc.STR_FECHA_DOC,
       STR_TOTALDOC: doc.STR_TOTALDOC,
-
       STR_PROVEEDOR: doc.STR_PROVEEDOR,
       STR_COMENTARIOS: doc.STR_COMENTARIOS,
     }))
     // console.log(response.data.Result[0])
-
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
   }
 
@@ -56,6 +59,7 @@ export default function FormDT({ editable,
   }, []);
   // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
+<<<<<<< HEAD
   //Silicitar aprobacion de rendicion 
   async function aceptarAprobacionLocal() {
     setLoading(true);
@@ -140,15 +144,108 @@ export default function FormDT({ editable,
 
   //---------------------------------------------------------------
 
+=======
+  // enviando solicitud
+  async function EnviarSolicitud() {
+    try {
+      setLoading(true);
+      const body = {
+        usuarioId: usuario.empId,
+        tipord: rendicion.SOLICITUDRD.STR_TIPORENDICION,
+        area: rendicion.STR_EMPLEADO_ASIGNADO.SubGerencia,
+        monto: rendicion.STR_TOTALRENDIDO,
+        cargo: rendicion.STR_EMPLEADO_ASIGNADO.jobTitle,
+        conta: usuario.TipoUsuario == 3 ? 0 : 1,
+      };
+      let response = await enviarAprobRendicion(
+        rendicion.ID,rendicion.SOLICITUDRD.ID,usuario.usuarioId,
+        rendicion.STR_ESTADO,usuario.branch
+      );
+      if (response.status < 300) {
+        showSuccess(
+          "Rendición fue enviada a aprobación. Se le notificará por correo electronico cuando se tenga respuesta"
+        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      } else {
+        showError("Ocurrio error interno");
+        console.log(response.data.Message);
+      }
+    } catch (error) {
+    } finally {
+      setLoading(false);
+      navigate(ruta + "/rendiciones");
+    }
+  }
+  // aceptar
+  const accept = () => {
+    EnviarSolicitud();
+  };
+  // confirmacion 
+  const confirm1 = () => {
+    confirmDialog({
+      message: `¿Estás seguro de Enviar a aprobar la rendición con código #${rendicion.ID}?`,
+      header: "Confirmación Rendición",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept,
+      //reject,
+    });
+  };
+  //Solicitar Aprobacion
+  const [loadingBtn, setLoadingBtn] = useState(false);
+  async function ValidacionEnvio() {
+    // const todosValidados = rendicion.documentos.every(
+    //   (doc) => doc.STR_VALIDA_SUNAT === true
+    // );
+    // if (todosValidados) {
+
+    confirm1();
+
+
+      // let todosDocumentosValidos = true;
+      // for (const e of rendicion.documentos) {
+      //   try {
+      //     setLoadingBtn(true);
+      //     console.log(e);
+      //     const response = await validacionDocumento(e.ID);
+      //     if (response.status !== 200) {
+      //       showError(response.Message);
+      //       todosDocumentosValidos = false;
+      //     }
+      //   } catch (error) {
+      //     console.log(error.response.data.Message);
+      //     showError(error.response.data.Message);
+      //     todosDocumentosValidos = false;
+      //   }
+      // }
+      // if (todosDocumentosValidos) {
+      //   confirm1();
+      // }
+      // setLoadingBtn(false);
+    // } else {
+    //   showError("Tienes que tener todos los documentos validados ante SUNAT");
+    // }
+  }
+>>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
   const leftToolbarTemplate = () => {
     return (
       <div className="">
-        <div className="d-flex col-12 md:col-6 lg:col-12">
-          <Button
-            className='col-6 md:col-6 lg:col-12'
+        <div className="d-flex col-12 md:col-12 lg:col-12">
+          {/* <Button
+            className='col-12 md:col-12 lg:col-12'
             icon="pi pi-plus"
             label="Guardar Borrador"
-          // onClick={openNew}
+          /> */}
+          <Button
+            className='col-12 md:col-12 lg:col-12'
+            label={"Solicitar Aprobación"}
+            onClick={(e) => {
+              ValidacionEnvio();
+            }}
+            // loading={loadingBtn}
+            // disabled={validaEditable}
           />
           
           <Button
