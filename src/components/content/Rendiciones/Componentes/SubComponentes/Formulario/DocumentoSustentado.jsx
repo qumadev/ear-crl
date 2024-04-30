@@ -615,7 +615,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_RUC}
+                            value={documento.STR_PROVEEDOR}
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
@@ -641,7 +641,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <label className='col-2'>(*)Razon Social</label>
                         <InputText
                             className='col-6'
-                            value={documento.STR_PROVEEDOR ? documento.STR_PROVEEDOR.CardName : ""}
+                            value={documento.STR_RAZONSOCIAL}
                             disabled
                         />
                     </div>
