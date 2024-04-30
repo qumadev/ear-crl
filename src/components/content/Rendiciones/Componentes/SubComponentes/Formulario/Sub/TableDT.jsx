@@ -22,9 +22,10 @@ export default function TableDT({
 
         {
             label: 'Editar',
-            icon: 'pi pi-external-link',
+            icon: 'pi pi',
             command: () => {
-                window.location.href = `/rendiciones/${documentos.ID}/documentos/detail`;
+                navigate(ruta+`/rendiciones/${documentos.ID}/documentos/detail`)
+                // window.location.href = `/rendiciones/${rendicion.ID}/documentos/detail`;
             }
         },
 
