@@ -116,7 +116,7 @@ export default function FormDT({ editable,
     //   (doc) => doc.STR_VALIDA_SUNAT === true
     // );
     // if (todosValidados) {
-
+    console.log("user: ",usuario)
     confirm1();
 
 
@@ -153,15 +153,19 @@ export default function FormDT({ editable,
             icon="pi pi-plus"
             label="Guardar Borrador"
           /> */}
-          <Button
-            className='col-12 md:col-12 lg:col-12'
-            label={"Solicitar Aprobación"}
-            onClick={(e) => {
-              ValidacionEnvio();
-            }}
-            // loading={loadingBtn}
-            // disabled={validaEditable}
-          />
+          {usuario.rol?.id==="1" ? 
+              <Button
+                className='col-12 md:col-12 lg:col-12'
+                label={"Solicitar Aprobación"}
+                onClick={(e) => {
+                  ValidacionEnvio();
+                }}
+                // loading={loadingBtn}
+                // disabled={validaEditable}
+              />
+            :
+              ""
+          }
           {/* <Button
                     className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
                     icon="pi pi-trash"

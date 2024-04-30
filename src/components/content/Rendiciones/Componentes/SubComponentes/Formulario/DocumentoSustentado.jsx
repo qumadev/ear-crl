@@ -619,10 +619,10 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
-                                console.log(e.target.value)
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_RUC: e.target.value,
+                                    STR_PROVEEDOR: e.target.value,
+                                    STR_RUC: e.target.value.LicTradNum,
                                     STR_RAZONSOCIAL: e.target.value.CardName
                                 }));
                             }}
