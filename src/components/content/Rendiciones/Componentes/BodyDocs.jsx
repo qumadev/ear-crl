@@ -719,7 +719,7 @@ export function BodyDocs() {
           editable={validaEditable}
         />
         <Divider />
-        <div className="card flex flex-wrap  gap-3 mx-3">
+      <div className="card flex flex-wrap  gap-3 mx-3">
           {usuario.TipoUsuario == 1 ? (
             <Button
               label={"Solicitar Aprobación"}

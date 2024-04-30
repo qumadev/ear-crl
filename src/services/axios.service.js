@@ -288,7 +288,7 @@ export const listarRendiciones = (
     }
   );
 };
- 
+
 export const obtenerSolicitudR = (id, create) => {
   return null;
 };
@@ -406,14 +406,15 @@ export const enviarAprobRendicion = (
   areaAprobador
 ) => {
   return API.post(
-    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,    {
-      ValidityState: function (status) {
-        return status < 500;
-      },
-    }
+    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`, {
+    ValidityState: function (status) {
+      return status < 500;
+    },
+  }
   );
 };
 
+//--modificacion de fiorella  para formDt
 export const aceptarAprobRendicion = (
   solicitudId,
   aprobadorId,
@@ -431,6 +432,8 @@ export const aceptarAprobRendicion = (
     }
   );
 };
+
+//--------------------
 
 export const rechazarAprobRendicion = (
   solicitudId,
