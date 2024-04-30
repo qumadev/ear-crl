@@ -784,7 +784,7 @@ function Rendiciones({
         console.log(err.message);
       })
       .finally(() => {
-        console.log("Se terminó de traer solicitud");
+        console.log("Se terminó de traer rendicion");
         if (!fresh) setLoading(false);
       });
   }

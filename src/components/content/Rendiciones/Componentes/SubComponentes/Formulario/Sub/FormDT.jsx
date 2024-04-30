@@ -148,11 +148,11 @@ export default function FormDT({ editable,
     return (
       <div className="">
         <div className="d-flex col-12 md:col-12 lg:col-12">
-          <Button
+          {/* <Button
             className='col-12 md:col-12 lg:col-12'
             icon="pi pi-plus"
             label="Guardar Borrador"
-          />
+          /> */}
           <Button
             className='col-12 md:col-12 lg:col-12'
             label={"Solicitar Aprobación"}
