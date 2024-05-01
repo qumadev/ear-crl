@@ -775,7 +775,7 @@ function Rendiciones({
       fechaFin,
       nrendicion,
       "", //estado,
-      0 //usuario.SubGerencia
+      usuario.branch //usuario.SubGerencia
     )
       .then((response) => {
         setRendiciones(response.data.Result);
