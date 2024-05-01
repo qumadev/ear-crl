@@ -202,8 +202,6 @@ export default function FormDT({ editable,
     // if (todosValidados) {
     console.log("user: ",usuario)
     confirm1();
-
-
       // let todosDocumentosValidos = true;
       // for (const e of rendicion.documentos) {
       //   try {
