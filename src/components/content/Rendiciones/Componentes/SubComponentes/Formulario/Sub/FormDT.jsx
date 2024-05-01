@@ -11,14 +11,10 @@ import { InputText } from 'primereact/inputtext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
-<<<<<<< HEAD
-import { aceptarAprobRendicion, obtenerRendicion } from '../../../../../../../services/axios.service';
-=======
-import { obtenerRendicion,autorizarReversionAprobRendicion,
+import { aceptarAprobRendicion,obtenerRendicion,autorizarReversionAprobRendicion,
   revertirAprobRendicion,validacionDocumento,
   enviarAprobRendicion } 
 from '../../../../../../../services/axios.service';
->>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
 import { useState } from 'react';
 import { useEffect } from 'react';
 import TableDT from './TableDT';
@@ -59,92 +55,6 @@ export default function FormDT({ editable,
   }, []);
   // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
-<<<<<<< HEAD
-  //Silicitar aprobacion de rendicion 
-  async function aceptarAprobacionLocal() {
-    setLoading(true);
-    try {
-      let response = await aceptarAprobRendicion(
-        rendicion.SOLICITUDRD.ID,
-        usuario.empId,
-        usuario.SubGerencia,
-        rendicion.STR_ESTADO_INFO.Id,
-        rendicion.ID,
-        usuario.SubGerencia
-      );
-      if (response.status < 300) {
-        let body = response.data.Result[0];
-        console.log(response.data);
-
-        if (body.AprobacionFinalizada == 0) {
-          showSuccess(`Se aprobó la rendición`);
-        } else {
-          showSuccess(
-            `Se migró a a SAP la rendición con número ${body.DocNum}`
-          );
-        }
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        navigate(ruta + "/rendiciones");
-      } else {
-        console.log(response.Message);
-        showError(response.Message);
-      }
-    } catch (error) {
-      console.log(error.response.data.Message);
-      showError(error.response.data.Message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // rechazar Aprobacion
-  async function rechazarAprobacionLocal() {
-    setLoadingBtn(true);
-    try {
-      let response = await rechazarAprobRendicion(
-        rendicion.SOLICITUDRD.ID,
-        usuario.empId,
-        usuario.SubGerencia,
-        rendicion.STR_ESTADO_INFO.Id,
-        rendicion.ID,
-        usuario.SubGerencia
-      );
-      if (response.status == 200) {
-        showInfo("Se rechazó la rendición");
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        navigate(ruta + "/rendiciones");
-      } else {
-        showError(response.data.Message);
-      }
-    } catch (error) {
-      console.log(error);
-      showError("Error interno");
-    } finally {
-      setLoadingBtn(false);
-    }
-  }
-
-  const getFileExtension = (filename) => {
-    return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
-  };
-  //----------------------------
-
-  const confirmAceptacion = () => {
-    confirmDialog({
-      message: `¿Estas seguro de rechazar la Rendicion con codigo #${rendicion.ID}`,
-      header: `Confimación solictud `,
-      icon: " pi pi-exclamacion-triangule",
-      defaultFocus: "accept",
-      acceptClassName: "p-button-danger",
-      acceptLabel: "Si",
-      rejectLabel: "No",
-      accept: () => aceptarAprobacionLocal(),
-    })
-  }
-
-  //---------------------------------------------------------------
-
-=======
   // enviando solicitud
   async function EnviarSolicitud() {
     try {
@@ -226,7 +136,6 @@ export default function FormDT({ editable,
     //   showError("Tienes que tener todos los documentos validados ante SUNAT");
     // }
   }
->>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
   const leftToolbarTemplate = () => {
     return (
       <div className="">
