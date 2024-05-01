@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
-import React, { useContext, useRef } from 'react'
+import React, { useContext } from 'react'
 
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
@@ -11,30 +11,32 @@ import { InputText } from 'primereact/inputtext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
+<<<<<<< HEAD
+import { aceptarAprobRendicion, obtenerRendicion } from '../../../../../../../services/axios.service';
+=======
 import { obtenerRendicion,autorizarReversionAprobRendicion,
   revertirAprobRendicion,validacionDocumento,
   enviarAprobRendicion } 
 from '../../../../../../../services/axios.service';
+>>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
 import { useState } from 'react';
 import { useEffect } from 'react';
 import TableDT from './TableDT';
 import { setDate } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
-import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 
 export default function FormDT({ editable,
   fechaSolicitud, responsiveSizeMobile, rowData
 }) {
   const navigate = useNavigate();
-  const { usuario, ruta } = useContext(AppContext);
+  const { usuario, showError, ruta } = useContext(AppContext);
 
   const { id } = useParams();
-  const toast = useRef(null);
-  const [rendicion, setRendicion] = useState(null)
-  const [loading, setLoading] = useState(false);
 
+  const [rendicion, setRendicion] = useState(null)
   async function obtenerData() {
     const response = await
     obtenerRendicion(id);
@@ -51,16 +53,98 @@ export default function FormDT({ editable,
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
   }
 
-  const fecBodyTemplate = (rendicion) => {
-
-    return <>{rendicion.STR_FECHAREGIS}</>;
-  };
 
   useEffect(() => {
     obtenerData();
   }, []);
   // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
+<<<<<<< HEAD
+  //Silicitar aprobacion de rendicion 
+  async function aceptarAprobacionLocal() {
+    setLoading(true);
+    try {
+      let response = await aceptarAprobRendicion(
+        rendicion.SOLICITUDRD.ID,
+        usuario.empId,
+        usuario.SubGerencia,
+        rendicion.STR_ESTADO_INFO.Id,
+        rendicion.ID,
+        usuario.SubGerencia
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+        console.log(response.data);
+
+        if (body.AprobacionFinalizada == 0) {
+          showSuccess(`Se aprobó la rendición`);
+        } else {
+          showSuccess(
+            `Se migró a a SAP la rendición con número ${body.DocNum}`
+          );
+        }
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        navigate(ruta + "/rendiciones");
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError(error.response.data.Message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // rechazar Aprobacion
+  async function rechazarAprobacionLocal() {
+    setLoadingBtn(true);
+    try {
+      let response = await rechazarAprobRendicion(
+        rendicion.SOLICITUDRD.ID,
+        usuario.empId,
+        usuario.SubGerencia,
+        rendicion.STR_ESTADO_INFO.Id,
+        rendicion.ID,
+        usuario.SubGerencia
+      );
+      if (response.status == 200) {
+        showInfo("Se rechazó la rendición");
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        navigate(ruta + "/rendiciones");
+      } else {
+        showError(response.data.Message);
+      }
+    } catch (error) {
+      console.log(error);
+      showError("Error interno");
+    } finally {
+      setLoadingBtn(false);
+    }
+  }
+
+  const getFileExtension = (filename) => {
+    return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+  };
+  //----------------------------
+
+  const confirmAceptacion = () => {
+    confirmDialog({
+      message: `¿Estas seguro de rechazar la Rendicion con codigo #${rendicion.ID}`,
+      header: `Confimación solictud `,
+      icon: " pi pi-exclamacion-triangule",
+      defaultFocus: "accept",
+      acceptClassName: "p-button-danger",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () => aceptarAprobacionLocal(),
+    })
+  }
+
+  //---------------------------------------------------------------
+
+=======
   // enviando solicitud
   async function EnviarSolicitud() {
     try {
@@ -144,6 +228,7 @@ export default function FormDT({ editable,
     //   showError("Tienes que tener todos los documentos validados ante SUNAT");
     // }
   }
+>>>>>>> 7c403216a1071c5f1df825cfe51c50756a66ca28
   const leftToolbarTemplate = () => {
     return (
       <div className="">
@@ -153,19 +238,15 @@ export default function FormDT({ editable,
             icon="pi pi-plus"
             label="Guardar Borrador"
           /> */}
-          {usuario.rol?.id==="1" ? 
-              <Button
-                className='col-12 md:col-12 lg:col-12'
-                label={"Solicitar Aprobación"}
-                onClick={(e) => {
-                  ValidacionEnvio();
-                }}
-                // loading={loadingBtn}
-                // disabled={validaEditable}
-              />
-            :
-              ""
-          }
+          <Button
+            className='col-12 md:col-12 lg:col-12'
+            label={"Solicitar Aprobación"}
+            onClick={(e) => {
+              ValidacionEnvio();
+            }}
+            // loading={loadingBtn}
+            // disabled={validaEditable}
+          />
           {/* <Button
                     className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
                     icon="pi pi-trash"
@@ -176,57 +257,7 @@ export default function FormDT({ editable,
       </div>
     )
   }
-  // messages toast
-  const showSuccess = (mensaje) => {
-    toast.current.show({
-      severity: "success",
-      summary: "Exitoso",
-      detail: mensaje,
-      life: 5000,
-    });
-  };
 
-  const showError = (mensaje) => {
-    toast.current.show({
-      severity: "error",
-      summary: "Error",
-      detail: mensaje,
-      life: 5000,
-    });
-  };
-
-  const showInfo = (mensaje) => {
-    toast.current.show({
-      severity: "info",
-      summary: "Info",
-      detail: mensaje,
-      life: 3000,
-    });
-  };
-  // autorizar
-  async function autorizarReversionLocal(rendicionId) {
-    setLoading(true);
-    try {
-      let response = await autorizarReversionAprobRendicion(
-        rendicionId
-      );
-      if (response.status < 300) {
-        let body = response.data.Result[0];
-        showSuccess(`Se autorizo la reversion de la rendición`);
-      } else {
-        console.log(response.Message);
-        showError(response.Message);
-      }
-    } catch (error) {
-      console.log(error.response.data.Message);
-      showError("Error interno");
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        navigate(ruta + "/rendiciones");
-      }, 1500);
-    }
-  }
   // confirmacion
   const confirmAutorizarReversion = (
     id
@@ -246,34 +277,9 @@ export default function FormDT({ editable,
     });
   };
 
-
-
-  // reversion
-  async function ReversionAprobacionLocal(rendicionId) {
-    setLoading(true);
-    try {
-      let response = await revertirAprobRendicion(
-        rendicionId
-      );
-      if (response.status < 300) {
-        let body = response.data.Result[0];
-        showSuccess(`Se revertio la aprobacion de la rendición`);
-      } else {
-        console.log(response.Message);
-        showError(response.Message);
-      }
-    } catch (error) {
-      console.log(error.response.data.Message);
-      showError("Error interno");
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-        navigate(ruta + "/rendiciones");
-      }, 1500);
-    }
-  }
-
-  const confirmReversion = (id) => {
+  const confirmReversion = (
+    id
+  ) => {
     confirmDialog({
       message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
       header: "Revertir Rendicion",
@@ -285,12 +291,13 @@ export default function FormDT({ editable,
         ReversionAprobacionLocal(
           id
         ),
+      //reject,
     });
   };
   return (
+
+
     <>
-      <Toast ref={toast}/>
-      <ConfirmDialog/>
       <div className="flex justify-content-between flex-wrap">
         <div className="flex text-2xl align-items-center gap-2">
           <i
@@ -335,8 +342,10 @@ export default function FormDT({ editable,
               navigate(ruta +
                 `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
+
           // disabled={usuario.TipoUsuario != 1}
           />
+
           <Button
             label="Exportar"
             icon="pi pi-upload"
@@ -352,7 +361,7 @@ export default function FormDT({ editable,
 
       <Divider />
       <div className="grid mt-3">
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Código:
@@ -367,7 +376,7 @@ export default function FormDT({ editable,
 
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               N° Rendición:
@@ -379,7 +388,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Estado:
@@ -391,7 +400,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Emp.Asignado:
@@ -403,7 +412,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               N° de la SR:
@@ -415,7 +424,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Fecha de Solicitud:
@@ -430,8 +439,8 @@ export default function FormDT({ editable,
             {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p> */}
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
-          <div className="mb-3 flex flex-column justify-content-center">
+        <div className="col-12 md:col-5 lg:col-3">
+          <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Monto Rendido:
             </label>
@@ -442,19 +451,19 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               FechaRD:
             </label>
             <InputText
-              value={rendicion?.STR_FECHAREGIS} 
+              value={rendicion?.STR_FECHAREGIS}
               disabled
               // onChange={(e) => setDate(e.value)} 
               showIcon />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               CargaDocs:
@@ -466,7 +475,7 @@ export default function FormDT({ editable,
             />
           </div>
         </div>
-        <div className="col-12 md:col-6 lg:col-3">
+        <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               DocEntry:
@@ -479,32 +488,36 @@ export default function FormDT({ editable,
           </div>
         </div>
       </div>
+      <Divider />
 
-      <div className="card flex flex-wrap gap-3 mx-1 mb-2">
+      <div className="card flex flex-wrap  gap-3 mx-3">
+
         {/* Botones por rol */}
-        {usuario.rol?.id == "2" ? (
+        {
+        usuario.rol?.id == "2" ? (
           <Button
             label="Revertir Aprobación"
             size="large"
-            onClick={()=>confirmReversion(rendicion?.ID)}
-            // disabled={
-            //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
-            // }
+            onClick={confirmReversion(rendicion?.ID)}
+          // disabled={
+          //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
+          // }
           />
-        ) : usuario.rol?.id == "3" ? (
+        ) : 
+        
+        usuario.rol?.id == "3" ? (
           <Button
             label="Autorizar Edicion"
             severity="danger"
             size="large"
-            onClick={()=>confirmAutorizarReversion(rendicion?.ID)}
-            // disabled={
-            //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
-            // }
+            onClick={confirmAutorizarReversion(rendicion?.ID)}
+          // disabled={
+          //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+          // }
           />
         ) : ""}
       </div>
 
-      <Divider />
 
       <TableDT
         rendicion={rendicion}

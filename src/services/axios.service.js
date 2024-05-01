@@ -288,7 +288,7 @@ export const listarRendiciones = (
     }
   );
 };
- 
+
 export const obtenerSolicitudR = (id, create) => {
   return null;
 };
@@ -411,12 +411,14 @@ export const enviarAprobRendicion = (
     `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,
     {
       validateStatus: function (status) {
-        return status < 500;
+        return status < 
+        500;
       },
     }
   );
 };
 
+//--modificacion de fiorella  para formDt
 export const aceptarAprobRendicion = (
   solicitudId,
   aprobadorId,
@@ -434,6 +436,8 @@ export const aceptarAprobRendicion = (
     }
   );
 };
+
+//--------------------
 
 export const rechazarAprobRendicion = (
   solicitudId,
