@@ -352,7 +352,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             obtenerCentroCosto(),
             obtenerUnidadNegocio()
         ]);
-        console.log("dt: ",response[0].data.Result)
         const dataafectacion = [
             { 
                 id: '1',

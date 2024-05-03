@@ -149,7 +149,6 @@ function FormularioRD() {
     // setDocumento(...documento, DocumentoDet)
   }, []);
 
-
   const [detalles, setDetalles] = useState([]); // Lista de detalles
   const [anexos, setAnexos] = useState([]);
   
@@ -254,11 +253,11 @@ function FormularioRD() {
         ...documento,
         ID: id,
         STR_RENDICION: id,
+        STR_RD_ID: id,
         //STR_VALIDA_SUNAT: null,
         STR_OPERACION: null,
         STR_PARTIDAFLUJO: null,
         STR_TOTALDOC: subtotalTotal,
-        STR_RD_ID: id,
         STR_CANTIDAD: null,
         STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
@@ -350,11 +349,10 @@ function FormularioRD() {
         let _documento = {
           ...documento,
           ID: id,
-          STR_RENDICION: id,
+          STR_RENDICION: documento.STR_RD_ID,
           STR_OPERACION: null,
           STR_PARTIDAFLUJO: null,
           STR_TOTALDOC: subtotalTotal,
-          STR_RD_ID: id,
           STR_CANTIDAD: null,
           STR_FECHA_CONTABILIZA: formatDate(documento.STR_FECHA_CONTABILIZA),
           STR_FECHA_DOC: formatDate(documento.STR_FECHA_DOC),

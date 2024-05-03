@@ -238,6 +238,7 @@ export default function FormDT({ editable,
         //     `Se migró a a SAP la rendición con número ${body.DocNum}`
         //   );
         // }
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       } else {
         console.log(response.Message);
         showError(response.Message);
@@ -246,6 +247,7 @@ export default function FormDT({ editable,
       console.log(error);
       showError("Error interno");
     } finally {
+      navigate(ruta + "/rendiciones");
       setLoading(false);
     }
   }
@@ -298,8 +300,6 @@ export default function FormDT({ editable,
             Rendición info
           </div>
         </div>
-
-
         <div div className="flex flex-row flex-wrap gap-2">
           <Button
             icon="pi pi-refresh"
@@ -358,7 +358,6 @@ export default function FormDT({ editable,
               placeholder="codigo"
               disabled
             />
-
           </div>
         </div>
         <div className="col-12 md:col-5 lg:col-3">
@@ -502,20 +501,12 @@ export default function FormDT({ editable,
               />
             ) : ""}
       </div>
-
-
       <TableDT
         rendicion={rendicion}
       >
       </TableDT>
-
-
-
       <Divider />
       <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
-
-
     </>
   )
 }
