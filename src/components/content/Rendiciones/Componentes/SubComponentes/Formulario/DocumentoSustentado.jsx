@@ -306,8 +306,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     ))}
                 </div>
             </div>
-
-
         );
     };
 
@@ -323,6 +321,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     // const [selectedProveedor, setSelectedProveedor] = useState(null);
 
     const [tipos, setTipos] = useState(null);
+    const [afectacion, setAfectacion] = useState(null);
     const [motivos, setMotivos] = useState(null);
     const [proveedores, setProveedores] = useState(null);
     const [articles, setArticles] = useState(null);
@@ -353,6 +352,18 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             obtenerCentroCosto(),
             obtenerUnidadNegocio()
         ]);
+        console.log("dt: ",response[0].data.Result)
+        const dataafectacion = [
+            { 
+                id: '1',
+                name: 'Retencion'
+            },
+            { 
+                id: '2',
+                name: 'Retraccion'
+            }
+        ];
+        setAfectacion(dataafectacion)
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
         setProveedores(response[2].data.Result)
@@ -403,8 +414,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     useEffect( () => {
         console.log("doc3: ",documento)
     }, [documento])
-
-
 
     const monedas = [
         { id: 'SOL', name: 'SOL' },
@@ -555,6 +564,27 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             className='col-6'
                             disabled={esModoValidate}
                         ></Checkbox>
+                    </div>
+                    <div className="flex col-12 align-items-center gap-5">
+                        <label className='col-2'>Afectacion</label>
+                        <Dropdown
+                            className='col-6'
+                            value={documento.STR_AFECTACION}
+                            onChange={
+                                (e) => {
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_AFECTACION: e.target.value,
+                                    }));
+                                    console.log("value: ",e.target.value)
+                                }}
+                            options={afectacion}
+                            optionLabel="name"
+                            filter
+                            filterBy='name'
+                            placeholder='Seleccione Afectacion'
+                            disabled={esModoValidate}
+                        />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Tipo</label>
@@ -875,12 +905,12 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 indImpuestos={indImpuestos}
             >
             </FormDetalleDocumento>
-
+{/* 
             <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            />
+            /> */}
             {/* <Button
                 className='col-4'
                 label="Exportar"

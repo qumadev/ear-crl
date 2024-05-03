@@ -342,9 +342,9 @@ function FormularioRD() {
         }));
         let _documento = {
           ...documento,
-          STR_FECHA_CONTABILIZA: null,
-          STR_FECHA_DOC: null,
-          STR_FECHA_VENCIMIENTO: null,
+          STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           detalles: _detalles, // Detalles
         };
         console.log("envio: ",_documento);
@@ -357,7 +357,7 @@ function FormularioRD() {
         } else {
           showError("Error al Actualizar documento");
         }
-    }
+      }
       // let _documento = {
       //   ...documento,
       //   STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
