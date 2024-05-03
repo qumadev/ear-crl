@@ -229,22 +229,47 @@ function FormularioRD() {
   /* Metodo para agregar */
   const registrarRD = async () => {
     setLoading(true);
-    console.log("docenviado: ",documento);
-    console.log("detailenv: ",detalle);
     try {
-      console.log("1");
+      const _detalles = detalle.map((detalle) => ({
+        ID: detalle.ID ? detalle.ID : null,
+        STR_CODARTICULO: detalle.Cod,
+        STR_INDIC_IMPUESTO: detalle.IndImpuesto,
+        STR_DIM1:detalle.UnidadNegocio,
+        STR_DIM2:detalle.Filial,
+        STR_DIM3:detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
+        STR_DIM4:detalle.Areas,
+        STR_DIM5:detalle.CentroCosto,
+        STR_ALMACEN:detalle.Almacen,
+        STR_CANTIDAD:detalle.Cantidad,
+        STR_TPO_OPERACION:null,
+        STR_DOC_ID:id,
+        STR_CONCEPTO:detalle.Concepto,
+        STR_PROYECTO:detalle.Proyecto,
+        STR_PRECIO:detalle.Precio,
+        STR_SUBTOTAL:detalle.Precio*detalle.Cantidad,
+        STR_IMPUESTO:detalle.Impuesto,
+      }));
+      let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
       let _documento = {
         ...documento,
-        STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
-        STR_FECHA_DOC: documento.STR_FECHA_DOC,
-        STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,
-        detalles: detalle,
-        //STR_VALIDA_SUNAT: compExisteSunat,
+        ID: id,
+        STR_RENDICION: id,
+        //STR_VALIDA_SUNAT: null,
+        STR_OPERACION: null,
+        STR_PARTIDAFLUJO: null,
+        STR_TOTALDOC: subtotalTotal,
+        STR_RD_ID: id,
+        STR_CANTIDAD: null,
+        STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,//aaaa-mm-dd
+        STR_FECHA_DOC: documento.STR_FECHA_DOC,//aaaa-mm-dd
+        STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,//aaaa-mm-dd
+        detalles: _detalles,
+        STR_VALIDA_SUNAT: compExisteSunat,
         // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
         //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
         //   : documento.STR_ANEXO_ADJUNTO,
       };
-      console.log("2: ", _documento);
+      console.log("datos enviados: ",_documento)
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
@@ -777,6 +802,7 @@ function FormularioRD() {
                 esModo==="Agregar" ? registrarRD() 
                 : 
                 esModo==="Editar" ? updateRD() : ""
+
                 //registrarDocumento();
                 //updateRD();
                 // if (!esModoRegistrar) updateRD();
