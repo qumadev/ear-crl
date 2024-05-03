@@ -360,7 +360,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             },
             { 
                 id: '2',
-                name: 'Retraccion'
+                name: 'Detraccion'
             }
         ];
         setAfectacion(dataafectacion)
@@ -377,7 +377,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     useEffect(()=>{
         if (detalles && detalles.length > 0) {
-            console.log("det2: ",detalles);
             const articles = detalles.map((detalle) => ({
                 ID: detalle.ID ? detalle.ID : null,
                 STR_SUBTOTAL: detalle.STR_SUBTOTAL,
@@ -576,7 +575,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                         ...prevState,
                                         STR_AFECTACION: e.target.value,
                                     }));
-                                    console.log("value: ",e.target.value)
                                 }}
                             options={afectacion}
                             optionLabel="name"
@@ -793,10 +791,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             }}
                         />
                     </div>
-
-
                     <Divider />
-                    
                     <DataTable
                         value={articulos}
                         sortMode="multiple"
@@ -805,7 +800,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         tableStyle={{ minWidth: "12rem" }}
                         header="Detalle de Documento Sustentado"
-                    // loading={loading}
                     >
                         <Column
                             header="N°"
@@ -888,7 +882,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                     } */}
                 </div>
             </div>
-
             <FormDetalleDocumento
                 documento={documento}
                 setDocumento={setDocumento}
@@ -905,12 +898,12 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 indImpuestos={indImpuestos}
             >
             </FormDetalleDocumento>
-{/* 
+
             <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            /> */}
+            /> 
             {/* <Button
                 className='col-4'
                 label="Exportar"
