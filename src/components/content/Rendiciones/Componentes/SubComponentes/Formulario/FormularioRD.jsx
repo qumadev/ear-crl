@@ -260,9 +260,9 @@ function FormularioRD() {
         STR_TOTALDOC: subtotalTotal,
         STR_RD_ID: id,
         STR_CANTIDAD: null,
-        STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,//aaaa-mm-dd
-        STR_FECHA_DOC: documento.STR_FECHA_DOC,//aaaa-mm-dd
-        STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,//aaaa-mm-dd
+        STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
+        STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
+        STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         detalles: _detalles,
         STR_VALIDA_SUNAT: compExisteSunat,
         // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
