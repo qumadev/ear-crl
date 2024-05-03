@@ -119,6 +119,7 @@ export const obtenerDocumento = (id) => {
 };
 
 export const obtenerRendicion = (id) => {
+  console.log("id", id);
   return API.get(`/rendicion/${id}`, {
     validateStatus: function (status) {
       return status < 500;

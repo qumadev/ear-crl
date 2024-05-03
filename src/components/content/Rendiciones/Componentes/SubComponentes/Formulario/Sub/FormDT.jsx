@@ -11,10 +11,12 @@ import { InputText } from 'primereact/inputtext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../../../../../App';
 import Rendiciones from '../../../Rendiciones';
-import { aceptarAprobRendicion,obtenerRendicion,autorizarReversionAprobRendicion,
-  revertirAprobRendicion,validacionDocumento,
-  enviarAprobRendicion } 
-from '../../../../../../../services/axios.service';
+import {
+  aceptarAprobRendicion, obtenerRendicion, autorizarReversionAprobRendicion,
+  revertirAprobRendicion, validacionDocumento,
+  enviarAprobRendicion
+}
+  from '../../../../../../../services/axios.service';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import TableDT from './TableDT';
@@ -34,9 +36,12 @@ export default function FormDT({ editable,
 
   const [rendicion, setRendicion] = useState(null)
   async function obtenerData() {
-    const response = await
-    obtenerRendicion(id);
+    const response = await obtenerRendicion(id);
+
+    console.log("rendicion", response.data.Result[0])
+    console.log("detalle",response.data.Result[0]?.documentos)
     const documentos = response.data.Result[0]?.documentos || [];
+
     const documentosFormateados = documentos.map(doc => ({
       ID: doc.ID,
       STR_TIPO_DOC: doc.STR_TIPO_DOC,
@@ -47,6 +52,8 @@ export default function FormDT({ editable,
     }))
     // console.log(response.data.Result[0])
     setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
+    
+    
   }
 
 
@@ -58,6 +65,8 @@ export default function FormDT({ editable,
   // enviando solicitud
   async function EnviarSolicitud() {
     try {
+      console.log(rendicion.ID, rendicion.SOLICITUDRD.ID, usuario.usuarioId,
+        rendicion.STR_ESTADO, usuario.branch)
       setLoading(true);
       const body = {
         usuarioId: usuario.empId,
@@ -68,8 +77,8 @@ export default function FormDT({ editable,
         conta: usuario.TipoUsuario == 3 ? 0 : 1,
       };
       let response = await enviarAprobRendicion(
-        rendicion.ID,rendicion.SOLICITUDRD.ID,usuario.usuarioId,
-        rendicion.STR_ESTADO,usuario.branch
+        rendicion.ID, rendicion.SOLICITUDRD.ID, usuario.usuarioId,
+        rendicion.STR_ESTADO, usuario.branch
       );
       if (response.status < 300) {
         showSuccess(
@@ -106,35 +115,8 @@ export default function FormDT({ editable,
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
   async function ValidacionEnvio() {
-    // const todosValidados = rendicion.documentos.every(
-    //   (doc) => doc.STR_VALIDA_SUNAT === true
-    // );
-    // if (todosValidados) {
-    console.log("user: ",usuario)
+    console.log("validacion")
     confirm1();
-      // let todosDocumentosValidos = true;
-      // for (const e of rendicion.documentos) {
-      //   try {
-      //     setLoadingBtn(true);
-      //     console.log(e);
-      //     const response = await validacionDocumento(e.ID);
-      //     if (response.status !== 200) {
-      //       showError(response.Message);
-      //       todosDocumentosValidos = false;
-      //     }
-      //   } catch (error) {
-      //     console.log(error.response.data.Message);
-      //     showError(error.response.data.Message);
-      //     todosDocumentosValidos = false;
-      //   }
-      // }
-      // if (todosDocumentosValidos) {
-      //   confirm1();
-      // }
-      // setLoadingBtn(false);
-    // } else {
-    //   showError("Tienes que tener todos los documentos validados ante SUNAT");
-    // }
   }
   const leftToolbarTemplate = () => {
     return (
@@ -151,8 +133,9 @@ export default function FormDT({ editable,
             onClick={(e) => {
               ValidacionEnvio();
             }}
-            // loading={loadingBtn}
-            // disabled={validaEditable}
+
+          // loading={loadingBtn}
+          // disabled={validaEditable}
           />
           {/* <Button
                     className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
@@ -160,10 +143,71 @@ export default function FormDT({ editable,
                     label=""
                     // onClick={() => { }}
                 /> */}
+            <Button
+              className='col-12 md:col-12 lg:col-12'
+              label={"Aceptar aprobación"}
+              size="large"
+              onClick={(e) => {
+                confirmAceptacion();
+              }}
+              loading={loadingBtn}
+              // disabled={validaEditableBtn}
+            />
         </div>
       </div>
     )
   }
+
+  
+  async function aceptarAprobacionLocal() {
+    setLoading(true);
+    try {
+      let response = await aceptarAprobRendicion(
+        rendicion.SOLICITUDRD.ID,
+        usuario.usuarioId,
+        usuario.branch,
+        rendicion.STR_ESTADO,
+        rendicion.ID,
+        usuario.SubGerencia
+      );
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+        console.log(response.data);
+
+        if (body.AprobacionFinalizada == 0) {
+          showSuccess(`Se aprobó la rendición`);
+        } else {
+          showSuccess(
+            `Se migró a a SAP la rendición con número ${body.DocNum}`
+          );
+        }
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        navigate(ruta + "/rendiciones");
+      } else {
+        console.log(response.Message);
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response.data.Message);
+      showError(error.response.data.Message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const confirmAceptacion = () => {
+    confirmDialog({
+      message: `¿Estás seguro de aceptar la Rendición con código #${rendicion.ID}?`,
+      header: "Confirmación solicitud",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () => aceptarAprobacionLocal(),
+      //reject,
+    });
+  };
+
 
   // confirmacion
   const confirmAutorizarReversion = (
@@ -401,28 +445,28 @@ export default function FormDT({ editable,
 
         {/* Botones por rol */}
         {
-        usuario.rol?.id == "2" ? (
-          <Button
-            label="Revertir Aprobación"
-            size="large"
-            onClick={confirmReversion(rendicion?.ID)}
-          // disabled={
-          //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
-          // }
-          />
-        ) : 
-        
-        usuario.rol?.id == "3" ? (
-          <Button
-            label="Autorizar Edicion"
-            severity="danger"
-            size="large"
-            onClick={confirmAutorizarReversion(rendicion?.ID)}
-          // disabled={
-          //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
-          // }
-          />
-        ) : ""}
+          usuario.rol?.id == "2" ? (
+            <Button
+              label="Revertir Aprobación"
+              size="large"
+              onClick={confirmReversion(rendicion?.ID)}
+            // disabled={
+            //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
+            // }
+            />
+          ) :
+
+            usuario.rol?.id == "3" ? (
+              <Button
+                label="Autorizar Edicion"
+                severity="danger"
+                size="large"
+                onClick={confirmAutorizarReversion(rendicion?.ID)}
+              // disabled={
+              //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+              // }
+              />
+            ) : ""}
       </div>
 
 
