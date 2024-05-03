@@ -31,7 +31,7 @@ export default function FormDT({ editable,
 }) {
   const navigate = useNavigate();
   const { usuario, showError, ruta } = useContext(AppContext);
-
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
 
   const [rendicion, setRendicion] = useState(null)
@@ -95,8 +95,10 @@ export default function FormDT({ editable,
       navigate(ruta + "/rendiciones");
     }
   }
+
   // aceptar
   const accept = () => {
+    console.log("acept")
     EnviarSolicitud();
   };
   // confirmacion 
@@ -177,9 +179,7 @@ export default function FormDT({ editable,
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
         } else {
-          showSuccess(
-            `Se migró a a SAP la rendición con número ${body.DocNum}`
-          );
+          showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum}`);
         }
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones");
@@ -246,9 +246,8 @@ export default function FormDT({ editable,
     });
   };
   return (
-
-
     <>
+      <ConfirmDialog />
       <div className="flex justify-content-between flex-wrap">
         <div className="flex text-2xl align-items-center gap-2">
           <i
