@@ -310,7 +310,12 @@ function FormularioRD() {
       "STR_RAZONSOCIAL": null,
       "STR_DIRECCION": null,
       "detalles": []
-    }
+  }
+
+  function formatDate(dateString) {
+    const [day, month, year] = dateString.split('/').map(Number);
+    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
 
   const updateRD = async () => {
     setLoading(true);
@@ -324,7 +329,7 @@ function FormularioRD() {
         const _detalles = detalle.map((detalle) => ({
             ID: detalle.ID ? detalle.ID : null,
             STR_CODARTICULO: detalle.Cod,
-            STR_SUBTOTAL: detalle.STR_SUBTOTAL,
+            // STR_SUBTOTAL: detalle.STR_SUBTOTAL,
             STR_INDIC_IMPUESTO: detalle.IndImpuesto,
             STR_DIM1:detalle.UnidadNegocio,
             STR_DIM2:detalle.Filial,
@@ -339,12 +344,25 @@ function FormularioRD() {
             STR_PROYECTO:detalle.Proyecto,
             STR_PRECIO:detalle.Precio,
             STR_IMPUESTO:detalle.Impuesto,
+            STR_SUBTOTAL:detalle.Precio*detalle.Cantidad,
         }));
+        let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
         let _documento = {
           ...documento,
-          STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
-          STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
-          STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          ID: id,
+          STR_RENDICION: id,
+          STR_OPERACION: null,
+          STR_PARTIDAFLUJO: null,
+          STR_TOTALDOC: subtotalTotal,
+          STR_RD_ID: id,
+          STR_CANTIDAD: null,
+          STR_FECHA_CONTABILIZA: formatDate(documento.STR_FECHA_CONTABILIZA),
+          STR_FECHA_DOC: formatDate(documento.STR_FECHA_DOC),
+          STR_FECHA_VENCIMIENTO: formatDate(documento.STR_FECHA_VENCIMIENTO),
+          // STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          // STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          // STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          STR_VALIDA_SUNAT: compExisteSunat,
           detalles: _detalles, // Detalles
         };
         console.log("envio: ",_documento);
