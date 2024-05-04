@@ -5,6 +5,8 @@ import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
 import React, { useContext,useRef } from 'react'
 
+
+import * as XLSX from 'xlsx';
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
 
@@ -36,6 +38,7 @@ export default function FormDT({ editable,
   const toast = useRef(null);
 
   const [rendicion, setRendicion] = useState(null)
+  
   async function obtenerData() {
     const response = await obtenerRendicion(id);
     const documentos = response.data.Result[0]?.documentos || [];
@@ -268,6 +271,23 @@ export default function FormDT({ editable,
     });
   };
 
+  const exportExcel = () => {
+    const data = rendicion?.documentos.map((doc) => ({
+      "N° documentado": doc.ID ?? "",
+      "Tipo": doc.STR_TIPO_DOC.name ?? "",
+      "Fecha del Documento": doc.STR_FECHA_DOC ?? "",
+      "Monto Rendido": doc.STR_TOTALDOC ?? "",
+      "Proveedor": doc.STR_PROVEEDOR.CardName ?? "",
+      "Comentario": doc.STR_COMENTARIOS ?? "",
+      // "Estado": doc.ESTADO ?? "",
+    }));
+    const workSheet = XLSX.utils.json_to_sheet(data);
+    const workBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workBook, workSheet, "Sheet1");
+    XLSX.writeFile(workBook, "export.xlsx");
+  };
+
+
   const confirmReversion = (id) => {
     confirmDialog({
       message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
@@ -338,9 +358,9 @@ export default function FormDT({ editable,
             icon="pi pi-upload"
             severity="secondary"
             style={{ backgroundColor: "black" }}
-          // onClick={() => {
-          //     exportExcel();
-          // }}
+          onClick={() => {
+            exportExcel();
+          }}
           />
 
         </div>
