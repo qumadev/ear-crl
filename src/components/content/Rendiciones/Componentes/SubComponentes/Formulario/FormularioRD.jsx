@@ -354,12 +354,12 @@ function FormularioRD() {
           STR_PARTIDAFLUJO: null,
           STR_TOTALDOC: subtotalTotal,
           STR_CANTIDAD: null,
-          STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
-          STR_FECHA_DOC: documento.STR_FECHA_DOC,
-          STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,
-          // STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
-          // STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
-          // STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          //STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
+          //STR_FECHA_DOC: documento.STR_FECHA_DOC,
+          //STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,
+          STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
+          STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_VALIDA_SUNAT: compExisteSunat,
           detalles: _detalles, // Detalles
         };
