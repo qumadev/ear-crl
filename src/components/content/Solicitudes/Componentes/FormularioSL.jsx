@@ -93,33 +93,46 @@ function FormularioSL() {
 
   async function solicitarAprobacion() {
     //setLoadingSkeleton(true);
+    setLoading(true);
     try {
       // const resultado = detalles.reduce((acc, detalle) => {
       let ID;
-      if (solicitudRD.ID == null) {
-        // Si solicitudRD.id es nulo, llama a registrarSR y obtén el id
-        const responseRegistrarSR = await registraRDSolo();
-        //console.log(responseRegistrarSR);
-        ID = responseRegistrarSR;
+      // if (solicitudRD.ID == null) {
+      //   // Si solicitudRD.id es nulo, llama a registrarSR y obtén el id
+      //   const responseRegistrarSR = await registraRDSolo();
+      //   //console.log(responseRegistrarSR);
+      //   ID = responseRegistrarSR;
 
-        if (ID == null) {
-          showError("Se produjo un error al registrar solicitud");
-          console.log("Se produjo un error al registrar solicitud");
-          setLoading(false);
-          return;
-        }
+      //   if (ID == null) {
+      //     showError("Se produjo un error al registrar solicitud");
+      //     console.log("Se produjo un error al registrar solicitud");
+      //     setLoading(false);
+      //     return;
+      //   }
 
-        showSuccess(`Se creó la solicitud con código: ${id}`);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-      } else {
-        ID = solicitudRD.ID;
-      }
+      //   showSuccess(`Se creó la solicitud con código: ${id}`);
+      //   await new Promise((resolve) => setTimeout(resolve, 3000));
+      // } else {
+      //   ID = solicitudRD.ID;
+      // }
 
       // Guardar Borrador
-      if (!esModoRegistrar) {
-        await registrarSR();
+      if (esModoRegistrar) {
+        var res = await createSolicitud(solicitudRD);
+        if (res.status < 300) {
+          let body = res.data.Result[0];
+          console.log("reg: ",body.ID)
+          showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
+          ID = body.ID;
+          //await new Promise((resolve) => setTimeout(resolve, 2000));
+          //navigate(ruta + "/solicitudes");
+        } else {
+          showError("Se tuvo un error al crear la solicitud");
+        }
+      }else{
+        ID = solicitudRD.ID;
       }
-
+      console.log("id: ",ID)
       let presupuestoSuficiente = true;
 
       let response = await enviarSolicitudAproba(ID, {
@@ -143,6 +156,7 @@ function FormularioSL() {
       showError(error.Message);
       console.log(error);
     } finally {
+      setLoading(false);
       // setLoadingSkeleton(false);
     }
   }
@@ -176,7 +190,6 @@ function FormularioSL() {
 
   const registrarSR = async () => {
     setLoading(true);
-
     // let body = obtieneJsonAregistrar();
     try {
       if (id == null) {
@@ -184,21 +197,24 @@ function FormularioSL() {
 
         if (response.status < 300) {
           let body = response.data.Result[0];
-
+          console.log("reg: ",body.ID)
           showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          navigate(ruta + "/solicitudes");
+          setLoading(false);
+          return body.ID;
+          //await new Promise((resolve) => setTimeout(resolve, 2000));
+          //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al crear la solicitud");
         }
+        
       } else {
         var response = await actualizarSolicitud(solicitudRD);
         if (response.status < 300) {
           //let body = response.data.Result[0];
 
           showSuccess(`Se actualizo exitosamente solicitud #${solicitudRD.ID}`);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          navigate(ruta + "/solicitudes");
+          //await new Promise((resolve) => setTimeout(resolve, 2000));
+          //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al actualizar la solicitud");
         }
@@ -616,7 +632,7 @@ function FormularioSL() {
             size="large"
             style={{ backgroundColor: "black", borderColor: "black" }}
             onClick={(e) => {
-              setSolicitando(false);
+              //setSolicitando(false);
               registrarSR();
               // if (esModoRegistrar) {
               //   navigate("/solicitudes");
@@ -631,7 +647,7 @@ function FormularioSL() {
             severity="success"
             size="large"
             onClick={(e) => {
-              setSolicitando(false);
+              //setSolicitando(false);
               confirmAceptacion();
             }}
             loading={loading}
