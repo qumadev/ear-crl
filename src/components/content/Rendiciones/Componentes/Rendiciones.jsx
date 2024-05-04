@@ -36,9 +36,19 @@ function Rendiciones({
   rendiciones,
   setRendiciones,
   filtrado,
-  estados,
   emptyProduct,
 }) {
+
+  
+  const statusBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        className="font-bold"
+        value={rowData.STR_ESTADO_INFO?.name}
+        severity={getSeverity(rowData.STR_ESTADO)}
+      />
+    );
+  };
 
   // const { id } = useParams();
   const navigate = useNavigate();
@@ -153,31 +163,31 @@ function Rendiciones({
 
   const getSeverity = (status) => {
     switch (status) {
-      case 5: "Rechazado SR"
-      case 7: "Error Mig SR"
-      case 12: "Devuelto"
-      case 15: "Rechazado RD"
-      case 17: "Error Mig RD"
+      case 5: 
+      case 7: 
+      case 12: 
+      case 15: 
+      case 17: 
         return "danger";
 
-      case 4: "Autorizado SR"
-      case 6: "Migrado SR"
-      case 8: "Aperturado"
-      case 13: "En Autorización RD"
-      case 14: "Autorizado RD"
-      case 16: "Migrado RD"
-      case 18: "Contabilizado"
-      case 19: "Cerrado"
-      case 11: "Revisado"
+      case 4: 
+      case 6: 
+      case 8: 
+      case 13: 
+      case 14: 
+      case 16: 
+      case 18: 
+      case 19: 
+      case 11: 
         return "success";
 
-      case 1: "Borrador"
-      case 9: "En carga"
-
+      case 1: 
+      case 9: 
         return "info";
-      case 10: "Cargado"
-      case 2: "Pendiente"
-      case 3: "En Autorización SR"
+
+      case 10: 
+      case 2: 
+      case 3: 
         return "warning";
 
       case "renewal":
@@ -752,15 +762,7 @@ function Rendiciones({
     );
   };
 
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        className="font-bold"
-        value={rowData.STR_ESTADO}
-        severity={getSeverity(rowData.STR_ESTADO)}
-      />
-    );
-  };
+
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);

@@ -79,7 +79,7 @@ export const obtenerEstados = (filtro) => {
 };
 
 export const obtenerEstadosRendiciones = (filtro) => {
-  return API.get(`/estado`, {
+  return API.get(`/rendiciones`, {
     validateStatus: function (status) {
       return status < 500;
     },
