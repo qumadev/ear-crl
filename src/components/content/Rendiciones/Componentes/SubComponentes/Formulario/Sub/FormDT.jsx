@@ -190,7 +190,7 @@ export default function FormDT({ editable,
         usuario.branch,
         rendicion.STR_ESTADO,
         rendicion.ID,
-        usuario.SubGerencia
+        usuario.branch
       );
       if (response.status < 300) {
         let body = response.data.Result[0];
