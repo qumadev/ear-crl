@@ -137,7 +137,7 @@ function FormularioRD() {
       // obtenerTipos(),
       obtenerDocumento(id),
     ]);
-    console.log("obt: ",response[0].data.Result[0])
+    console.log("obt: ", response[0].data.Result[0]);
     setDocumento(response[0].data.Result[0])
   }
 
