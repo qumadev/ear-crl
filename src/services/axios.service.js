@@ -78,6 +78,14 @@ export const obtenerEstados = (filtro) => {
   });
 };
 
+export const obtenerEstadosRendiciones = (filtro) => {
+  return API.get(`/estado`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const createSolicitud = (body) => {
   return API.post("/solicitudEar", body, {
     validateStatus: function (status) {
