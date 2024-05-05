@@ -35,38 +35,18 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
 
     const editDetalle = (rowData) => {
-        setDetalleEditar(rowData);
-        setModoEditar("editar");
-        setProductDialog(true);
+        // setDetalleEditar(rowData);
+        // setModoEditar("editar");
+        // setProductDialog(true);
     };
 
-    const confirmDeleteDetalle = (detalle) => {
-        // setDetalle(detalle);
-        // setDeleteProductDialog(true);
+    const confirmDeleteDetalle = () => {
+        setDetDoc(null);
+        setDeleteProductDialog(true);
         console.log("detalle eliminado")
     };
 
-    const actionBodyTemplate = (rowData) => {
-        return (
-            <React.Fragment>
-                <Button
-                    icon="pi pi-pencil"
-                    rounded
-                    outlined
-                    className="mr-2"
-                    onClick={() => editDetalle(rowData)}
-                />
-                <Button
-                    icon="pi pi-trash"
-                    rounded
-                    outlined
-                    severity="danger"
-                    onClick={() => confirmDeleteDetalle(rowData)}
-                    disabled={editable}
-                />
-            </React.Fragment>
-        );
-    };
+
 
 
     //Modificar  esto para edioa6||
@@ -312,10 +292,32 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
+    let emptyProduct = {
+             "ID": null,
+             "STR_CODARTICULO": null,
+             "STR_CONCEPTO": null,
+             "STR_ALMACEN": null,
+             "STR_SUBTOTAL": null,
+             "STR_INDIC_IMPUESTO": null,
+             "STR_DIM1": null,
+             "STR_DIM2": null,
+             "STR_DIM3": null,
+             "STR_DIM4": null,
+             "STR_DIM5": null,
+             "STR_DOC_ID": null,
+             "STR_CANTIDAD": null,
+             "STR_TPO_OPERACION": null
+      };
+
+
     const openNew = () => {
         setProductDialog(true);
-
+        setDetalle(articulos);
     };
+
+    console.log("nuevof",articulos)
+
+
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
@@ -468,8 +470,9 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const quitArticulo = () => { }
 
     const showDoc = () => {
-        console.log("d: ", documento)
-        console.log("a: ", articulos)
+        console.log("nuevaData",articulos)
+        // console.log("d: ", documento)
+        // console.log("a: ", articulos)
     }
 
     // Personalizando campos
@@ -551,6 +554,28 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         </div>
         )
     }
+
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <Button
+                    icon="pi pi-pencil"
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() => editDetalle(rowData)}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => confirmDeleteDetalle(rowData)}
+                    disabled={editable}
+                />
+            </React.Fragment>
+        );
+    };
 
     return (
         <div>
