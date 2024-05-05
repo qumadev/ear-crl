@@ -502,7 +502,7 @@ function Rendiciones({
   const actionBodyver = (rowData) => (
     console.log("log",rowData),
     <Button
-      label="XX"
+      label="Ver"
       icon="pi pi-eye"
       severity="success"
       onClick={() => {
