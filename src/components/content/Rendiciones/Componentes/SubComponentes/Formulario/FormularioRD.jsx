@@ -851,7 +851,12 @@ function FormularioRD() {
               label="Cancelar"
               severity="secondary"
               size="large"
-              onClick={() => navigate(ruta + `/rendiciones/${id}/documentos`)}
+              onClick={() => 
+                esModo==="Agregar" ? 
+                navigate(ruta + "/rendiciones/info/"+id)
+                : 
+                navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID)  
+              }
             />
           </>
         }

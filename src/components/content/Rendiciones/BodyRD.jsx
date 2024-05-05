@@ -142,7 +142,6 @@ function BodyRD() {
       bookType: "xlsx",
       type: "array",
     });
-
     saveAsExcelFile(excelBuffer, "rendiciones");
   };
 

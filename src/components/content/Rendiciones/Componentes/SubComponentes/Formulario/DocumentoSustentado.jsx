@@ -771,20 +771,21 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         { esModoValidate ? "" :
                         <>
                             <Button
-                                className='col-4'
+                                className='col-6'
                                 label="Agregar Detalle"
                                 onClick={openNew}
                             />
-                            <Button
+                            {/* <Button 
                                 className='col-4'
                                 label="Eliminar Seleccionados"
                                 onClick={() => { }}
-                            />
+                            /> */}
                         </> 
                         }
                         <Button
-                            className='col-4'
+                            className='col-6'
                             label="Exportar Detalle"
+                            style={{ backgroundColor: "black", borderColor: "black" }}
                             onClick={() => {
                                 exportExcel();
                             }}
@@ -898,11 +899,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             >
             </FormDetalleDocumento>
 
-            <Button
+            {/* <Button
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            /> 
+            />  */}
             {/* <Button
                 className='col-4'
                 label="Exportar"
