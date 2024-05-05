@@ -641,6 +641,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                     STR_SERIE_DOC: e.target.value,
                                 }));
                             }}
+                            maxLength={4}
                             className='col-6'
                             placeholder='N° de serie'
                             disabled={esModoValidate}
@@ -652,17 +653,22 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             className='col-6'
                             placeholder='Correlativo'
                             value={documento.STR_CORR_DOC}
+                            maxLength={8}
                             onChange={(e) => {
+                                const inputValue = e.target.value;
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_CORR_DOC: e.target.value,
+                                    STR_CORR_DOC: inputValue,
                                 }));
                             }}
-                            // value={numero}
-                            // onChange={handleNumeroChange}
-                            disabled={esModoValidate}
+                            onBlur={() => {
+                                const paddedValue = documento.STR_CORR_DOC.padStart(8, '0'); // Rellenamos con ceros a la izquierda cuando se pierde el foco
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: paddedValue,
+                                }));
+                            }}
                         />
-                        {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
