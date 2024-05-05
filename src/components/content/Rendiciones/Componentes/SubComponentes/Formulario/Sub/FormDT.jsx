@@ -3,7 +3,7 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Toast } from 'primereact/toast';
-import React, { useContext,useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 
 
 import * as XLSX from 'xlsx';
@@ -26,6 +26,7 @@ import { setDate } from 'date-fns';
 import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { FileUpload } from 'primereact/fileupload';
 
 
 export default function FormDT({ editable,
@@ -36,21 +37,35 @@ export default function FormDT({ editable,
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const toast = useRef(null);
-
+  const fileUploadRef = useRef(null);
+  const [excel, setExcel] = useState();
   const [rendicion, setRendicion] = useState(null)
-  
-  async function obtenerData() {
-    const response = await obtenerRendicion(id);
-    const documentos = response.data.Result[0]?.documentos || [];
-    const documentosFormateados = documentos.map(doc => ({
-      ID: doc.ID,
-      STR_TIPO_DOC: doc.STR_TIPO_DOC,
-      STR_FECHA_DOC: doc.STR_FECHA_DOC,
-      STR_TOTALDOC: doc.STR_TOTALDOC,
-      STR_PROVEEDOR: doc.STR_PROVEEDOR,
-      STR_COMENTARIOS: doc.STR_COMENTARIOS,
-    }))
-    setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
+
+  const estadosEditablesUsr = [8, 9, 12];
+
+  async function obtenerData(fresh = false) {
+    if (!fresh) setLoading(true);
+    try {
+      const response = await obtenerRendicion(id);
+      const documentos = response.data.Result[0]?.documentos || [];
+      const documentosFormateados = documentos.map(doc => ({
+        ID: doc.ID,
+        STR_TIPO_DOC: doc.STR_TIPO_DOC,
+        STR_FECHA_DOC: doc.STR_FECHA_DOC,
+        STR_TOTALDOC: doc.STR_TOTALDOC,
+        STR_PROVEEDOR: doc.STR_PROVEEDOR,
+        STR_COMENTARIOS: doc.STR_COMENTARIOS,
+      }))
+
+      setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
+      console.log(rendicion?.STR_ESTADO)
+
+    } catch (error) {
+      showError(error.Message);
+      console.log(error.Message);
+    } finally {
+      if (!fresh) setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -138,16 +153,16 @@ export default function FormDT({ editable,
                     label=""
                     // onClick={() => { }}
                 /> */}
-            <Button
-              className='col-12 md:col-12 lg:col-12'
-              label={"Aceptar aprobación"}
-              size="large"
-              onClick={(e) => {
-                confirmAceptacion();
-              }}
-              loading={loadingBtn}
-              // disabled={validaEditableBtn}
-            />
+          <Button
+            className='col-12 md:col-12 lg:col-12'
+            label={"Aceptar aprobación"}
+            size="large"
+            onClick={(e) => {
+              confirmAceptacion();
+            }}
+            loading={loadingBtn}
+          // disabled={validaEditableBtn}
+          />
         </div>
       </div>
     )
@@ -180,13 +195,13 @@ export default function FormDT({ editable,
       life: 3000,
     });
   };
-  
+
   async function aceptarAprobacionLocal() {
     setLoading(true);
     try {
       let response = await aceptarAprobRendicion(
         rendicion.SOLICITUDRD.ID,
-        usuario.usuarioId,
+        usuario.sapID,
         usuario.branch,
         rendicion.STR_ESTADO,
         rendicion.ID,
@@ -235,7 +250,7 @@ export default function FormDT({ editable,
       if (response.status < 300) {
         //let body = response.data.Result[0];
         // if (body.AprobacionFinalizada == 0) {
-            showSuccess(`Se revertio la aprobacion de la rendición`);
+        showSuccess(`Se revertio la aprobacion de la rendición`);
         // } else {
         //   showSuccess(
         //     `Se migró a a SAP la rendición con número ${body.DocNum}`
@@ -272,6 +287,58 @@ export default function FormDT({ editable,
       //reject,
     });
   };
+
+
+  const handleUpload = (event) => {
+    setLoading(true);
+    const allowedExtensions = ["xlsx"];
+
+    //console.log(event.files);
+
+    try {
+      event.files.forEach(async (file) => {
+        const fileExtension = getFileExtension(file.name);
+        console.log(fileExtension);
+        if (allowedExtensions.includes(fileExtension.toLowerCase())) {
+          let response = await importarPlantilla(file, rendicion.ID);
+
+          if (response.status < 300) {
+            if (response.data.Result.CodRespuesta != "99") {
+              showSuccess("Se agregó exitosamente");
+              obtenerRendicionLocal();
+            } else {
+              showError(response.data.Result.DescRespuesta);
+              setExcel(null);
+              fileUploadRef.current.clear();
+            }
+          } else {
+            showError(response.data);
+            setExcel(null);
+            fileUploadRef.current.clear();
+          }
+        } else {
+          showError(
+            `El archivo ${file.name} no tiene la extensión permitida (.xlsx).`
+          );
+          setExcel(null);
+          fileUploadRef.current.clear();
+        }
+      });
+    } catch (error) {
+      showError("Error interno");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // const validaEditable =
+  //   usuario.rol?.id == 1
+  //     ? !estadosEditablesUsr.includes(rendicion.STR_ESTADO)
+  //     : usuario.TipoUsuario == 3
+  //       ? !estadosEditablesCont.includes(rendicion.STR_ESTADO)
+  //       : true;
+
 
   const exportExcel = () => {
     const data = rendicion?.documentos.map((doc) => ({
@@ -358,9 +425,29 @@ export default function FormDT({ editable,
             icon="pi pi-upload"
             severity="secondary"
             style={{ backgroundColor: "black" }}
-          onClick={() => {
-            exportExcel();
-          }}
+            onClick={() => {
+              exportExcel();
+            }}
+          />
+
+          <FileUpload
+            ref={fileUploadRef}
+            files={excel}
+            mode="basic"
+            name="demo[]"
+            url="/api/upload"
+            accept=".xlsx"
+            customUpload
+            maxFileSize={1000000}
+            uploadHandler={handleUpload}
+            className="justify-content-center text-base"
+            chooseLabel="Importar Plantilla"
+            chooseOptions={{
+              icon: "pi pi-upload",
+            }}
+            progressBarTemplate
+            // disabled={validaEditable}
+            disabled={false}
           />
 
         </div>
@@ -498,11 +585,11 @@ export default function FormDT({ editable,
 
         {/* Botones por rol */}
         {
-          usuario.rol?.id === "2" && rendicion?.STR_ESTADO===10 ? (
+          usuario.rol?.id === "2" && rendicion?.STR_ESTADO === 10 ? (
             <Button
               label="Revertir Aprobación"
               size="large"
-              onClick={()=>confirmReversion(rendicion?.ID)}
+              onClick={() => confirmReversion(rendicion?.ID)}
             // disabled={
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
             // }
@@ -514,7 +601,7 @@ export default function FormDT({ editable,
                 label="Autorizar Edicion"
                 severity="danger"
                 size="large"
-                onClick={()=>confirmAutorizarReversion(rendicion?.ID)}
+                onClick={() => confirmAutorizarReversion(rendicion?.ID)}
               // disabled={
               //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
               // }
