@@ -112,7 +112,7 @@ function FormDetalleDocumento({
         Filial: false,
         Areas: false,
         CentroCosto: false,
-        IndImpuesto: false,
+        //IndImpuesto: false,
         Precio: false,
         Cantidad: false,
         // Impuesto: false
@@ -274,7 +274,6 @@ function FormDetalleDocumento({
                                     IndImpuesto: e.target.value,
                                     Impuesto: e.target.value.name==="IGV" ? (detDoc?.Precio*detDoc?.Cantidad*0.18).toFixed(2) : 0
                                 }));
-                                
                                 console.log("ind: ",e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,

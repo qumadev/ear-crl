@@ -274,7 +274,10 @@ function FormularioRD() {
         var content = response.data.Result[0];
         console.log(`Documento creado con ID: ${content.id}`);
         showSuccess(`Documento creado con ID: ${content.id}`);
-        navigate(ruta + `/rendiciones/${id}/documentos/agregar`);
+        // navigate(ruta + `/rendiciones/${id}/documentos/agregar`);
+        
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        navigate(ruta + "/rendiciones/info/"+id)
       } else {
         showError("Error al crear documento");
       }
@@ -369,6 +372,8 @@ function FormularioRD() {
           var content = response.data.Result[0];
           console.log(`Documento actualizado con ID: ${content.id}`);
           showSuccess(`Documento actualizado con ID: ${content.id}`);
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID);
           //navigate(`/rendiciones/${id}/documentos`);
         } else {
           showError("Error al Actualizar documento");
@@ -692,7 +697,10 @@ function FormularioRD() {
           <i
             className="pi pi-chevron-left cursor-pointer"
             onClick={() => {
-              navigate(ruta + `/rendiciones/info/:id`);
+              esModo==="Agregar" ? 
+                navigate(ruta + "/rendiciones/info/"+id)
+              : 
+                navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID)
             }}
           ></i>
           <div>{esModo==="Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
