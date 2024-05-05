@@ -375,8 +375,6 @@ export const borrarDocumentoDet = (id, docId) => {
   return null;
 };
 
-
-
 export const extraerPlantilla = () => {
   return API.get(`rendicion/documento/plantilla`, {
     validateStatus: function (status) {
@@ -393,7 +391,11 @@ export const importarPlantilla = (file, id) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  return null;
+  return API.post(`rendicion/documento/plantilla/${id}`, formData, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 export const actualizarSntDoc = (id, estado) => {
   return null;
@@ -415,13 +417,13 @@ export const enviarAprobRendicion = (
   areaAprobador
 ) => {
   console.log("body: ", id)
-  console.log("body: ", id,idSolicitud,usuarioId,estado,areaAprobador) 
+  console.log("body: ", id, idSolicitud, usuarioId, estado, areaAprobador)
   return API.post(
     `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,
     {
       validateStatus: function (status) {
-        return status < 
-        500;
+        return status <
+          500;
       },
     }
   );

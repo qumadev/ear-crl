@@ -21,79 +21,60 @@ import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 
 
-function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo }) {
+function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo, editable }) {
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
-    const [esModoValidate] = useState(esModo==="Detalle"?true:false)
+    const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
     const { usuario, ruta, config } = useContext(AppContext);
 
-    // const [documento, setDocumento] = useState(
-    //     {
-    //         ID: null,
-    //         STR_RENDICION: null,
-    //         STR_FECHA_CONTABILIZA: null,
-    //         STR_FECHA_DOC: null,
-    //         STR_FECHA_VENCIMIENTO: null,
-    //         STR_PROVEEDOR: null,
-    //         STR_RUC: null,
-    //         STR_TIPO_AGENTE: null,
-    //         STR_MONEDA: null,
-    //         STR_COMENTARIOS: null,
-    //         STR_TIPO_DOC: null,
-    //         STR_SERIE_DOC: null,
-    //         STR_CORR_DOC: null,
-    //         STR_VALIDA_SUNAT: null,
-    //         STR_ANEXO_ADJUNTO: null,
-    //         STR_OPERACION: null,
-    //         STR_PARTIDAFLUJO: null,
-    //         STR_RD_ID: null,
-    //         STR_TOTALDOC: null,
-    //         STR_RAZONSOCIAL: null,
-    //         DocumentoDet:[
-    //             {
-    //                 Cod: {
-    //                   ItemCode: null,
-    //                   ItemName: null,
-    //                   U_BPP_TIPUNMED: null,
-    //                   WhsCode: null,
-    //                   Stock: 0,
-    //                   Precio: 0
-    //                 },
-    //                 Concepto: null,
-    //                 Almacen: null,
-    //                 Proyecto: null,
-    //                 UnidadNegocio: null,
-    //                 Filial: null,
-    //                 Areas: null,
-    //                 CentroCosto: null,
-    //                 IndImpuesto: null,
-    //                 Precio: 0,
-    //                 Cantidad: 0,
-    //                 Impuesto: 0
-    //               }
-    //         ]
-    //     }
+    const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+    const [visibleEditar, setVisibleEditar] = useState(false);
+    const [detalleEditar, setDetalleEditar] = useState(null);
+    const [modoEditar, setModoEditar] = useState("agregar");
 
-    // );
 
-    const actionBodyTemplate = (rowData) => {
+
+    const editDetalle = (rowData) => {
+        // setDetalleEditar(rowData);
+        // setModoEditar("editar");
+        // setProductDialog(true);
+    };
+
+    const confirmDeleteDetalle = () => {
+        setDetDoc(null);
+        setDeleteProductDialog(true);
+        console.log("detalle eliminado")
+    };
+
+
+
+
+    //Modificar  esto para edioa6||
+    const actionBodyTemplate1 = (rowData) => {
         const items = [
             {
-                label: "Ver",
+                label: "Editar",
                 icon: "pi pi-eye",
                 command: async () => {
-                    try {
-                        if (rowData.STR_ESTADO == 8) {
-                            await actualizarRendiEnCarga(rowData);
-                            await new Promise((resolve) => setTimeout(resolve, 5000));
-                        }
-                    } catch (error) {
-                    } finally {
-                        // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                        console.log("entra")
-                        navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                    }
-                },
+                    console.log("logdata",)
+                    editDetalle(articles)
+                }
+                // command: async () => {
+                //     try {
+                //         if (rowData.STR_ESTADO == 8) {
+                //             await actualizarRendiEnCarga(rowData);
+                //             await new Promise((resolve) => setTimeout(resolve, 5000));
+                //         }
+                //     } catch (error) {
+                //     } finally {
+                //         sw
+
+
+                //         // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                //         // console.log("entra")
+                //         // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                //     }
+                // },
             },
         ];
 
@@ -311,9 +292,32 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
+    let emptyProduct = {
+             "ID": null,
+             "STR_CODARTICULO": null,
+             "STR_CONCEPTO": null,
+             "STR_ALMACEN": null,
+             "STR_SUBTOTAL": null,
+             "STR_INDIC_IMPUESTO": null,
+             "STR_DIM1": null,
+             "STR_DIM2": null,
+             "STR_DIM3": null,
+             "STR_DIM4": null,
+             "STR_DIM5": null,
+             "STR_DOC_ID": null,
+             "STR_CANTIDAD": null,
+             "STR_TPO_OPERACION": null
+      };
+
+
     const openNew = () => {
         setProductDialog(true);
+        setDetalle(articulos);
     };
+
+    console.log("nuevof",articulos)
+
+
 
     const [selectedMoneda, setSelectedMoneda] = useState(null);
     const [selectedTipo, setSelectedTipo] = useState(null);
@@ -335,9 +339,9 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const [articulos, setArticulos] = useState([])
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         setDetalle(articulos);
-    },[articulos])
+    }, [articulos])
 
     async function obtenerData() {
         const response = await Promise.all([
@@ -353,11 +357,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             obtenerUnidadNegocio()
         ]);
         const dataafectacion = [
-            { 
+            {
                 id: '1',
                 name: 'Retencion'
             },
-            { 
+            {
                 id: '2',
                 name: 'Detraccion'
             }
@@ -374,7 +378,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         setUnidNegocios(response[8].data.Result)
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         if (detalles && detalles.length > 0) {
             const articles = detalles.map((detalle) => ({
                 ID: detalle.ID ? detalle.ID : null,
@@ -397,11 +401,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             }));
             // Actualizamos el estado articulos con el nuevo array de objetos personalizados
             setArticulos(articles);
-        }else{
+        } else {
             setArticulos([]);
         }
-       
-    },[detalles])
+
+    }, [detalles])
 
     useEffect(() => {
         obtenerData();
@@ -409,8 +413,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
-    useEffect( () => {
-        console.log("doc3: ",documento)
+    useEffect(() => {
+        console.log("doc3: ", documento)
     }, [documento])
 
     const monedas = [
@@ -466,10 +470,11 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const quitArticulo = () => { }
 
     const showDoc = () => {
-        console.log("d: ", documento)
-        console.log("a: ", articulos)
+        console.log("nuevaData",articulos)
+        // console.log("d: ", documento)
+        // console.log("a: ", articulos)
     }
-    
+
     // Personalizando campos
     const transformDataForExport = (articulos) => {
         return articulos.map((articulo) => {
@@ -530,7 +535,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
             );
         }
     };
-    
+
     const leftToolbarTemplate = () => {
         return (<div className="">
             <div className="col-12 md:col-6 lg:col-12">
@@ -549,6 +554,28 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         </div>
         )
     }
+
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <Button
+                    icon="pi pi-pencil"
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() => editDetalle(rowData)}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => confirmDeleteDetalle(rowData)}
+                    disabled={editable}
+                />
+            </React.Fragment>
+        );
+    };
 
     return (
         <div>
@@ -594,7 +621,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                         ...prevState,
                                         STR_TIPO_DOC: e.target.value,
                                     }));
-                                    console.log("value: ",e.target.value)
+                                    console.log("value: ", e.target.value)
                                 }}
                             options={tipos}
                             optionLabel="name"
@@ -631,9 +658,9 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                     STR_CORR_DOC: e.target.value,
                                 }));
                             }}
-                        // value={numero}
-                        // onChange={handleNumeroChange}
-                        disabled={esModoValidate}
+                            // value={numero}
+                            // onChange={handleNumeroChange}
+                            disabled={esModoValidate}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -754,13 +781,13 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <InputTextarea
                             value={documento.STR_COMENTARIOS}
                             onChange={
-                            (e) => {
-                                // setSelectedTipo(e.value.value);
-                                setDocumento((prevState) => ({
-                                    ...prevState,
-                                    STR_COMENTARIOS: e.target.value,
-                                }));
-                            }}
+                                (e) => {
+                                    // setSelectedTipo(e.value.value);
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_COMENTARIOS: e.target.value,
+                                    }));
+                                }}
                             className='col-6'
                             rows={5}
                             cols={30}
@@ -792,6 +819,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         />
                     </div>
                     <Divider />
+
                     <DataTable
                         value={articulos}
                         sortMode="multiple"
@@ -804,7 +832,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                         <Column
                             header="N°"
                             headerStyle={{ width: "3rem" }}
-                            body={actionBodyTemplate}
+                            body={(data, options) => options.rowIndex + 1}
+
                         >
                         </Column>
                         <Column
@@ -872,6 +901,13 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             header="Impuesto"
                             style={{ minWidth: "7rem" }}
                         ></Column>
+                        <Column
+                            header="Acciones"
+                            headerStyle={{ width: "3rem" }}
+                            body={actionBodyTemplate}
+                        >
+
+                        </Column>
                     </DataTable>
                     {/* { esModoDetail ? "" :
                         // <Button
@@ -883,11 +919,19 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 </div>
             </div>
             <FormDetalleDocumento
+
+                visible={visibleEditar}
+                setVisible={setVisibleEditar}
+                detalle={detalleEditar}
+                modo={modoEditar}
+
+
                 documento={documento}
                 setDocumento={setDocumento}
                 articulos={articulos}
                 setArticulos={setArticulos}
                 productDialog={productDialog}
+                deleteProductDialog={deleteProductDialog}
                 setProductDialog={setProductDialog}
                 articles={articles}
                 filial={filial}

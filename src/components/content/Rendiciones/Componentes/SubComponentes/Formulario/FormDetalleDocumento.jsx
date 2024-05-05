@@ -19,7 +19,9 @@ function FormDetalleDocumento({
     areas,
     centroCostos,
     unidNegocios,
-    indImpuestos
+    indImpuestos,
+    visible, setVisible
+
 }) {
 
     const [article, setArticle] = useState(null);
@@ -130,15 +132,24 @@ function FormDetalleDocumento({
         }
         return true;
     };
+
+
+
     return (
         <div>
             <Dialog
                 visible={productDialog}
+
+                
                 onHide={() => (
                     setProductDialog(false),
-                    setDetDoc(null)
+                    setDetDoc(null),
+                    setVisible(false)
+                  
+
                 )}
                 style={{ width: '50vw' }} 
+
             >
                 <h2>Agregar Detalle:</h2>
                 <div className="col-12 md:col-6 lg:col-12">
