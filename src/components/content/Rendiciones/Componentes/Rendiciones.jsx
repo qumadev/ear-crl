@@ -14,6 +14,7 @@ import {
   autorizarReversionAprobRendicion,
   enviarAprobRendicion,
   listarRendiciones,
+  obtenerEstadosRendiciones,
   obtenerRendicion,
   rechazarAprobRendicion,
   reintentarRendi,
@@ -35,9 +36,19 @@ function Rendiciones({
   rendiciones,
   setRendiciones,
   filtrado,
-  estados,
   emptyProduct,
 }) {
+
+  
+  const statusBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        className="font-bold"
+        value={rowData.STR_ESTADO_INFO?.name}
+        severity={getSeverity(rowData.STR_ESTADO)}
+      />
+    );
+  };
 
   // const { id } = useParams();
   const navigate = useNavigate();
@@ -152,36 +163,51 @@ function Rendiciones({
 
   const getSeverity = (status) => {
     switch (status) {
-      case 5:
-      case 7:
-      case 12:
-      case 15:
-      case 17:
+      case 5: 
+      case 7: 
+      case 12: 
+      case 15: 
+      case 17: 
         return "danger";
 
-      case 4:
-      case 6:
-      case 8:
-      case 13:
-      case 14:
-      case 16:
-      case 18:
-      case 19:
-      case 11:
+      case 4: 
+      case 6: 
+      case 8: 
+      case 13: 
+      case 14: 
+      case 16: 
+      case 18: 
+      case 19: 
+      case 11: 
         return "success";
 
-      case 1:
-      case 9:
+      case 1: 
+      case 9: 
         return "info";
-      case 10:
-      case 2:
-      case 3:
+
+      case 10: 
+      case 2: 
+      case 3: 
         return "warning";
 
       case "renewal":
         return null;
     }
   };
+
+  const [estados,setEstados] = useState([])
+  async function obtenerEstadosLocalR() {
+    let response = await obtenerEstadosRendiciones();
+    let body = response.data.Result;
+
+    setEstados(response.data.Result);
+  }
+
+
+
+  useEffect(() => {
+    obtenerEstadosLocalR();
+  }, []);
 
   async function actualizarRendiEnCarga(body) {
     try {
@@ -476,7 +502,7 @@ function Rendiciones({
   const actionBodyver = (rowData) => (
     console.log("log",rowData),
     <Button
-      label="ver"
+      label="Ver"
       icon="pi pi-eye"
       severity="success"
       onClick={() => {
@@ -486,7 +512,6 @@ function Rendiciones({
         )
       }}
     />
-
   )
 
   const actionBodyTemplate = (rowData) => {
@@ -737,15 +762,7 @@ function Rendiciones({
     );
   };
 
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        className="font-bold"
-        value={rowData.STR_ESTADO}
-        severity={getSeverity(rowData.STR_ESTADO)}
-      />
-    );
-  };
+
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);

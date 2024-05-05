@@ -44,7 +44,7 @@ function FormDetalleDocumento({
         "Filial": null,
         "Areas": null,
         "CentroCosto": null,
-        "IndImpuesto": null,
+        "IndImpuesto": {id: 'IGV', name: 'IGV'},
         "Precio": null,
         "Cantidad": null,
         "Impuesto": null
@@ -114,7 +114,7 @@ function FormDetalleDocumento({
         Filial: false,
         Areas: false,
         CentroCosto: false,
-        IndImpuesto: false,
+        //IndImpuesto: false,
         Precio: false,
         Cantidad: false,
         // Impuesto: false
@@ -282,8 +282,10 @@ function FormDetalleDocumento({
                                 setIndImp(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: e.target.value
+                                    IndImpuesto: e.target.value,
+                                    Impuesto: e.target.value.name==="IGV" ? (detDoc?.Precio*detDoc?.Cantidad*0.18).toFixed(2) : 0
                                 }));
+                                console.log("ind: ",e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     IndImpuesto: Boolean(e.target.value)

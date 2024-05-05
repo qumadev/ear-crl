@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
-import Filtrado from "../Solicitudes/Componentes/subcomponentes/Filtrado";
 import HeaderRD from "./Componentes/HeaderRD";
+import Filtrado from "../Solicitudes/Componentes/subcomponentes/Filtrado";
 import Rendiciones from "./Componentes/Rendiciones";
 import { obtenerEstados } from "../../../services/axios.service";
 import { AppContext } from "../../../App";
@@ -89,6 +89,19 @@ function BodyRD() {
               },
             ],
   });
+  
+  // Mapear los números de ID a los nombres de estados
+  const estadoIdANombre = (id) => {
+    const estadoEncontrado = filtrado.estados.find((estado) => estado.Id === id);
+    return estadoEncontrado ? estadoEncontrado.Nombre : "Estado Desconocido";
+  };
+  
+  // Dentro del componente, donde uses los nombres de estado en lugar de los IDs, puedes usar esta función
+  // Por ejemplo:
+  {filtrado.estados.map((estado) => (
+    <div key={estado.Id}>{estadoIdANombre(estado.Id)}</div>
+  ))}
+  
 
   /* Obtiene Estados */
   async function obtenerEstadosLocal() {
