@@ -41,8 +41,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     };
 
     const confirmDeleteDetalle = () => {
-        setDetDoc(null);
-        setDeleteProductDialog(true);
+        //setDetDoc(null);
+        //setDeleteProductDialog(true);
         console.log("detalle eliminado")
     };
 
@@ -312,10 +312,10 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     const openNew = () => {
         setProductDialog(true);
-        setDetalle(articulos);
+        //setDetalle(articulos);
     };
 
-    console.log("nuevof",articulos)
+    //console.log("nuevof",articulos)
 
 
 
@@ -413,9 +413,9 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
-    useEffect(() => {
-        console.log("doc3: ", documento)
-    }, [documento])
+    // useEffect(() => {
+    //     console.log("doc3: ", documento)
+    // }, [documento])
 
     const monedas = [
         { id: 'SOL', name: 'SOL' },
