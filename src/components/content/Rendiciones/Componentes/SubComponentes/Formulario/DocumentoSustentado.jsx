@@ -21,7 +21,16 @@ import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 
 
-function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, moneda, esModo, editable }) {
+function DocumentoSustentado({
+     documento, 
+     setDocumento,
+      detalles, 
+      setDetalle,
+       moneda, 
+       esModo,
+        editable,
+        showError
+    }) {
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
     const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -37,16 +46,19 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const editDetalle = (rowData) => {
         // setDetalleEditar(rowData);
         // setModoEditar("editar");
-        // setProductDialog(true);
-    };
-
-    const confirmDeleteDetalle = () => {
-        //setDetDoc(null);
-        //setDeleteProductDialog(true);
-        console.log("detalle eliminado")
+        setProductDialog(true);
     };
 
 
+
+    const deleteProduct = async (rowData) => {
+ 
+    
+        const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        setArticulos(updatedArticulos);
+        
+    };
+    
 
 
     //Modificar  esto para edioa6||
@@ -292,22 +304,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
-    let emptyProduct = {
-             "ID": null,
-             "STR_CODARTICULO": null,
-             "STR_CONCEPTO": null,
-             "STR_ALMACEN": null,
-             "STR_SUBTOTAL": null,
-             "STR_INDIC_IMPUESTO": null,
-             "STR_DIM1": null,
-             "STR_DIM2": null,
-             "STR_DIM3": null,
-             "STR_DIM4": null,
-             "STR_DIM5": null,
-             "STR_DOC_ID": null,
-             "STR_CANTIDAD": null,
-             "STR_TPO_OPERACION": null
-      };
+    
 
 
     const openNew = () => {
@@ -317,12 +314,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
 
     //console.log("nuevof",articulos)
 
-
-
-    const [selectedMoneda, setSelectedMoneda] = useState(null);
-    const [selectedTipo, setSelectedTipo] = useState(null);
-    const [selectedMotivo, setSelectedMotivo] = useState(null);
-    // const [selectedProveedor, setSelectedProveedor] = useState(null);
 
     const [tipos, setTipos] = useState(null);
     const [afectacion, setAfectacion] = useState(null);
@@ -334,8 +325,8 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     const [areas, setAreas] = useState(null);
     const [centroCostos, setCentroCostos] = useState(null);
     const [unidNegocios, setUnidNegocios] = useState(null);
-
-    const [razon, setRazon] = useState(null);
+    const [editing, setEditing] = useState(false);
+   
     const [articulos, setArticulos] = useState([])
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
@@ -410,6 +401,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
     useEffect(() => {
         obtenerData();
         setDocumentoDet(articulos);
+        
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
@@ -427,7 +419,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         { id: 'EXO', name: 'EXO' },
     ];
 
-    const [proveedor, handleChangeProveedor] = useState(null);
 
     const selectedOptionTemplate = (option, props) => {
         if (option) {
@@ -554,23 +545,37 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
         </div>
         )
     }
+    const [rowData, setRowData] = useState(null); // Define rowData state
 
+    const editDetallep = (rowData) => {
+
+      setRowData(rowData); // Update rowData state
+      console.log("f",rowData)
+    setProductDialog(true);
+    setEditing(true);
+    };
+    // const editDetallep = (detalles) => {
+    //     setDetalle({ ...detalles });
+    //     console.log(...detalles)
+    //     setProductDialog(true);
+    //   };
+    
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-                <Button
-                    icon="pi pi-pencil"
-                    rounded
-                    outlined
-                    className="mr-2"
-                    onClick={() => editDetalle(rowData)}
-                />
+       <Button
+        icon={rowData.id? "pi pi-pencil" : "pi pi-plus"}
+        rounded
+        outlined
+        className="mr-2"
+        onClick={() => editDetallep(rowData)}
+      />
                 <Button
                     icon="pi pi-trash"
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => confirmDeleteDetalle(rowData)}
+                    onClick={() => deleteProduct(rowData)}
                     disabled={editable}
                 />
             </React.Fragment>
@@ -641,7 +646,6 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                     STR_SERIE_DOC: e.target.value,
                                 }));
                             }}
-                            maxLength={4}
                             className='col-6'
                             placeholder='N° de serie'
                             disabled={esModoValidate}
@@ -653,22 +657,17 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                             className='col-6'
                             placeholder='Correlativo'
                             value={documento.STR_CORR_DOC}
-                            maxLength={8}
                             onChange={(e) => {
-                                const inputValue = e.target.value;
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_CORR_DOC: inputValue,
+                                    STR_CORR_DOC: e.target.value,
                                 }));
                             }}
-                            onBlur={() => {
-                                const paddedValue = documento.STR_CORR_DOC.padStart(8, '0'); // Rellenamos con ceros a la izquierda cuando se pierde el foco
-                                setDocumento((prevState) => ({
-                                    ...prevState,
-                                    STR_CORR_DOC: paddedValue,
-                                }));
-                            }}
+                            // value={numero}
+                            // onChange={handleNumeroChange}
+                            disabled={esModoValidate}
                         />
+                        {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
@@ -774,7 +773,7 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                                     // setSelectedTipo(e.value.value);
                                     setDocumento((prevState) => ({
                                         ...prevState,
-                                        STR_FECHA_DOC: e.target.value,
+                                        STR_FECHA_DOC: e.value,
                                     }));
                                 }}
                             //dateFormat="dd/mm/yyyy"
@@ -929,9 +928,10 @@ function DocumentoSustentado({ documento, setDocumento, detalles, setDetalle, mo
                 visible={visibleEditar}
                 setVisible={setVisibleEditar}
                 detalle={detalleEditar}
-                modo={modoEditar}
-
-
+                editing={editing}
+                onEdit={editDetallep}
+                setEditing={setEditing}
+                selectedRowData={rowData}
                 documento={documento}
                 setDocumento={setDocumento}
                 articulos={articulos}
