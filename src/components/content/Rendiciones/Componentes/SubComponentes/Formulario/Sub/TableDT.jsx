@@ -128,41 +128,30 @@ export default function TableDT({
                         headerStyle={{ width: "3rem" }}
                         body={(data, options) => options.rowIndex + 1}
                     ></Column>
-
                     <Column
-
                         header="N° documentado"
                         field="ID"
                         style={{ width: "3rem" }}
-                        
                     ></Column>
-
                     <Column
                         field='STR_TIPO_DOC.name'
                         header="Tipo"
                         style={{ width: "3rem" }}
-                        
                     ></Column>
-
                     <Column
                         field='STR_FECHA_DOC'
                         header="Fecha del Documento"
                         style={{ width: "3rem" }}
-                        
                     ></Column>
-
                     <Column
                         field='STR_TOTALDOC'
                         header="Monto Rendido"
-
                         style={{ width: "3rem" }}
-                        
                     ></Column>
                     <Column
                         field='STR_PROVEEDOR.CardName'
                         header="Proveedor"
                         style={{ width: "3rem" }}
-                        
                     ></Column>
                     <Column
                         field='STR_COMENTARIOS'

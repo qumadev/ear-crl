@@ -19,7 +19,9 @@ function FormDetalleDocumento({
     areas,
     centroCostos,
     unidNegocios,
-    indImpuestos
+    indImpuestos,
+    visible, setVisible
+
 }) {
 
     const [article, setArticle] = useState(null);
@@ -42,7 +44,7 @@ function FormDetalleDocumento({
         "Filial": null,
         "Areas": null,
         "CentroCosto": null,
-        "IndImpuesto": null,
+        "IndImpuesto": {id: 'IGV', name: 'IGV'},
         "Precio": null,
         "Cantidad": null,
         "Impuesto": null
@@ -112,7 +114,7 @@ function FormDetalleDocumento({
         Filial: false,
         Areas: false,
         CentroCosto: false,
-        IndImpuesto: false,
+        //IndImpuesto: false,
         Precio: false,
         Cantidad: false,
         // Impuesto: false
@@ -130,15 +132,24 @@ function FormDetalleDocumento({
         }
         return true;
     };
+
+
+
     return (
         <div>
             <Dialog
                 visible={productDialog}
+
+                
                 onHide={() => (
                     setProductDialog(false),
-                    setDetDoc(null)
+                    setDetDoc(null),
+                    setVisible(false)
+                  
+
                 )}
                 style={{ width: '50vw' }} 
+
             >
                 <h2>Agregar Detalle:</h2>
                 <div className="col-12 md:col-6 lg:col-12">
@@ -271,8 +282,10 @@ function FormDetalleDocumento({
                                 setIndImp(e.value)
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: e.target.value
+                                    IndImpuesto: e.target.value,
+                                    Impuesto: e.target.value.name==="IGV" ? (detDoc?.Precio*detDoc?.Cantidad*0.18).toFixed(2) : 0
                                 }));
+                                console.log("ind: ",e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     IndImpuesto: Boolean(e.target.value)
