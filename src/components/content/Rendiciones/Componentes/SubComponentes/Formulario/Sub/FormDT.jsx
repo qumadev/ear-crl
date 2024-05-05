@@ -138,12 +138,12 @@ export default function FormDT({ editable,
             label="Guardar Borrador"
           /> */}
           <Button
-            className='col-12 md:col-12 lg:col-12'
+            className='mr-2'
             label={"Solicitar Aprobación"}
+            size="large"
             onClick={(e) => {
               ValidacionEnvio();
             }}
-
           // loading={loadingBtn}
           // disabled={validaEditable}
           />
@@ -154,7 +154,6 @@ export default function FormDT({ editable,
                     // onClick={() => { }}
                 /> */}
           <Button
-            className='col-12 md:col-12 lg:col-12'
             label={"Aceptar aprobación"}
             size="large"
             onClick={(e) => {
