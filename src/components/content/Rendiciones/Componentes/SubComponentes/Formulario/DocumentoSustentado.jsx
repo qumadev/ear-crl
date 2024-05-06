@@ -652,6 +652,7 @@ function DocumentoSustentado({
                             }}
                             className='col-6'
                             placeholder='N° de serie'
+                            maxLength={4}
                             disabled={esModoValidate}
                         />
                     </div>
@@ -660,18 +661,26 @@ function DocumentoSustentado({
                         <InputText
                             className='col-6'
                             placeholder='Correlativo'
+                            maxLength={8}
                             value={documento.STR_CORR_DOC}
                             onChange={(e) => {
+                                const inputValue = e.target.value;
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_CORR_DOC: e.target.value,
+                                    STR_CORR_DOC: inputValue,
+                                }));
+                            }}
+                            onBlur={() => {
+                                const paddedValue = documento.STR_CORR_DOC.padStart(8, '0'); // Rellenamos con ceros a la izquierda cuando se pierde el foco
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: paddedValue,
                                 }));
                             }}
                             // value={numero}
                             // onChange={handleNumeroChange}
                             disabled={esModoValidate}
                         />
-                        {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
