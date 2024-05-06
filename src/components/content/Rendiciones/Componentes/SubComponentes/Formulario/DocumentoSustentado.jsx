@@ -355,6 +355,10 @@ function DocumentoSustentado({
             {
                 id: '2',
                 name: 'Detraccion'
+            },
+            {
+                id: '3',
+                name: '-'
             }
         ];
         setAfectacion(dataafectacion)
