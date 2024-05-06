@@ -4,7 +4,8 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Toast } from "primereact/toast";
 
 function FormDetalleDocumento({
     documento,
@@ -27,7 +28,7 @@ function FormDetalleDocumento({
     onEdit
 
 }) {
-
+    
     const [article, setArticle] = useState(null);
     const [proyecto, setProyecto] = useState(null);
     const [area, setArea] = useState(null);
@@ -39,124 +40,164 @@ function FormDetalleDocumento({
     const [cantidad, setCantidad] = useState(null);
     const [impuesto, setImpuesto] = useState(null);
 
-    // const [detDoc, setDetDoc] = useState({
-    //     ...selectedRowData,
-    //     Cod: selectedRowData?.Cod || null,
-    //     Proyecto: selectedRowData?.Proyecto || null,
-    //     UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-    //     Filial: selectedRowData?.Filial || null,
-    //     Areas: selectedRowData?.Areas || null,
-    //     CentroCosto: selectedRowData?.CentroCosto || null,
-    //     IndImpuesto: selectedRowData?.IndImpuesto || null,
-    //     Precio: selectedRowData?.Precio || null,
-    //     Cantidad: selectedRowData?.Cantidad || null,
-    //     Impuesto: selectedRowData?.Impuesto || null
-    // });
+    const toast = useRef(null);
+    const showSuccess = (mensaje) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Exitoso",
+          detail: mensaje,
+          life: 3000,
+        });
+    };
+
+    const showError = (mensaje) => {
+    toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: mensaje,
+        life: 3000,
+    });
+    };
 
     const [detDoc, setDetDoc] = useState({
-        "Cod": null,
-        "Concepto": null,
-        "Almacen": null,
-        "Proyecto": null,
-        "UnidadNegocio": null,
-        "Filial": null,
-        "Areas": null,
-        "CentroCosto": null,
-        "IndImpuesto": {id: 'IGV', name: 'IGV'},
-        "Precio": null,
-        "Cantidad": null,
-        "Impuesto": null
-    });
-
-
-    // useEffect(() => {
-    //     if (editing && selectedRowData) {
-    //         setDetDoc({
-    //             ...selectedRowData,
-    //             Cod: selectedRowData?.Cod || null,
-    //             Proyecto: selectedRowData?.Proyecto || null,
-    //             UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-    //             Filial: selectedRowData?.Filial || null,
-    //             Areas: selectedRowData?.Areas || null,
-    //             CentroCosto: selectedRowData?.CentroCosto || null,
-    //             IndImpuesto: selectedRowData?.IndImpuesto || null,
-    //             Precio: selectedRowData?.Precio || null,
-    //             Cantidad: selectedRowData?.Cantidad || null,
-    //             Impuesto: selectedRowData?.Impuesto || null
-    //         });
-    //     }
-    // }, [editing, selectedRowData]);
-
-
-    const selectedOptionTemplate = (option, props) => {
+        Cod:null,
+        Concepto: null,
+        Almacen: null,
+        Proyecto: null,
+        UnidadNegocio: null,
+        Filial: null,
+        Areas: null,
+        CentroCosto: null,
+        IndImpuesto:null,
+        Precio: null,
+        Cantidad: null,
+        Impuesto: null,
+      });
+ 
+      useEffect(() => {
+        if (editing && selectedRowData) {
+          setDetDoc({
+           ...selectedRowData,
+            Cod:  selectedRowData?.Cod||null,
+            // Concepto: selectedRowData?.Concepto || null,
+            // Almacen: selectedRowData?.Almacen || null,
+            Proyecto: selectedRowData?.Proyecto || null,
+            UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+            Filial: selectedRowData?.Filial || null,
+            Areas: selectedRowData?.Areas || null,
+            CentroCosto: selectedRowData?.CentroCosto || null,
+            IndImpuesto: selectedRowData?.IndImpuesto || null,
+            Precio: selectedRowData?.Precio || null,
+            Cantidad: selectedRowData?.Cantidad || null,
+            Impuesto: selectedRowData?.Impuesto || null,
+          });
+        }else{
+            setDetDoc({
+                "Cod": null,
+                "Concepto": null,
+                "Almacen": null,
+                "Proyecto": null,
+                "UnidadNegocio": null,
+                "Filial": null,
+                "Areas": null,
+                "CentroCosto": null,
+                "IndImpuesto": {id: 'IGV', name: 'IGV (18%)'},
+                "Precio": null,
+                "Cantidad": null,
+                "Impuesto": null
+            })
+        }
+      }, [editing, selectedRowData]);
+    
+      const selectedOptionTemplate = (option, props) => {
         if (option) {
-            return (
-                <div>{option.ItemCode}</div>
-            );
+          return <div>{option.ItemCode}</div>;
         }
-
+    
         return <span>{props.placeholder}</span>;
-    };
-
-    const complementoOptionTemplate = (option) => {
+      };
+    
+      const complementoOptionTemplate = (option) => {
         return (
-            <div>
-                {option.ItemCode} - {option.ItemName}
-            </div>
+          <div>
+            {option.ItemCode} - {option.ItemName}
+          </div>
         );
-    };
-
-    const addDetDoc = () => {
+      };
+    
+      const addDetDoc = () => {
         if (validarCampos()) {
-            setArticulos([...articulos, detDoc]);
-            // setDocumento(prevState => ({
-            //     ...prevState,
-            //     DocumentoDet: articulos
-            // }))
-            // setDocumento([...documento,documento.DocumentoDet])
-            setProductDialog(false)
-            setDetDoc(null)
-        } else {
-            alert('Por favor complete todos los campos requeridos.');
-        }
-    }
+          setArticulos([...articulos, detDoc]);
+          setDocumento((prevState) => ({
+           ...prevState,
+            DocumentoDet: articulos,
+          }));
+          setProductDialog(false);
+          setDetDoc(null);
+          showSuccess(`Detalle agregado correctamente`);
 
-    const [campoValido, setCampoValido] = useState({
+          //alert('Detalle agregado correctamente');
+        } else {
+            showError(`Por favor complete todos los campos requeridos.`);
+          //alert('Por favor complete todos los campos requeridos.');
+        }
+      };
+    
+      const [campoValido, setCampoValido] = useState({
         Cod: false,
         Proyecto: false,
         UnidadNegocio: false,
         Filial: false,
         Areas: false,
         CentroCosto: false,
-        //IndImpuesto: false,
         Precio: false,
         Cantidad: false,
-        // Impuesto: false
-    });
-
-    const validarCampos = () => {
+      });
+    
+    //   const onEdit = (detDoc) => {
+    //     setDocumento((prevState) => ({
+    //      ...prevState,
+    //       DocumentoDet: prevState.DocumentoDet.map((item) =>
+    //         item.Cod === detDoc.Cod? detDoc : item
+    //       ),
+    //     }));
+    //   };
+    
+      const validarCampos = () => {
         for (let campo in campoValido) {
-            if (!detDoc[campo]) {
-                setCampoValido(prevState => ({
-                    ...prevState,
-                    [campo]: false
-                }));
-                return false;
-            }
+          if (!detDoc[campo]) {
+            setCampoValido((prevState) => ({
+             ...prevState,
+              [campo]: false,
+            }));
+            return false;
+          }
         }
         return true;
-    };
+      };
+    
+      const handleEdit = () => {
+        if (validarCampos()) {
+          setEditing(false);
+          setArticulos((prevState) =>
+          
+            //prevState.map((item) => (item.Proyecto === detDoc.Proyecto? detDoc : item)),
+            prevState.map((item) => (item.ID === detDoc.ID? detDoc : item)),
+            console.log(detDoc)
+          ); 
+            onEdit(detDoc);
+            setProductDialog(false);
+            showSuccess(`Detalle editado correctamente`);
 
-    const handleEdit = () => {
-        setEditing(true);
-        setArticulos((prevState) =>
-          prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
-        );
-        onEdit(detDoc);
-        setProductDialog(false);
+            //alert('Detalle editado correctamente');
+        } else {
+            showError(`Por favor complete todos los campos requeridos.`);
+            //alert('Por favor complete todos los campos requeridos.');
+        }
       };
     return (
         <div>
+            <Toast ref={toast} />
             <Dialog
                 visible={productDialog}
                 header={editing ? "Editar Detalle" : "Agregar Detalle"}
@@ -184,6 +225,8 @@ function FormDetalleDocumento({
                                     Concepto: e.target.value.ItemName,
                                     Almacen: e.target.value.WhsCode
                                 }));
+                                console.log(e.target.value),
+
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     Cod: Boolean(e.target.value)
@@ -317,6 +360,7 @@ function FormDetalleDocumento({
                             optionLabel="name"
                             placeholder='Seleccione Ind. Impuesto'
                         />
+                        { console.log("opcigv: ",indImpuestos)}
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
                             value={detDoc?.Precio}
@@ -361,19 +405,23 @@ function FormDetalleDocumento({
                             }}
                             disabled
                         />
-                        <Button
+                        {editing ?
+                            <Button
+                                className="col-12"
+                                label="Editar"
+                                onClick={handleEdit}
+                            />  
+                            :
+                            <Button
                             className='col-12'
                             // label="Agregar"
-                            label={editing ? "Editar" : "Agregar"}
+                            label="Agregar"
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
-                        />
-                        <Button
-                            className="col-12"
-                            label="Editar"
-                            onClick={handleEdit}
-                            disabled={!selectedRowData}
-                        />
+                            />
+                        }
+                        
+                        
                         {/* <Button
                             className='col-12'
                             label="mostrar"

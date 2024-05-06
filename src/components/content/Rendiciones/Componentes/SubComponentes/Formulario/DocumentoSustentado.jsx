@@ -50,11 +50,23 @@ function DocumentoSustentado({
 
 
 
-    const deleteProduct = async (rowData) => { 
+    /const deleteProduct = async (rowData) => { 
         const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
         setArticulos(updatedArticulos);
     };
     
+
+
+    // const editDetalle = (rowData) => {
+    //     // setDetalleEditar(rowData);
+    //     // setModoEditar("editar");
+    //     setProductDialog(true);
+    // };
+
+
+
+
+
 
 
     //Modificar  esto para edioa6||
@@ -304,6 +316,7 @@ function DocumentoSustentado({
 
 
     const openNew = () => {
+        setEditing(false);
         setProductDialog(true);
         //setDetalle(articulos);
     };
@@ -400,12 +413,38 @@ function DocumentoSustentado({
     }, [detalles])
 
     useEffect(() => {
+        if(esModo === "Agregar"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '3', name: '-'},
+            }));
+        }
+    }, [])
+
+    useEffect(() => {
         obtenerData();
         setDocumentoDet(articulos);
-        
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
+    useEffect(() => {
+        let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
+        if(subtotalTotal>700 && documento.STR_TIPO_DOC.name==="Factura"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '1', name: 'Retencion'}
+            }));
+        }
+        console.log("datoprobando: ",subtotalTotal)
+    }, [articulos])
+
+    // useEffect(()=>{
+    //     const articulosConSubtotal = articulos.map((detalle) => ({
+    //         ...detalle,
+    //         Subtotal: detalle.Precio * detalle.Cantidad,
+    //     }));
+    //     setArticulos(articulosConSubtotal);
+    // },[articulos])
     // useEffect(() => {
     //     console.log("doc3: ", documento)
     // }, [documento])
@@ -416,7 +455,7 @@ function DocumentoSustentado({
     ];
 
     const indImpuestos = [
-        { id: 'IGV', name: 'IGV' },
+        { id: 'IGV', name: 'IGV (18%)' },
         { id: 'EXO', name: 'EXO' },
     ];
 
@@ -466,6 +505,8 @@ function DocumentoSustentado({
         // console.log("d: ", documento)
         // console.log("a: ", articulos)
     }
+
+    console.log("mi",articulos)
 
     // Personalizando campos
     const transformDataForExport = (articulos) => {
@@ -549,11 +590,10 @@ function DocumentoSustentado({
     const [rowData, setRowData] = useState(null); // Define rowData state
 
     const editDetallep = (rowData) => {
-
-      setRowData(rowData); // Update rowData state
-      console.log("f",rowData)
-    setProductDialog(true);
-    setEditing(true);
+        setRowData(rowData); // Update rowData state
+        console.log("f",rowData)
+        setProductDialog(true);
+        setEditing(true);
     };
     // const editDetallep = (detalles) => {
     //     setDetalle({ ...detalles });
@@ -561,22 +601,40 @@ function DocumentoSustentado({
     //     setProductDialog(true);
     //   };
     
+    
+     const deleteProduct = async (rowData) => {
+
+        // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // setArticulos(updatedArticulos);
+        const updatedArticulos = articulos.map((item) => {
+            if (item.ID === rowData.ID) {
+                return {
+                    ...item,
+                    FLG_ELIM: 1
+                };
+            }
+            return item;
+        });
+        console.log("rowid: ",rowData.ID)
+        console.log("elimin: ",updatedArticulos)
+        setArticulos(updatedArticulos);
+    };
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-       <Button
-        icon={rowData.id? "pi pi-pencil" : "pi pi-plus"}
-        rounded
-        outlined
-        className="mr-2"
-        onClick={() => editDetallep(rowData)}
-      />
+                <Button
+                    icon={"pi pi-pencil"}
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() => editDetallep(rowData)}
+                />
                 <Button
                     icon="pi pi-trash"
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => deleteProduct(rowData)}
+                    onClick={() => deleteProduct(rowData)} 
                     disabled={editable}
                 />
             </React.Fragment>
@@ -607,6 +665,7 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_AFECTACION: e.target.value,
                                     }));
+                                    console.log("val: ",e.target.value)
                                 }}
                             options={afectacion}
                             optionLabel="name"
@@ -837,7 +896,8 @@ function DocumentoSustentado({
                     <Divider />
 
                     <DataTable
-                        value={articulos}
+                        //value={articulos}
+                        value={articulos.filter(item => item.FLG_ELIM !== 1)}
                         sortMode="multiple"
                         paginator
                         rows={5}
@@ -849,7 +909,6 @@ function DocumentoSustentado({
                             header="N°"
                             headerStyle={{ width: "3rem" }}
                             body={(data, options) => options.rowIndex + 1}
-
                         >
                         </Column>
                         <Column
@@ -913,6 +972,12 @@ function DocumentoSustentado({
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
+                            //field="Cantidad*Precio"
+                            header="Subtotal"
+                            body={(rowData) => rowData.Cantidad * rowData.Precio}
+                            style={{ minWidth: "7rem" }}
+                        ></Column>
+                        <Column
                             field="Impuesto"
                             header="Impuesto"
                             style={{ minWidth: "7rem" }}
@@ -922,7 +987,6 @@ function DocumentoSustentado({
                             headerStyle={{ width: "3rem" }}
                             body={actionBodyTemplate}
                         >
-
                         </Column>
                     </DataTable>
                     {/* { esModoDetail ? "" :
@@ -935,7 +999,6 @@ function DocumentoSustentado({
                 </div>
             </div>
             <FormDetalleDocumento
-
                 visible={visibleEditar}
                 setVisible={setVisibleEditar}
                 detalle={detalleEditar}
