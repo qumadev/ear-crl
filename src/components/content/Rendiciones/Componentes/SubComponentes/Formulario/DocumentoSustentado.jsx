@@ -421,11 +421,15 @@ function DocumentoSustentado({
             }));
         }
         console.log("datoprobando: ",subtotalTotal)
-
-        // articulos.map((detalle) => ({
-        //     Subtotal:detalle.Precio*detalle.Cantidad,
-        // }));
     }, [articulos])
+
+    // useEffect(()=>{
+    //     const articulosConSubtotal = articulos.map((detalle) => ({
+    //         ...detalle,
+    //         Subtotal: detalle.Precio * detalle.Cantidad,
+    //     }));
+    //     setArticulos(articulosConSubtotal);
+    // },[articulos])
     // useEffect(() => {
     //     console.log("doc3: ", documento)
     // }, [documento])
@@ -584,8 +588,7 @@ function DocumentoSustentado({
     
     
      const deleteProduct = async (rowData) => {
- 
-    
+
          const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
          setArticulos(updatedArticulos);
         
@@ -593,13 +596,13 @@ function DocumentoSustentado({
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-        <Button
-            icon={"pi pi-pencil"}
-            rounded
-            outlined
-            className="mr-2"
-            onClick={() => editDetallep(rowData)}
-        />
+                <Button
+                    icon={"pi pi-pencil"}
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() => editDetallep(rowData)}
+                />
                 <Button
                     icon="pi pi-trash"
                     rounded
@@ -941,8 +944,9 @@ function DocumentoSustentado({
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
-                            field="Subtotal"
+                            //field="Cantidad*Precio"
                             header="Subtotal"
+                            body={(rowData) => rowData.Cantidad * rowData.Precio}
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
