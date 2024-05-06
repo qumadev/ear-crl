@@ -470,6 +470,8 @@ function DocumentoSustentado({
         // console.log("a: ", articulos)
     }
 
+    console.log("mi",articulos)
+
     // Personalizando campos
     const transformDataForExport = (articulos) => {
         return articulos.map((articulo) => {

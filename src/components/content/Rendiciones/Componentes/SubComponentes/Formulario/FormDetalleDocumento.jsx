@@ -39,92 +39,120 @@ function FormDetalleDocumento({
     const [cantidad, setCantidad] = useState(null);
     const [impuesto, setImpuesto] = useState(null);
 
-    
-
     const [detDoc, setDetDoc] = useState({
-        "Cod": null,
-        "Concepto": null,
-        "Almacen": null,
-        "Proyecto": null,
-        "UnidadNegocio": null,
-        "Filial": null,
-        "Areas": null,
-        "CentroCosto": null,
-        "IndImpuesto": {id: 'IGV', name: 'IGV'},
-        "Precio": null,
-        "Cantidad": null,
-        "Impuesto": null
-    });
-
-
-  
-
-    const selectedOptionTemplate = (option, props) => {
+        Cod:null,
+        Concepto: null,
+        Almacen: null,
+        Proyecto: null,
+        UnidadNegocio: null,
+        Filial: null,
+        Areas: null,
+        CentroCosto: null,
+        IndImpuesto:null,
+        Precio: null,
+        Cantidad: null,
+        Impuesto: null,
+      });
+ 
+      useEffect(() => {
+        if (editing && selectedRowData) {
+          setDetDoc({
+           ...selectedRowData,
+           
+            Cod:  selectedRowData?.Cod||null,
+            // Concepto: selectedRowData?.Concepto || null,
+            // Almacen: selectedRowData?.Almacen || null,
+            Proyecto: selectedRowData?.Proyecto || null,
+            UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+            Filial: selectedRowData?.Filial || null,
+            Areas: selectedRowData?.Areas || null,
+            CentroCosto: selectedRowData?.CentroCosto || null,
+            IndImpuesto: selectedRowData?.IndImpuesto || null,
+            Precio: selectedRowData?.Precio || null,
+            Cantidad: selectedRowData?.Cantidad || null,
+            Impuesto: selectedRowData?.Impuesto || null,
+          });
+        }
+      }, [editing, selectedRowData]);
+    
+      const selectedOptionTemplate = (option, props) => {
         if (option) {
-            return (
-                <div>{option.ItemCode}</div>
-            );
+          return <div>{option.ItemCode}</div>;
         }
-
+    
         return <span>{props.placeholder}</span>;
-    };
-
-    const complementoOptionTemplate = (option) => {
+      };
+    
+      const complementoOptionTemplate = (option) => {
         return (
-            <div>
-                {option.ItemCode} - {option.ItemName}
-            </div>
+          <div>
+            {option.ItemCode} - {option.ItemName}
+          </div>
         );
-    };
-
-    const addDetDoc = () => {
+      };
+    
+      const addDetDoc = () => {
         if (validarCampos()) {
-            setArticulos([...articulos, detDoc]);
-            // setDocumento(prevState => ({
-            //     ...prevState,
-            //     DocumentoDet: articulos
-            // }))
-            // setDocumento([...documento,documento.DocumentoDet])
-            setProductDialog(false)
-            setDetDoc(null)
+          setArticulos([...articulos, detDoc]);
+          setDocumento((prevState) => ({
+           ...prevState,
+            DocumentoDet: articulos,
+          }));
+          setProductDialog(false);
+          setDetDoc(null);
+          alert('Detalle agregado correctamente');
         } else {
-            alert('Por favor complete todos los campos requeridos.');
+          alert('Por favor complete todos los campos requeridos.');
         }
-    }
-
-    const [campoValido, setCampoValido] = useState({
+      };
+    
+      const [campoValido, setCampoValido] = useState({
         Cod: false,
         Proyecto: false,
         UnidadNegocio: false,
         Filial: false,
         Areas: false,
         CentroCosto: false,
-        //IndImpuesto: false,
         Precio: false,
         Cantidad: false,
-        // Impuesto: false
-    });
-
-    const validarCampos = () => {
+      });
+    
+    //   const onEdit = (detDoc) => {
+    //     setDocumento((prevState) => ({
+    //      ...prevState,
+    //       DocumentoDet: prevState.DocumentoDet.map((item) =>
+    //         item.Cod === detDoc.Cod? detDoc : item
+    //       ),
+    //     }));
+    //   };
+    
+      const validarCampos = () => {
         for (let campo in campoValido) {
-            if (!detDoc[campo]) {
-                setCampoValido(prevState => ({
-                    ...prevState,
-                    [campo]: false
-                }));
-                return false;
-            }
+          if (!detDoc[campo]) {
+            setCampoValido((prevState) => ({
+             ...prevState,
+              [campo]: false,
+            }));
+            return false;
+          }
         }
         return true;
-    };
-
-    const handleEdit = () => {
-        setEditing(true);
-        setArticulos((prevState) =>
-          prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
-        );
-        onEdit(detDoc);
-        setProductDialog(false);
+      };
+    
+      const handleEdit = () => {
+        if (validarCampos()) {
+          setEditing(true);
+          setArticulos((prevState) =>
+           
+            prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
+            
+          ); 
+          onEdit(detDoc);
+    setProductDialog(false);
+          alert('Detalle editado correctamente');
+        } else {
+          alert('Por favor complete todos los campos requeridos.');
+        }
       };
     return (
         <div>
