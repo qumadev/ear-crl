@@ -51,8 +51,25 @@ function DocumentoSustentado({
     };
 
 
-    const deleteProduct = async (rowData) => { 
-        const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+    // const deleteProduct = async (rowData) => { 
+    //     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+    //     setArticulos(updatedArticulos);
+    // };
+    const deleteProduct = async (rowData) => {
+
+        // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // setArticulos(updatedArticulos);
+        const updatedArticulos = articulos.map((item) => {
+            if (item.ID === rowData.ID) {
+                return {
+                    ...item,
+                    FLG_ELIM: 1
+                };
+            }
+            return item;
+        });
+        console.log("rowid: ",rowData.ID)
+        console.log("elimin: ",updatedArticulos)
         setArticulos(updatedArticulos);
     };
 
