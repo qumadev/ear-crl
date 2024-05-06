@@ -589,10 +589,21 @@ function DocumentoSustentado({
     
      const deleteProduct = async (rowData) => {
 
-         const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-         setArticulos(updatedArticulos);
-        
-     };
+        // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // setArticulos(updatedArticulos);
+        const updatedArticulos = articulos.map((item) => {
+            if (item.ID === rowData.ID) {
+                return {
+                    ...item,
+                    FLG_ELIM: 1
+                };
+            }
+            return item;
+        });
+        console.log("rowid: ",rowData.ID)
+        console.log("elimin: ",updatedArticulos)
+        setArticulos(updatedArticulos);
+    };
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -869,7 +880,8 @@ function DocumentoSustentado({
                     <Divider />
 
                     <DataTable
-                        value={articulos}
+                        //value={articulos}
+                        value={articulos.filter(item => item.FLG_ELIM !== 1)}
                         sortMode="multiple"
                         paginator
                         rows={5}

@@ -347,6 +347,7 @@ function FormularioRD() {
             STR_PRECIO:detalle.Precio,
             STR_IMPUESTO:detalle.Impuesto,
             STR_SUBTOTAL:detalle.Precio*detalle.Cantidad,
+            FLG_ELIM: detalle.FLG_ELIM===1 ? 1 : 0,
         }));
         let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
         let _documento = {
