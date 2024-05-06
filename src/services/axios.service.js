@@ -375,6 +375,14 @@ export const borrarDocumentoDet = (id, docId) => {
   return null;
 };
 
+export const validacionDocumento = (id) => {
+  return API.post(`rendicion/documento/validacion/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const extraerPlantilla = () => {
   return API.get(`rendicion/documento/plantilla`, {
     validateStatus: function (status) {
@@ -402,10 +410,6 @@ export const actualizarSntDoc = (id, estado) => {
 };
 
 export const actualizaRendicion = (body) => {
-  return null;
-};
-
-export const validacionDocumento = (id) => {
   return null;
 };
 
