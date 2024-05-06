@@ -4,7 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function FormDetalleDocumento({
     documento,
@@ -20,7 +20,11 @@ function FormDetalleDocumento({
     centroCostos,
     unidNegocios,
     indImpuestos,
-    visible, setVisible
+    visible, setVisible,
+    selectedRowData,
+    editing,
+    setEditing,
+    onEdit
 
 }) {
 
@@ -36,38 +40,37 @@ function FormDetalleDocumento({
     const [impuesto, setImpuesto] = useState(null);
 
     const [detDoc, setDetDoc] = useState({
-        "Cod": null,
-        "Concepto": null,
-        "Almacen": null,
-        "Proyecto": null,
-        "UnidadNegocio": null,
-        "Filial": null,
-        "Areas": null,
-        "CentroCosto": null,
-        "IndImpuesto": {id: 'IGV', name: 'IGV'},
-        "Precio": null,
-        "Cantidad": null,
-        "Impuesto": null
+        ...selectedRowData,
+        Cod: selectedRowData?.Cod || null,
+        Proyecto: selectedRowData?.Proyecto || null,
+        UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+        Filial: selectedRowData?.Filial || null,
+        Areas: selectedRowData?.Areas || null,
+        CentroCosto: selectedRowData?.CentroCosto || null,
+        IndImpuesto: selectedRowData?.IndImpuesto || null,
+        Precio: selectedRowData?.Precio || null,
+        Cantidad: selectedRowData?.Cantidad || null,
+        Impuesto: selectedRowData?.Impuesto || null
     });
 
-    // const [documentoDet, setDocumentoDet] = useState(
-    //     {
-    //         "ID": null,
-    //         "STR_CODARTICULO": null,
-    //         "STR_CONCEPTO": null,
-    //         "STR_ALMACEN": null,
-    //         "STR_SUBTOTAL": null,
-    //         "STR_INDIC_IMPUESTO": null,
-    //         "STR_DIM1": null,
-    //         "STR_DIM2": null,
-    //         "STR_DIM3": null,
-    //         "STR_DIM4": null,
-    //         "STR_DIM5": null,
-    //         "STR_DOC_ID": null,
-    //         "STR_CANTIDAD": null,
-    //         "STR_TPO_OPERACION": null
-    //     }
-    // );
+
+    useEffect(() => {
+        if (editing && selectedRowData) {
+            setDetDoc({
+                ...selectedRowData,
+                Cod: selectedRowData?.Cod || null,
+                Proyecto: selectedRowData?.Proyecto || null,
+                UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+                Filial: selectedRowData?.Filial || null,
+                Areas: selectedRowData?.Areas || null,
+                CentroCosto: selectedRowData?.CentroCosto || null,
+                IndImpuesto: selectedRowData?.IndImpuesto || null,
+                Precio: selectedRowData?.Precio || null,
+                Cantidad: selectedRowData?.Cantidad || null,
+                Impuesto: selectedRowData?.Impuesto || null
+            });
+        }
+    }, [editing, selectedRowData]);
 
 
     const selectedOptionTemplate = (option, props) => {
@@ -103,10 +106,6 @@ function FormDetalleDocumento({
         }
     }
 
-    const showCampos = () => {
-        console.log(detDoc)
-    }
-
     const [campoValido, setCampoValido] = useState({
         Cod: false,
         Proyecto: false,
@@ -133,25 +132,28 @@ function FormDetalleDocumento({
         return true;
     };
 
-
+    const handleEdit = () => {
+        setEditing(true);
+        onEdit(selectedRowData);
+    };
 
     return (
         <div>
             <Dialog
                 visible={productDialog}
+                header={editing ? "Editar Detalle" : "Agregar Detalle"}
 
-                
                 onHide={() => (
                     setProductDialog(false),
                     setDetDoc(null),
                     setVisible(false)
-                  
+
 
                 )}
-                style={{ width: '50vw' }} 
+                style={{ width: '50vw' }}
 
             >
-                <h2>Agregar Detalle:</h2>
+
                 <div className="col-12 md:col-6 lg:col-12">
                     <div className="mb-3 flex flex-column gap-2">
                         <label htmlFor="">(*)Cod. Articulo/Servicio:</label>
@@ -283,9 +285,9 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     IndImpuesto: e.target.value,
-                                    Impuesto: e.target.value.name==="IGV" ? (detDoc?.Precio*detDoc?.Cantidad*0.18).toFixed(2) : 0
+                                    Impuesto: e.target.value.name === "IGV" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0
                                 }));
-                                console.log("ind: ",e.target.value)
+                                console.log("ind: ", e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     IndImpuesto: Boolean(e.target.value)
@@ -305,7 +307,7 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Precio: e.target.value,
-                                    Impuesto: detDoc?.IndImpuesto?.id=='EXO'||detDoc?.IndImpuesto==null? 0 : (e.target.value*detDoc?.Cantidad*0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto?.id == 'EXO' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.18).toFixed(2)
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
@@ -321,7 +323,7 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Cantidad: e.target.value,
-                                    Impuesto: detDoc?.IndImpuesto.id=='EXO'||null? 0 :(e.target.value*detDoc?.Precio*0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto.id == 'EXO' || null ? 0 : (e.target.value * detDoc?.Precio * 0.18).toFixed(2)
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
@@ -343,9 +345,16 @@ function FormDetalleDocumento({
                         />
                         <Button
                             className='col-12'
-                            label="Agregar"
+                            // label="Agregar"
+                            label={editing ? "Editar" : "Agregar"}
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
+                        />
+                        <Button
+                            className="col-12"
+                            label="Editar"
+                            onClick={handleEdit}
+                            disabled={!selectedRowData}
                         />
                         {/* <Button
                             className='col-12'
