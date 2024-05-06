@@ -2,6 +2,8 @@ import { Checkbox } from '@mui/material';
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
+import { ColumnGroup } from 'primereact/columngroup';
+import { Row } from 'primereact/row';
 import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
@@ -49,12 +51,27 @@ function DocumentoSustentado({
     };
 
 
+    // const deleteProduct = async (rowData) => { 
+    //     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+    //     setArticulos(updatedArticulos);
+    // };
+    const deleteProduct = async (rowData) => {
 
-    const deleteProduct = async (rowData) => { 
-        const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // setArticulos(updatedArticulos);
+        const updatedArticulos = articulos.map((item) => {
+            if (item.ID === rowData.ID) {
+                return {
+                    ...item,
+                    FLG_ELIM: 1
+                };
+            }
+            return item;
+        });
+        console.log("rowid: ",rowData.ID)
+        console.log("elimin: ",updatedArticulos)
         setArticulos(updatedArticulos);
     };
-    
 
 
     // const editDetalle = (rowData) => {
@@ -426,16 +443,18 @@ function DocumentoSustentado({
         setDocumentoDet(articulos);
         // setDocumento(...documento, DocumentoDet)
     }, []);
-
+    const [TotalMonto, setTotalMonto] = useState("0.00");
     useEffect(() => {
-        let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
+        //let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
+        let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
         if(subtotalTotal>700 && documento.STR_TIPO_DOC.name==="Factura"){
             setDocumento((prevState) => ({
                 ...prevState,
                 STR_AFECTACION: {id: '1', name: 'Retencion'}
             }));
         }
-        console.log("datoprobando: ",subtotalTotal)
+        setTotalMonto(subtotalTotal)
+        // console.log("datoprobando: ",subtotalTotal)
     }, [articulos])
 
     // useEffect(()=>{
@@ -601,25 +620,6 @@ function DocumentoSustentado({
     //     setProductDialog(true);
     //   };
     
-    
-    // const deleteProduct = async (rowData) => {
-
-    //     // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-    //     // setArticulos(updatedArticulos);
-    //     const updatedArticulos = articulos.map((item) => {
-    //         if (item.ID === rowData.ID) {
-    //             return {
-    //                 ...item,
-    //                 FLG_ELIM: 1
-    //             };
-    //         }
-    //         return item;
-    //     });
-    //     console.log("rowid: ",rowData.ID)
-    //     console.log("elimin: ",updatedArticulos)
-    //     setArticulos(updatedArticulos);
-    // };
-    
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -641,6 +641,19 @@ function DocumentoSustentado({
             </React.Fragment>
         );
     };
+    const footerGroup = (
+        <ColumnGroup>
+          <Row>
+            <Column
+              footer="Total:"
+              colSpan={13}
+              footerStyle={{ textAlign: 'right',  }}
+            />
+            <Column footerStyle={{ }} footer={TotalMonto} />
+            <Column footer=""/>
+          </Row>
+        </ColumnGroup>
+    );
 
     return (
         <div>
@@ -905,6 +918,7 @@ function DocumentoSustentado({
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         tableStyle={{ minWidth: "12rem" }}
                         header="Detalle de Documento Sustentado"
+                        footerColumnGroup={footerGroup}
                     >
                         <Column
                             header="N°"
@@ -973,14 +987,14 @@ function DocumentoSustentado({
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
+                            field="Impuesto"
+                            header="Impuesto"
+                            style={{ minWidth: "7rem" }}
+                        ></Column>
+                         <Column
                             //field="Cantidad*Precio"
                             header="Subtotal"
                             body={(rowData) => rowData.Cantidad * rowData.Precio}
-                            style={{ minWidth: "7rem" }}
-                        ></Column>
-                        <Column
-                            field="Impuesto"
-                            header="Impuesto"
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
