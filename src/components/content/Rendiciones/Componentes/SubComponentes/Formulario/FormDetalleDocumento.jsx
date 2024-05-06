@@ -39,38 +39,53 @@ function FormDetalleDocumento({
     const [cantidad, setCantidad] = useState(null);
     const [impuesto, setImpuesto] = useState(null);
 
+    // const [detDoc, setDetDoc] = useState({
+    //     ...selectedRowData,
+    //     Cod: selectedRowData?.Cod || null,
+    //     Proyecto: selectedRowData?.Proyecto || null,
+    //     UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+    //     Filial: selectedRowData?.Filial || null,
+    //     Areas: selectedRowData?.Areas || null,
+    //     CentroCosto: selectedRowData?.CentroCosto || null,
+    //     IndImpuesto: selectedRowData?.IndImpuesto || null,
+    //     Precio: selectedRowData?.Precio || null,
+    //     Cantidad: selectedRowData?.Cantidad || null,
+    //     Impuesto: selectedRowData?.Impuesto || null
+    // });
+
     const [detDoc, setDetDoc] = useState({
-        ...selectedRowData,
-        Cod: selectedRowData?.Cod || null,
-        Proyecto: selectedRowData?.Proyecto || null,
-        UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-        Filial: selectedRowData?.Filial || null,
-        Areas: selectedRowData?.Areas || null,
-        CentroCosto: selectedRowData?.CentroCosto || null,
-        IndImpuesto: selectedRowData?.IndImpuesto || null,
-        Precio: selectedRowData?.Precio || null,
-        Cantidad: selectedRowData?.Cantidad || null,
-        Impuesto: selectedRowData?.Impuesto || null
+        "Cod": null,
+        "Concepto": null,
+        "Almacen": null,
+        "Proyecto": null,
+        "UnidadNegocio": null,
+        "Filial": null,
+        "Areas": null,
+        "CentroCosto": null,
+        "IndImpuesto": {id: 'IGV', name: 'IGV'},
+        "Precio": null,
+        "Cantidad": null,
+        "Impuesto": null
     });
 
 
-    useEffect(() => {
-        if (editing && selectedRowData) {
-            setDetDoc({
-                ...selectedRowData,
-                Cod: selectedRowData?.Cod || null,
-                Proyecto: selectedRowData?.Proyecto || null,
-                UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-                Filial: selectedRowData?.Filial || null,
-                Areas: selectedRowData?.Areas || null,
-                CentroCosto: selectedRowData?.CentroCosto || null,
-                IndImpuesto: selectedRowData?.IndImpuesto || null,
-                Precio: selectedRowData?.Precio || null,
-                Cantidad: selectedRowData?.Cantidad || null,
-                Impuesto: selectedRowData?.Impuesto || null
-            });
-        }
-    }, [editing, selectedRowData]);
+    // useEffect(() => {
+    //     if (editing && selectedRowData) {
+    //         setDetDoc({
+    //             ...selectedRowData,
+    //             Cod: selectedRowData?.Cod || null,
+    //             Proyecto: selectedRowData?.Proyecto || null,
+    //             UnidadNegocio: selectedRowData?.UnidadNegocio || null,
+    //             Filial: selectedRowData?.Filial || null,
+    //             Areas: selectedRowData?.Areas || null,
+    //             CentroCosto: selectedRowData?.CentroCosto || null,
+    //             IndImpuesto: selectedRowData?.IndImpuesto || null,
+    //             Precio: selectedRowData?.Precio || null,
+    //             Cantidad: selectedRowData?.Cantidad || null,
+    //             Impuesto: selectedRowData?.Impuesto || null
+    //         });
+    //     }
+    // }, [editing, selectedRowData]);
 
 
     const selectedOptionTemplate = (option, props) => {
@@ -134,9 +149,12 @@ function FormDetalleDocumento({
 
     const handleEdit = () => {
         setEditing(true);
-        onEdit(selectedRowData);
-    };
-
+        setArticulos((prevState) =>
+          prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
+        );
+        onEdit(detDoc);
+        setProductDialog(false);
+      };
     return (
         <div>
             <Dialog
