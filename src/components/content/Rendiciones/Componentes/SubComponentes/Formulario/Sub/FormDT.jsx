@@ -125,8 +125,36 @@ export default function FormDT({ editable,
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
   async function ValidacionEnvio() {
-    console.log("validacion")
-    confirm1();
+    const todosValidados = rendicion.documentos.every(
+      (doc) => doc.STR_VALIDA_SUNAT === true
+    );
+    if (true) {
+
+      let todosDocumentosValidos = true;
+
+      for (const e of rendicion.documentos) {
+        try {
+          setLoadingBtn(true);
+          console.log(e);
+          const response = await validacionDocumento(e.ID);
+          if (response.status !== 200) {
+            showError(response.Message);
+            todosDocumentosValidos = false;
+          }
+        } catch (error) {
+          console.log(error.response.data.Message);
+          showError(error.response.data.Message);
+          todosDocumentosValidos = false;
+        }
+      }
+
+      if (todosDocumentosValidos) {
+        confirm1();
+      }
+      setLoadingBtn(false);
+    } else {
+      showError("Tienes que tener todos los documentos validados ante SUNAT");
+    }
   }
   const leftToolbarTemplate = () => {
     return (
