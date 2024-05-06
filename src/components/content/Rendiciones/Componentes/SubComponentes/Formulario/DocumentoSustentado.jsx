@@ -43,24 +43,40 @@ function DocumentoSustentado({
 
 
 
-    const editDetalle = (rowData) => {
-        // setDetalleEditar(rowData);
-        // setModoEditar("editar");
-        setProductDialog(true);
-    };
+    // const editDetalle = (rowData) => {
+    //     // setDetalleEditar(rowData);
+    //     // setModoEditar("editar");
+    //     setProductDialog(true);
+    // };
 
 
 
-    const deleteProduct = async (rowData) => {
+    // const deleteProduct = async (rowData) => {
  
     
-        const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-        setArticulos(updatedArticulos);
+    //     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+    //     setArticulos(updatedArticulos);
         
+    // };
+    const deleteProduct = (rowData, flgElim) => {
+        // pass the flgElim value to the deleteDetallep function
+        deleteDetallep(rowData, flgElim);
     };
-    
 
-
+    const deleteDetallep = async (rowData, flgElim) => {
+        try {
+            await deleteDocSust(rowData.id, flgElim); // pass the flgElim value to the deleteDocSust function
+            setDocSustList(docSustList.filter((item) => item.id !== rowData.id));
+            toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Se eliminó el registro', life: 3000 });
+        } catch (error) {
+            console.error(error);
+            toast.current.show({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al eliminar el registro', life: 3000 });
+        }
+    };
+const deleteDocSust = async (id, flgElim) => {
+    const response = await deleteDocSust(id, flgElim); // pass the flgElim value to the API request
+    return response.data;
+};
     //Modificar  esto para edioa6||
     const actionBodyTemplate1 = (rowData) => {
         const items = [
@@ -581,7 +597,7 @@ function DocumentoSustentado({
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => deleteProduct(rowData)}
+                    onClick={() => deleteProduct(rowData, 1)} 
                     disabled={editable}
                 />
             </React.Fragment>
