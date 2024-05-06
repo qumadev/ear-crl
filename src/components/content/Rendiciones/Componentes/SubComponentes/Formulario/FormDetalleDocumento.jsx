@@ -58,7 +58,6 @@ function FormDetalleDocumento({
         if (editing && selectedRowData) {
           setDetDoc({
            ...selectedRowData,
-           
             Cod:  selectedRowData?.Cod||null,
             // Concepto: selectedRowData?.Concepto || null,
             // Almacen: selectedRowData?.Almacen || null,
@@ -72,6 +71,21 @@ function FormDetalleDocumento({
             Cantidad: selectedRowData?.Cantidad || null,
             Impuesto: selectedRowData?.Impuesto || null,
           });
+        }else{
+            setDetDoc({
+                "Cod": null,
+                "Concepto": null,
+                "Almacen": null,
+                "Proyecto": null,
+                "UnidadNegocio": null,
+                "Filial": null,
+                "Areas": null,
+                "CentroCosto": null,
+                "IndImpuesto": {id: 'IGV', name: 'IGV (18%)'},
+                "Precio": null,
+                "Cantidad": null,
+                "Impuesto": null
+            })
         }
       }, [editing, selectedRowData]);
     
@@ -141,14 +155,15 @@ function FormDetalleDocumento({
     
       const handleEdit = () => {
         if (validarCampos()) {
-          setEditing(true);
+          setEditing(false);
           setArticulos((prevState) =>
-           
-            prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
-            
+          
+            //prevState.map((item) => (item.Proyecto === detDoc.Proyecto? detDoc : item)),
+            prevState.map((item) => (item.ID === detDoc.ID? detDoc : item)),
+            console.log(detDoc)
           ); 
-          onEdit(detDoc);
-    setProductDialog(false);
+            onEdit(detDoc);
+            setProductDialog(false);
           alert('Detalle editado correctamente');
         } else {
           alert('Por favor complete todos los campos requeridos.');
@@ -183,6 +198,8 @@ function FormDetalleDocumento({
                                     Concepto: e.target.value.ItemName,
                                     Almacen: e.target.value.WhsCode
                                 }));
+                                console.log(e.target.value),
+
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     Cod: Boolean(e.target.value)
@@ -316,6 +333,7 @@ function FormDetalleDocumento({
                             optionLabel="name"
                             placeholder='Seleccione Ind. Impuesto'
                         />
+                        { console.log("opcigv: ",indImpuestos)}
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
                             value={detDoc?.Precio}
@@ -360,19 +378,23 @@ function FormDetalleDocumento({
                             }}
                             disabled
                         />
-                        <Button
+                        {editing ?
+                            <Button
+                                className="col-12"
+                                label="Editar"
+                                onClick={handleEdit}
+                            />  
+                            :
+                            <Button
                             className='col-12'
                             // label="Agregar"
-                            label={editing ? "Agregar" : ""}
+                            label="Agregar"
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
-                        />
-                        <Button
-                            className="col-12"
-                            label="Editar"
-                            onClick={handleEdit}
-                            disabled={!selectedRowData}
-                        />
+                            />
+                        }
+                        
+                        
                         {/* <Button
                             className='col-12'
                             label="mostrar"

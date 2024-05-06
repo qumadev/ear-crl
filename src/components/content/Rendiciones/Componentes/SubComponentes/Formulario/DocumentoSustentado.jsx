@@ -308,6 +308,7 @@ function DocumentoSustentado({
 
 
     const openNew = () => {
+        setEditing(false);
         setProductDialog(true);
         //setDetalle(articulos);
     };
@@ -419,7 +420,7 @@ function DocumentoSustentado({
     ];
 
     const indImpuestos = [
-        { id: 'IGV', name: 'IGV' },
+        { id: 'IGV', name: 'IGV (18%)' },
         { id: 'EXO', name: 'EXO' },
     ];
 
@@ -554,11 +555,10 @@ function DocumentoSustentado({
     const [rowData, setRowData] = useState(null); // Define rowData state
 
     const editDetallep = (rowData) => {
-
-      setRowData(rowData); // Update rowData state
-      console.log("f",rowData)
-    setProductDialog(true);
-    setEditing(true);
+        setRowData(rowData); // Update rowData state
+        console.log("f",rowData)
+        setProductDialog(true);
+        setEditing(true);
     };
     // const editDetallep = (detalles) => {
     //     setDetalle({ ...detalles });
@@ -569,13 +569,13 @@ function DocumentoSustentado({
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
-       <Button
-        icon={rowData.id? "pi pi-pencil" : "pi pi-plus"}
-        rounded
-        outlined
-        className="mr-2"
-        onClick={() => editDetallep(rowData)}
-      />
+        <Button
+            icon={"pi pi-pencil"}
+            rounded
+            outlined
+            className="mr-2"
+            onClick={() => editDetallep(rowData)}
+        />
                 <Button
                     icon="pi pi-trash"
                     rounded
@@ -853,7 +853,6 @@ function DocumentoSustentado({
                             header="N°"
                             headerStyle={{ width: "3rem" }}
                             body={(data, options) => options.rowIndex + 1}
-
                         >
                         </Column>
                         <Column
