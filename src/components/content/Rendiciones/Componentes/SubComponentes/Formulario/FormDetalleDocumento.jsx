@@ -4,7 +4,8 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Toast } from "primereact/toast";
 
 function FormDetalleDocumento({
     documento,
@@ -38,6 +39,25 @@ function FormDetalleDocumento({
     const [precio, setPrecio] = useState(null);
     const [cantidad, setCantidad] = useState(null);
     const [impuesto, setImpuesto] = useState(null);
+
+    const toast = useRef(null);
+    const showSuccess = (mensaje) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Exitoso",
+          detail: mensaje,
+          life: 3000,
+        });
+    };
+
+    const showError = (mensaje) => {
+    toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: mensaje,
+        life: 3000,
+    });
+    };
 
     const [detDoc, setDetDoc] = useState({
         Cod:null,
@@ -114,9 +134,12 @@ function FormDetalleDocumento({
           }));
           setProductDialog(false);
           setDetDoc(null);
-          alert('Detalle agregado correctamente');
+          showSuccess(`Detalle agregado correctamente`);
+
+          //alert('Detalle agregado correctamente');
         } else {
-          alert('Por favor complete todos los campos requeridos.');
+            showError(`Por favor complete todos los campos requeridos.`);
+          //alert('Por favor complete todos los campos requeridos.');
         }
       };
     
@@ -164,13 +187,17 @@ function FormDetalleDocumento({
           ); 
             onEdit(detDoc);
             setProductDialog(false);
-          alert('Detalle editado correctamente');
+            showSuccess(`Detalle editado correctamente`);
+
+            //alert('Detalle editado correctamente');
         } else {
-          alert('Por favor complete todos los campos requeridos.');
+            showError(`Por favor complete todos los campos requeridos.`);
+            //alert('Por favor complete todos los campos requeridos.');
         }
       };
     return (
         <div>
+            <Toast ref={toast} />
             <Dialog
                 visible={productDialog}
                 header={editing ? "Editar Detalle" : "Agregar Detalle"}
