@@ -581,7 +581,7 @@ export default function FormDT({ editable,
               showIcon />
           </div>
         </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        {/* <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               CargaDocs:
@@ -592,8 +592,8 @@ export default function FormDT({ editable,
               disabled
             />
           </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
+        </div> */}
+        {/* <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
               DocEntry:
@@ -604,7 +604,7 @@ export default function FormDT({ editable,
               disabled
             />
           </div>
-        </div>
+        </div> */}
       </div>
       <Divider />
 
