@@ -129,7 +129,7 @@ function FormularioRD() {
       ]
     }
   );*/
-  const [documento, setDocumento] = useState([]);
+  const [documento, setDocumento] = useState({STR_AFECTACION: '-'});
 
   async function obtenerData() {
     //let id = 8

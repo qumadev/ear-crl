@@ -22,15 +22,16 @@ import { Toolbar } from 'primereact/toolbar';
 
 
 function DocumentoSustentado({
-     documento, 
-     setDocumento,
-      detalles, 
-      setDetalle,
-       moneda, 
-       esModo,
-        editable,
-        showError
-    }) {
+    documento,
+    setDocumento,
+    detalles,
+    setDetalle,
+    moneda,
+    esModo,
+    editable,
+    showError
+}) {
+
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
     const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -41,8 +42,6 @@ function DocumentoSustentado({
     const [detalleEditar, setDetalleEditar] = useState(null);
     const [modoEditar, setModoEditar] = useState("agregar");
 
-
-
     const editDetalle = (rowData) => {
         // setDetalleEditar(rowData);
         // setModoEditar("editar");
@@ -51,12 +50,9 @@ function DocumentoSustentado({
 
 
 
-    const deleteProduct = async (rowData) => {
- 
-    
+    const deleteProduct = async (rowData) => { 
         const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
         setArticulos(updatedArticulos);
-        
     };
     
 
@@ -326,14 +322,14 @@ function DocumentoSustentado({
     const [centroCostos, setCentroCostos] = useState(null);
     const [unidNegocios, setUnidNegocios] = useState(null);
     const [editing, setEditing] = useState(false);
-   
-    const [articulos, setArticulos] = useState([])
+    const [articulos, setArticulos] = useState([]);
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
     useEffect(() => {
         setDetalle(articulos);
     }, [articulos])
 
+    
     async function obtenerData() {
         const response = await Promise.all([
             // obtenerTipos(),
@@ -361,6 +357,7 @@ function DocumentoSustentado({
                 name: '-'
             }
         ];
+
         setAfectacion(dataafectacion)
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
@@ -644,6 +641,7 @@ function DocumentoSustentado({
                         <label className='col-2'>(*)N° de serie</label>
                         <InputText
                             value={documento.STR_SERIE_DOC}
+                            maxLength={4}
                             onChange={(e) => {
                                 setDocumento((prevState) => ({
                                     ...prevState,
@@ -652,7 +650,6 @@ function DocumentoSustentado({
                             }}
                             className='col-6'
                             placeholder='N° de serie'
-                            maxLength={4}
                             disabled={esModoValidate}
                         />
                     </div>
@@ -681,6 +678,7 @@ function DocumentoSustentado({
                             // onChange={handleNumeroChange}
                             disabled={esModoValidate}
                         />
+                        {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)RUC</label>
