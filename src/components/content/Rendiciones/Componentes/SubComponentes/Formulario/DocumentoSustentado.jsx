@@ -43,22 +43,16 @@ function DocumentoSustentado({
 
 
 
-    const editDetalle = (rowData) => {
-        // setDetalleEditar(rowData);
-        // setModoEditar("editar");
-        setProductDialog(true);
-    };
+    // const editDetalle = (rowData) => {
+    //     // setDetalleEditar(rowData);
+    //     // setModoEditar("editar");
+    //     setProductDialog(true);
+    // };
 
 
 
-    const deleteProduct = async (rowData) => {
- 
-    
-        const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-        setArticulos(updatedArticulos);
-        
-    };
-    
+
+
 
 
     //Modificar  esto para edioa6||
@@ -588,6 +582,14 @@ function DocumentoSustentado({
     //     setProductDialog(true);
     //   };
     
+    
+     const deleteProduct = async (rowData) => {
+ 
+    
+         const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+         setArticulos(updatedArticulos);
+        
+     };
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -603,7 +605,7 @@ function DocumentoSustentado({
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => deleteProduct(rowData)}
+                    onClick={() => deleteProduct(rowData)} 
                     disabled={editable}
                 />
             </React.Fragment>

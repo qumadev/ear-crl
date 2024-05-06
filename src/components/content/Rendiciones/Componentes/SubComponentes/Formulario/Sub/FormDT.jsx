@@ -86,7 +86,7 @@ export default function FormDT({ editable,
         conta: usuario.TipoUsuario == 3 ? 0 : 1,
       };
       let response = await enviarAprobRendicion(
-        rendicion.ID, rendicion.SOLICITUDRD.ID, usuario.usuarioId,
+        rendicion.ID, rendicion.SOLICITUDRD.ID, usuario.sapID,
         rendicion.STR_ESTADO, usuario.branch
       );
       if (response.status < 300) {
