@@ -404,12 +404,34 @@ function DocumentoSustentado({
     }, [detalles])
 
     useEffect(() => {
+        if(esModo === "Agregar"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '3', name: '-'},
+            }));
+        }
+    }, [])
+
+    useEffect(() => {
         obtenerData();
         setDocumentoDet(articulos);
-        
         // setDocumento(...documento, DocumentoDet)
     }, []);
 
+    useEffect(() => {
+        let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
+        if(subtotalTotal>700 && documento.STR_TIPO_DOC.name==="Factura"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '1', name: 'Retencion'}
+            }));
+        }
+        console.log("datoprobando: ",subtotalTotal)
+
+        // articulos.map((detalle) => ({
+        //     Subtotal:detalle.Precio*detalle.Cantidad,
+        // }));
+    }, [articulos])
     // useEffect(() => {
     //     console.log("doc3: ", documento)
     // }, [documento])
@@ -612,6 +634,7 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_AFECTACION: e.target.value,
                                     }));
+                                    console.log("val: ",e.target.value)
                                 }}
                             options={afectacion}
                             optionLabel="name"
@@ -916,6 +939,11 @@ function DocumentoSustentado({
                             style={{ minWidth: "7rem" }}
                         ></Column>
                         <Column
+                            field="Subtotal"
+                            header="Subtotal"
+                            style={{ minWidth: "7rem" }}
+                        ></Column>
+                        <Column
                             field="Impuesto"
                             header="Impuesto"
                             style={{ minWidth: "7rem" }}
@@ -925,7 +953,6 @@ function DocumentoSustentado({
                             headerStyle={{ width: "3rem" }}
                             body={actionBodyTemplate}
                         >
-
                         </Column>
                     </DataTable>
                     {/* { esModoDetail ? "" :
@@ -938,7 +965,6 @@ function DocumentoSustentado({
                 </div>
             </div>
             <FormDetalleDocumento
-
                 visible={visibleEditar}
                 setVisible={setVisibleEditar}
                 detalle={detalleEditar}
