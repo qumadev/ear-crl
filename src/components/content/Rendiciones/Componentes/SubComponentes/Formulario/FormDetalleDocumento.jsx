@@ -27,7 +27,7 @@ function FormDetalleDocumento({
     onEdit
 
 }) {
-
+    
     const [article, setArticle] = useState(null);
     const [proyecto, setProyecto] = useState(null);
     const [area, setArea] = useState(null);
@@ -39,19 +39,7 @@ function FormDetalleDocumento({
     const [cantidad, setCantidad] = useState(null);
     const [impuesto, setImpuesto] = useState(null);
 
-    // const [detDoc, setDetDoc] = useState({
-    //     ...selectedRowData,
-    //     Cod: selectedRowData?.Cod || null,
-    //     Proyecto: selectedRowData?.Proyecto || null,
-    //     UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-    //     Filial: selectedRowData?.Filial || null,
-    //     Areas: selectedRowData?.Areas || null,
-    //     CentroCosto: selectedRowData?.CentroCosto || null,
-    //     IndImpuesto: selectedRowData?.IndImpuesto || null,
-    //     Precio: selectedRowData?.Precio || null,
-    //     Cantidad: selectedRowData?.Cantidad || null,
-    //     Impuesto: selectedRowData?.Impuesto || null
-    // });
+    
 
     const [detDoc, setDetDoc] = useState({
         "Cod": null,
@@ -69,24 +57,7 @@ function FormDetalleDocumento({
     });
 
 
-    // useEffect(() => {
-    //     if (editing && selectedRowData) {
-    //         setDetDoc({
-    //             ...selectedRowData,
-    //             Cod: selectedRowData?.Cod || null,
-    //             Proyecto: selectedRowData?.Proyecto || null,
-    //             UnidadNegocio: selectedRowData?.UnidadNegocio || null,
-    //             Filial: selectedRowData?.Filial || null,
-    //             Areas: selectedRowData?.Areas || null,
-    //             CentroCosto: selectedRowData?.CentroCosto || null,
-    //             IndImpuesto: selectedRowData?.IndImpuesto || null,
-    //             Precio: selectedRowData?.Precio || null,
-    //             Cantidad: selectedRowData?.Cantidad || null,
-    //             Impuesto: selectedRowData?.Impuesto || null
-    //         });
-    //     }
-    // }, [editing, selectedRowData]);
-
+  
 
     const selectedOptionTemplate = (option, props) => {
         if (option) {
@@ -364,7 +335,7 @@ function FormDetalleDocumento({
                         <Button
                             className='col-12'
                             // label="Agregar"
-                            label={editing ? "Editar" : "Agregar"}
+                            label={editing ? "Agregar" : ""}
                             onClick={addDetDoc}
                             disabled={!Object.values(campoValido).every(Boolean)}
                         />
