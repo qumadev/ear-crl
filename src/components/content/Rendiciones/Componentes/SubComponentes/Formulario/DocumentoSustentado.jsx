@@ -50,7 +50,7 @@ function DocumentoSustentado({
 
 
 
-    /const deleteProduct = async (rowData) => { 
+    const deleteProduct = async (rowData) => { 
         const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
         setArticulos(updatedArticulos);
     };
@@ -602,7 +602,7 @@ function DocumentoSustentado({
     //   };
     
     
-     const deleteProduct = async (rowData) => {
+    const deleteProduct = async (rowData) => {
 
         // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
         // setArticulos(updatedArticulos);
