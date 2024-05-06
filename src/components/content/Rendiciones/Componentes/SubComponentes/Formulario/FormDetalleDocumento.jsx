@@ -134,9 +134,12 @@ function FormDetalleDocumento({
 
     const handleEdit = () => {
         setEditing(true);
-        onEdit(selectedRowData);
-    };
-
+        setArticulos((prevState) =>
+          prevState.map((item) => (item.Cod === detDoc.Cod? detDoc : item))
+        );
+        onEdit(detDoc);
+        setProductDialog(false);
+      };
     return (
         <div>
             <Dialog
