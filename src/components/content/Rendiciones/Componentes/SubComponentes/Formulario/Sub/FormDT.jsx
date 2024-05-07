@@ -516,7 +516,7 @@ export default function FormDT({ editable,
               Estado:
             </label>
             <InputText
-              value={rendicion?.STR_ESTADO}
+              value={rendicion?.STR_ESTADO_INFO?.name}
               placeholder="Estado"
               disabled
             />
