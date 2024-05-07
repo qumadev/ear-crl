@@ -773,7 +773,9 @@ const statusBodyTemplate = (rowData) => {
     return `${year}/${month}/${day}`;
   }
 
+
   async function listarRendicionesLocal() {
+
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
@@ -800,10 +802,12 @@ const statusBodyTemplate = (rowData) => {
       fechaFin,
       nrendicion,
       estado,
-      usuario.branch //usuario.SubGerencia
+      usuario.branch //usuario.filial.
     )
       .then((response) => {
+        console.log(response.data);
         setRendiciones(response.data.Result);
+        console.log(response.data.Result);
       })
       .catch((err) => {
         console.log(err.message);

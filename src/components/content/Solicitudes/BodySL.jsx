@@ -67,8 +67,8 @@ export function BodySL({ responsiveSizeMobile }) {
   async function obtenerEstadosLocal() {
     let response = await obtenerEstados("<8" /*esSolicitudes ? "<8" : ">7"*/);
     let body = response.data.Result;
-    console.log(body);
-
+    console.log(response.data.Result);
+ 
     /*
     if (filtrado.estados == null && usuario.TipoUsuario == 2) {
       setFiltrado((...prevFiltrado) => ({
