@@ -690,6 +690,16 @@ function FormularioRD() {
     }
   };
 
+
+  const [campoValidoCabecera, setCampoValidoCabecera] = useState({
+    STR_TIPO_DOC: false,
+    STR_SERIE_DOC: false,
+    STR_CORR_DOC: false,
+    STR_PROVEEDOR: false,
+    STR_MOTIVORENDICION: false,
+    STR_MONEDA: false,
+    STR_FECHA_DOC: false,
+  }); 
   return (
     <div>
       <Toast ref={toast} />
@@ -722,6 +732,7 @@ function FormularioRD() {
             moneda={documento.STR_MONEDA}
             //esModoDetail={esModoDetail}
             esModo={esModo}
+            setCampoValidoCabecera={setCampoValidoCabecera}
           />
         </TabPanel>
         {/* <TabPanel header="General">
@@ -820,9 +831,9 @@ function FormularioRD() {
           <>
             <Button
               label={esModo==="Agregar"?"Agregar Documento": esModo==="Editar"?"Actualizar Documento":"Detalle"}
-              severity="info"
+              //severity="info"
               size="large"
-              style={{ backgroundColor: "black", borderColor: "black" }}
+              //style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
                 esModo==="Agregar" ? registrarRD() 
                 : 
@@ -835,8 +846,8 @@ function FormularioRD() {
                 // else registrarDocumento();
               }}
               loading={loading}
-              disabled={editable}
-            //disabled={!estadosEditables.includes(solicitudRD.estado)}
+              disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
+              //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
             {/* <Button
                 label="Exportar"
