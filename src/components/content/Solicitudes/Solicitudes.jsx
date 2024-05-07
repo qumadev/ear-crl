@@ -596,7 +596,6 @@ function Solicitudes({
   };
 
   async function listarSolicitudes() {
-    console.log("listarSolicitudes");
 
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
@@ -604,9 +603,7 @@ function Solicitudes({
     let fechaFin = "";
     let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
 
-    let estado =
-      filtrado.estados != null
-        ? filtrado.estados.map((dato) => dato.Id).join(",")
+    let estado =filtrado.estados != null? filtrado.estados.map((data) => data.id).join(",")
         : "";
 
     if (filtrado.rangoFecha?.length > 1) {

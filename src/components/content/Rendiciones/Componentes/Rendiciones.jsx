@@ -39,8 +39,7 @@ function Rendiciones({
   emptyProduct,
 }) {
 
-  
-  const statusBodyTemplate = (rowData) => {
+const statusBodyTemplate = (rowData) => {
     return (
       <Tag
         className="font-bold"
@@ -56,16 +55,16 @@ function Rendiciones({
   const toast = useRef(null);
   const [loading, setLoading] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
-  
+
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
 
-//   const [rendiciones,rendiciones]= useState(
+  //   const [rendiciones,rendiciones]= useState(
 
-//     {
-// ID:null
-//     }
-//    )
+  //     {
+  // ID:null
+  //     }
+  //    )
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -163,31 +162,31 @@ function Rendiciones({
 
   const getSeverity = (status) => {
     switch (status) {
-      case 5: 
-      case 7: 
-      case 12: 
-      case 15: 
-      case 17: 
+      case 5:
+      case 7:
+      case 12:
+      case 15:
+      case 17:
         return "danger";
 
-      case 4: 
-      case 6: 
-      case 8: 
-      case 13: 
-      case 14: 
-      case 16: 
-      case 18: 
-      case 19: 
-      case 11: 
+      case 4:
+      case 6:
+      case 8:
+      case 13:
+      case 14:
+      case 16:
+      case 18:
+      case 19:
+      case 11:
         return "success";
 
-      case 1: 
-      case 9: 
+      case 1:
+      case 9:
         return "info";
 
-      case 10: 
-      case 2: 
-      case 3: 
+      case 10:
+      case 2:
+      case 3:
         return "warning";
 
       case "renewal":
@@ -195,7 +194,7 @@ function Rendiciones({
     }
   };
 
-  const [estados,setEstados] = useState([])
+  const [estados, setEstados] = useState([])
   async function obtenerEstadosLocalR() {
     let response = await obtenerEstadosRendiciones();
     let body = response.data.Result;
@@ -500,7 +499,7 @@ function Rendiciones({
   }
 
   const actionBodyver = (rowData) => (
-    console.log("log",rowData),
+
     <Button
       label="Ver"
       icon="pi pi-eye"
@@ -774,16 +773,14 @@ function Rendiciones({
     return `${year}/${month}/${day}`;
   }
 
-  async function listarRendicionesLocal(fresh = false) {
-    if (!fresh) setLoading(true);
+  async function listarRendicionesLocal() {
+    setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
     let fechaFin = "";
     let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
 
-    let estado =
-      filtrado.estados != null
-        ? filtrado.estados.map((dato) => dato.Id).join(",")
+    let estado =filtrado.estados != null? filtrado.estados.map((data) => data.id).join(",")
         : "";
 
     if (filtrado.rangoFecha?.length > 1) {
@@ -802,7 +799,7 @@ function Rendiciones({
       fechaInicial,
       fechaFin,
       nrendicion,
-      "", //estado,
+      estado,
       usuario.branch //usuario.SubGerencia
     )
       .then((response) => {
@@ -813,16 +810,18 @@ function Rendiciones({
       })
       .finally(() => {
         console.log("Se terminó de traer solicitud");
-        if (!fresh) setLoading(false);
+        setLoading(false);
       });
   }
 
   useEffect(() => {
-    //obtenerEstadoLocal();
+   
     if (usuario.sapID != null) {
       listarRendicionesLocal();
     }
   }, [filtrado, usuario]);
+
+
   const [productDialog, setProductDialog] = useState(false);
   const openNew = () => {
 
@@ -830,7 +829,7 @@ function Rendiciones({
   };
 
   // const pruebas{
-  
+ console.log( "ren",rendiciones)
   // }
   return (
     <div>
@@ -962,7 +961,7 @@ function Rendiciones({
 
     </div>
 
-    
+
 
   );
 }
