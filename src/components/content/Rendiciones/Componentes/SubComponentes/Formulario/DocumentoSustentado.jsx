@@ -31,7 +31,8 @@ function DocumentoSustentado({
     moneda,
     esModo,
     editable,
-    showError
+    showError,
+    setCampoValidoCabecera
 }) {
 
     //  const {moneda, setmoneda }
@@ -701,6 +702,10 @@ function DocumentoSustentado({
                                         STR_TIPO_DOC: e.target.value,
                                     }));
                                     console.log("value: ", e.target.value)
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_TIPO_DOC: Boolean(e.target.value)
+                                    }));
                                 }}
                             options={tipos}
                             optionLabel="name"
@@ -720,6 +725,10 @@ function DocumentoSustentado({
                                     ...prevState,
                                     STR_SERIE_DOC: e.target.value,
                                 }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_SERIE_DOC: Boolean(e.target.value)
+                                }));
                             }}
                             className='col-6'
                             placeholder='N° de serie'
@@ -738,6 +747,10 @@ function DocumentoSustentado({
                                 setDocumento((prevState) => ({
                                     ...prevState,
                                     STR_CORR_DOC: inputValue,
+                                }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: Boolean(e.target.value)
                                 }));
                             }}
                             onBlur={() => {
@@ -766,6 +779,10 @@ function DocumentoSustentado({
                                     STR_PROVEEDOR: e.target.value,
                                     STR_RUC: e.target.value.LicTradNum,
                                     STR_RAZONSOCIAL: e.target.value.CardName
+                                }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_PROVEEDOR: Boolean(e.target.value)
                                 }));
                             }}
                             options={proveedores}
@@ -813,6 +830,10 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_MOTIVORENDICION: e.target.value,
                                     }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_MOTIVORENDICION: Boolean(e.target.value)
+                                    }));
                                 }}
                             options={motivos}
                             optionLabel="name"
@@ -833,6 +854,10 @@ function DocumentoSustentado({
                                     setDocumento((prevState) => ({
                                         ...prevState,
                                         STR_MONEDA: e.target.value,
+                                    }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_MONEDA: Boolean(e.target.value)
                                     }));
                                 }}
                             options={monedas}
@@ -859,6 +884,10 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_FECHA_DOC: e.value,
                                     }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_FECHA_DOC: Boolean(e.target.value)
+                                    }));
                                 }}
                             //dateFormat="dd/mm/yyyy"
                             disabled={esModoValidate}
@@ -875,6 +904,10 @@ function DocumentoSustentado({
                                     setDocumento((prevState) => ({
                                         ...prevState,
                                         STR_COMENTARIOS: e.target.value,
+                                    }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_COMENTARIOS: Boolean(e.target.value)
                                     }));
                                 }}
                             className='col-6'
