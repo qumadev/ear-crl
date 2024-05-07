@@ -1,4 +1,3 @@
-
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
@@ -182,7 +181,7 @@ export default function FormDT({ editable,
                     label=""
                     // onClick={() => { }}
                 /> */}
-          {usuario.rol?.id === "2" || usuario.rol?.id === "3" && ( //Verificar si el usuario es de rol 2
+          {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
           <Button
             label={"Aceptar aprobación"}
             size="large"
@@ -420,7 +419,7 @@ export default function FormDT({ editable,
           </div>
         </div>
         <div div className="flex flex-row flex-wrap gap-2">
-          <Button
+          {/*<Button
             icon="pi pi-refresh"
             onClick={() => {
               setFiltrado((prevFiltrado) => ({
@@ -428,12 +427,18 @@ export default function FormDT({ editable,
               }));
             }}
             severity="secondary"
-          />
-          <Button
+          />*/}
+          {/*<Button
             icon="pi pi-eraser"
- 
+             onClick={() => {
+                  setFiltrado({
+                     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
+                     nrRendicion: null,
+                    estados: null,
+             });
+             }}
             severity="secondary"
-          />
+            />*/}
           <Button
             label="Agregar"
             icon="pi pi-plus"

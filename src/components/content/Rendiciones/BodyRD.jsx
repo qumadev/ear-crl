@@ -22,8 +22,8 @@ function BodyRD({responsiveSizeMobile}) {
     nrRendicion: null,
      
     estados:
-      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1
-      ? [
+      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1? 
+      [
           {
             id: 8,
             name: "Aperturado",
