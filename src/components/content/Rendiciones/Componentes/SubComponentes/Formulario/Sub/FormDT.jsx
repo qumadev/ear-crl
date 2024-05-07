@@ -183,7 +183,7 @@ export default function FormDT({ editable,
                     label=""
                     // onClick={() => { }}
                 /> */}
-          {usuario.rol?.id === "2" || usuario.rol?.id === "3" && ( //Verificar si el usuario es de rol 2
+          {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
           <Button
             label={"Aceptar aprobación"}
             size="large"
