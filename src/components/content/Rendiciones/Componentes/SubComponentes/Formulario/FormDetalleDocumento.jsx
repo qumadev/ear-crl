@@ -153,15 +153,8 @@ function FormDetalleDocumento({
         Precio: false,
         Cantidad: false,
       });
-    
-    //   const onEdit = (detDoc) => {
-    //     setDocumento((prevState) => ({
-    //      ...prevState,
-    //       DocumentoDet: prevState.DocumentoDet.map((item) =>
-    //         item.Cod === detDoc.Cod? detDoc : item
-    //       ),
-    //     }));
-    //   };
+
+      
     
       const validarCampos = () => {
         for (let campo in campoValido) {

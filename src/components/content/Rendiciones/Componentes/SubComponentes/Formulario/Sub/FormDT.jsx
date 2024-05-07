@@ -59,12 +59,13 @@ export default function FormDT({ editable,
       }))
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
-      console.log(rendicion?.STR_ESTADO)
+      
 
     } catch (error) {
       showError(error.Message);
       console.log(error.Message);
-    } finally {
+    } 
+    finally {
       if (!fresh) setLoading(false);
     }
   }
@@ -72,9 +73,7 @@ export default function FormDT({ editable,
   useEffect(() => {
     obtenerData();
   }, []);
-  // console.log("fecha", rendicion?.SOLICITUDRD.STR_FECHAREGIS)
 
-  // enviando solicitud
   async function EnviarSolicitud() {
     try {
       setLoading(true);
@@ -389,7 +388,7 @@ export default function FormDT({ editable,
     XLSX.writeFile(workBook, "export.xlsx");
   };
 
-
+  const showEditButton = usuario.rol?.id== 1 && rendicion?.STR_ESTADO_INFO?.id <10;
   const confirmReversion = (id) => {
     confirmDialog({
       message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
@@ -432,13 +431,7 @@ export default function FormDT({ editable,
           />
           <Button
             icon="pi pi-eraser"
-            // onClick={() => {
-            //      setFiltrado({
-            //         rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-            //         nrRendicion: null,
-            //        estados: null,
-            // });
-            // }}
+ 
             severity="secondary"
           />
           <Button
@@ -450,7 +443,8 @@ export default function FormDT({ editable,
                 `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
 
-          // disabled={usuario.TipoUsuario != 1}
+          
+           disabled={!showEditButton }
           />
 
           <Button
