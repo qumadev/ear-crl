@@ -853,9 +853,9 @@ const statusBodyTemplate = (rowData) => {
         value={
             // rendiciones
             usuario.rol?.id === "2" ?
-            rendiciones.filter(rendicion => rendicion.STR_ESTADO > 10) :
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 10) :
             usuario.rol?.id === "3" ?
-            rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 11) :
             rendiciones
         }
         sortMode="multiple"
