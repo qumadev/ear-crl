@@ -218,9 +218,8 @@ function Solicitudes({
         command: () => {
           navigate(
             ruta +
-              `/solicitudes/editar/${
-                rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-              }`,
+            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+            }`,
             {
               state: {
                 create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -266,9 +265,8 @@ function Solicitudes({
         command: () => {
           navigate(
             ruta +
-              `/solicitudes/editar/${
-                rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-              }`,
+            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+            }`,
             {
               state: {
                 create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -473,9 +471,8 @@ function Solicitudes({
           onClick={() => {
             navigate(
               ruta +
-                `/solicitudes/editar/${
-                  rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-                }`,
+              `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+              }`,
               {
                 state: {
                   create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -619,8 +616,8 @@ function Solicitudes({
       usuario.rol?.id == 1
         ? usuario.sapID
         : filtrado.empleadoAsig == null
-        ? null
-        : filtrado.empleadoAsig.id,
+          ? null
+          : filtrado.empleadoAsig.id,
       usuario.rol.id,
       fechaInicial,
       fechaFin,
@@ -700,8 +697,8 @@ function Solicitudes({
         header={header}
         loading={loading}
         emptyMessage="No se encontraron Solicitudes"
-        // scrollable
-        // scrollHeight="400px"
+      // scrollable
+      // scrollHeight="400px"
       >
         {/* {responsiveSizeMobile ? (
           <></>
@@ -762,20 +759,20 @@ function Solicitudes({
           style={{ minWidth: "7rem" }}
         ></Column>
         <Column
+          field="STR_MOTIVOMIGR"
+          header="Mensaje de Migración"
+          style={{ minWidth: "20rem" }}
+        // frozen={true}
+        // alignFrozen="right"
+        ></Column>
+        <Column
           header="Acciones"
           body={actionBodyTemplate}
           exportable={false}
           style={{ minWidth: "10rem" }}
           // frozen={true}
           rowSpan={3}
-          // alignFrozen="right"
-        ></Column>
-        <Column
-          field="STR_MOTIVOMIGR"
-          header="Mensaje de Migración"
-          style={{ minWidth: "20rem" }}
-          // frozen={true}
-          // alignFrozen="right"
+        // alignFrozen="right"
         ></Column>
         {/* </>
         )} */}
