@@ -832,12 +832,29 @@ function Rendiciones({
   // const pruebas{
   
   // }
+  useEffect(() => {
+    //obtenerEstadoLocal();
+    console.log("USER: ",usuario.rol?.id)
+    console.log("LISTA: ",usuario.rol?.id === "2" ?
+    rendiciones.filter(rendicion => rendicion.STR_ESTADO > 10) :
+    usuario.rol?.id === "3" ?
+    rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
+    rendiciones)
+  }, [rendiciones]);
+
   return (
     <div>
       <Toast ref={toast} />
       <ConfirmDialog />
       <DataTable
-        value={rendiciones}
+        value={
+            // rendiciones
+            usuario.rol?.id === "2" ?
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO > 10) :
+            usuario.rol?.id === "3" ?
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
+            rendiciones
+        }
         sortMode="multiple"
         paginator
         rows={5}
