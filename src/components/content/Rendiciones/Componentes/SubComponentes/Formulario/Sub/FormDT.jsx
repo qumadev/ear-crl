@@ -166,6 +166,7 @@ export default function FormDT({ editable,
             icon="pi pi-plus"
             label="Guardar Borrador"
           /> */}
+          {usuario.rol?.id === "1" && ( //Verificar si el usuario es de rol 1
           <Button
             className='mr-2'
             label={"Solicitar Aprobación"}
@@ -175,13 +176,14 @@ export default function FormDT({ editable,
             }}
           // loading={loadingBtn}
           // disabled={validaEditable}
-          />
+          />)}
           {/* <Button
                     className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
                     icon="pi pi-trash"
                     label=""
                     // onClick={() => { }}
                 /> */}
+          {usuario.rol?.id === "2" || usuario.rol?.id === "3" && ( //Verificar si el usuario es de rol 2
           <Button
             label={"Aceptar aprobación"}
             size="large"
@@ -190,7 +192,7 @@ export default function FormDT({ editable,
             }}
             loading={loadingBtn}
           // disabled={validaEditableBtn}
-          />
+          />)}
         </div>
       </div>
     )
