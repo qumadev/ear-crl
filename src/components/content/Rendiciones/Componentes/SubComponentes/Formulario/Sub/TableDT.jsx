@@ -11,10 +11,12 @@ export default function TableDT({
     setRendicion,
 
 }) {
-    // console.log("pr", rendicion?.documentos)
-
+  
     const navigate = useNavigate();
     const { usuario, ruta } = useContext(AppContext);
+ const estadoEditable=[1,2,3,4,5,6,7,8,9];
+    console.log("Usuario", usuario)
+    
 
     const items= [
 
@@ -28,82 +30,78 @@ export default function TableDT({
         },
 
     ];
-    const actionverDoc= (documentos) => {
-        const items = [
-            {
-              label: "Editar",
-              icon: "pi pi-pencil",
-              command: () => {
-                navigate(
-                  ruta +
-                  `/rendiciones/${documentos.ID}/documentos/editar`
-                );
-              },
-            },
-          ];
-        return (
-            <div className="split-button">
+
+    
+    const actionverDoc = (documentos) => {
+      console.log("es",rendicion)
+      const items = [
+        {
+          label: "Editar",
+          icon: "pi pi-pencil",
+          command: () => {
+            navigate(
+              ruta +
+              `/rendiciones/${documentos.ID}/documentos/editar`
+            );
+          },
+        },
+      ];
+    
+      // Check if the user's ID is not 1
+      const showEditButton = usuario.usuarioId == 1;
+    
+      return (
+        <div className="split-button">
+          <Button
+            onClick={() => {
+              navigate(
+                ruta +
+                `/rendiciones/${documentos.ID}/documentos/detail`
+              );
+            }}
+            severity="success"
+          >
+            <div className="flex gap-3 align-items-center justify-content-center">
+              <span>Ver</span>
+              <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
+            </div>
+          </Button>
+          <div className="dropdown-content">
+
+            {showEditButton ?
+             (
+              items.map((data, key) => (
+                <Button
+                  key={key}
+                  onClick={() => {
+                    data.command();
+                  }}
+                >
+                  <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
+                  {data.label}
+                </Button>
+              ))
+            ) : 
+            (
               <Button
                 onClick={() => {
                   navigate(
                     ruta +
-                      `/rendiciones/${documentos.ID}/documentos/detail`
+                    `/rendiciones/${documentos.ID}/documentos/detail`
                   );
                 }}
-                severity="success"
               >
                 <div className="flex gap-3 align-items-center justify-content-center">
                   <span>Ver</span>
                   <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
                 </div>
               </Button>
-              <div className="dropdown-content">
-                {items.map((data, key) => (
-                  <Button
-                    key={key}
-                    onClick={() => {
-                      data.command();
-                    }}
-                  >
-                    <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-                    {data.label}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          );
-
-
-
-
-
-
-        // <SplitButton
-        
-        // label="ver"
-        // icon="pi pi-eye"
-        // onClick={() => {
-        //         navigate(ruta + 
-        //                 `/rendiciones/${documentos.ID}/documentos/detail`);
-        //           }} 
-        //           model={items}
-
-        // />
-
-        // <Button
-        //   label="ver"
-        //   icon="pi pi-eye"
-        //   severity="success"
-        //   onClick={() => {
-        //     navigate(ruta + 
-        //         `/rendiciones/${documentos.ID}/documentos/detail`);
-        //   }}
-
-        // />
-
-
-      
-    }
+            )
+            }
+          </div>
+        </div>
+      );
+    };
 
     //exportar po excel 
 
@@ -159,11 +157,11 @@ export default function TableDT({
                         style={{ width: "3rem" }}
                         
                     ></Column>
-                    <Column
+                    {/* <Column
                         header="Estado"
                         style={{ width: "3rem" }}
                         
-                    ></Column>
+                    ></Column> */}
                     <Column
                         header="Acciones"
                         style={{ width: "3rem" }}
