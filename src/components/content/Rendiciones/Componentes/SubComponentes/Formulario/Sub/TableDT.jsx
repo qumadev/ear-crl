@@ -159,11 +159,11 @@ export default function TableDT({
                         style={{ width: "3rem" }}
                         
                     ></Column>
-                    <Column
+                    {/* <Column
                         header="Estado"
                         style={{ width: "3rem" }}
                         
-                    ></Column>
+                    ></Column> */}
                     <Column
                         header="Acciones"
                         style={{ width: "3rem" }}
