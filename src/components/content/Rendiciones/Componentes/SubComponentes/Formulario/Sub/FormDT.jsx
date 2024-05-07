@@ -16,7 +16,8 @@ import Rendiciones from '../../../Rendiciones';
 import {
   aceptarAprobRendicion, obtenerRendicion, autorizarReversionAprobRendicion,
   revertirAprobRendicion, validacionDocumento,
-  enviarAprobRendicion
+  enviarAprobRendicion,
+  importarPlantilla
 }
   from '../../../../../../../services/axios.service';
 import { useState } from 'react';
@@ -315,6 +316,9 @@ export default function FormDT({ editable,
     });
   };
 
+  const getFileExtension = (filename) => {
+    return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
+  };
 
   const handleUpload = (event) => {
     setLoading(true);
