@@ -225,6 +225,14 @@ function FormularioRD() {
   //   }
   // }, [esModo]);
 
+  function formatearFecha(fecha) {
+    const fechaOriginal = new Date(fecha);
+    const dia = fechaOriginal.getDate().toString().padStart(2, '0');
+    const mes = (fechaOriginal.getMonth() + 1).toString().padStart(2, '0');
+    const año = fechaOriginal.getFullYear();
+    return `${dia}-${mes}-${año}`;
+  }
+
   /* Metodo para agregar */
   const registrarRD = async () => {
     setLoading(true);
@@ -249,6 +257,7 @@ function FormularioRD() {
         STR_IMPUESTO:detalle.Impuesto,
       }));
       let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
+      //let fechaFormateada = formatearFecha(documento.STR_FECHA_DOC);
       let _documento = {
         ...documento,
         ID: id,
@@ -699,6 +708,7 @@ function FormularioRD() {
     STR_MOTIVORENDICION: false,
     STR_MONEDA: false,
     STR_FECHA_DOC: false,
+    STR_COMENTARIOS:false
   }); 
   return (
     <div>

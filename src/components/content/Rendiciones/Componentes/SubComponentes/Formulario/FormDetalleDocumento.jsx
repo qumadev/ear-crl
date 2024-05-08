@@ -218,7 +218,7 @@ function FormDetalleDocumento({
                                     Concepto: e.target.value.ItemName,
                                     Almacen: e.target.value.WhsCode
                                 }));
-                                console.log(e.target.value),
+                                //console.log(e.target.value),
 
                                 setCampoValido(prevState => ({
                                     ...prevState,
@@ -339,9 +339,9 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     IndImpuesto: e.target.value,
-                                    Impuesto: e.target.value.name === "IGV" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0
+                                    Impuesto: e.target.value.name === "IGV (18%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0
                                 }));
-                                console.log("ind: ", e.target.value)
+                                //console.log("ind: ", e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,
                                     IndImpuesto: Boolean(e.target.value)
@@ -353,7 +353,6 @@ function FormDetalleDocumento({
                             optionLabel="name"
                             placeholder='Seleccione Ind. Impuesto'
                         />
-                        { console.log("opcigv: ",indImpuestos)}
                         <label htmlFor="">(*)Precio:</label>
                         <InputText
                             value={detDoc?.Precio}
