@@ -512,14 +512,14 @@ function FormularioSL() {
 
         {!esModoRegistrar && (
           <div className="flex text-2xl align-items-center gap-2 p-2">
-            <Button
+            {/*<Button
               type="button"
               icon="pi pi-file-pdf"
               severity="warning"
               rounded
               onClick={downloadAndOpenPdf}
               data-pr-tooltip="PDF"
-            />
+        />*/}
           </div>
         )}
         {/* {(solicitudRD.estado > 5) & (solicitudRD.estado != 7) && (
