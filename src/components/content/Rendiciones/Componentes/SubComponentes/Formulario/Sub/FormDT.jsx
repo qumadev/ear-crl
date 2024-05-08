@@ -617,7 +617,7 @@ export default function FormDT({ editable,
 
         {/* Botones por rol */}
         {
-          usuario.rol?.id === "2" && rendicion?.STR_ESTADO === 10 ? (
+          usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 ? (
             <Button
               label="Revertir Aprobación"
               size="large"
