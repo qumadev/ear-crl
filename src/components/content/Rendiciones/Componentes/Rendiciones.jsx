@@ -918,7 +918,7 @@ const statusBodyTemplate = (rowData) => {
         ></Column>
         <Column
           field="STR_NRCARGA"
-          header="Carga Docs"
+          header="DocNum"
           style={{ minWidth: "7rem" }}
         ></Column>
         <Column

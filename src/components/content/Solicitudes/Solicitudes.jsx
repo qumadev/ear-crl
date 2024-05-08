@@ -712,11 +712,11 @@ function Solicitudes({
           style={{ width: "7rem" }}
           className="font-bold"
         ></Column>
-        <Column
+        {/* <Column
           field="STR_NRRENDICION"
           header="N° Rendición"
           style={{ minWidth: "12rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           field="STR_ESTADO_INFO"
           header="Estado"
@@ -750,11 +750,11 @@ function Solicitudes({
           header="DocEntry"
           style={{ minWidth: "10rem" }}
         ></Column>
-        <Column
+        {/* <Column
           field="STR_CARGADOCS"
           header="Carga Docs"
           style={{ minWidth: "7rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
