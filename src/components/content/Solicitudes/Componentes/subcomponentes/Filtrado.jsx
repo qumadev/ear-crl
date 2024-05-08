@@ -154,7 +154,7 @@ export default function Filtrado({
         <div className="grid ">
           <div className="col-12 md:col-6 lg:col-3">
             <div className="mb-3 flex flex-column gap-2 justify-content-center">
-              <Dropdown
+              {/*<Dropdown
                 value={filtrado.empleadoAsig}
                 onChange={(e) =>
                   setFiltrado((prevSolicitudRD) => ({
@@ -169,7 +169,7 @@ export default function Filtrado({
                 valueTemplate={selectedOptionTemplate}
                 itemTemplate={complementoOptionTemplate}
                 className="w-full md:w-14rem"
-              />
+              />*/}
             </div>
           </div>
         </div>
