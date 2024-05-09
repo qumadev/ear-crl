@@ -171,7 +171,7 @@ export function BodySL({ responsiveSizeMobile }) {
             onClick={() => {
               navigate(ruta + "/solicitudes/agregar");
             }}
-            // disabled={(usuario.rol.id != 1)}
+            disabled={(usuario.rol.id != 1)}
           />
           {/* <Button
             label="Ver"

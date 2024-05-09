@@ -212,7 +212,7 @@ function Solicitudes({
 
   const actionBodyTemplate = (rowData) => {
     const items = [
-      {
+      {/*
         label: "Editar",
         icon: "pi pi-eye",
         command: () => {
@@ -227,13 +227,13 @@ function Solicitudes({
             }
           );
         },
-      },
+      */},
     ];
 
     if (
       (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {
+    ) {/*
       items.push({
         label: "Aceptar",
         icon: "pi pi-check",
@@ -241,12 +241,12 @@ function Solicitudes({
           confirmAceptacion(rowData);
         },
       });
-    }
+    */}
 
     if (
       (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {
+    ) {/*
       items.push({
         label: "Rechazar",
         icon: "pi pi-times",
@@ -254,11 +254,11 @@ function Solicitudes({
           confirmRechazo(rowData);
         },
       });
-    }
+    */}
     if (
       ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
       (usuario.rol.id == 1)
-    ) {
+    ) {/*
       items.push({
         label: "Editar",
         icon: "pi pi-pencil",
@@ -275,10 +275,10 @@ function Solicitudes({
           );
         },
       });
-    }
+    */}
 
-    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) {
-      items.push({
+    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) 
+    {/*items.push({
         label: "Reintentar Migracion",
         icon: "pi pi-pencil",
         command: () => {
@@ -286,9 +286,10 @@ function Solicitudes({
           // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
         },
       });
-    }
+    */}
 
-    if (rowData.STR_ESTADO == 6) {
+    if (rowData.STR_ESTADO == 6) 
+    {/*
       items.push({
         label: "Descargar Solicitud",
         icon: "pi pi-file-pdf",
@@ -301,9 +302,10 @@ function Solicitudes({
           // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
         },
       });
-    }
+    */}
 
-    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) {
+    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) 
+    {/*
       items.push({
         label: "Enviar Aprobación",
         icon: "pi pi-send",
@@ -311,7 +313,7 @@ function Solicitudes({
           confirm1(rowData);
         },
       });
-    }
+    */}
 
     const downloadAndOpenPdf = async (docEntry, numRendi, tipoEar) => {
       setLoading(true);
@@ -468,6 +470,7 @@ function Solicitudes({
     return (
       <div className="split-button">
         <Button
+          label = "Ver"
           onClick={() => {
             navigate(
               ruta +
@@ -482,12 +485,12 @@ function Solicitudes({
           }}
           severity="success"
         >
-          <div className="flex gap-3 align-items-center justify-content-center">
+          {/*<div className="flex gap-3 align-items-center justify-content-center">
             <span>Ver</span>
             <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-          </div>
+          </div>*/}
         </Button>
-        <div className="dropdown-content">
+        {/*<div className="dropdown-content">
           {items.map((data, key) => (
             <Button
               key={key}
@@ -499,7 +502,7 @@ function Solicitudes({
               {data.label}
             </Button>
           ))}
-        </div>
+        </div>*/}
       </div>
     );
   };
@@ -720,7 +723,7 @@ function Solicitudes({
         <Column
           field="STR_ESTADO_INFO"
           header="Estado"
-          style={{ minWidth: "8rem" }}
+          style={{ minWidth: "9rem" }}
           body={statusBodyTemplate}
         ></Column>
         <Column
