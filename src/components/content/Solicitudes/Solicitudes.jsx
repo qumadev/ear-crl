@@ -642,9 +642,9 @@ function Solicitudes({
 
   const statusBodyTemplate = (rowData) => {
     //console.log(typeof rowData.STR_ESTADO_INFO)
-    if((usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData.STR_ESTADO_INFO === "Borrador"){
-      return null;
-    }
+    // if((usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData.STR_ESTADO_INFO === "Borrador"){
+    //   return null;
+    // }
     return (
       <Tag
         className="font-bold"
@@ -695,7 +695,14 @@ function Solicitudes({
       <ConfirmDialog />
       <DataTable
         value={solicitudes.filter(rowData => {
-          return !((usuario.rol.id !== 2 && usuario.rol.id !== 3) && rowData.STR_ESTADO_INFO === "Borrador");
+          // return !((usuario.rol.id !== 2 && usuario.rol.id !== 3) && rowData.STR_ESTADO_INFO === "Borrador");
+          // return ((usuario.rol.id != 2 && usuario.rol.id != 3) && rowData.STR_ESTADO_INFO === "Borrador");
+          switch (usuario.rol?.id) {
+            case "1": return true;
+            case "2": return rowData.STR_ESTADO >= 2;
+            case "3": return rowData.STR_ESTADO >= 3;
+          }
+          // return rowData.STR_ESTADO_INFO === "Borrador" ? usuario.rol.id === 1 : true;
         })}
         sortMode="multiple"
         paginator
