@@ -203,6 +203,17 @@ export default function FormDT({ editable,
               // disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO) || loading}
             />
           )}
+          {usuario.rol?.id == "3" ? (
+              <Button
+                label="Autorizar Edicion"
+                severity="danger"
+                size="large"
+                onClick={() => confirmAutorizarReversion(rendicion?.ID)}
+              // disabled={
+              //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+              // }
+              />
+            ) : ""}
         </div>
       </div>
     );
@@ -638,9 +649,9 @@ export default function FormDT({ editable,
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
             // }
             />
-          ) :
+          )*/}
 
-            usuario.rol?.id == "3" ? (
+            {/*usuario.rol?.id == "3" ? (
               <Button
                 label="Autorizar Edicion"
                 severity="danger"
