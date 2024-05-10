@@ -165,36 +165,48 @@ export default function FormDT({ editable,
             label="Guardar Borrador"
           /> */}
           {usuario.rol?.id === "1" && ( //Verificar si el usuario es de rol 1
-          <Button
-            className='mr-2'
-            label={"Solicitar Aprobación"}
-            size="large"
-            onClick={(e) => {
-              ValidacionEnvio();
-            }}
-          // loading={loadingBtn}
-          // disabled={validaEditable}
-          />)}
+            <Button
+              className='mr-2'
+              label={"Solicitar Aprobación"}
+              size="large"
+              onClick={(e) => {
+                ValidacionEnvio();
+              }}
+              // loading={loadingBtn}
+              // disabled={validaEditable}
+            />
+          )}
           {/* <Button
-                    className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
-                    icon="pi pi-trash"
-                    label=""
-                    // onClick={() => { }}
-                /> */}
+            className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
+            icon="pi pi-trash"
+            label=""
+            // onClick={() => { }}
+          /> */}
           {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
-          <Button
-            label={"Aceptar aprobación"}
-            size="large"
-            onClick={(e) => {
-              confirmAceptacion();
-            }}
-            loading={loadingBtn}
-          // disabled={validaEditableBtn}
-          />)}
+            <Button
+              label={"Aceptar Aprobación"}
+              size="large"
+              className="mr-5"
+              onClick={(e) => {
+                confirmAceptacion();
+              }}
+              loading={loadingBtn}
+              // disabled={validaEditableBtn}
+            />
+          )}
+          {usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
+            <Button
+              label="Revertir Aprobación"
+              size="large"
+              style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
+              onClick={() => confirmReversion(rendicion?.ID)}
+              // disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO) || loading}
+            />
+          )}
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   /* States Globales */
   const showSuccess = (mensaje) => {
@@ -616,11 +628,11 @@ export default function FormDT({ editable,
       <div className="card flex flex-wrap  gap-3 mx-3">
 
         {/* Botones por rol */}
-        {
-          usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 ? (
+        {/*usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 ? (
             <Button
               label="Revertir Aprobación"
               size="large"
+              style={{ backgroundColor: "#FFA500" }}
               onClick={() => confirmReversion(rendicion?.ID)}
             // disabled={
             //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
@@ -638,7 +650,7 @@ export default function FormDT({ editable,
               //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
               // }
               />
-            ) : ""}
+            ) : ""*/}
       </div>
       <TableDT
         rendicion={rendicion}

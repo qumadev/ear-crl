@@ -471,6 +471,7 @@ function Solicitudes({
       <div className="split-button">
         <Button
           label = "Ver"
+          icon = "pi pi-eye"
           onClick={() => {
             navigate(
               ruta +
@@ -640,6 +641,10 @@ function Solicitudes({
   }
 
   const statusBodyTemplate = (rowData) => {
+    //console.log(typeof rowData.STR_ESTADO_INFO)
+    if((usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData.STR_ESTADO_INFO === "Borrador"){
+      return null;
+    }
     return (
       <Tag
         className="font-bold"
@@ -648,6 +653,7 @@ function Solicitudes({
       />
     );
   };
+
 
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -688,7 +694,9 @@ function Solicitudes({
       <Toast ref={toast} />
       <ConfirmDialog />
       <DataTable
-        value={solicitudes}
+        value={solicitudes.filter(rowData => {
+          return !((usuario.rol.id !== 2 && usuario.rol.id !== 3) && rowData.STR_ESTADO_INFO === "Borrador");
+        })}
         sortMode="multiple"
         paginator
         rows={5}
