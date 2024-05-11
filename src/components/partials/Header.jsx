@@ -18,7 +18,7 @@ export function Header({
   const [cargo, setCargo] = useState("");
   const buttonRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
-  const [isHoveredC, setIsHoveredC] = useState(false);
+  const [isHoveredConfig, setIsHoveredConfig] = useState(false);
   const [isHoveredUs, setIsHoveredUs] = useState(false);
 
   const handleSpanClick = () => {
@@ -164,33 +164,32 @@ export function Header({
             </div>
           )}
 
-            <div 
-              className={`flex flex-column align-items-center  cursor-pointer ${
-              isHoveredC ? "hoveredconfig" : ""
-              }`}
-              onMouseEnter={() => setIsHoveredC(true)}
-              onMouseLeave={() => setIsHoveredC(false)}
-            > 
-                <Button
-                  icon="pi pi-cog"
-                  rounded
-                  text
-                  severity="success"
-                  aria-label="Search"
-                  size="large"
-                  className="align-items-center justify-content-center"
-                  style={{ color: "#97E723" }}
-                  onClick={() => {
-                    navigate(ruta + "/Config")
-                  }}
-                ></Button>
-                <span
-                  className="text-xs"
-                  style={{ color: "#ffffff" }}
-                >
-                  Configuración
-                </span>
-            </div>
+          <div
+            className={`flex flex-column align-items-center cursor-pointer ${
+              isHoveredConfig? "hoveredconfig" : ""
+            }`}
+            onMouseEnter={() => setIsHoveredConfig(true)}
+            onMouseLeave={() => setIsHoveredConfig(false)}
+          >
+            <Button
+            icon="pi pi-cog"
+            rounded
+            text
+            severity="success"
+            aria-label="Search"
+            size="large"
+            style={{ color: "#97E723"}}
+            onClick={(e) => {
+              navigate(ruta + "/configuracion");
+            }}
+            ></Button>
+            <span
+              className="text-xs"
+              style={{ color: "#ffffff" }}
+            >
+              Configuración
+            </span>
+          </div>
 
           <div
             className={`flex flex-column align-items-center cursor-pointer ${
