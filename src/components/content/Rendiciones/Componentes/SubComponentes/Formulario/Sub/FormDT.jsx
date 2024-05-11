@@ -343,6 +343,20 @@ export default function FormDT({ editable,
     return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
   };
 
+  async function obtenerRendicionLocal(fresh = false) {
+    if (!fresh) setLoading(true);
+    try {
+      let response = await obtenerRendicion(id);
+
+      setRendicion(response.data.Result[0]);
+      console.log(response.data.Result);
+    } catch (error) {
+      showError(error.Message);
+      console.log(error.Message);
+    } finally {
+      if (!fresh) setLoading(false);
+    }
+  }
   const handleUpload = (event) => {
     setLoading(true);
     const allowedExtensions = ["xlsx"];
