@@ -2,6 +2,8 @@ import { Checkbox } from '@mui/material';
 import { InputNumber } from "primereact/inputnumber";
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
+import { ColumnGroup } from 'primereact/columngroup';
+import { Row } from 'primereact/row';
 import { DataTable } from 'primereact/datatable';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
@@ -21,78 +23,96 @@ import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 
 
-function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) {
+function DocumentoSustentado({
+    documento,
+    setDocumento,
+    detalles,
+    setDetalle,
+    moneda,
+    esModo,
+    editable,
+    showError,
+    setCampoValidoCabecera
+}) {
+
     //  const {moneda, setmoneda }
     const navigate = useNavigate();
+    const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
     const { usuario, ruta, config } = useContext(AppContext);
 
-    // const [documento, setDocumento] = useState(
-    //     {
-    //         ID: null,
-    //         STR_RENDICION: null,
-    //         STR_FECHA_CONTABILIZA: null,
-    //         STR_FECHA_DOC: null,
-    //         STR_FECHA_VENCIMIENTO: null,
-    //         STR_PROVEEDOR: null,
-    //         STR_RUC: null,
-    //         STR_TIPO_AGENTE: null,
-    //         STR_MONEDA: null,
-    //         STR_COMENTARIOS: null,
-    //         STR_TIPO_DOC: null,
-    //         STR_SERIE_DOC: null,
-    //         STR_CORR_DOC: null,
-    //         STR_VALIDA_SUNAT: null,
-    //         STR_ANEXO_ADJUNTO: null,
-    //         STR_OPERACION: null,
-    //         STR_PARTIDAFLUJO: null,
-    //         STR_RD_ID: null,
-    //         STR_TOTALDOC: null,
-    //         STR_RAZONSOCIAL: null,
-    //         DocumentoDet:[
-    //             {
-    //                 Cod: {
-    //                   ItemCode: null,
-    //                   ItemName: null,
-    //                   U_BPP_TIPUNMED: null,
-    //                   WhsCode: null,
-    //                   Stock: 0,
-    //                   Precio: 0
-    //                 },
-    //                 Concepto: null,
-    //                 Almacen: null,
-    //                 Proyecto: null,
-    //                 UnidadNegocio: null,
-    //                 Filial: null,
-    //                 Areas: null,
-    //                 CentroCosto: null,
-    //                 IndImpuesto: null,
-    //                 Precio: 0,
-    //                 Cantidad: 0,
-    //                 Impuesto: 0
-    //               }
-    //         ]
-    //     }
+    const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+    const [visibleEditar, setVisibleEditar] = useState(false);
+    const [detalleEditar, setDetalleEditar] = useState(null);
+    const [modoEditar, setModoEditar] = useState("agregar");
 
-    // );
+    const editDetalle = (rowData) => {
+        // setDetalleEditar(rowData);
+        // setModoEditar("editar");
+        setProductDialog(true);
+    };
 
-    const actionBodyTemplate = (rowData) => {
+
+    // const deleteProduct = async (rowData) => { 
+    //     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+    //     setArticulos(updatedArticulos);
+    // };
+    const deleteProduct = async (rowData) => {
+
+        // const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+        // setArticulos(updatedArticulos);
+        const updatedArticulos = articulos.map((item) => {
+            if (item.ID === rowData.ID) {
+                return {
+                    ...item,
+                    FLG_ELIM: 1
+                };
+            }
+            return item;
+        });
+        console.log("rowid: ",rowData.ID)
+        console.log("elimin: ",updatedArticulos)
+        setArticulos(updatedArticulos);
+    };
+
+
+    // const editDetalle = (rowData) => {
+    //     // setDetalleEditar(rowData);
+    //     // setModoEditar("editar");
+    //     setProductDialog(true);
+    // };
+
+
+
+
+
+
+
+    //Modificar  esto para edioa6||
+    const actionBodyTemplate1 = (rowData) => {
         const items = [
             {
-                label: "Ver",
+                label: "Editar",
                 icon: "pi pi-eye",
                 command: async () => {
-                    try {
-                        if (rowData.STR_ESTADO == 8) {
-                            await actualizarRendiEnCarga(rowData);
-                            await new Promise((resolve) => setTimeout(resolve, 5000));
-                        }
-                    } catch (error) {
-                    } finally {
-                        // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                        console.log("entra")
-                        navigate(ruta + `/rendiciones/8/documentos`);
-                    }
-                },
+                    console.log("logdata",)
+                    editDetalle(articles)
+                }
+                // command: async () => {
+                //     try {
+                //         if (rowData.STR_ESTADO == 8) {
+                //             await actualizarRendiEnCarga(rowData);
+                //             await new Promise((resolve) => setTimeout(resolve, 5000));
+                //         }
+                //     } catch (error) {
+                //     } finally {
+                //         sw
+
+
+                //         // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                //         // console.log("entra")
+                //         // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
+                //     }
+                // },
             },
         ];
 
@@ -281,7 +301,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             // navigate(ruta + "/rendiciones/ver");
                             // navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
                             // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-                            navigate(ruta + `/rendiciones/8/documentos/agregar`);
+                            navigate(ruta + `/rendiciones/${rowData.ID}/documentos/agregar`);
                         }
                     }}
                     severity="success"
@@ -305,23 +325,25 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                     ))}
                 </div>
             </div>
-
-
         );
     };
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
+    
+
+
     const openNew = () => {
+        setEditing(false);
         setProductDialog(true);
+        //setDetalle(articulos);
     };
 
-    const [selectedMoneda, setSelectedMoneda] = useState(null);
-    const [selectedTipo, setSelectedTipo] = useState(null);
-    const [selectedMotivo, setSelectedMotivo] = useState(null);
-    // const [selectedProveedor, setSelectedProveedor] = useState(null);
+    //console.log("nuevof",articulos)
+
 
     const [tipos, setTipos] = useState(null);
+    const [afectacion, setAfectacion] = useState(null);
     const [motivos, setMotivos] = useState(null);
     const [proveedores, setProveedores] = useState(null);
     const [articles, setArticles] = useState(null);
@@ -330,11 +352,15 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
     const [areas, setAreas] = useState(null);
     const [centroCostos, setCentroCostos] = useState(null);
     const [unidNegocios, setUnidNegocios] = useState(null);
-
-    const [razon, setRazon] = useState(null);
-    const [articulos, setArticulos] = useState([])
+    const [editing, setEditing] = useState(false);
+    const [articulos, setArticulos] = useState([]);
     const [DocumentoDet, setDocumentoDet] = useState([]);
 
+    useEffect(() => {
+        setDetalle(articulos);
+    }, [articulos])
+
+    
     async function obtenerData() {
         const response = await Promise.all([
             // obtenerTipos(),
@@ -348,6 +374,22 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
             obtenerCentroCosto(),
             obtenerUnidadNegocio()
         ]);
+        const dataafectacion = [
+            {
+                id: '1',
+                name: 'Retencion'
+            },
+            {
+                id: '2',
+                name: 'Detraccion'
+            },
+            {
+                id: '3',
+                name: '-'
+            }
+        ];
+
+        setAfectacion(dataafectacion)
         setTipos(response[0].data.Result)
         setMotivos(response[1].data.Result)
         setProveedores(response[2].data.Result)
@@ -358,11 +400,74 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
         setCentroCostos(response[7].data.Result)
         setUnidNegocios(response[8].data.Result)
     }
+
+    useEffect(() => {
+        if (detalles && detalles.length > 0) {
+            const articles = detalles.map((detalle) => ({
+                ID: detalle.ID ? detalle.ID : null,
+                STR_SUBTOTAL: detalle.STR_SUBTOTAL,
+                STR_TPO_OPERACION: detalle.STR_TPO_OPERACION,
+                STR_DOC_ID: detalle.STR_DOC_ID,
+                STR_DIM3: detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
+                Cod: detalle.STR_CODARTICULO,
+                Concepto: detalle.STR_CONCEPTO,
+                Almacen: detalle.STR_ALMACEN,
+                Proyecto: detalle.STR_PROYECTO,
+                UnidadNegocio: detalle.STR_DIM1,
+                Filial: detalle.STR_DIM2,
+                Areas: detalle.STR_DIM4,
+                CentroCosto: detalle.STR_DIM5,
+                IndImpuesto: detalle.STR_INDIC_IMPUESTO,
+                Precio: detalle.STR_PRECIO,
+                Cantidad: detalle.STR_CANTIDAD,
+                Impuesto: detalle.STR_IMPUESTO
+            }));
+            // Actualizamos el estado articulos con el nuevo array de objetos personalizados
+            setArticulos(articles);
+        } else {
+            setArticulos([]);
+        }
+
+    }, [detalles])
+
+    useEffect(() => {
+        if(esModo === "Agregar"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '3', name: '-'},
+            }));
+        }
+    }, [])
+
     useEffect(() => {
         obtenerData();
-        setDocumentoDet(articulos)
+        setDocumentoDet(articulos);
         // setDocumento(...documento, DocumentoDet)
     }, []);
+    const [TotalMonto, setTotalMonto] = useState("0.00");
+    useEffect(() => {
+        //let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
+        let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
+        if(subtotalTotal>700 && documento.STR_TIPO_DOC.name==="Factura"){
+            setDocumento((prevState) => ({
+                ...prevState,
+                STR_AFECTACION: {id: '1', name: 'Retencion'}
+            }));
+        }
+        setTotalMonto(subtotalTotal)
+        // console.log("datoprobando: ",subtotalTotal)
+    }, [articulos])
+
+    // useEffect(()=>{
+    //     const articulosConSubtotal = articulos.map((detalle) => ({
+    //         ...detalle,
+    //         Subtotal: detalle.Precio * detalle.Cantidad,
+    //     }));
+    //     setArticulos(articulosConSubtotal);
+    // },[articulos])
+    // useEffect(() => {
+    //     console.log("doc3: ", documento)
+    // }, [documento])
 
     const monedas = [
         { id: 'SOL', name: 'SOL' },
@@ -370,11 +475,10 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
     ];
 
     const indImpuestos = [
-        { id: 'IGV', name: 'IGV' },
+        { id: 'IGV', name: 'IGV (18%)' },
         { id: 'EXO', name: 'EXO' },
     ];
 
-    const [proveedor, handleChangeProveedor] = useState(null);
 
     const selectedOptionTemplate = (option, props) => {
         if (option) {
@@ -417,9 +521,12 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
     const quitArticulo = () => { }
 
     const showDoc = () => {
-        console.log("d: ", documento)
-        console.log("a: ", articulos)
+        console.log("nuevaData",articulos)
+        // console.log("d: ", documento)
+        // console.log("a: ", articulos)
     }
+
+    console.log("mi",articulos)
 
     // Personalizando campos
     const transformDataForExport = (articulos) => {
@@ -481,6 +588,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
             );
         }
     };
+
     const leftToolbarTemplate = () => {
         return (<div className="">
             <div className="col-12 md:col-6 lg:col-12">
@@ -495,28 +603,92 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                     label="Eliminar Seleccionados"
                     onClick={() => { }}
                 />
-
             </div>
-
         </div>
-
-
         )
     }
+    const [rowData, setRowData] = useState(null); // Define rowData state
 
+    const editDetallep = (rowData) => {
+        setRowData(rowData); // Update rowData state
+        console.log("f",rowData)
+        setProductDialog(true);
+        setEditing(true);
+    };
+    // const editDetallep = (detalles) => {
+    //     setDetalle({ ...detalles });
+    //     console.log(...detalles)
+    //     setProductDialog(true);
+    //   };
+    
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <Button
+                    icon={"pi pi-pencil"}
+                    rounded
+                    outlined
+                    className="mr-2"
+                    onClick={() => editDetallep(rowData)}
+                />
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    outlined
+                    severity="danger"
+                    onClick={() => deleteProduct(rowData)} 
+                    disabled={editable}
+                />
+            </React.Fragment>
+        );
+    };
+    const footerGroup = (
+        <ColumnGroup>
+          <Row>
+            <Column
+              footer="Total:"
+              colSpan={13}
+              footerStyle={{ textAlign: 'right',  }}
+            />
+            <Column footerStyle={{ }} footer={TotalMonto} />
+            <Column footer=""/>
+          </Row>
+        </ColumnGroup>
+    );
 
     return (
         <div>
             {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
-            <h1>{esModoDetail ? "Detalle" : "Agregar"} Documento Sustentado:</h1>
-            <div className="col-12 md:col-6 lg:col-12">
+            <h1>{esModo} Documento Sustentado:</h1>
+            <div className="col-12 md:col-12 lg:col-12">
                 <div className="mb-3 flex flex-column">
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)¿Es exterior?</label>
                         <Checkbox
                             className='col-6'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         ></Checkbox>
+                    </div>
+                    <div className="flex col-12 align-items-center gap-5">
+                        <label className='col-2'>Afectacion</label>
+                        <Dropdown
+                            className='col-6'
+                            value={documento.STR_AFECTACION}
+                            onChange={
+                                (e) => {
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_AFECTACION: e.target.value,
+                                    }));
+                                    console.log("val: ",e.target.value)
+                                }}
+                            options={afectacion}
+                            optionLabel="name"
+                            filter
+                            filterBy='name'
+                            placeholder='Seleccione Afectacion'
+                            disabled={esModoValidate}
+                        />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Tipo</label>
@@ -529,28 +701,38 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                                         ...prevState,
                                         STR_TIPO_DOC: e.target.value,
                                     }));
+                                    console.log("value: ", e.target.value)
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_TIPO_DOC: Boolean(e.target.value)
+                                    }));
                                 }}
                             options={tipos}
                             optionLabel="name"
                             filter
                             filterBy='name'
                             placeholder='Seleccione Tipo'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)N° de serie</label>
                         <InputText
                             value={documento.STR_SERIE_DOC}
+                            maxLength={4}
                             onChange={(e) => {
                                 setDocumento((prevState) => ({
                                     ...prevState,
                                     STR_SERIE_DOC: e.target.value,
                                 }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_SERIE_DOC: Boolean(e.target.value)
+                                }));
                             }}
                             className='col-6'
                             placeholder='N° de serie'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -558,16 +740,29 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                         <InputText
                             className='col-6'
                             placeholder='Correlativo'
+                            maxLength={8}
                             value={documento.STR_CORR_DOC}
                             onChange={(e) => {
+                                const inputValue = e.target.value;
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_CORR_DOC: e.target.value,
+                                    STR_CORR_DOC: inputValue,
+                                }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: Boolean(e.target.value)
+                                }));
+                            }}
+                            onBlur={() => {
+                                const paddedValue = documento.STR_CORR_DOC.padStart(8, '0'); // Rellenamos con ceros a la izquierda cuando se pierde el foco
+                                setDocumento((prevState) => ({
+                                    ...prevState,
+                                    STR_CORR_DOC: paddedValue,
                                 }));
                             }}
                             // value={numero}
                             // onChange={handleNumeroChange}
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                         {!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
                     </div>
@@ -575,15 +770,19 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                         <label className='col-2'>(*)RUC</label>
                         <Dropdown
                             className='col-6'
-                            value={documento.STR_RUC}
+                            value={documento.STR_PROVEEDOR}
                             onChange={(e) => {
                                 // handleChangeProveedor(e.value)
                                 // setRazon(e.value.CardName)
-                                console.log(e.target.value)
                                 setDocumento((prevState) => ({
                                     ...prevState,
-                                    STR_RUC: e.target.value,
+                                    STR_PROVEEDOR: e.target.value,
+                                    STR_RUC: e.target.value.LicTradNum,
                                     STR_RAZONSOCIAL: e.target.value.CardName
+                                }));
+                                setCampoValidoCabecera(prevState => ({
+                                    ...prevState,
+                                    STR_PROVEEDOR: Boolean(e.target.value)
                                 }));
                             }}
                             options={proveedores}
@@ -594,7 +793,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             placeholder="Selecciona Proveedor"
                             valueTemplate={selectedOptionTemplate}
                             itemTemplate={complementoOptionTemplate}
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -617,7 +816,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             }}
                             className='col-6'
                             placeholder='Direccion'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -631,13 +830,17 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                                         ...prevState,
                                         STR_MOTIVORENDICION: e.target.value,
                                     }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_MOTIVORENDICION: Boolean(e.target.value)
+                                    }));
                                 }}
                             options={motivos}
                             optionLabel="name"
                             filter
                             filterBy='name'
                             placeholder='Seleccione Motivo'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
@@ -652,59 +855,108 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                                         ...prevState,
                                         STR_MONEDA: e.target.value,
                                     }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_MONEDA: Boolean(e.target.value)
+                                    }));
                                 }}
                             options={monedas}
                             optionLabel="name"
                             filter
                             filterBy='name'
                             placeholder='Seleccione Moneda'
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Fecha</label>
                         <Calendar
                             className='col-6'
-                            // value={}
+                            value={documento.STR_FECHA_DOC}
+                            //value={fecha}
                             // readOnlyInput
                             // disabled
-                            placeholder='Seleccione fecha'
-                            dateFormat="dd/mm/yy"
-                            disabled={esModoDetail}
+                            placeholder={documento.STR_FECHA_DOC}
+                            onChange={
+                                (e) => {
+                                    // setSelectedTipo(e.value.value);
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_FECHA_DOC: e.value,
+                                    }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_FECHA_DOC: Boolean(e.target.value)
+                                    }));
+                                }}
+                            //dateFormat="dd/mm/yyyy"
+                            disabled={esModoValidate}
+                            locale="es"
                         />
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Comentario</label>
                         <InputTextarea
+                            value={documento.STR_COMENTARIOS}
+                            onChange={
+                                (e) => {
+                                    // setSelectedTipo(e.value.value);
+                                    setDocumento((prevState) => ({
+                                        ...prevState,
+                                        STR_COMENTARIOS: e.target.value,
+                                    }));
+                                    setCampoValidoCabecera(prevState => ({
+                                        ...prevState,
+                                        STR_COMENTARIOS: Boolean(e.target.value)
+                                    }));
+                                }}
                             className='col-6'
                             rows={5}
                             cols={30}
-                            disabled={esModoDetail}
+                            disabled={esModoValidate}
                         />
                     </div>
-                    {esModoDetail ? "" :
-
-                        <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-
-                    }
-
-
+                    <div className="flex col-12">
+                        { esModoValidate ? "" :
+                        <>
+                            <Button
+                                className='col-6'
+                                label="Agregar Detalle"
+                                onClick={openNew}
+                            />
+                            {/* <Button 
+                                className='col-4'
+                                label="Eliminar Seleccionados"
+                                onClick={() => { }}
+                            /> */}
+                        </> 
+                        }
+                        <Button
+                            className='col-6'
+                            label="Exportar Detalle"
+                            style={{ backgroundColor: "black", borderColor: "black" }}
+                            onClick={() => {
+                                exportExcel();
+                            }}
+                        />
+                    </div>
                     <Divider />
 
                     <DataTable
-                        value={articulos}
+                        //value={articulos}
+                        value={articulos.filter(item => item.FLG_ELIM !== 1)}
                         sortMode="multiple"
                         paginator
                         rows={5}
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         tableStyle={{ minWidth: "12rem" }}
                         header="Detalle de Documento Sustentado"
-                    // loading={loading}
+                        footerColumnGroup={footerGroup}
                     >
                         <Column
                             header="N°"
                             headerStyle={{ width: "3rem" }}
-                            body={actionBodyTemplate}
+                            body={(data, options) => options.rowIndex + 1}
                         >
                         </Column>
                         <Column
@@ -772,6 +1024,18 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                             header="Impuesto"
                             style={{ minWidth: "7rem" }}
                         ></Column>
+                         <Column
+                            //field="Cantidad*Precio"
+                            header="Subtotal"
+                            body={(rowData) => rowData.Cantidad * rowData.Precio}
+                            style={{ minWidth: "7rem" }}
+                        ></Column>
+                        <Column
+                            header="Acciones"
+                            headerStyle={{ width: "3rem" }}
+                            body={actionBodyTemplate}
+                        >
+                        </Column>
                     </DataTable>
                     {/* { esModoDetail ? "" :
                         // <Button
@@ -782,13 +1046,20 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                     } */}
                 </div>
             </div>
-
             <FormDetalleDocumento
+                visible={visibleEditar}
+                setVisible={setVisibleEditar}
+                detalle={detalleEditar}
+                editing={editing}
+                onEdit={editDetallep}
+                setEditing={setEditing}
+                selectedRowData={rowData}
                 documento={documento}
                 setDocumento={setDocumento}
                 articulos={articulos}
                 setArticulos={setArticulos}
                 productDialog={productDialog}
+                deleteProductDialog={deleteProductDialog}
                 setProductDialog={setProductDialog}
                 articles={articles}
                 filial={filial}
@@ -804,8 +1075,8 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                 className='col-4'
                 label="Show Doc"
                 onClick={showDoc}
-            /> */}
-            <Button
+            />  */}
+            {/* <Button
                 className='col-4'
                 label="Exportar"
                 icon="pi pi-upload"
@@ -814,7 +1085,7 @@ function DocumentoSustentado({ documento, setDocumento, moneda, esModoDetail }) 
                 onClick={() => {
                     exportExcel();
                 }}
-            />
+            />  */}
 
         </div>
     );

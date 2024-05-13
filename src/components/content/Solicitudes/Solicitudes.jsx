@@ -212,15 +212,14 @@ function Solicitudes({
 
   const actionBodyTemplate = (rowData) => {
     const items = [
-      {
+      {/*
         label: "Editar",
         icon: "pi pi-eye",
         command: () => {
           navigate(
             ruta +
-              `/solicitudes/editar/${
-                rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-              }`,
+            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+            }`,
             {
               state: {
                 create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -228,13 +227,13 @@ function Solicitudes({
             }
           );
         },
-      },
+      */},
     ];
 
     if (
       (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {
+    ) {/*
       items.push({
         label: "Aceptar",
         icon: "pi pi-check",
@@ -242,12 +241,12 @@ function Solicitudes({
           confirmAceptacion(rowData);
         },
       });
-    }
+    */}
 
     if (
       (usuario.rol.id != 1) &
       ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {
+    ) {/*
       items.push({
         label: "Rechazar",
         icon: "pi pi-times",
@@ -255,20 +254,19 @@ function Solicitudes({
           confirmRechazo(rowData);
         },
       });
-    }
+    */}
     if (
       ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
       (usuario.rol.id == 1)
-    ) {
+    ) {/*
       items.push({
         label: "Editar",
         icon: "pi pi-pencil",
         command: () => {
           navigate(
             ruta +
-              `/solicitudes/editar/${
-                rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-              }`,
+            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+            }`,
             {
               state: {
                 create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -277,10 +275,10 @@ function Solicitudes({
           );
         },
       });
-    }
+    */}
 
-    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) {
-      items.push({
+    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) 
+    {/*items.push({
         label: "Reintentar Migracion",
         icon: "pi pi-pencil",
         command: () => {
@@ -288,9 +286,10 @@ function Solicitudes({
           // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
         },
       });
-    }
+    */}
 
-    if (rowData.STR_ESTADO == 6) {
+    if (rowData.STR_ESTADO == 6) 
+    {/*
       items.push({
         label: "Descargar Solicitud",
         icon: "pi pi-file-pdf",
@@ -303,9 +302,10 @@ function Solicitudes({
           // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
         },
       });
-    }
+    */}
 
-    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) {
+    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) 
+    {/*
       items.push({
         label: "Enviar Aprobación",
         icon: "pi pi-send",
@@ -313,7 +313,7 @@ function Solicitudes({
           confirm1(rowData);
         },
       });
-    }
+    */}
 
     const downloadAndOpenPdf = async (docEntry, numRendi, tipoEar) => {
       setLoading(true);
@@ -470,12 +470,13 @@ function Solicitudes({
     return (
       <div className="split-button">
         <Button
+          label = "Ver"
+          icon = "pi pi-eye"
           onClick={() => {
             navigate(
               ruta +
-                `/solicitudes/editar/${
-                  rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-                }`,
+              `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+              }`,
               {
                 state: {
                   create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
@@ -485,12 +486,12 @@ function Solicitudes({
           }}
           severity="success"
         >
-          <div className="flex gap-3 align-items-center justify-content-center">
+          {/*<div className="flex gap-3 align-items-center justify-content-center">
             <span>Ver</span>
             <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-          </div>
+          </div>*/}
         </Button>
-        <div className="dropdown-content">
+        {/*<div className="dropdown-content">
           {items.map((data, key) => (
             <Button
               key={key}
@@ -502,7 +503,7 @@ function Solicitudes({
               {data.label}
             </Button>
           ))}
-        </div>
+        </div>*/}
       </div>
     );
   };
@@ -596,7 +597,6 @@ function Solicitudes({
   };
 
   async function listarSolicitudes() {
-    console.log("listarSolicitudes");
 
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
@@ -604,9 +604,7 @@ function Solicitudes({
     let fechaFin = "";
     let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
 
-    let estado =
-      filtrado.estados != null
-        ? filtrado.estados.map((dato) => dato.Id).join(",")
+    let estado =filtrado.estados != null? filtrado.estados.map((data) => data.id).join(",")
         : "";
 
     if (filtrado.rangoFecha?.length > 1) {
@@ -619,8 +617,8 @@ function Solicitudes({
       usuario.rol?.id == 1
         ? usuario.sapID
         : filtrado.empleadoAsig == null
-        ? null
-        : filtrado.empleadoAsig.id,
+          ? null
+          : filtrado.empleadoAsig.id,
       usuario.rol.id,
       fechaInicial,
       fechaFin,
@@ -643,6 +641,10 @@ function Solicitudes({
   }
 
   const statusBodyTemplate = (rowData) => {
+    //console.log(typeof rowData.STR_ESTADO_INFO)
+    // if((usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData.STR_ESTADO_INFO === "Borrador"){
+    //   return null;
+    // }
     return (
       <Tag
         className="font-bold"
@@ -651,6 +653,7 @@ function Solicitudes({
       />
     );
   };
+
 
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -691,7 +694,16 @@ function Solicitudes({
       <Toast ref={toast} />
       <ConfirmDialog />
       <DataTable
-        value={solicitudes}
+        value={solicitudes.filter(rowData => {
+          // return !((usuario.rol.id !== 2 && usuario.rol.id !== 3) && rowData.STR_ESTADO_INFO === "Borrador");
+          // return ((usuario.rol.id != 2 && usuario.rol.id != 3) && rowData.STR_ESTADO_INFO === "Borrador");
+          switch (usuario.rol?.id) {
+            case "1": return true;
+            case "2": return rowData.STR_ESTADO >= 2;
+            case "3": return rowData.STR_ESTADO >= 3;
+          }
+          // return rowData.STR_ESTADO_INFO === "Borrador" ? usuario.rol.id === 1 : true;
+        })}
         sortMode="multiple"
         paginator
         rows={5}
@@ -700,8 +712,8 @@ function Solicitudes({
         header={header}
         loading={loading}
         emptyMessage="No se encontraron Solicitudes"
-        // scrollable
-        // scrollHeight="400px"
+      // scrollable
+      // scrollHeight="400px"
       >
         {/* {responsiveSizeMobile ? (
           <></>
@@ -718,15 +730,15 @@ function Solicitudes({
           style={{ width: "7rem" }}
           className="font-bold"
         ></Column>
-        <Column
+        {/* <Column
           field="STR_NRRENDICION"
           header="N° Rendición"
           style={{ minWidth: "12rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           field="STR_ESTADO_INFO"
           header="Estado"
-          style={{ minWidth: "8rem" }}
+          style={{ minWidth: "9rem" }}
           body={statusBodyTemplate}
         ></Column>
         <Column
@@ -756,10 +768,17 @@ function Solicitudes({
           header="DocEntry"
           style={{ minWidth: "10rem" }}
         ></Column>
-        <Column
+        {/* <Column
           field="STR_CARGADOCS"
           header="Carga Docs"
           style={{ minWidth: "7rem" }}
+        ></Column> */}
+        <Column
+          field="STR_MOTIVOMIGR"
+          header="Mensaje de Migración"
+          style={{ minWidth: "20rem" }}
+        // frozen={true}
+        // alignFrozen="right"
         ></Column>
         <Column
           header="Acciones"
@@ -768,14 +787,7 @@ function Solicitudes({
           style={{ minWidth: "10rem" }}
           // frozen={true}
           rowSpan={3}
-          // alignFrozen="right"
-        ></Column>
-        <Column
-          field="STR_MOTIVOMIGR"
-          header="Mensaje de Migración"
-          style={{ minWidth: "20rem" }}
-          // frozen={true}
-          // alignFrozen="right"
+        // alignFrozen="right"
         ></Column>
         {/* </>
         )} */}

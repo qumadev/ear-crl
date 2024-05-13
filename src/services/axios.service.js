@@ -78,6 +78,14 @@ export const obtenerEstados = (filtro) => {
   });
 };
 
+export const obtenerEstadosRendiciones = (filtro) => {
+  return API.get(`/rendiciones`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
 export const createSolicitud = (body) => {
   return API.post("/solicitudEar", body, {
     validateStatus: function (status) {
@@ -111,7 +119,7 @@ export const obtenerTipos = () => {
 };
 
 export const obtenerDocumento = (id) => {
-  return API.post(`/rendicion/documento/${id}`, {
+  return API.get(`/rendicion/documento/${id}`, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -119,6 +127,7 @@ export const obtenerDocumento = (id) => {
 };
 
 export const obtenerRendicion = (id) => {
+  console.log("id", id);
   return API.get(`/rendicion/${id}`, {
     validateStatus: function (status) {
       return status < 500;
@@ -288,7 +297,7 @@ export const listarRendiciones = (
     }
   );
 };
- 
+
 export const obtenerSolicitudR = (id, create) => {
   return null;
 };
@@ -366,7 +375,13 @@ export const borrarDocumentoDet = (id, docId) => {
   return null;
 };
 
-
+export const validacionDocumento = (id) => {
+  return API.post(`rendicion/documento/validacion/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
 
 export const extraerPlantilla = () => {
   return API.get(`rendicion/documento/plantilla`, {
@@ -384,17 +399,17 @@ export const importarPlantilla = (file, id) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  return null;
+  return API.post(`rendicion/documento/plantilla/${id}`, formData, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
 };
 export const actualizarSntDoc = (id, estado) => {
   return null;
 };
 
 export const actualizaRendicion = (body) => {
-  return null;
-};
-
-export const validacionDocumento = (id) => {
   return null;
 };
 
@@ -405,15 +420,20 @@ export const enviarAprobRendicion = (
   estado,
   areaAprobador
 ) => {
+  console.log("body: ", id)
+  console.log("body: ", id, idSolicitud, usuarioId, estado, areaAprobador)
   return API.post(
-    `/solicitudEar/aprobacion/acepta?id=${id}&idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,    {
-      ValidityState: function (status) {
-        return status < 500;
+    `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,
+    {
+      validateStatus: function (status) {
+        return status <
+          500;
       },
     }
   );
 };
 
+//--modificacion de fiorella  para formDt
 export const aceptarAprobRendicion = (
   solicitudId,
   aprobadorId,
@@ -423,14 +443,16 @@ export const aceptarAprobRendicion = (
   area
 ) => {
   return API.patch(
-    `/rendicion/aprobacion/acepta?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
+    `rendicion/aprobacion/acepta?solicitudId=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}&rendicionId=${rendicionId}&area=${area}`,
     {
-      ValidityState: function (status) {
+      validateStatus: function (status) {
         return status < 500;
       },
     }
   );
 };
+
+//--------------------
 
 export const rechazarAprobRendicion = (
   solicitudId,

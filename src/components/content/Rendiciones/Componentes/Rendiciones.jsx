@@ -14,6 +14,7 @@ import {
   autorizarReversionAprobRendicion,
   enviarAprobRendicion,
   listarRendiciones,
+  obtenerEstadosRendiciones,
   obtenerRendicion,
   rechazarAprobRendicion,
   reintentarRendi,
@@ -35,9 +36,18 @@ function Rendiciones({
   rendiciones,
   setRendiciones,
   filtrado,
-  estados,
   emptyProduct,
 }) {
+
+const statusBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        className="font-bold"
+        value={rowData.STR_ESTADO_INFO?.name}
+        severity={getSeverity(rowData.STR_ESTADO)}
+      />
+    );
+  };
 
   // const { id } = useParams();
   const navigate = useNavigate();
@@ -45,16 +55,16 @@ function Rendiciones({
   const toast = useRef(null);
   const [loading, setLoading] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
-  
+
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
 
-//   const [rendiciones,rendiciones]= useState(
+  //   const [rendiciones,rendiciones]= useState(
 
-//     {
-// ID:null
-//     }
-//    )
+  //     {
+  // ID:null
+  //     }
+  //    )
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -173,6 +183,7 @@ function Rendiciones({
       case 1:
       case 9:
         return "info";
+
       case 10:
       case 2:
       case 3:
@@ -182,6 +193,20 @@ function Rendiciones({
         return null;
     }
   };
+
+  const [estados, setEstados] = useState([])
+  async function obtenerEstadosLocalR() {
+    let response = await obtenerEstadosRendiciones();
+    let body = response.data.Result;
+
+    setEstados(response.data.Result);
+  }
+
+
+
+  useEffect(() => {
+    obtenerEstadosLocalR();
+  }, []);
 
   async function actualizarRendiEnCarga(body) {
     try {
@@ -474,9 +499,9 @@ function Rendiciones({
   }
 
   const actionBodyver = (rowData) => (
-    console.log("log",rowData),
+
     <Button
-      label="ver"
+      label="Ver"
       icon="pi pi-eye"
       severity="success"
       onClick={() => {
@@ -486,7 +511,6 @@ function Rendiciones({
         )
       }}
     />
-
   )
 
   const actionBodyTemplate = (rowData) => {
@@ -646,6 +670,17 @@ function Rendiciones({
       });
     }
 
+    if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
+      items.push({
+        label: "Reintentar Migracion",
+        icon: "pi pi-pencil",
+        command: () => {
+          reintentarMigracion(rowData.ID);
+        },
+      });
+    }
+
+
     if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
       items.push({
         label: "Ver Aprobadores",
@@ -726,15 +761,7 @@ function Rendiciones({
     );
   };
 
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        className="font-bold"
-        value={rowData.STR_ESTADO_INFO.Nombre}
-        severity={getSeverity(rowData.STR_ESTADO_INFO.Id)}
-      />
-    );
-  };
+
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);
@@ -746,16 +773,16 @@ function Rendiciones({
     return `${year}/${month}/${day}`;
   }
 
-  async function listarRendicionesLocal(fresh = false) {
-    if (!fresh) setLoading(true);
+
+  async function listarRendicionesLocal() {
+
+    setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
     let fechaFin = "";
     let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
 
-    let estado =
-      filtrado.estados != null
-        ? filtrado.estados.map((dato) => dato.Id).join(",")
+    let estado =filtrado.estados != null? filtrado.estados.map((data) => data.id).join(",")
         : "";
 
     if (filtrado.rangoFecha?.length > 1) {
@@ -774,27 +801,31 @@ function Rendiciones({
       fechaInicial,
       fechaFin,
       nrendicion,
-      "", //estado,
-      0 //usuario.SubGerencia
+      estado,
+      usuario.branch //usuario.filial.
     )
       .then((response) => {
+        console.log(response.data);
         setRendiciones(response.data.Result);
+        console.log(response.data.Result);
       })
       .catch((err) => {
         console.log(err.message);
       })
       .finally(() => {
         console.log("Se terminó de traer solicitud");
-        if (!fresh) setLoading(false);
+        setLoading(false);
       });
   }
 
   useEffect(() => {
-    //obtenerEstadoLocal();
+   
     if (usuario.sapID != null) {
       listarRendicionesLocal();
     }
   }, [filtrado, usuario]);
+
+
   const [productDialog, setProductDialog] = useState(false);
   const openNew = () => {
 
@@ -802,14 +833,31 @@ function Rendiciones({
   };
 
   // const pruebas{
-  
+ console.log( "ren",rendiciones)
   // }
+  useEffect(() => {
+    //obtenerEstadoLocal();
+    console.log("USER: ",usuario.rol?.id)
+    console.log("LISTA: ",usuario.rol?.id === "2" ?
+    rendiciones.filter(rendicion => rendicion.STR_ESTADO > 10) :
+    usuario.rol?.id === "3" ?
+    rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
+    rendiciones)
+  }, [rendiciones]);
+
   return (
     <div>
       <Toast ref={toast} />
       <ConfirmDialog />
       <DataTable
-        value={rendiciones}
+        value={
+            // rendiciones
+            usuario.rol?.id === "2" ?
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 10) :
+            usuario.rol?.id === "3" ?
+            rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 11) :
+            rendiciones
+        }
         sortMode="multiple"
         paginator
         rows={5}
@@ -835,7 +883,7 @@ function Rendiciones({
           style={{ minWidth: "12rem" }}
         ></Column>
         <Column
-          field="STR_ESTADO_INFO"
+          field="STR_ESTADO"
           header="Estado"
           style={{ minWidth: "8rem" }}
           body={statusBodyTemplate}
@@ -870,7 +918,7 @@ function Rendiciones({
         ></Column>
         <Column
           field="STR_NRCARGA"
-          header="Carga Docs"
+          header="DocNum"
           style={{ minWidth: "7rem" }}
         ></Column>
         <Column
@@ -886,14 +934,37 @@ function Rendiciones({
         ></Column>
         <Column
           header="Acciones"
-          body={actionBodyTemplate}
+          body={actionBodyver}
+          // body={actionBodyTemplate}
           exportable={false}
           style={{ minWidth: "10rem" }}
           frozen
           alignFrozen="right"
         ></Column>
       </DataTable>
-      
+      {/* <Button
+        label="ver"
+        icon="pi pi-eye"
+        severity="success"
+        onClick={() => {
+          navigate(ruta + `/rendiciones/6/documentos/editar`);
+        }}
+      /> */}
+      {/* <Button
+        label="ver2"
+        icon="pi pi-eye"
+        severity="success"
+        onClick={() => {
+          navigate(ruta + `/rendiciones/info/1`);
+        }}
+      /> */}
+      {/* <div>
+      <Button
+      <div>
+        <Button label="ver" icon="pi pi-eye" severity="success"
+            onClick={() => {
+            navigate(ruta + "/rendiciones/8/documentos/agregar");
+          }}
 
       {/* <Button label="ver" icon="pi pi-eye" severity="success"
         onClick={() => {
@@ -911,7 +982,7 @@ function Rendiciones({
 
     </div>
 
-    
+
 
   );
 }

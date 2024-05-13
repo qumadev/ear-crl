@@ -107,9 +107,10 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
           />
           <label htmlFor="">(*)Monto:</label>
           <InputText
-            value={solicitudRD.STR_TOTALSOLICITADO}
+            //value={solicitudRD.STR_TOTALSOLICITADO}
+            type="number"
             onChange={(e) => {
-              //setMonto(e.target.value);
+              setMonto(e.target.value);
               setSolicitudRD((prevState) => ({
                 ...prevState,
                 STR_TOTALSOLICITADO: e.target.value,

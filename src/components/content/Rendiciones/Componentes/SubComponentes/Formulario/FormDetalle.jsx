@@ -37,9 +37,10 @@ export function FormDetalle({
   setDocumento,
   editable,
   documentoId,
+  esModo
 }) {
   const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
-
+  const [esModoEditar]=useState(esModo === "Editar"? true : false)
   const refCup = useRef(null);
   const hideDialog = () => {
     setSubmitted(false);
@@ -333,7 +334,7 @@ export function FormDetalle({
   useEffect(() => {
     obtieneListadoCups();
   }, [productDialog]);
-
+  const [visible, setVisible] = useState(false);
   /*
   useEffect(() => {
     if (detalle.STR_CODARTICULO.posFinanciera && centroCosto[0].CostCenter) {
@@ -347,16 +348,21 @@ export function FormDetalle({
   */
   return (
     <>
-      <Dialog
+   
+      <Dialog 
         visible={productDialog}
+        setVisible={setVisible}
         //style={{ width: "32rem" }}
         breakpoints={{ "960px": "75vw", "641px": "90vw" }}
-        header="Agregar Concepto"
+        // header={esModo + "Concepto"}
+        // header="Agregar Concepto"
         modal
         className="p-fluid xl:max-w-30rem w-full max-w-20rem"
         footer={productDialogFooter}
         onHide={hideDialog}
       >
+
+<h2>{modo === "editar" ? "Editar Detalle" : "Agregar Detalle"}</h2>
         <div className="field">
           <label htmlFor="name" className="font-bold">
             Árticulo
@@ -443,7 +449,7 @@ export function FormDetalle({
         </div>
         <div className="field">
           <label htmlFor="name" className="font-bold">
-            Seleccionar Impuesto
+            Seleccionar Impuesto sdfdsfdf
           </label>
           <div className="card flex">
             <Dropdown

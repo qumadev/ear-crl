@@ -14,11 +14,9 @@ import { AppContext } from '../../../../../App';
 import { useParams } from 'react-router-dom';
 
 
-
 function VerSolicitud() {
 
     const { id } = useParams();
-   
     const { usuario, ruta, config } = useContext(AppContext);
     // const [ solicitud, setSolicitud] = useState(null);
 

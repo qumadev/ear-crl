@@ -18,6 +18,7 @@ export function Header({
   const [cargo, setCargo] = useState("");
   const buttonRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [isHoveredConfig, setIsHoveredConfig] = useState(false);
   const [isHoveredUs, setIsHoveredUs] = useState(false);
 
   const handleSpanClick = () => {
@@ -152,16 +153,43 @@ export function Header({
                 className="align-items-center justify-content-center"
                 style={{ color: "#97E723" }}
               ></Button>
-              <span className="text-xs perfil " style={{ color: "#ffffff" }}>
+              <span className="text-xs perfil " style={{ color: "#ffffff", width: "7rem" }}>
                 {usuario.nombres && capitalizarNombres(usuario.nombres)}
               </span>
-              <span className="text-xs perfil" style={{ color: "#ffffff" }}>
+              <span className="text-xs perfil" style={{ color: "#ffffff", width: "7rem" }}>
                 Perfil: {obtenePerfil(usuario.rol?.id)} - Sede:{" "}
                 {usuario.filial &&
                   capitalizarNombres(usuario.filial.U_ST_NombreFilial)}
               </span>
             </div>
           )}
+
+          <div
+            className={`flex flex-column align-items-center cursor-pointer ${
+              isHoveredConfig? "hoveredconfig" : ""
+            }`}
+            onMouseEnter={() => setIsHoveredConfig(true)}
+            onMouseLeave={() => setIsHoveredConfig(false)}
+          >
+            <Button
+            icon="pi pi-cog"
+            rounded
+            text
+            severity="success"
+            aria-label="Search"
+            size="large"
+            style={{ color: "#97E723"}}
+            onClick={(e) => {
+              navigate(ruta + "/configuracion");
+            }}
+            ></Button>
+            <span
+              className="text-xs"
+              style={{ color: "#ffffff" }}
+            >
+              Configuración
+            </span>
+          </div>
 
           <div
             className={`flex flex-column align-items-center cursor-pointer ${

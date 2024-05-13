@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Divider } from "primereact/divider";
 import { Button } from "primereact/button";
-import Filtrado from "../Solicitudes/Componentes/subcomponentes/Filtrado";
 import HeaderRD from "./Componentes/HeaderRD";
+import Filtrado from "../Solicitudes/Componentes/subcomponentes/Filtrado";
 import Rendiciones from "./Componentes/Rendiciones";
 import { obtenerEstados } from "../../../services/axios.service";
 import { AppContext } from "../../../App";
 
-function BodyRD() {
+function BodyRD({responsiveSizeMobile}) {
   const [estados, setEstados] = useState([]);
   const [rendiciones, setRendiciones] = useState([]);
   const [primeraCarga, setPrimeraCarga] = useState(true);
@@ -20,75 +20,69 @@ function BodyRD() {
   const [filtrado, setFiltrado] = useState({
     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
     nrRendicion: null,
+     
     estados:
-      usuario.TipoUsuario == 1
-        ? [
+      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1? 
+      [
           {
-            Id: 8,
-            Nombre: "Aperturado",
-            Descripcion: null,
-            id: null,
-            name: null,
+            id: 8,
+            name: "Aperturado",
+ 
           },
           {
-            Id: 9,
-            Nombre: "En carga",
-            Descripcion: null,
-            id: null,
-            name: null,
+            id: 9,
+            name: "En carga",
+      
+       
           },
           {
-            Id: 12,
-            Nombre: "Devuelto",
-            Descripcion: null,
-            id: null,
-            name: null,
+            id: 12,
+            name: "Devuelto",
+
+
           },
           {
-            Id: 15,
-            Nombre: "Rechazado RD",
-            Descripcion: null,
-            id: null,
-            name: null,
+           id: 15,
+            name: "Rechazado RD",
+
+
           },
         ]
         : usuario.TipoUsuario == 2
           ? [
             {
-              Id: 11,
-              Nombre: "Revisado",
-              Descripcion: null,
-              id: null,
-              name: null,
+              id: 11,
+              name: "Revisado",
+     
+     
             },
             {
-              Id: 13,
-              Nombre: "En Autorización RD",
-              Descripcion: null,
-              id: null,
-              name: null,
+              id: 13,
+              name: "En Autorización RD",
+   
+   
             },
           ]
           : usuario.TipoUsuario == 3
             ? [
               {
-                Id: 10,
-                Nombre: "Cargado",
-                Descripcion: null,
-                id: null,
-                name: null,
+                id: 10,
+                name: "Cargado",
+
+              },
+              {
+                id: 17,
+                name: "Error Mig RD",
+
               },
             ]
-            : [
-              {
-                Id: 17,
-                Nombre: "Error Mig RD",
-                Descripcion: null,
-                id: null,
-                name: null,
-              },
-            ],
+            
+           : null,
+           
   });
+  
+
+  
 
   /* Obtiene Estados */
   async function obtenerEstadosLocal() {
@@ -129,7 +123,6 @@ function BodyRD() {
       bookType: "xlsx",
       type: "array",
     });
-
     saveAsExcelFile(excelBuffer, "rendiciones");
   };
 
@@ -156,7 +149,13 @@ function BodyRD() {
   const header = (
     <>
       <div className="flex justify-content-between flex-wrap">
-        <div className="flex text-2xl align-items-center">
+        
+      <div
+          className={`flex ${
+            responsiveSizeMobile ? `text-xl` : `text-2xl`
+          } align-items-center`}
+          // className={`flex  text-2xl align-items-center`}
+        >
           Lista de Rendiciones
         </div>
         <div className="flex flex-row flex-wrap gap-2">
@@ -180,14 +179,14 @@ function BodyRD() {
             }}
             severity="secondary"
           />
-          <Button
+          {/* <Button
             label="Ver"
             icon="pi pi-eye"
             severity="success"
             onClick={() => {
               navigate(ruta + "/rendiciones/ver");
             }}
-          />
+          /> */}
           <Button
             label="Exportar"
             icon="pi pi-upload"
