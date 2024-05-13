@@ -122,7 +122,7 @@ function FormularioSL() {
         if (res.status < 300) {
           let body = res.data.Result[0];
           console.log("reg: ",body.ID)
-          showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
+          showSuccess(`Se creó solicitud exitosamente con id: ${body.ID}`);
           ID = body.ID;
           //await new Promise((resolve) => setTimeout(resolve, 2000));
           //navigate(ruta + "/solicitudes");
@@ -145,7 +145,7 @@ function FormularioSL() {
       });
 
       if (response.status == 200) {
-        showSuccess(`Se envió la solicitud a los aprobadores con id: ${id}`);
+        showSuccess(`Se envió la solicitud a los aprobadores con id: ${ID}`);
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/solicitudes");
       } else {
