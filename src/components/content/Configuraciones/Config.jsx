@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import CambioContraseña from "./BodyConfig/CambioContraseña";
+import { AppContext } from "../../../App";
+import VerificarContraseña from "./BodyConfig/VerificarContraseña";
 
 export function Config() {
   return(
@@ -16,9 +17,9 @@ export function Config() {
           Cambiar Contraseña
         </div>
       </div>
-      <CambioContraseña>
+      <VerificarContraseña>
         
-      </CambioContraseña>
+      </VerificarContraseña>
     </>
   );
 }

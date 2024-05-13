@@ -316,6 +316,14 @@ export default function MyApp() {
                 </Componente>
               }
             />
+            {/*<Route 
+              path={ruta + "/configuracion/actualizar"}
+              element={
+                <Componente>
+                  <NuevaContraseña />
+                </Componente>
+              }
+            />*/}
             <Route
               path={ruta + "/pruebas"}
               element={
