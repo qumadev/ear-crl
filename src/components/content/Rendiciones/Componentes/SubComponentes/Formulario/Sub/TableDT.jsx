@@ -46,8 +46,8 @@ export default function TableDT({
       },
     ];
   
-  const showEditButton = usuario.usuarioId == 1 && rendicion?.STR_ESTADO_INFO.id <=9;
-   console.log("log",rendicion?.STR_ESTADO_INFO)
+  const showEditButton = usuario.usuarioId == 1 && rendicion?.STR_ESTADO <= 9;
+  console.log("log",rendicion?.STR_ESTADO_INFO)
     return (
       <div className="split-button">
         <Button

@@ -3,12 +3,12 @@ import "primeflex/primeflex.css";
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import { AppContext } from "../../../../App";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function VerificarContraseña() {
     const [currentPassword, setCurrentPassword] = useState("");
     const navigate = useNavigate();
-    const { usuario } = useContext(AppContext);
+    const { usuario, ruta } = useContext(AppContext);
     console.log(usuario.password)
 
     return(
@@ -34,15 +34,16 @@ function VerificarContraseña() {
                         feedback={false}
                     />
                 </div>
-                <div className="card flex flex-wrap  gap-3 mx-3">
+                <div>
                     <Button
                         label="Continuar"
                         size="large"
+                        severity="success"
                         style={{marginTop: '50px'}}
                         disabled={currentPassword != usuario.password}
-                        onClick={() => 
-                            navigate(ruta + `/configuracion`)
-                        }
+                        onClick={() => {
+                            navigate(ruta + "/configuracion/actualizar");
+                        }}
                     />
                 </div>
             </div>

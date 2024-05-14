@@ -22,6 +22,7 @@ import TokenCorreo from "./components/content/Correo/TokenCorreo";
 import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
 import DocumentoSustentado from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/DocumentoSustentado";
 import FormDT from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Sub/FormDT";
+import NuevaContraseña from "./components/content/Configuraciones/BodyConfig/NuevaContraseña";
 
 export const AppContext = createContext(null);
 
