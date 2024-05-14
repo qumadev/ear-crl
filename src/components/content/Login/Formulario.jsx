@@ -16,7 +16,7 @@ export function Formulario() {
   // console.log(AppContext)
   const toast = useRef(null);
   //const sociedades = [{ name: "ELECTROPERU", code: "ELPTSERVER" }];
-  const sociedades = [{ name: "ELECTROPERU", code: "ELPTSERVER" }];
+  const sociedades = [{ name: "REGATAS", code: "ELPTSERVER" }];
   const [selectSociedad, setSelectSociedad] = useState(sociedades[0]);
   const navigate = useNavigate();
   const buttonRef = useRef();
