@@ -24,8 +24,8 @@ export const obtenInfoUser = (id) => {
   return null;
 };
 
-export const obtenerArticulos = () => {
-  return API.get("/item/art?area=0101", {
+export const obtenerArticulos = (centroCosto) => {
+  return API.get(`/item/art?area=${centroCosto}`, {
     validateStatus: function (status) {
       return status < 500;
     },
