@@ -367,7 +367,7 @@ function DocumentoSustentado({
             obtenerTipoDocs(),
             obtenerMotivos(),
             obtenerProveedores(),
-            obtenerArticulos(),
+            obtenerArticulos(usuario.filial?.U_ST_Filial),
             obtenerFilial(),
             obtenerProyectos(),
             obtenerAreas(),
