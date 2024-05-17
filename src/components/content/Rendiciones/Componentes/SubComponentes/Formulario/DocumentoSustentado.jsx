@@ -367,7 +367,7 @@ function DocumentoSustentado({
             obtenerTipoDocs(),
             obtenerMotivos(),
             obtenerProveedores(),
-            obtenerArticulos(usuario.filial?.U_ST_Filial),
+            obtenerArticulos(),
             obtenerFilial(),
             obtenerProyectos(),
             obtenerAreas(),
@@ -644,15 +644,15 @@ function DocumentoSustentado({
     };
     const footerGroup = (
         <ColumnGroup>
-          <Row>
+            <Row>
             <Column
-              footer="Total:"
-              colSpan={13}
-              footerStyle={{ textAlign: 'right',  }}
+                footer="Total:"
+                colSpan={13}
+                footerStyle={{ textAlign: 'right',  }}
             />
             <Column footerStyle={{ }} footer={TotalMonto} />
             <Column footer=""/>
-          </Row>
+            </Row>
         </ColumnGroup>
     );
 
@@ -680,7 +680,7 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_AFECTACION: e.target.value,
                                     }));
-                                    console.log("val: ",e.target.value)
+                                    console.log("value: ",e.target.value.name)
                                 }}
                             options={afectacion}
                             optionLabel="name"
@@ -692,6 +692,7 @@ function DocumentoSustentado({
                     </div>
                     <div className="flex col-12 align-items-center gap-5">
                         <label className='col-2'>(*)Tipo</label>
+                        {/*console.log(typeof STR_TIPO_DOC)*/}
                         <Dropdown
                             className='col-6'
                             value={documento.STR_TIPO_DOC}
@@ -706,6 +707,9 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_TIPO_DOC: Boolean(e.target.value)
                                     }));
+                                    if (e.target.value.name === 'Factura') {
+                                        //alert("factura");
+                                    }
                                 }}
                             options={tipos}
                             optionLabel="name"
@@ -729,6 +733,14 @@ function DocumentoSustentado({
                                     ...prevState,
                                     STR_SERIE_DOC: Boolean(e.target.value)
                                 }));
+                                if (STR_TIPO_DOC === 'Factura') {
+                                    const primeraLetra = e.target.value.charAt(0).toUpperCase();
+                                    if (primeraLetra === 'F' || primeraLetra === 'E') {
+                                        alert("1");
+                                    }else {
+                                        alert("2");
+                                    }
+                                }
                             }}
                             className='col-6'
                             placeholder='N° de serie'
