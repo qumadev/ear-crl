@@ -193,7 +193,7 @@ function FormDetalleDocumento({
         if (editing) {
             console.log("")
         } else {
-            setDetDoc(null)
+            // setDetDoc(null)
         }
     }
     return (
