@@ -740,8 +740,8 @@ function DocumentoSustentado({
                                     const primeraLetra = e.target.value.charAt(0).toUpperCase();
                                     if (primeraLetra === 'F' || primeraLetra === 'E') {
                                         alert("1");
-                                    } if (primera) {
-                                        
+                                    } else {
+                                        alert("2");
                                     }
                                 }
                             }}
