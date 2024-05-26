@@ -69,8 +69,8 @@ function DocumentoSustentado({
             }
             return item;
         });
-        console.log("rowid: ",rowData.ID)
-        console.log("elimin: ",updatedArticulos)
+        console.log("rowid: ", rowData.ID)
+        console.log("elimin: ", updatedArticulos)
         setArticulos(updatedArticulos);
     };
 
@@ -330,7 +330,7 @@ function DocumentoSustentado({
 
     const [productDialog, setProductDialog] = useState(false);
     const [visible, setVisible] = useState(false);
-    
+
 
 
     const openNew = () => {
@@ -360,14 +360,14 @@ function DocumentoSustentado({
         setDetalle(articulos);
     }, [articulos])
 
-    
+
     async function obtenerData() {
         const response = await Promise.all([
             // obtenerTipos(),
             obtenerTipoDocs(),
             obtenerMotivos(),
             obtenerProveedores(),
-            obtenerArticulos(),
+            obtenerArticulos(usuario.filial?.U_ST_Filial),
             obtenerFilial(),
             obtenerProyectos(),
             obtenerAreas(),
@@ -431,10 +431,10 @@ function DocumentoSustentado({
     }, [detalles])
 
     useEffect(() => {
-        if(esModo === "Agregar"){
+        if (esModo === "Agregar") {
             setDocumento((prevState) => ({
                 ...prevState,
-                STR_AFECTACION: {id: '3', name: '-'},
+                STR_AFECTACION: { id: '3', name: '-' },
             }));
         }
     }, [])
@@ -448,10 +448,10 @@ function DocumentoSustentado({
     useEffect(() => {
         //let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
         let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
-        if(subtotalTotal>700 && documento.STR_TIPO_DOC.name==="Factura"){
+        if (subtotalTotal > 700 && documento.STR_TIPO_DOC.name === "Factura") {
             setDocumento((prevState) => ({
                 ...prevState,
-                STR_AFECTACION: {id: '1', name: 'Retencion'}
+                STR_AFECTACION: { id: '1', name: 'Retencion' }
             }));
         }
         setTotalMonto(subtotalTotal)
@@ -521,12 +521,12 @@ function DocumentoSustentado({
     const quitArticulo = () => { }
 
     const showDoc = () => {
-        console.log("nuevaData",articulos)
+        console.log("nuevaData", articulos)
         // console.log("d: ", documento)
         // console.log("a: ", articulos)
     }
 
-    console.log("mi",articulos)
+    console.log("mi", articulos)
 
     // Personalizando campos
     const transformDataForExport = (articulos) => {
@@ -611,7 +611,7 @@ function DocumentoSustentado({
 
     const editDetallep = (rowData) => {
         setRowData(rowData); // Update rowData state
-        console.log("f",rowData)
+        console.log("f", rowData)
         setProductDialog(true);
         setEditing(true);
     };
@@ -620,7 +620,7 @@ function DocumentoSustentado({
     //     console.log(...detalles)
     //     setProductDialog(true);
     //   };
-    
+
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -636,7 +636,7 @@ function DocumentoSustentado({
                     rounded
                     outlined
                     severity="danger"
-                    onClick={() => deleteProduct(rowData)} 
+                    onClick={() => deleteProduct(rowData)}
                     disabled={editable}
                 />
             </React.Fragment>
@@ -645,13 +645,13 @@ function DocumentoSustentado({
     const footerGroup = (
         <ColumnGroup>
             <Row>
-            <Column
-                footer="Total:"
-                colSpan={13}
-                footerStyle={{ textAlign: 'right',  }}
-            />
-            <Column footerStyle={{ }} footer={TotalMonto} />
-            <Column footer=""/>
+                <Column
+                    footer="Total:"
+                    colSpan={13}
+                    footerStyle={{ textAlign: 'right', }}
+                />
+                <Column footerStyle={{}} footer={TotalMonto} />
+                <Column footer="" />
             </Row>
         </ColumnGroup>
     );
@@ -680,7 +680,7 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_AFECTACION: e.target.value,
                                     }));
-                                    console.log("value: ",e.target.value.name)
+                                    console.log("value: ", e.target.value.name)
                                 }}
                             options={afectacion}
                             optionLabel="name"
@@ -702,13 +702,16 @@ function DocumentoSustentado({
                                         ...prevState,
                                         STR_TIPO_DOC: e.target.value,
                                     }));
-                                    console.log("value: ", e.target.value)
+                                    //console.log("value: ", e.target.value)
                                     setCampoValidoCabecera(prevState => ({
                                         ...prevState,
                                         STR_TIPO_DOC: Boolean(e.target.value)
                                     }));
                                     if (e.target.value.name === 'Factura') {
-                                        //alert("factura");
+                                        alert("F");
+                                    }
+                                    if (e.target.value.name === 'Boleta de venta') {
+                                        alert("B");
                                     }
                                 }}
                             options={tipos}
@@ -733,12 +736,12 @@ function DocumentoSustentado({
                                     ...prevState,
                                     STR_SERIE_DOC: Boolean(e.target.value)
                                 }));
-                                if (STR_TIPO_DOC === 'Factura') {
+                                if (documento.STR_TIPO_DOC === 'Factura') {
                                     const primeraLetra = e.target.value.charAt(0).toUpperCase();
                                     if (primeraLetra === 'F' || primeraLetra === 'E') {
                                         alert("1");
-                                    }else {
-                                        alert("2");
+                                    } if (primera) {
+                                        
                                     }
                                 }
                             }}
@@ -929,19 +932,19 @@ function DocumentoSustentado({
                         />
                     </div>
                     <div className="flex col-12">
-                        { esModoValidate ? "" :
-                        <>
-                            <Button
-                                className='col-6'
-                                label="Agregar Detalle"
-                                onClick={openNew}
-                            />
-                            {/* <Button 
+                        {esModoValidate ? "" :
+                            <>
+                                <Button
+                                    className='col-6'
+                                    label="Agregar Detalle"
+                                    onClick={openNew}
+                                />
+                                {/* <Button 
                                 className='col-4'
                                 label="Eliminar Seleccionados"
                                 onClick={() => { }}
                             /> */}
-                        </> 
+                            </>
                         }
                         <Button
                             className='col-6'
@@ -1036,18 +1039,21 @@ function DocumentoSustentado({
                             header="Impuesto"
                             style={{ minWidth: "7rem" }}
                         ></Column>
-                         <Column
+                        <Column
                             //field="Cantidad*Precio"
                             header="Subtotal"
                             body={(rowData) => rowData.Cantidad * rowData.Precio}
                             style={{ minWidth: "7rem" }}
                         ></Column>
-                        <Column
-                            header="Acciones"
-                            headerStyle={{ width: "3rem" }}
-                            body={actionBodyTemplate}
-                        >
-                        </Column>
+                        {usuario.rol?.id == 1 && true ?
+                            <Column
+                                header="Acciones"
+                                headerStyle={{ width: "3rem" }}
+                                body={actionBodyTemplate}
+                            >
+                            </Column>
+                            : null
+                        }
                     </DataTable>
                     {/* { esModoDetail ? "" :
                         // <Button
