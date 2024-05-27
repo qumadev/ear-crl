@@ -39,7 +39,9 @@ export default function FormDT({ editable,
   const toast = useRef(null);
   const fileUploadRef = useRef(null);
   const [excel, setExcel] = useState();
-  const [rendicion, setRendicion] = useState(null)
+  const [rendicion, setRendicion] = useState(null);
+
+  const [habilitado, setHabilitado] = useState(false);
 
   const estadosEditablesUsr = [8, 9, 12];
 
@@ -58,12 +60,12 @@ export default function FormDT({ editable,
       }))
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
-      
+
 
     } catch (error) {
       showError(error.Message);
       console.log(error.Message);
-    } 
+    }
     finally {
       if (!fresh) setLoading(false);
     }
@@ -170,10 +172,15 @@ export default function FormDT({ editable,
               label={"Solicitar Aprobación"}
               size="large"
               onClick={(e) => {
-                ValidacionEnvio();
+                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
+                  ValidacionEnvio();
+                } else {
+                  e.preventDefault(); 
+                  showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado. Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
+                }
               }}
-              // loading={loadingBtn}
-              // disabled={validaEditable}
+            // loading={loadingBtn}
+            // disabled={validaEditable}
             />
           )}
           {/* <Button
@@ -191,7 +198,7 @@ export default function FormDT({ editable,
                 confirmAceptacion();
               }}
               loading={loadingBtn}
-              // disabled={validaEditableBtn}
+            // disabled={validaEditableBtn}
             />
           )}
           {usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
@@ -200,7 +207,7 @@ export default function FormDT({ editable,
               size="large"
               style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
               onClick={() => confirmReversion(rendicion?.ID)}
-              // disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO) || loading}
+            // disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO) || loading}
             />
           )}
           {/* {usuario.rol?.id == "3" ? (
@@ -213,6 +220,18 @@ export default function FormDT({ editable,
               />
             ) : ""} */}
         </div>
+        {/*<div className="d-flex col-12 md:col-12 lg:col-12">
+          <Button 
+              label={"test"}
+              onClick={(e) => {
+                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
+                  alert("asies")
+                } else {
+                  alert("ono")
+                };
+              }}
+          />
+        </div>*/}
       </div>
     );
   };
@@ -422,7 +441,7 @@ export default function FormDT({ editable,
     XLSX.writeFile(workBook, "export.xlsx");
   };
 
-  const showEditButton = usuario.rol?.id== 1 && rendicion?.STR_ESTADO_INFO?.id <10;
+  const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO_INFO?.id < 10;
   const confirmReversion = (id) => {
     confirmDialog({
       message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
@@ -465,13 +484,13 @@ export default function FormDT({ editable,
           />*/}
           {/*<Button
             icon="pi pi-eraser"
-             onClick={() => {
+            onClick={() => {
                   setFiltrado({
-                     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-                     nrRendicion: null,
+                    rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
+                    nrRendicion: null,
                     estados: null,
-             });
-             }}
+            });
+            }}
             severity="secondary"
             />*/}
           <Button
@@ -483,8 +502,8 @@ export default function FormDT({ editable,
                 `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
 
-          
-           disabled={!showEditButton }
+
+            disabled={!showEditButton}
           />
 
           <Button
@@ -663,7 +682,7 @@ export default function FormDT({ editable,
             />
           )*/}
 
-            {/*usuario.rol?.id == "3" ? (
+        {/*usuario.rol?.id == "3" ? (
               <Button
                 label="Autorizar Edicion"
                 severity="danger"

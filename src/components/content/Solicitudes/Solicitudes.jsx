@@ -57,6 +57,10 @@ function Solicitudes({
     console.info(`You clicked ${options[selectedIndex]}`);
   };
 
+  const Solicitudes = () => {
+    const [montoSolicitado, setMontoSolicitado] = useState(0);
+  }
+
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
     setOpen(false);
