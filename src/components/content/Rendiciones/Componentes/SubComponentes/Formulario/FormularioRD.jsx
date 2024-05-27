@@ -845,10 +845,19 @@ function FormularioRD() {
               size="large"
               //style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
-                esModo==="Agregar" ? registrarRD() 
-                : 
-                esModo==="Editar" ? updateRD() : ""
-
+                const firstChar = documento.STR_SERIE_DOC.charAt(0).toUpperCase();
+                if (esModo === "Agregar") {
+                  if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' || firstChar !== 'E')) {
+                    e.preventDefault();
+                    showError("Las facturas tienen que comenzar con 'F' o 'E'");
+                  } else {
+                    
+                  }
+                  if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
+                    e.preventDefault();
+                    showError("Las Boletas de venta tienen que comenzar con 'B'")
+                  }
+                }
                 //registrarDocumento();
                 //updateRD();
                 // if (!esModoRegistrar) updateRD();
@@ -856,8 +865,20 @@ function FormularioRD() {
                 // else registrarDocumento();
               }}
               loading={loading}
-              disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
+              //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
               //disabled={!estadosEditables.includes(solicitudRD.estado)}
+            />
+            <Button 
+              label={"test"}
+              onClick={(e) =>{
+                const primeraLetra = documento.STR_SERIE_DOC.charAt(0).toUpperCase()
+                if ((documento.STR_TIPO_DOC.name === 'Factura') && (primeraLetra !== 'F' || primeraLetra !== 'E')) {
+                  console.log("ESPECTACULAR")
+                  e.preventDefault();
+                  showError("No se puede");
+                }
+                }
+              }
             />
             {/* <Button
                 label="Exportar"
