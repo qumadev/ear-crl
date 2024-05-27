@@ -850,13 +850,14 @@ function FormularioRD() {
                   if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' || firstChar !== 'E')) {
                     e.preventDefault();
                     showError("Las facturas tienen que comenzar con 'F' o 'E'");
-                  } else {
-                    
+                    return;
                   }
                   if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
                     e.preventDefault();
                     showError("Las Boletas de venta tienen que comenzar con 'B'")
+                    return;
                   }
+                  registrarRD();
                 }
                 //registrarDocumento();
                 //updateRD();
@@ -865,10 +866,11 @@ function FormularioRD() {
                 // else registrarDocumento();
               }}
               loading={loading}
+              disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean)}
               //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
               //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
-            <Button 
+            {/*<Button 
               label={"test"}
               onClick={(e) =>{
                 const primeraLetra = documento.STR_SERIE_DOC.charAt(0).toUpperCase()
@@ -879,7 +881,7 @@ function FormularioRD() {
                 }
                 }
               }
-            />
+            />*/}
             {/* <Button
                 label="Exportar"
                 icon="pi pi-upload"
