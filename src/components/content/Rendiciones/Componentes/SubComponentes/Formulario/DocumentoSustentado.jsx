@@ -460,7 +460,7 @@ function DocumentoSustentado({
 	useEffect(() => {
 		//let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
 		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
-		if (subtotalTotal > 700 && documento.STR_TIPO_DOC.name === "Factura") {
+		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			setDocumento((prevState) => ({
 				...prevState,
 				STR_AFECTACION: { id: '1', name: 'Retencion' }

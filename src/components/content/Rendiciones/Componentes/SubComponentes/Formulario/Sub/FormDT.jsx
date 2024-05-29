@@ -172,11 +172,13 @@ export default function FormDT({ editable,
               label={"Solicitar Aprobación"}
               size="large"
               onClick={(e) => {
-                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
+                // if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
+                if (true) {
                   ValidacionEnvio();
                 } else {
+                  
                   e.preventDefault(); 
-                  showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado. Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
+                  showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
                 }
               }}
             // loading={loadingBtn}

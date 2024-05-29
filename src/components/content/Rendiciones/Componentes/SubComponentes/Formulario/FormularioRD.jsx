@@ -847,14 +847,19 @@ function FormularioRD() {
               onClick={(e) => {
                 const firstChar = documento.STR_SERIE_DOC.charAt(0).toUpperCase();
                 if (esModo === "Agregar") {
-                  if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' || firstChar !== 'E')) {
+                  if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' && firstChar !== 'E')) {
                     e.preventDefault();
-                    showError("Las facturas tienen que comenzar con 'F' o 'E'");
+                    showError("La serie de las facturas tienen que comenzar con 'F' o 'E'");
+                    return;
+                  }
+                  if ((documento.STR_SERIE_DOC.length !== 4 )) {
+                    e.preventDefault();
+                    showError("La serie debe tener 4 digitos");
                     return;
                   }
                   if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
                     e.preventDefault();
-                    showError("Las Boletas de venta tienen que comenzar con 'B'")
+                    showError("La serie de las Boletas de venta tienen que comenzar con 'B'")
                     return;
                   }
                   registrarRD();
