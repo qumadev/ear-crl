@@ -27,6 +27,7 @@ import { Calendar } from 'primereact/calendar';
 import { Toolbar } from 'primereact/toolbar';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { FileUpload } from 'primereact/fileupload';
+import AnexPDF from './AnexPDF';
 
 
 export default function FormDT({ editable,
@@ -700,7 +701,16 @@ export default function FormDT({ editable,
         rendicion={rendicion}
       >
       </TableDT>
+      <Divider/>
+      <AnexPDF 
+      rendicion={rendicion}
+      showSuccess={showSuccess}
+     
+      showError={showError}
+      >
+      </AnexPDF>
       <Divider />
+
       <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
     </>
   )

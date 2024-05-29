@@ -497,6 +497,27 @@ export const tokenRendicion = (id) => {
   return null;
 };
 
+// Función para cargar PDF
+export const uploadAdjuntoPDF = (id, file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return API.post(`rendicion/upload-Pdf/${id}`, formData, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  });
+};
+
+// Función para descargar PDF
+export const downloadAdjuntoPDF = (id) => {
+  return API.get(`rendicion/download-pdf/${id}`, {
+    responseType: 'arraybuffer',
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  });
+};
 /*
 export const uploadAdjunto = (file) => {
   const formData = new FormData();
