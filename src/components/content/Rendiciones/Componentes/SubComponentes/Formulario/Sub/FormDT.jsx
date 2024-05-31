@@ -703,7 +703,7 @@ export default function FormDT({ editable,
       </TableDT>
       <Divider />
        {
-       usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
+      //  usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
 
         <AnexPDF
           rendicion={rendicion}
@@ -712,7 +712,7 @@ export default function FormDT({ editable,
           showError={showError}
         >
         </AnexPDF>
-      ) : null
+      // ) : null
       }
       <Divider />
 
