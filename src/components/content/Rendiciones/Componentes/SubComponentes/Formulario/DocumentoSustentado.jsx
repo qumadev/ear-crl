@@ -920,7 +920,7 @@ function DocumentoSustentado({
 										STR_FECHA_DOC: Boolean(e.target.value)
 									}));
 								}}
-							//dateFormat="dd/mm/yyyy"
+							dateFormat="dd/mm/yy"
 							disabled={esModoValidate}
 							locale="es"
 						/>

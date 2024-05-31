@@ -138,7 +138,24 @@ function FormularioRD() {
       obtenerDocumento(id),
     ]);
     console.log("obt: ", response[0].data.Result[0]);
-    setDocumento(response[0].data.Result[0])
+    let body = response[0].data.Result[0]
+    body.STR_FECHA_DOC = getFechaLargo(body.STR_FECHA_DOC)
+    body.STR_FECHA_VENCIMIENTO = getFechaLargo(body.STR_FECHA_VENCIMIENTO)
+    body.STR_FECHA_CONTABILIZA = getFechaLargo(body.STR_FECHA_CONTABILIZA)
+    setDocumento(body)
+  }
+  function getFechaLargo(fechaCorta) {
+    const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
+
+    const fechaAnio = fechaArray[2];
+
+    const fechaJs = new Date(
+      fechaAnio.substring(0, 4),
+      fechaArray[1] - 1,
+      fechaArray[0]
+    );
+
+    return new Date(`${fechaJs}`);
   }
 
   useEffect(() => {
