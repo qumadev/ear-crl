@@ -863,10 +863,12 @@ function FormularioRD() {
                     return;
                   }
                   registrarRD();
+                }else{
+                  updateRD();
                 }
                 //registrarDocumento();
                 //updateRD();
-                // if (!esModoRegistrar) updateRD();
+                //  if (!esModoRegistrar) updateRD();
                 // else registrarRD();
                 // else registrarDocumento();
               }}
