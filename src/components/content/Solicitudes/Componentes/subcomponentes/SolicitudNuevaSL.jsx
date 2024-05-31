@@ -66,7 +66,8 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
         <div className="mb-3 flex flex-column gap-2">
           <label htmlFor="">Empleado:</label>
           <InputText
-            value={usuario.nombres + " " + usuario.apellidos}
+            // value={usuario.nombres + " " + usuario.apellidos}
+            value={solicitudRD.STR_EMPLDREGI?.nombres + ' ' + solicitudRD.STR_EMPLDREGI.apellidos}
             disabled={true}
           />
           <label htmlFor="">(*)Tipo:</label>

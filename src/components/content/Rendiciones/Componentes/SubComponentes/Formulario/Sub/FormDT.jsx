@@ -177,8 +177,8 @@ export default function FormDT({ editable,
                 if (true) {
                   ValidacionEnvio();
                 } else {
-                  
-                  e.preventDefault(); 
+
+                  e.preventDefault();
                   showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
                 }
               }}
@@ -701,14 +701,17 @@ export default function FormDT({ editable,
         rendicion={rendicion}
       >
       </TableDT>
-      <Divider/>
-      <AnexPDF 
-      rendicion={rendicion}
-      showSuccess={showSuccess}
-     
-      showError={showError}
-      >
-      </AnexPDF>
+      <Divider />
+      {usuario.rol?.id == "1" ? (
+        <AnexPDF
+          rendicion={rendicion}
+          showSuccess={showSuccess}
+
+          showError={showError}
+        >
+        </AnexPDF>
+      ) : null
+      }
       <Divider />
 
       <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
