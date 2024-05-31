@@ -109,15 +109,16 @@ export default function TableDT({
 
 
       <div className="card">
-        <DataTable
+      <DataTable
           value={rendicion?.documentos}
+          sortField="ID"
+          sortOrder={-1}
           sortMode="multiple"
           paginator
           rows={5}
           rowsPerPageOptions={[5, 10, 25, 50]}
           tableStyle={{ minWidth: "100rem" }}
-          // header={header}
-          emptyMessage="No se encontro Data"
+          emptyMessage="No se encontró Data"
         >
           <Column
             header="#"
@@ -128,6 +129,7 @@ export default function TableDT({
             header="N° documentado"
             field="ID"
             style={{ width: "3rem" }}
+            sortable
           ></Column>
           <Column
             field='STR_TIPO_DOC.name'
