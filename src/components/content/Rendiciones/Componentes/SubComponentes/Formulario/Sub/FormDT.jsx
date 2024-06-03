@@ -124,6 +124,27 @@ export default function FormDT({ editable,
       //reject,
     });
   };
+
+  const enviarAprobacionConDiferenciaMontos = () => {
+    EnviarSolicitud();
+  };
+
+  const confirmarDiferenciaMontos = () => {
+    let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
+    let mensaje = diferencia < 0 ?
+    `¿Estás seguro de generar un reembolso de ${(-1)*diferencia} en la rendicion #${rendicion.ID}?`
+    : `¿Estás seguro de generar una devolucion de ${diferencia} en la rendicion #${rendicion.ID}?`
+    confirmDialog({
+      message: mensaje,
+      header: "Confirmación - Devolucion / Reembolso",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      enviarAprobacionConDiferenciaMontos,
+      //reject,
+    });
+  };
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
   async function ValidacionEnvio() {
@@ -173,13 +194,14 @@ export default function FormDT({ editable,
               label={"Solicitar Aprobación"}
               size="large"
               onClick={(e) => {
-                // if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
-                if (true) {
+                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
+                //if (true) {
                   ValidacionEnvio();
                 } else {
-
+                  //ValidacionEnvio();
                   e.preventDefault();
-                  showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
+                  confirmarDiferenciaMontos()
+                  //showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
                 }
               }}
             // loading={loadingBtn}
