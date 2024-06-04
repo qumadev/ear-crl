@@ -125,9 +125,11 @@ export default function FormDT({ editable,
     });
   };
 
+  /*
   const enviarAprobacionConDiferenciaMontos = () => {
     EnviarSolicitud();
   };
+  */
 
   const confirmarDiferenciaMontos = () => {
     let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
@@ -141,7 +143,7 @@ export default function FormDT({ editable,
       defaultFocus: "accept",
       acceptLabel: "Si",
       rejectLabel: "No",
-      enviarAprobacionConDiferenciaMontos,
+      confirm1,
       //reject,
     });
   };
@@ -172,7 +174,8 @@ export default function FormDT({ editable,
       }
 
       if (todosDocumentosValidos) {
-        confirm1();
+        confirmarDiferenciaMontos()
+        //confirm1();
       }
       setLoadingBtn(false);
     } else {
@@ -194,6 +197,8 @@ export default function FormDT({ editable,
               label={"Solicitar Aprobación"}
               size="large"
               onClick={(e) => {
+                ValidacionEnvio();
+                /*
                 if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
                 //if (true) {
                   ValidacionEnvio();
@@ -203,6 +208,7 @@ export default function FormDT({ editable,
                   confirmarDiferenciaMontos()
                   //showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
                 }
+                */
               }}
             // loading={loadingBtn}
             // disabled={validaEditable}
