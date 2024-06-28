@@ -87,9 +87,10 @@ export default function FormDT({ editable,
         cargo: rendicion.STR_EMPLEADO_ASIGNADO.jobTitle,
         conta: usuario.TipoUsuario == 3 ? 0 : 1,
       };
+      let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
       let response = await enviarAprobRendicion(
         rendicion.ID, rendicion.SOLICITUDRD.ID, usuario.sapID,
-        rendicion.STR_ESTADO, usuario.branch
+        rendicion.STR_ESTADO, usuario.branch, diferencia
       );
       if (response.status < 300) {
         showSuccess(
@@ -120,7 +121,7 @@ export default function FormDT({ editable,
       defaultFocus: "accept",
       acceptLabel: "Si",
       rejectLabel: "No",
-      accept,
+      accept: accept,
       //reject,
     });
   };
@@ -134,16 +135,19 @@ export default function FormDT({ editable,
   const confirmarDiferenciaMontos = () => {
     let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
     let mensaje = diferencia < 0 ?
-    `¿Estás seguro de generar un reembolso de ${(-1)*diferencia} en la rendicion #${rendicion.ID}?`
-    : `¿Estás seguro de generar una devolucion de ${diferencia} en la rendicion #${rendicion.ID}?`
+    `Monto Solicitado : ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}
+    Monto Rendido : ${rendicion.STR_TOTALRENDIDO}
+    ¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con un reembolso de ${(-1)*diferencia} ?`
+    : diferencia > 0 ?`¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con una devolucion de ${diferencia}?`
+    : `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID}`
     confirmDialog({
       message: mensaje,
-      header: "Confirmación - Devolucion / Reembolso",
+      header: "Confirmación Rendición",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
       acceptLabel: "Si",
       rejectLabel: "No",
-      confirm1,
+      accept: accept,
       //reject,
     });
   };

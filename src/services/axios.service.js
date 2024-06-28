@@ -418,12 +418,13 @@ export const enviarAprobRendicion = (
   idSolicitud,
   usuarioId,
   estado,
-  areaAprobador
+  areaAprobador,
+  montoDiferencia
 ) => {
-  console.log("body: ", id)
-  console.log("body: ", id, idSolicitud, usuarioId, estado, areaAprobador)
+  // console.log("body: ", id)
+  // console.log("body: ", id, idSolicitud, usuarioId, estado, areaAprobador)
   return API.post(
-    `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}`,
+    `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}&montoDiferencia=${montoDiferencia}`,
     {
       validateStatus: function (status) {
         return status <
