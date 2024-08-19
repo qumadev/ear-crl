@@ -488,7 +488,8 @@ function DocumentoSustentado({
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
-		{ id: 'EXO', name: 'EXO' },
+		{ id: 'IGV10', name: 'IGV (10%)'},
+		{ id: 'EXO', name: 'EXO' }
 	];
 
 
@@ -725,10 +726,10 @@ function DocumentoSustentado({
 										showInfo("Las facturas comienzan con 'F' o 'E' en N° de serie");
 										//console.log("factura")
 									}
-									if (e.target.value.name === 'Boleta de venta') {
-										showInfo("Las boletas de venta comienzan con 'B' en N° de serie");
-										//console.log("boleta")
-									}
+									// if (e.target.value.name === 'Boleta de venta') {
+									// 	showInfo("Las boletas de venta comienzan con 'B' en N° de serie");
+									// 	//console.log("boleta")
+									// }
 								}}
 							options={tipos}
 							optionLabel="name"

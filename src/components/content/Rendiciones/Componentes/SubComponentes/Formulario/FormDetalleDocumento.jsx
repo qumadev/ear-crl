@@ -348,7 +348,8 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     IndImpuesto: e.target.value,
-                                    Impuesto: e.target.value.name === "IGV (18%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0
+                                    Impuesto: e.target.value.name === "IGV (18%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0,
+                                    Impuesto: e.target.value.name === "IGV (10%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2) : 0,
                                 }));
                                 //console.log("ind: ", e.target.value)
                                 setCampoValido(prevState => ({
@@ -370,7 +371,8 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Precio: e.target.value,
-                                    Impuesto: detDoc?.IndImpuesto?.id == 'EXO' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto?.id == 'EXO' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.18).toFixed(2),
+                                    // Impuesto: detDoc?.IndImpuesto?.id == 'IGV10' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.10).toFixed(2),
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,
@@ -386,7 +388,8 @@ function FormDetalleDocumento({
                                 setDetDoc(prevState => ({
                                     ...prevState,
                                     Cantidad: e.target.value,
-                                    Impuesto: detDoc?.IndImpuesto.id == 'EXO' || null ? 0 : (e.target.value * detDoc?.Precio * 0.18).toFixed(2)
+                                    Impuesto: detDoc?.IndImpuesto.id == 'EXO' || null ? 0 : (e.target.value * detDoc?.Precio * 0.18).toFixed(2),
+                                    // Impuesto: detDoc?.IndImpuesto.id == 'IGV10' || null ? 0 : (e.target.value * detDoc?.Precio * 0.10).toFixed(2)
                                 }));
                                 setCampoValido(prevState => ({
                                     ...prevState,

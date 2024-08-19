@@ -874,11 +874,11 @@ function FormularioRD() {
                     showError("La serie debe tener 4 digitos");
                     return;
                   }
-                  if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
-                    e.preventDefault();
-                    showError("La serie de las Boletas de venta tienen que comenzar con 'B'")
-                    return;
-                  }
+                  // if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
+                  //   e.preventDefault();
+                  //   showError("La serie de las Boletas de venta tienen que comenzar con 'B'")
+                  //   return;
+                  // }
                   registrarRD();
                 }else{
                   updateRD();
