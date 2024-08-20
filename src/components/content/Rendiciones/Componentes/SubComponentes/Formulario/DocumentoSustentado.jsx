@@ -462,6 +462,7 @@ function DocumentoSustentado({
 	
 		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
+			const afectacion = documento.STR_AFECTACION?.name;
 			if (documento.STR_AFECTACION.name !== 'Detraccion' && documento.STR_AFECTACION.name !== '-' && documento.STR_AFECTACION.name !== 'Retencion') {
 				setDocumento((prevState) => ({
 					...prevState,
