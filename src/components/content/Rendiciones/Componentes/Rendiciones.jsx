@@ -234,7 +234,21 @@ const statusBodyTemplate = (rowData) => {
 
   const priceBodySolicitudTemplate = (product) => {
     return formatCurrency(product.STR_TOTALAPERTURA);
-  }
+  };
+
+  const priceDiferenciaTemplate = (rowData) => {
+    const montoRendir = rowData.STR_TOTALAPERTURA || 0;
+    const montoRendido = rowData.STR_TOTALRENDIDO || 0;
+    const diferencia = montoRendir - montoRendido;
+
+    const color = diferencia < 0 ? 'green' : 'red';
+
+    return (
+      <span style={{ color: color, fontWeight: 'bold' }}>
+        {formatCurrency(diferencia)}
+      </span>
+    );
+  };
 
   async function aceptarAprobacionLocal(
     idSoli,
@@ -929,6 +943,12 @@ const statusBodyTemplate = (rowData) => {
           field="STR_TOTALRENDIDO"
           body={priceBodyTemplate}
           header="Monto Rendido"
+          style={{ minWidth: "12rem" }}
+        ></Column>
+        <Column
+          field="STR_TOTALAPERTURA"
+          body={priceDiferenciaTemplate}
+          header="Diferencia"
           style={{ minWidth: "12rem" }}
         ></Column>
         <Column
