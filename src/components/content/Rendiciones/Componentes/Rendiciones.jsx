@@ -41,6 +41,7 @@ function Rendiciones({
 }) {
 
 const statusBodyTemplate = (rowData) => {
+  console.log(rowData);
     return (
       <Tag
         className="font-bold"
@@ -569,7 +570,6 @@ const statusBodyTemplate = (rowData) => {
         },
       });
     }
-
 
     if (true) {
       items.push({

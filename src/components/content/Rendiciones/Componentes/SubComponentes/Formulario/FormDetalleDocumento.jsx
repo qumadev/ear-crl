@@ -196,6 +196,28 @@ function FormDetalleDocumento({
             // setDetDoc(null)
         }
     }
+
+    const calculateImpuesto = () => {
+        if (!detDoc?.IndImpuesto) return 0;
+    
+        let tasaImpuesto = 0;
+        if (detDoc.IndImpuesto.name === "IGV (18%)") {
+            tasaImpuesto = 0.18;
+        } else if (detDoc.IndImpuesto.name === "IGV (10%)") {
+            tasaImpuesto = 0.10;
+        }
+    
+        return (detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto).toFixed(2);
+    };
+    
+    
+    useEffect(() => {
+        setDetDoc(prevState => ({
+            ...prevState,
+            Impuesto: calculateImpuesto(),
+        }));
+    }, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
+
     return (
         <div>
             <Toast ref={toast} />
@@ -344,17 +366,24 @@ function FormDetalleDocumento({
                         <Dropdown
                             value={detDoc?.IndImpuesto}
                             onChange={(e) => {
-                                setIndImp(e.value)
+                                const impuestoSeleccionado = e.target.value;
+                                let impuestoCalculado = 0;
+                        
+                                if (impuestoSeleccionado.name === "IGV (18%)") {
+                                    impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
+                                } else if (impuestoSeleccionado.name === "IGV (10%)") {
+                                    impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2);
+                                }
+                        
+                                setIndImp(impuestoSeleccionado);
                                 setDetDoc(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: e.target.value,
-                                    Impuesto: e.target.value.name === "IGV (18%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2) : 0,
-                                    Impuesto: e.target.value.name === "IGV (10%)" ? (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2) : 0,
+                                    IndImpuesto: impuestoSeleccionado,
+                                    Impuesto: impuestoCalculado,
                                 }));
-                                //console.log("ind: ", e.target.value)
                                 setCampoValido(prevState => ({
                                     ...prevState,
-                                    IndImpuesto: Boolean(e.target.value)
+                                    IndImpuesto: Boolean(impuestoSeleccionado)
                                 }));
                             }}
                             options={indImpuestos}
