@@ -52,6 +52,8 @@ function Solicitudes({
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+  //AQUI
+  //const [montoSolicitud, setMontoSolicitud] = useState(0);
 
   const handleClick = () => {
     console.info(`You clicked ${options[selectedIndex]}`);
@@ -740,6 +742,15 @@ function Solicitudes({
           style={{ minWidth: "12rem" }}
         ></Column> */}
         <Column
+          header="Acciones"
+          body={actionBodyTemplate}
+          exportable={false}
+          style={{ minWidth: "10rem" }}
+          // frozen={true}
+          rowSpan={3}
+        // alignFrozen="right"
+        ></Column>
+        <Column
           field="STR_ESTADO_INFO"
           header="Estado"
           style={{ minWidth: "9rem" }}
@@ -782,15 +793,6 @@ function Solicitudes({
           header="Mensaje de Migración"
           style={{ minWidth: "20rem" }}
         // frozen={true}
-        // alignFrozen="right"
-        ></Column>
-        <Column
-          header="Acciones"
-          body={actionBodyTemplate}
-          exportable={false}
-          style={{ minWidth: "10rem" }}
-          // frozen={true}
-          rowSpan={3}
         // alignFrozen="right"
         ></Column>
         {/* </>

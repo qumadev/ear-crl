@@ -14,6 +14,7 @@ import {
   autorizarReversionAprobRendicion,
   enviarAprobRendicion,
   listarRendiciones,
+  listarSolicitud,
   obtenerEstadosRendiciones,
   obtenerRendicion,
   rechazarAprobRendicion,
@@ -58,6 +59,7 @@ const statusBodyTemplate = (rowData) => {
 
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
+  const [totalSolicitado, setTotalSolicitado] = useState(0);
 
   //   const [rendiciones,rendiciones]= useState(
 
@@ -228,6 +230,10 @@ const statusBodyTemplate = (rowData) => {
   const priceBodyTemplate = (product) => {
     return formatCurrency(product.STR_TOTALRENDIDO);
   };
+
+  const priceBodySolicitudTemplate = (product) => {
+    return formatCurrency(product.STR_TOTALRENDIDO);
+  }
 
   async function aceptarAprobacionLocal(
     idSoli,
@@ -807,7 +813,7 @@ const statusBodyTemplate = (rowData) => {
       .then((response) => {
         console.log(response.data);
         setRendiciones(response.data.Result);
-        console.log(response.data.Result);
+        console.log("RESPUESTA DE API", response.data.Result);
       })
       .catch((err) => {
         console.log(err.message);
@@ -819,7 +825,7 @@ const statusBodyTemplate = (rowData) => {
   }
 
   useEffect(() => {
-   
+  
     if (usuario.sapID != null) {
       listarRendicionesLocal();
     }
@@ -878,6 +884,15 @@ const statusBodyTemplate = (rowData) => {
           className="font-bold"
         ></Column>
         <Column
+          header="Acciones"
+          body={actionBodyver}
+          // body={actionBodyTemplate}
+          exportable={false}
+          style={{ minWidth: "10rem" }}
+          frozen
+          alignFrozen="right"
+        ></Column>
+        <Column
           field="STR_NRRENDICION"
           header="N° Rendición"
           style={{ minWidth: "12rem" }}
@@ -903,6 +918,12 @@ const statusBodyTemplate = (rowData) => {
           header="Fecha de Solicitud"
           style={{ minWidth: "10rem" }}
           body={fecBodyTemplate}
+        ></Column>
+        <Column
+          field="STR_TOTALAPERTURA"
+          body={priceBodySolicitudTemplate}
+          header="Monto a Rendir"
+          style={{ minWidth: "12rem" }}
         ></Column>
         <Column
           field="STR_TOTALRENDIDO"
@@ -931,15 +952,6 @@ const statusBodyTemplate = (rowData) => {
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
           style={{ minWidth: "20rem" }}
-        ></Column>
-        <Column
-          header="Acciones"
-          body={actionBodyver}
-          // body={actionBodyTemplate}
-          exportable={false}
-          style={{ minWidth: "10rem" }}
-          frozen
-          alignFrozen="right"
         ></Column>
       </DataTable>
       {/* <Button

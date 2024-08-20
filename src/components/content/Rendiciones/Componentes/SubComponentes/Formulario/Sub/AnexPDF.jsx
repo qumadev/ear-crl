@@ -76,6 +76,12 @@ export default function AnexPDF({
                     accept="application/pdf"
                     maxFileSize={1000000}
                     emptyTemplate={<p className="m-0">Arrastra y suelta archivos aquí para subir.</p>}
+                    chooseLabel="Seleccionar archivo"
+                    uploadLabel="Subir archivo"
+                    cancelLabel="Cancelar"
+                    chooseOptions={{ style: { fontSize: '18px' } }}
+                    uploadOptions={{ style: { fontSize: '18px' } }}
+                    cancelOptions={{ style: { fontSize: '18px' } }}
                 />
                 ) : null
             }
@@ -108,6 +114,7 @@ export default function AnexPDF({
 
                                 icon="pi pi-download"
                                 onClick={() => handleDownload(file)}
+                                style={{ marginLeft: '20px' }}
                             />
                         </li>
                     ))}

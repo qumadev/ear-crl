@@ -488,7 +488,7 @@ function DocumentoSustentado({
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
-		{ id: 'IGV10', name: 'IGV (10%)'},
+		{ id: 'IGV_LEY', name: 'IGV (10%)'},
 		{ id: 'EXO', name: 'EXO' }
 	];
 
@@ -684,28 +684,6 @@ function DocumentoSustentado({
 						></Checkbox>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>Afectacion</label>
-						<Dropdown
-							className='col-6'
-							value={documento.STR_AFECTACION}
-							onChange={
-								(e) => {
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_AFECTACION: e.target.value,
-									}));
-									console.log("value: ", e.target.value.name)
-								}}
-							options={afectacion}
-							optionLabel="name"
-							filter
-							filterBy='name'
-							placeholder='Seleccione Afectacion'
-							disabled={esModoValidate}
-						/>
-					</div>
-
-					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>(*)Tipo</label>
 						{/*console.log(typeof STR_TIPO_DOC)*/}
 						<Dropdown
@@ -897,6 +875,27 @@ function DocumentoSustentado({
 							filter
 							filterBy='name'
 							placeholder='Seleccione Moneda'
+							disabled={esModoValidate}
+						/>
+					</div>
+					<div className="flex col-12 align-items-center gap-5">
+						<label className='col-2'>Afectacion</label>
+						<Dropdown
+							className='col-6'
+							value={documento.STR_AFECTACION}
+							onChange={
+								(e) => {
+									setDocumento((prevState) => ({
+										...prevState,
+										STR_AFECTACION: e.target.value,
+									}));
+									console.log("value: ", e.target.value.name)
+								}}
+							options={afectacion}
+							optionLabel="name"
+							filter
+							filterBy='name'
+							placeholder='Seleccione Afectacion'
 							disabled={esModoValidate}
 						/>
 					</div>
