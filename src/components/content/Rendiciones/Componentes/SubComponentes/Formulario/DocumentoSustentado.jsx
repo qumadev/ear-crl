@@ -458,17 +458,21 @@ function DocumentoSustentado({
 	}, []);
 	const [TotalMonto, setTotalMonto] = useState("0.00");
 	useEffect(() => {
-		//let subtotalTotal = articulos?.reduce((total, detalle) => total + (detalle?.Precio*detalle?.Cantidad), 0);
 		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
+	
+		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
-			setDocumento((prevState) => ({
-				...prevState,
-				STR_AFECTACION: { id: '1', name: 'Retencion' }
-			}));
+			if (documento.STR_AFECTACION.name !== 'Detraccion' && documento.STR_AFECTACION.name !== '-' && documento.STR_AFECTACION.name !== 'Retencion') {
+				setDocumento((prevState) => ({
+					...prevState,
+					STR_AFECTACION: { id: '1', name: 'Retencion' }
+				}));
+			}
 		}
-		setTotalMonto(subtotalTotal)
-		// console.log("datoprobando: ",subtotalTotal)
-	}, [articulos])
+	
+		setTotalMonto(subtotalTotal);
+	}, [articulos, documento.STR_AFECTACION]);
+	
 
 	// useEffect(()=>{
 	//     const articulosConSubtotal = articulos.map((detalle) => ({
