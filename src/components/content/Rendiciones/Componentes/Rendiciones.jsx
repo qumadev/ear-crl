@@ -233,7 +233,7 @@ const statusBodyTemplate = (rowData) => {
   };
 
   const priceBodySolicitudTemplate = (product) => {
-    return formatCurrency(product.STR_TOTALRENDIDO);
+    return formatCurrency(product.STR_TOTALAPERTURA);
   }
 
   async function aceptarAprobacionLocal(
