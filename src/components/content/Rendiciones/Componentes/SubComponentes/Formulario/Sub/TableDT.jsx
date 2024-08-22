@@ -45,9 +45,9 @@ export default function TableDT({
         },
       },
     ];
-  
-  const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
-  console.log("log",rendicion?.STR_ESTADO_INFO)
+
+    const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
+    console.log("log", rendicion?.STR_ESTADO_INFO)
     return (
       <div className="split-button">
         <Button
@@ -61,10 +61,24 @@ export default function TableDT({
         >
           <div className="flex gap-3 align-items-center justify-content-center">
             <span>Ver</span>
-            <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
           </div>
         </Button>
-        <div className="dropdown-content">
+        {showEditButton ?
+          (
+            <Button
+              onClick={() => {
+                navigate(
+                  ruta +
+                  `/rendiciones/${documentos.ID}/documentos/editar`
+                );
+              }}
+              severity="success"
+            >
+              <div className="flex gap-3 align-items-center justify-content-center">
+                <span>Editar</span>
+              </div>
+            </Button>): null}
+        {/* <div className="dropdown-content">
           {showEditButton ?
             (
               items.map((data, key) => (
@@ -96,7 +110,7 @@ export default function TableDT({
               </Button>
             )
           }
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -109,7 +123,7 @@ export default function TableDT({
 
 
       <div className="card">
-      <DataTable
+        <DataTable
           value={rendicion?.documentos}
           sortField="ID"
           sortOrder={-1}
@@ -126,10 +140,18 @@ export default function TableDT({
             body={(data, options) => options.rowIndex + 1}
           ></Column>
           <Column
-            header="N° documentado"
+            header="N° documento"
             field="ID"
             style={{ width: "3rem" }}
             sortable
+          ></Column>
+          <Column
+            header="Acciones"
+            style={{ width: "3rem" }}
+            body={(rowData) => actionverDoc(rowData, rowData)}
+            exportable={false}
+            frozen
+            alignFrozen="right"
           ></Column>
           <Column
             field='STR_TIPO_DOC.name'
@@ -163,15 +185,6 @@ export default function TableDT({
             style={{ width: "3rem" }}
 
           ></Column> */}
-          <Column
-            header="Acciones"
-            style={{ width: "3rem" }}
-            body={(rowData) => actionverDoc(rowData, rowData)}
-            exportable={false}
-            frozen
-            alignFrozen="right"
-          ></Column>
-
 
         </DataTable>
       </div>
