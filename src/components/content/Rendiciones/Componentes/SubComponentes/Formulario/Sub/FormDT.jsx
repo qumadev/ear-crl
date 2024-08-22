@@ -15,7 +15,7 @@ import Rendiciones from '../../../Rendiciones';
 import {
   aceptarAprobRendicion, obtenerRendicion, autorizarReversionAprobRendicion,
   revertirAprobRendicion, validacionDocumento,
-  enviarAprobRendicion,
+  enviarAprobRendicion, obtenerDocumento,
   importarPlantilla
 }
   from '../../../../../../../services/axios.service';
@@ -41,6 +41,7 @@ export default function FormDT({ editable,
   const fileUploadRef = useRef(null);
   const [excel, setExcel] = useState();
   const [rendicion, setRendicion] = useState(null);
+  const [detalles, setDetalles] = useState([]);
 
   const [habilitado, setHabilitado] = useState(false);
 
@@ -61,8 +62,8 @@ export default function FormDT({ editable,
       }))
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
-
-
+      console.log("respuesta de APIREN: ", { ...response.data.Result[0], documentos: documentosFormateados });
+      
     } catch (error) {
       showError(error.Message);
       console.log(error.Message);
@@ -409,6 +410,50 @@ export default function FormDT({ editable,
       if (!fresh) setLoading(false);
     }
   }
+
+  // OBTENER PROPIEDADES DE UN DOCUMENTO EN ESPECIFICO
+  async function fetchDocumentDetails(id) {
+    try {
+      const response = await obtenerDocumento(id);
+      if (response.status === 200) {
+        console.log(`Detalles del documento ${id}:`, response.data);
+        return response.data;
+      } else {
+        console.error(`Error al obtener el documento ${id}:`, response.statusText);
+      }
+    } catch (error) {
+      console.error(`Error al obtener el documento ${id}:`, error);
+    }
+  }
+
+  // RECORRIDO PARA OBTENER LOS DETALLES DE TODOS LOS DOCUMENTOS ENLISTADOS
+  async function obtenerData(fresh = false) {
+    if (!fresh) setLoading(true);
+    try {
+      const response = await obtenerRendicion(id);
+      const documentos = response.data.Result[0]?.documentos || [];
+      setRendicion({ ...response.data.Result[0], documentos });
+  
+      // Obtener detalles de cada documento
+      const detallesDocumentos = [];
+      for (const doc of documentos) {
+        const detalle = await fetchDocumentDetails(doc.ID);
+        if (detalle) {
+          detallesDocumentos.push(detalle);
+        }
+      }
+  
+      // Opcional: hacer algo con los detalles de los documentos obtenidos
+      console.log("Detalles de todos los documentos:", detallesDocumentos);
+  
+    } catch (error) {
+      showError(error.Message);
+      console.log(error.Message);
+    } finally {
+      if (!fresh) setLoading(false);
+    }
+  }
+
   const handleUpload = (event) => {
     setLoading(true);
     const allowedExtensions = ["xlsx"];

@@ -118,21 +118,25 @@ export const obtenerTipos = () => {
   });
 };
 
-export const obtenerDocumento = (id) => {
-  return API.get(`/rendicion/documento/${id}`, {
+export const obtenerDocumento = async (id) => {
+  const respuesta = await API.get(`/rendicion/documento/${id}`, {
     validateStatus: function (status) {
       return status < 500;
     },
   });
+  console.log("RES DOC: ", respuesta);
+  return respuesta;
 };
 
-export const obtenerRendicion = (id) => {
+export const obtenerRendicion = async (id) => {
   console.log("id", id);
-  return API.get(`/rendicion/${id}`, {
+  const respuesta = await API.get(`/rendicion/${id}`, {
     validateStatus: function (status) {
       return status < 500;
     },
   });
+  console.log("REES: ", respuesta);
+  return respuesta;
 };
 
 
