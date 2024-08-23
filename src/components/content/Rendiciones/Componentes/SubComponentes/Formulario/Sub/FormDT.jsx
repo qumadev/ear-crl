@@ -42,6 +42,7 @@ export default function FormDT({ editable,
   const [excel, setExcel] = useState();
   const [rendicion, setRendicion] = useState(null);
   const [detalles, setDetalles] = useState([]);
+  const [dataForExport, setDataForExport] = useState([]);
 
   const [habilitado, setHabilitado] = useState(false);
 
@@ -59,11 +60,14 @@ export default function FormDT({ editable,
         STR_TOTALDOC: doc.STR_TOTALDOC,
         STR_PROVEEDOR: doc.STR_PROVEEDOR,
         STR_COMENTARIOS: doc.STR_COMENTARIOS,
+        STR_SERIE: doc.STR_SERIE_DOC
       }))
+
+      console.log("Data para exportar:", documentosFormateados);
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
       console.log("respuesta de APIREN: ", { ...response.data.Result[0], documentos: documentosFormateados });
-      
+
     } catch (error) {
       showError(error.Message);
       console.log(error.Message);
@@ -75,6 +79,7 @@ export default function FormDT({ editable,
 
   useEffect(() => {
     obtenerData();
+    obtenerDataDocumento();
   }, []);
 
   async function EnviarSolicitud() {
@@ -136,11 +141,11 @@ export default function FormDT({ editable,
   const confirmarDiferenciaMontos = () => {
     let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
     let mensaje = diferencia < 0 ?
-    `Monto Solicitado : ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}
+      `Monto Solicitado : ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}
     Monto Rendido : ${rendicion.STR_TOTALRENDIDO}
-    ¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con un reembolso de ${(-1)*diferencia} ?`
-    : diferencia > 0 ?`¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con una devolucion de ${diferencia}?`
-    : `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID}`
+    ¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con un reembolso de ${(-1) * diferencia} ?`
+      : diferencia > 0 ? `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con una devolucion de ${diferencia}?`
+        : `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID}`
     confirmDialog({
       message: mensaje,
       header: "Confirmación Rendición",
@@ -427,25 +432,67 @@ export default function FormDT({ editable,
   }
 
   // RECORRIDO PARA OBTENER LOS DETALLES DE TODOS LOS DOCUMENTOS ENLISTADOS
-  async function obtenerData(fresh = false) {
+  async function obtenerDataDocumento(fresh = false) {
     if (!fresh) setLoading(true);
     try {
       const response = await obtenerRendicion(id);
       const documentos = response.data.Result[0]?.documentos || [];
+      console.log("DOC OBTENIDOS: ", documentos);
+
       setRendicion({ ...response.data.Result[0], documentos });
-  
+
       // Obtener detalles de cada documento
       const detallesDocumentos = [];
       for (const doc of documentos) {
         const detalle = await fetchDocumentDetails(doc.ID);
-        if (detalle) {
-          detallesDocumentos.push(detalle);
+        console.log(`Detalle para documento ${doc.ID}:`, detalle); // Verifica el detalle
+        if (detalle && detalle.Result && detalle.Result.length > 0) {
+          const detalleDocumento = detalle.Result[0]; // Accede al primer resultado
+          detallesDocumentos.push(detalleDocumento);
         }
       }
-  
+
+      // PREPARAR DATA PARA EL EXPORTAR EXCEL
+      const dataForExport = detallesDocumentos.map(doc => ({
+        ID: doc.ID,
+        STR_RD_ID: doc.STR_RD_ID,
+        STR_TIPO_DOC: doc.STR_TIPO_DOC,
+        STR_SERIE: doc.STR_SERIE_DOC,
+        STR_CORR_DOC: doc.STR_CORR_DOC,
+        STR_PROVEEDOR: doc.STR_PROVEEDOR,
+        STR_DIRECCION: doc.STR_DIRECCION,
+        STR_MOTIVORENDICION: doc.STR_MOTIVORENDICION,
+        STR_MONEDA: doc.STR_MONEDA,
+        STR_AFECTACION: doc.STR_AFECTACION,
+        STR_FECHA_DOC: doc.STR_FECHA_DOC,
+        STR_COMENTARIOS: doc.STR_COMENTARIOS,
+        STR_TOTALDOC: doc.STR_TOTALDOC,
+        detalles: doc.detalles.map(detalle => ({
+          // ID: detalle.ID,
+          COD_ARTICULO: detalle.STR_CODARTICULO,
+          CONCEPTO: detalle.STR_CONCEPTO,
+          ALMACEN: detalle.STR_ALMACEN,
+          PROYECTO: detalle.STR_PROYECTO,
+          UNIDAD_NEGOCIO: detalle.STR_DIM1,
+          FILIAL: detalle.STR_DIM2,
+          AREA: detalle.STR_DIM4,
+          CENTRO_COSTO: detalle.STR_DIM5,
+          IND_IMPUESTO: detalle.STR_INDIC_IMPUESTO,
+          PRECIO: detalle.STR_PRECIO,
+          CANTIDAD: detalle.STR_CANTIDAD,
+          IMPUESTO: detalle.STR_IMPUESTO,
+        }))
+      }));
+
+      setDataForExport(dataForExport);
+      setDetalles(detallesDocumentos);
+
+      console.log("detallesDOC: ", detallesDocumentos);
+      console.log("Data para exportar:", dataForExport);
+
       // Opcional: hacer algo con los detalles de los documentos obtenidos
       console.log("Detalles de todos los documentos:", detallesDocumentos);
-  
+
     } catch (error) {
       showError(error.Message);
       console.log(error.Message);
@@ -506,19 +553,40 @@ export default function FormDT({ editable,
 
 
   const exportExcel = () => {
-    const data = rendicion?.documentos.map((doc) => ({
-      "N° documentado": doc.ID ?? "",
-      "Tipo": doc.STR_TIPO_DOC.name ?? "",
-      "Fecha del Documento": doc.STR_FECHA_DOC ?? "",
-      "Monto Rendido": doc.STR_TOTALDOC ?? "",
-      "Proveedor": doc.STR_PROVEEDOR.CardName ?? "",
-      "Comentario": doc.STR_COMENTARIOS ?? "",
-      // "Estado": doc.ESTADO ?? "",
-    }));
+    const data = dataForExport.flatMap(doc =>
+      doc.detalles.map(detalle => ({
+        "N° Rendicion": doc.STR_RD_ID,
+        "N° documento": doc.ID,
+        "Tipo": doc.STR_TIPO_DOC.name,
+        "Serie": doc.STR_SERIE,
+        "Correlativo": doc.STR_CORR_DOC,
+        "RUC": doc.STR_PROVEEDOR.LicTradNum,
+        "Razon Social": doc.STR_PROVEEDOR.CardName,
+        "Direccion": doc.STR_DIRECCION,
+        "Motivo": doc.STR_MOTIVORENDICION.name,
+        "Moneda": doc.STR_MONEDA.name,
+        "Afectacion": doc.STR_AFECTACION.name,
+        "Fecha de Creacion": doc.STR_FECHA_DOC,
+        "Comentarios": doc.STR_COMENTARIOS,
+        "Importe Total": doc.STR_TOTALDOC,
+        "Codigo de Articulo": detalle.COD_ARTICULO.ItemCode,
+        "Concepto": detalle.CONCEPTO,
+        "Almacen": detalle.ALMACEN,
+        "Proyecto": detalle.PROYECTO.name,
+        "Unidad de Negocio": detalle.UNIDAD_NEGOCIO.name,
+        "Filial": detalle.FILIAL.name,
+        "Area": detalle.AREA.name,
+        "Centro Costo": detalle.CENTRO_COSTO.name,
+        "Indicador Impuesto": detalle.IND_IMPUESTO.name,
+        "Precio": detalle.PRECIO,
+        "Cantidad": detalle.CANTIDAD,
+        "Impuesto": detalle.IMPUESTO
+      }))
+    );
     const workSheet = XLSX.utils.json_to_sheet(data);
     const workBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workBook, workSheet, "Sheet1");
-    XLSX.writeFile(workBook, "export.xlsx");
+    XLSX.writeFile(workBook, "documentosPRUEBABIEN.xlsx");
   };
 
   const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO_INFO?.id < 10;
@@ -779,8 +847,8 @@ export default function FormDT({ editable,
       >
       </TableDT>
       <Divider />
-       {
-      //  usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
+      {
+        //  usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
 
         <AnexPDF
           rendicion={rendicion}
@@ -789,7 +857,7 @@ export default function FormDT({ editable,
           showError={showError}
         >
         </AnexPDF>
-      // ) : null
+        // ) : null
       }
       <Divider />
 
