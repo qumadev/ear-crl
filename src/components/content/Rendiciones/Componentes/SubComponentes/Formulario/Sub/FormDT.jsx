@@ -43,6 +43,7 @@ export default function FormDT({ editable,
   const [rendicion, setRendicion] = useState(null);
   const [detalles, setDetalles] = useState([]);
   const [dataForExport, setDataForExport] = useState([]);
+  // const [dataEarExport, setDataEarExport] = useState([]);
 
   const [habilitado, setHabilitado] = useState(false);
 
@@ -55,6 +56,7 @@ export default function FormDT({ editable,
       const documentos = response.data.Result[0]?.documentos || [];
       const documentosFormateados = documentos.map(doc => ({
         ID: doc.ID,
+        N_STRRENDICION: doc.STR_NRRENDICION,
         STR_TIPO_DOC: doc.STR_TIPO_DOC,
         STR_FECHA_DOC: doc.STR_FECHA_DOC,
         STR_TOTALDOC: doc.STR_TOTALDOC,
@@ -438,6 +440,7 @@ export default function FormDT({ editable,
       const response = await obtenerRendicion(id);
       const documentos = response.data.Result[0]?.documentos || [];
       console.log("DOC OBTENIDOS: ", documentos);
+      console.log("RENDICION: ", response.data);
 
       setRendicion({ ...response.data.Result[0], documentos });
 
@@ -451,6 +454,10 @@ export default function FormDT({ editable,
           detallesDocumentos.push(detalleDocumento);
         }
       }
+
+      // const dataEarExport = documentos.map(doc => ({
+      //   N_EAR: doc.STR_NRRENDICION,
+      // }))
 
       // PREPARAR DATA PARA EL EXPORTAR EXCEL
       const dataForExport = detallesDocumentos.map(doc => ({
@@ -484,9 +491,11 @@ export default function FormDT({ editable,
         }))
       }));
 
+      // setDataEarExport(dataEarExport);
       setDataForExport(dataForExport);
       setDetalles(detallesDocumentos);
 
+      // console.log("N EAR: ", dataEarExport);
       console.log("detallesDOC: ", detallesDocumentos);
       console.log("Data para exportar:", dataForExport);
 
@@ -569,6 +578,7 @@ export default function FormDT({ editable,
         "Fecha de Creacion": doc.STR_FECHA_DOC,
         "Comentarios": doc.STR_COMENTARIOS,
         "Importe Total": doc.STR_TOTALDOC,
+        "": "", // Columna en blanco
         "Codigo de Articulo": detalle.COD_ARTICULO.ItemCode,
         "Concepto": detalle.CONCEPTO,
         "Almacen": detalle.ALMACEN,
@@ -585,8 +595,45 @@ export default function FormDT({ editable,
     );
     const workSheet = XLSX.utils.json_to_sheet(data);
     const workBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workBook, workSheet, "Sheet1");
-    XLSX.writeFile(workBook, "documentosPRUEBABIEN.xlsx");
+
+    // Ajustar el ancho de las columnas
+    const columnWidths = [
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 15 }, // COLUMNA EN BLANCO
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+      { width: 20 },
+    ];
+
+    workSheet["!cols"] = columnWidths;
+
+    // const rendicionId = dataEarExport[0]?.N_EAR;
+    const fileName = `${rendicion.STR_NRRENDICION}.xlsx`;
+
+    XLSX.utils.book_append_sheet(workBook, workSheet, "DOCUMENTOS");
+    XLSX.writeFile(workBook, fileName);
   };
 
   const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO_INFO?.id < 10;
