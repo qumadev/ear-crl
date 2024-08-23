@@ -81,6 +81,16 @@ export default function AnexPDF({
     }
   };
 
+  const handleDelete = (fileName) => {
+    // Eliminar del estado
+    setPdfFiles(prevFiles => {
+      const updatedFiles = prevFiles.filter(file => file !== fileName);
+      // Guardar en localStorage
+      localStorage.setItem(PDF_STORAGE_KEY, JSON.stringify(updatedFiles));
+      return updatedFiles;
+    });
+  }; 
+
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
@@ -135,6 +145,12 @@ export default function AnexPDF({
                 icon="pi pi-download"
                 onClick={() => handleDownload(file)}
                 style={{ marginLeft: '20px' }}
+              />
+              <Button
+
+                icon="pi pi-trash"
+                onClick={() => handleDelete(file)}
+                style={{ marginLeft: '20px', backgroundColor: 'red', color:'white' }}
               />
             </li>
           ))}
