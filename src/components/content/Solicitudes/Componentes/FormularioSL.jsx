@@ -121,18 +121,18 @@ function FormularioSL() {
         var res = await createSolicitud(solicitudRD);
         if (res.status < 300) {
           let body = res.data.Result[0];
-          console.log("reg: ",body.ID)
-          showSuccess(`Se creó solicitud exitosamente con id: ${body.ID}`);
+          console.log("reg: ", body.ID)
+          showSuccess(`Se creó la solicitud exitosamente con id: ${body.ID}`);
           ID = body.ID;
           //await new Promise((resolve) => setTimeout(resolve, 2000));
           //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al crear la solicitud");
         }
-      }else{
+      } else {
         ID = solicitudRD.ID;
       }
-      console.log("id: ",ID)
+      console.log("id: ", ID)
       let presupuestoSuficiente = true;
 
       let response = await enviarSolicitudAproba(ID, {
@@ -149,8 +149,8 @@ function FormularioSL() {
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/solicitudes");
       } else {
-        showError(response.data.Message);
-        console.log(response.data.Message);
+        // showError(response.data.Message);
+        // console.log(response.data.Message);
       }
     } catch (error) {
       showError(error.Message);
@@ -197,7 +197,7 @@ function FormularioSL() {
 
         if (response.status < 300) {
           let body = response.data.Result[0];
-          console.log("reg: ",body.ID)
+          console.log("reg: ", body.ID)
           showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
           setLoading(false);
           return body.ID;
@@ -206,7 +206,7 @@ function FormularioSL() {
         } else {
           showError("Se tuvo un error al crear la solicitud");
         }
-        
+
       } else {
         var response = await actualizarSolicitud(solicitudRD);
         if (response.status < 300) {

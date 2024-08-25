@@ -80,15 +80,16 @@ function Solicitudes({
     setOpen(false);
   };
 
-  const formatCurrency = (value) => {
+  const formatCurrency = (value, currency) => {
     return value.toLocaleString("es-PE", {
       style: "currency",
-      currency: "SOL",
+      currency: currency,
     });
   };
 
-  const priceBodyTemplate = (product) => {
-    return formatCurrency(product.STR_TOTALSOLICITADO);
+  const priceBodyTemplate = (rowData) => {
+    const currency = rowData.STR_MONEDA?.id || "SOL";
+    return formatCurrency(rowData.STR_TOTALSOLICITADO, currency);
   };
 
   const fecBodyTemplate = (rowData) => {
