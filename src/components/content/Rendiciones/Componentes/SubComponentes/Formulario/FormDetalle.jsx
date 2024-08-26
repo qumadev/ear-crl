@@ -449,7 +449,7 @@ export function FormDetalle({
         </div>
         <div className="field">
           <label htmlFor="name" className="font-bold">
-            Seleccionar Impuesto sdfdsfdf
+            Seleccionar Impuesto
           </label>
           <div className="card flex">
             <Dropdown

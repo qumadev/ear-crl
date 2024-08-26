@@ -55,13 +55,13 @@ function DocumentoSustentado({
 	};
 
 	const showInfo = (mensaje) => {
-    toast.current.show({
-      severity: "info",
-      summary: "Info",
-      detail: mensaje,
-      life: 3000,
-    });
-  };
+		toast.current.show({
+			severity: "info",
+			summary: "Info",
+			detail: mensaje,
+			life: 3000,
+		});
+	};
 
 	// const deleteProduct = async (rowData) => { 
 	//     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
@@ -459,7 +459,7 @@ function DocumentoSustentado({
 	const [TotalMonto, setTotalMonto] = useState("0.00");
 	useEffect(() => {
 		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
-	
+
 		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			const afectacion = documento.STR_AFECTACION?.name;
@@ -470,10 +470,10 @@ function DocumentoSustentado({
 				}));
 			}
 		}
-	
+
 		setTotalMonto(subtotalTotal);
 	}, [articulos, documento.STR_AFECTACION]);
-	
+
 
 	// useEffect(()=>{
 	//     const articulosConSubtotal = articulos.map((detalle) => ({
@@ -493,7 +493,7 @@ function DocumentoSustentado({
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
-		{ id: 'IGV_LEY', name: 'IGV (10%)'},
+		{ id: 'IGV_LEY', name: 'IGV (10%)' },
 		{ id: 'EXO', name: 'EXO' }
 	];
 
@@ -673,6 +673,21 @@ function DocumentoSustentado({
 			</Row>
 		</ColumnGroup>
 	);
+
+	const formatCurrency = (amount, currency) => {
+		// Asegúrate de que currency sea una cadena
+		const currencyCode = typeof currency === 'string' ? currency : (currency ? currency.id : 'USD');
+
+		try {
+			return new Intl.NumberFormat('es-PE', {
+				style: 'currency',
+				currency: currencyCode,
+			}).format(amount);
+		} catch (error) {
+			console.error('Error formatting currency:', error);
+			return amount; // Devuelve el monto sin formato en caso de error
+		}
+	};
 
 	return (
 		<div>
@@ -961,10 +976,10 @@ function DocumentoSustentado({
 									onClick={openNew}
 								/>
 								{/* <Button 
-                                className='col-4'
-                                label="Eliminar Seleccionados"
-                                onClick={() => { }}
-                            /> */}
+                  className='col-4'
+                  label="Eliminar Seleccionados"
+                  onClick={() => { }}
+              /> */}
 							</>
 						}
 						<Button
@@ -995,6 +1010,15 @@ function DocumentoSustentado({
 							body={(data, options) => options.rowIndex + 1}
 						>
 						</Column>
+						{usuario.rol?.id == 1 && true ?
+							<Column
+								header="Acciones"
+								headerStyle={{ width: "3rem" }}
+								body={actionBodyTemplate}
+							>
+							</Column>
+							: null
+						}
 						<Column
 							field="Cod.ItemCode"
 							header="Cod. Articulo/Servicio"
@@ -1063,18 +1087,9 @@ function DocumentoSustentado({
 						<Column
 							//field="Cantidad*Precio"
 							header="Subtotal"
-							body={(rowData) => rowData.Cantidad * rowData.Precio}
+							body={(rowData) => formatCurrency(rowData.Cantidad * rowData.Precio, moneda)}
 							style={{ minWidth: "7rem" }}
 						></Column>
-						{usuario.rol?.id == 1 && true ?
-							<Column
-								header="Acciones"
-								headerStyle={{ width: "3rem" }}
-								body={actionBodyTemplate}
-							>
-							</Column>
-							: null
-						}
 					</DataTable>
 					{/* { esModoDetail ? "" :
                         // <Button
