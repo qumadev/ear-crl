@@ -31,6 +31,17 @@ export default function TableDT({
 
   ];
 
+  const formatMontoRendido = (rowData) => {
+    // if (!rowData || !rowData.STR_MONEDA || !rowData.STR_TOTALDOC) {
+    //     return 'N/A';
+    // }
+
+    const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
+    const monto = rowData.STR_TOTALDOC ?? 'N/A';
+
+    return `${monto} ${moneda}`;
+  };
+
 
   const actionverDoc = (rowData, documentos) => {
     const items = [
@@ -77,7 +88,7 @@ export default function TableDT({
               <div className="flex gap-3 align-items-center justify-content-center">
                 <span>Editar</span>
               </div>
-            </Button>): null}
+            </Button>) : null}
         {/* <div className="dropdown-content">
           {showEditButton ?
             (
@@ -167,6 +178,7 @@ export default function TableDT({
             field='STR_TOTALDOC'
             header="Monto Rendido"
             style={{ width: "3rem" }}
+            body={formatMontoRendido}
           ></Column>
           <Column
             field='STR_PROVEEDOR.CardName'

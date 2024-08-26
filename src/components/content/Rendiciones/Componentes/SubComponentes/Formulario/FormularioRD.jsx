@@ -38,8 +38,8 @@ function FormularioRD() {
   const [activeIndex, setActiveIndex] = useState(0);
   const tabViewRef = useRef(null);
   const location = useLocation();
-  const esModo = location.pathname.includes("agregar") ? "Agregar" : 
-  location.pathname.includes("editar") ? "Editar" : "Detalle";
+  const esModo = location.pathname.includes("agregar") ? "Agregar" :
+    location.pathname.includes("editar") ? "Editar" : "Detalle";
   const { config, ruta } = useContext(AppContext);
   const fileUploadRef = useRef(null);
   const tipoRendicion = location.state && location.state.tipoRendicion;
@@ -129,7 +129,7 @@ function FormularioRD() {
       ]
     }
   );*/
-  const [documento, setDocumento] = useState({STR_AFECTACION: '-'});
+  const [documento, setDocumento] = useState({ STR_AFECTACION: '-' });
 
   async function obtenerData() {
     //let id = 8
@@ -159,8 +159,8 @@ function FormularioRD() {
   }
 
   useEffect(() => {
-    if(esModo!=="Agregar"){
-        obtenerData();
+    if (esModo !== "Agregar") {
+      obtenerData();
     }
     //setDocumentoDet(articulos)
     // setDocumento(...documento, DocumentoDet)
@@ -168,7 +168,7 @@ function FormularioRD() {
 
   const [detalles, setDetalles] = useState([]); // Lista de detalles
   const [anexos, setAnexos] = useState([]);
-  
+
   const [detalle, setDetalle] = useState({
     // Detalle a Registrar
   });
@@ -258,20 +258,20 @@ function FormularioRD() {
         ID: detalle.ID ? detalle.ID : null,
         STR_CODARTICULO: detalle.Cod,
         STR_INDIC_IMPUESTO: detalle.IndImpuesto,
-        STR_DIM1:detalle.UnidadNegocio,
-        STR_DIM2:detalle.Filial,
-        STR_DIM3:detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
-        STR_DIM4:detalle.Areas,
-        STR_DIM5:detalle.CentroCosto,
-        STR_ALMACEN:detalle.Almacen,
-        STR_CANTIDAD:detalle.Cantidad,
-        STR_TPO_OPERACION:null,
-        STR_DOC_ID:id,
-        STR_CONCEPTO:detalle.Concepto,
-        STR_PROYECTO:detalle.Proyecto,
-        STR_PRECIO:detalle.Precio,
-        STR_SUBTOTAL:detalle.Precio*detalle.Cantidad,
-        STR_IMPUESTO:detalle.Impuesto,
+        STR_DIM1: detalle.UnidadNegocio,
+        STR_DIM2: detalle.Filial,
+        STR_DIM3: detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
+        STR_DIM4: detalle.Areas,
+        STR_DIM5: detalle.CentroCosto,
+        STR_ALMACEN: detalle.Almacen,
+        STR_CANTIDAD: detalle.Cantidad,
+        STR_TPO_OPERACION: null,
+        STR_DOC_ID: id,
+        STR_CONCEPTO: detalle.Concepto,
+        STR_PROYECTO: detalle.Proyecto,
+        STR_PRECIO: detalle.Precio,
+        STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
+        STR_IMPUESTO: detalle.Impuesto,
       }));
       let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
       //let fechaFormateada = formatearFecha(documento.STR_FECHA_DOC);
@@ -294,16 +294,16 @@ function FormularioRD() {
         //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
         //   : documento.STR_ANEXO_ADJUNTO,
       };
-      console.log("datos enviados: ",_documento)
+      console.log("datos enviados: ", _documento)
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
         console.log(`Documento creado con ID: ${content.id}`);
         showSuccess(`Documento creado con ID: ${content.id}`);
         // navigate(ruta + `/rendiciones/${id}/documentos/agregar`);
-        
+
         await new Promise((resolve) => setTimeout(resolve, 3000));
-        navigate(ruta + "/rendiciones/info/"+id)
+        navigate(ruta + "/rendiciones/info/" + id)
       } else {
         showError("Error al crear documento");
       }
@@ -315,29 +315,29 @@ function FormularioRD() {
     }
   };
 
-  const datosState= {
-      "ID": null,
-      "STR_RENDICION": null,
-      "STR_FECHA_CONTABILIZA": null,
-      "STR_FECHA_DOC": null,
-      "STR_FECHA_VENCIMIENTO": null,
-      "STR_PROVEEDOR": {"CardCode":null,"CardName":null,"LicTradNum":null},
-      "STR_MONEDA": {"id":null,"name":null},
-      "STR_COMENTARIOS": null,
-      "STR_TIPO_DOC": {"id":null,"name":null},
-      "STR_SERIE_DOC": null,
-      "STR_CORR_DOC": null,
-      "STR_VALIDA_SUNAT": null,
-      "STR_OPERACION": null,
-      "STR_PARTIDAFLUJO": null,
-      "STR_TOTALDOC": null,
-      "STR_RD_ID": null,
-      "STR_CANTIDAD": null,
-      "STR_ALMACEN":null,
-      "STR_RUC": null,
-      "STR_RAZONSOCIAL": null,
-      "STR_DIRECCION": null,
-      "detalles": []
+  const datosState = {
+    "ID": null,
+    "STR_RENDICION": null,
+    "STR_FECHA_CONTABILIZA": null,
+    "STR_FECHA_DOC": null,
+    "STR_FECHA_VENCIMIENTO": null,
+    "STR_PROVEEDOR": { "CardCode": null, "CardName": null, "LicTradNum": null },
+    "STR_MONEDA": { "id": null, "name": null },
+    "STR_COMENTARIOS": null,
+    "STR_TIPO_DOC": { "id": null, "name": null },
+    "STR_SERIE_DOC": null,
+    "STR_CORR_DOC": null,
+    "STR_VALIDA_SUNAT": null,
+    "STR_OPERACION": null,
+    "STR_PARTIDAFLUJO": null,
+    "STR_TOTALDOC": null,
+    "STR_RD_ID": null,
+    "STR_CANTIDAD": null,
+    "STR_ALMACEN": null,
+    "STR_RUC": null,
+    "STR_RAZONSOCIAL": null,
+    "STR_DIRECCION": null,
+    "detalles": []
   }
 
   function formatDate(dateString) {
@@ -351,29 +351,29 @@ function FormularioRD() {
       // let _detalles = detalles.map((e) => {
       //   return typeof e.ID == "number" ? e : { ...e, ID: null };
       // });
-      console.log("docx: ",documento);
+      console.log("docx: ", documento);
       if (detalle && detalle.length > 0) {
-        console.log("detx: ",detalle);
+        console.log("detx: ", detalle);
         const _detalles = detalle.map((detalle) => ({
-            ID: detalle.ID ? detalle.ID : null,
-            STR_CODARTICULO: detalle.Cod,
-            // STR_SUBTOTAL: detalle.STR_SUBTOTAL,
-            STR_INDIC_IMPUESTO: detalle.IndImpuesto,
-            STR_DIM1:detalle.UnidadNegocio,
-            STR_DIM2:detalle.Filial,
-            STR_DIM3:detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
-            STR_DIM4:detalle.Areas,
-            STR_DIM5:detalle.CentroCosto,
-            STR_ALMACEN:detalle.Almacen,
-            STR_CANTIDAD:detalle.Cantidad,
-            STR_TPO_OPERACION:detalle.STR_TPO_OPERACION,
-            STR_DOC_ID:detalle.STR_DOC_ID,
-            STR_CONCEPTO:detalle.Concepto,
-            STR_PROYECTO:detalle.Proyecto,
-            STR_PRECIO:detalle.Precio,
-            STR_IMPUESTO:detalle.Impuesto,
-            STR_SUBTOTAL:detalle.Precio*detalle.Cantidad,
-            FLG_ELIM: detalle.FLG_ELIM===1 ? 1 : 0,
+          ID: detalle.ID ? detalle.ID : null,
+          STR_CODARTICULO: detalle.Cod,
+          // STR_SUBTOTAL: detalle.STR_SUBTOTAL,
+          STR_INDIC_IMPUESTO: detalle.IndImpuesto,
+          STR_DIM1: detalle.UnidadNegocio,
+          STR_DIM2: detalle.Filial,
+          STR_DIM3: detalle.STR_DIM3 ? detalle.STR_DIM3 : null,
+          STR_DIM4: detalle.Areas,
+          STR_DIM5: detalle.CentroCosto,
+          STR_ALMACEN: detalle.Almacen,
+          STR_CANTIDAD: detalle.Cantidad,
+          STR_TPO_OPERACION: detalle.STR_TPO_OPERACION,
+          STR_DOC_ID: detalle.STR_DOC_ID,
+          STR_CONCEPTO: detalle.Concepto,
+          STR_PROYECTO: detalle.Proyecto,
+          STR_PRECIO: detalle.Precio,
+          STR_IMPUESTO: detalle.Impuesto,
+          STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
+          FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
         let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
         let _documento = {
@@ -393,14 +393,14 @@ function FormularioRD() {
           STR_VALIDA_SUNAT: compExisteSunat,
           detalles: _detalles, // Detalles
         };
-        console.log("envio: ",_documento);
+        console.log("envio: ", _documento);
         let response = await actualizarDocumento(_documento); // _documento - Crea Documento
         if (response.CodRespuesta != "99") {
           var content = response.data.Result[0];
           console.log(`Documento actualizado con ID: ${content.id}`);
           showSuccess(`Documento actualizado con ID: ${content.id}`);
           await new Promise((resolve) => setTimeout(resolve, 3000));
-          navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID);
+          navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
           //navigate(`/rendiciones/${id}/documentos`);
         } else {
           showError("Error al Actualizar documento");
@@ -435,7 +435,7 @@ function FormularioRD() {
       //   showError("Error al Actualizar documento");
       // }
     } catch (error) {
-      console.log("err: ",error);
+      console.log("err: ", error);
     } finally {
       setLoading(false);
     }
@@ -580,7 +580,7 @@ function FormularioRD() {
       console.log(error);
       showError("Error en el servidor");
     } finally {
-      if (esModo==="Agregar") setLoadingTemplate(false);
+      if (esModo === "Agregar") setLoadingTemplate(false);
       //setLoadingTemplate(false);
     }
   }
@@ -725,8 +725,8 @@ function FormularioRD() {
     STR_MOTIVORENDICION: false,
     STR_MONEDA: false,
     STR_FECHA_DOC: false,
-    STR_COMENTARIOS:false
-  }); 
+    STR_COMENTARIOS: false
+  });
   return (
     <div>
       <Toast ref={toast} />
@@ -735,13 +735,13 @@ function FormularioRD() {
           <i
             className="pi pi-chevron-left cursor-pointer"
             onClick={() => {
-              esModo==="Agregar" ? 
-                navigate(ruta + "/rendiciones/info/"+id)
-              : 
-                navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID)
+              esModo === "Agregar" ?
+                navigate(ruta + "/rendiciones/info/" + id)
+                :
+                navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID)
             }}
           ></i>
-          <div>{esModo==="Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
+          <div>{esModo === "Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
         </div>
       </div>
       <Divider />
@@ -857,7 +857,7 @@ function FormularioRD() {
         {esModo === "Detalle" ? "" :
           <>
             <Button
-              label={esModo==="Agregar"?"Agregar Documento": esModo==="Editar"?"Actualizar Documento":"Detalle"}
+              label={esModo === "Agregar" ? "Agregar Documento" : esModo === "Editar" ? "Actualizar Documento" : "Detalle"}
               //severity="info"
               size="large"
               //style={{ backgroundColor: "black", borderColor: "black" }}
@@ -869,7 +869,7 @@ function FormularioRD() {
                     showError("La serie de las facturas tienen que comenzar con 'F' o 'E'");
                     return;
                   }
-                  if ((documento.STR_SERIE_DOC.length !== 4 )) {
+                  if ((documento.STR_SERIE_DOC.length !== 4)) {
                     e.preventDefault();
                     showError("La serie debe tener 4 digitos");
                     return;
@@ -880,7 +880,7 @@ function FormularioRD() {
                   //   return;
                   // }
                   registrarRD();
-                }else{
+                } else {
                   updateRD();
                 }
                 //registrarDocumento();
@@ -890,9 +890,9 @@ function FormularioRD() {
                 // else registrarDocumento();
               }}
               loading={loading}
-              disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean)}
-              //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
-              //disabled={!estadosEditables.includes(solicitudRD.estado)}
+              disabled={esModo === "Agregar" && !Object.values(campoValidoCabecera).every(Boolean)}
+            //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
+            //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
             {/*<Button 
               label={"test"}
@@ -920,11 +920,11 @@ function FormularioRD() {
               label="Cancelar"
               severity="secondary"
               size="large"
-              onClick={() => 
-                esModo==="Agregar" ? 
-                navigate(ruta + "/rendiciones/info/"+id)
-                : 
-                navigate(ruta + "/rendiciones/info/"+documento.STR_RD_ID)  
+              onClick={() =>
+                esModo === "Agregar" ?
+                  navigate(ruta + "/rendiciones/info/" + id)
+                  :
+                  navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID)
               }
             />
           </>
