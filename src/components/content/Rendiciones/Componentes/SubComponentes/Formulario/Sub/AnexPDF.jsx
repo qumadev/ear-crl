@@ -43,7 +43,7 @@ export default function AnexPDF({
       for (const file of files) {
         const response = await uploadAdjuntoPDF(id, file);
         if (response.status === 200) {
-          alert(`Archivo ${file.name} subido correctamente`);
+          // alert(`Archivo ${file.name} subido correctamente`);
           // Actualizamos la lista de archivos después de subir cada nuevo archivo
           uploadedFileNames.push(file.name);
         } else {
@@ -56,11 +56,12 @@ export default function AnexPDF({
           localStorage.setItem(PDF_STORAGE_KEY, JSON.stringify(updatedFiles));
           return updatedFiles;
         });
-        alert('Archivos subidos correctamente');
+        showSuccess("Carga exitosa");
       }
     } catch (error) {
       console.error('Error al subir los archivos:', error);
-      alert('Error al subir los archivos');
+      showError("Error al subir los archivos");
+      // alert('Error al subir los archivos');
     }
   };
 
