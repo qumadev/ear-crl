@@ -460,8 +460,10 @@ function DocumentoSustentado({
 	useEffect(() => {
 		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
 
+		let impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + detalle.Impuesto, 0);
+
 		//Redondear Total a 2 decimales
-		const totalRedondeado = subtotalTotal.toFixed(2);
+		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
 
 		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
