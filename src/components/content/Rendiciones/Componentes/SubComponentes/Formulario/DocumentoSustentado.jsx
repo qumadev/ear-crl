@@ -460,6 +460,9 @@ function DocumentoSustentado({
 	useEffect(() => {
 		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
 
+		//Redondear Total a 2 decimales
+		const totalRedondeado = subtotalTotal.toFixed(2);
+
 		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			const afectacion = documento.STR_AFECTACION?.name;
@@ -471,7 +474,7 @@ function DocumentoSustentado({
 			}
 		}
 
-		setTotalMonto(subtotalTotal);
+		setTotalMonto(totalRedondeado);
 	}, [articulos, documento.STR_AFECTACION]);
 
 

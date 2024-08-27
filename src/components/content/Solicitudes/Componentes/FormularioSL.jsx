@@ -124,6 +124,7 @@ function FormularioSL() {
           console.log("reg: ", body.ID)
           showSuccess(`Se creó la solicitud exitosamente con id: ${body.ID}`);
           ID = body.ID;
+          // navigate(ruta + "/solicitudes")
           //await new Promise((resolve) => setTimeout(resolve, 2000));
           //navigate(ruta + "/solicitudes");
         } else {
