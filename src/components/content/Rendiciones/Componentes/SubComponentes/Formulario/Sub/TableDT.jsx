@@ -88,33 +88,28 @@ export default function TableDT({
         label: "Editar",
         icon: "pi pi-pencil",
         command: () => {
-          navigate(
-            ruta +
-            `/rendiciones/${documentos.ID}/documentos/editar`
-          );
+          navigate(ruta + `/rendiciones/${documentos.ID}/documentos/editar`);
         },
+      },
+      {
+        label: 'Borrar',
+        icon: 'pi pi-trash',
+        command: () => eliminarDocumento(rowData.ID),
       },
     ];
 
     const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
     console.log("log", rendicion?.STR_ESTADO_INFO)
+    const filteredItems = showEditButton ? items: [];
     return (
       <div className="split-button">
-        <Button
-          onClick={() => {
-            navigate(
-              ruta +
-              `/rendiciones/${documentos.ID}/documentos/detail`
-            );
-          }}
-          severity="success"
-        >
-          <div className="flex gap-3 align-items-center justify-content-center">
-            <i className='pi pi-eye' style={{ fontSize: '1em' }} ></i>
-            <span>Ver</span>
-          </div>
-        </Button>
-        {showEditButton ?
+        <SplitButton
+          label='Ver'
+          icon='pi pi-eye'
+          model={filteredItems}
+          onClick={() => {navigate(ruta +`/rendiciones/${documentos.ID}/documentos/detail`);}}
+        />
+        {/* {showEditButton ?
           (
             <Button
               onClick={() => {
@@ -137,7 +132,7 @@ export default function TableDT({
                 <i className='pi pi-trash' style={{ fontSize: '1em' }} ></i>
                 <span>Borrar</span>
               </div>
-            </Button>) : null}
+            </Button>) : null} */}
         {/* <div className="dropdown-content">
           {showEditButton ?
             (
