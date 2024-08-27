@@ -1,10 +1,13 @@
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
-import React, { useContext } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
 import { SplitButton } from 'primereact/splitbutton'
+import { Toast } from 'primereact/toast'
+
+import { borrarDocumento, obtenerDocumento } from '../../../../../../../services/axios.service'
 
 export default function TableDT({
   rendicion,
@@ -15,8 +18,29 @@ export default function TableDT({
   const navigate = useNavigate();
   const { usuario, ruta } = useContext(AppContext);
 
+  const [loading, setLoading] = useState(false);
+
   console.log("Usuario", usuario)
 
+  const toast = useRef(null);
+
+  const showSuccess = (mensaje) => {
+    toast.current.show({
+      severity: "success",
+      summary: "Exitoso",
+      detail: mensaje,
+      life: 3000,
+    });
+  };
+
+  const showError = (mensaje) => {
+    toast.current.show({
+      severity: "error",
+      summary: "Error",
+      detail: mensaje,
+      life: 3000,
+    });
+  };
 
   const items = [
 
@@ -42,6 +66,21 @@ export default function TableDT({
     return `${monto} ${moneda}`;
   };
 
+  const eliminarDocumento = async (idDoc) => {
+    setLoading(true);
+    try {
+      const documentoResponse = await borrarDocumento(idDoc);
+      if (documentoResponse.status === 200) {
+        showSuccess("Documento eliminado con éxito");
+      } else {
+        showError("Error al eliminar el documento");
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const actionverDoc = (rowData, documentos) => {
     const items = [
@@ -71,6 +110,7 @@ export default function TableDT({
           severity="success"
         >
           <div className="flex gap-3 align-items-center justify-content-center">
+            <i className='pi pi-eye' style={{ fontSize: '1em' }} ></i>
             <span>Ver</span>
           </div>
         </Button>
@@ -86,7 +126,16 @@ export default function TableDT({
               severity="success"
             >
               <div className="flex gap-3 align-items-center justify-content-center">
+                <i className='pi pi-pencil' style={{ fontSize: '1em' }} ></i>
                 <span>Editar</span>
+              </div>
+            </Button>) : null}
+        {showEditButton ?
+          (
+            <Button onClick={() => eliminarDocumento(documentos.ID)} severity='danger'>
+              <div className="flex gap-3 align-items-center justify-content-center">
+                <i className='pi pi-trash' style={{ fontSize: '1em' }} ></i>
+                <span>Borrar</span>
               </div>
             </Button>) : null}
         {/* <div className="dropdown-content">
@@ -131,8 +180,7 @@ export default function TableDT({
 
   return (
     <>
-
-
+      <Toast ref={toast} />
       <div className="card">
         <DataTable
           value={rendicion?.documentos}
@@ -153,7 +201,7 @@ export default function TableDT({
           <Column
             header="N° documento"
             field="ID"
-            style={{ width: "3rem" }}
+            style={{ width: "8rem" }}
             sortable
           ></Column>
           <Column

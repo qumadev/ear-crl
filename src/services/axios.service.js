@@ -139,7 +139,6 @@ export const obtenerRendicion = async (id) => {
   return respuesta;
 };
 
-
 export const crearDocumento = (body) => {
   return API.post("/rendicion/documento", body, {
     validateStatus: function (status) {
@@ -150,6 +149,14 @@ export const crearDocumento = (body) => {
 
 export const actualizarDocumento = (body) => {
   return API.patch("/rendicion/documento", body, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
+  });
+};
+
+export const borrarDocumento = (idDoc) => {
+  return API.delete(`/rendicion/documento/${idDoc}`, {
     validateStatus: function (status) {
       return status < 500;
     },
@@ -368,10 +375,6 @@ export const consultaComprobante = (body) => {
 };
 
 export const actualizaDocumento = (body) => {
-  return null;
-};
-
-export const borrarDocumento = (id, rdId) => {
   return null;
 };
 
