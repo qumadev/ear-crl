@@ -1021,7 +1021,7 @@ function DocumentoSustentado({
 							body={(data, options) => options.rowIndex + 1}
 						>
 						</Column>
-						{usuario.rol?.id == 1 && true ?
+						{!esModoValidate && usuario.rol?.id == 1 && true ?
 							<Column
 								header="Acciones"
 								headerStyle={{ width: "3rem" }}
