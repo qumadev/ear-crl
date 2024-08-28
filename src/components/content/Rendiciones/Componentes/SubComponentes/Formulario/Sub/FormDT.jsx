@@ -30,7 +30,7 @@ import { FileUpload } from 'primereact/fileupload';
 import AnexPDF from './AnexPDF';
 
 
-export default function FormDT({ editable,
+export default function FormDT({ editable, totalRedondeado,
   fechaSolicitud, responsiveSizeMobile, rowData
 }) {
   const navigate = useNavigate();
@@ -48,6 +48,12 @@ export default function FormDT({ editable,
   const [habilitado, setHabilitado] = useState(false);
 
   const estadosEditablesUsr = [8, 9, 12];
+
+  console.log("TOT RED: ", totalRedondeado);
+
+  // const handleNuevoTotal = (total) => {
+  //   setTotalRedondeado(total);
+  // }
 
   async function obtenerData(fresh = false) {
     if (!fresh) setLoading(true);
@@ -891,6 +897,7 @@ export default function FormDT({ editable,
       </div>
       <TableDT
         rendicion={rendicion}
+        totalRedondeado={totalRedondeado}
       >
       </TableDT>
       <Divider />

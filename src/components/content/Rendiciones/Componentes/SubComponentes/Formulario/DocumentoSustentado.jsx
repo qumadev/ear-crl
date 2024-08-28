@@ -33,7 +33,8 @@ function DocumentoSustentado({
 	esModo,
 	editable,
 	showError,
-	setCampoValidoCabecera
+	setCampoValidoCabecera,
+	onTotalChange
 }) {
 
 	//  const {moneda, setmoneda }
@@ -457,10 +458,13 @@ function DocumentoSustentado({
 		// setDocumento(...documento, DocumentoDet)
 	}, []);
 	const [TotalMonto, setTotalMonto] = useState("0.00");
-	useEffect(() => {
-		let subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + (detalle.Precio * detalle.Cantidad), 0);
 
-		let impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1).reduce((total, detalle) => total + detalle.Impuesto, 0);
+	useEffect(() => {
+		const subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
+			.reduce((total, detalle) => total + (parseFloat(detalle.Precio) * parseFloat(detalle.Cantidad)), 0);
+
+		const impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
+			.reduce((total, detalle) => total + parseFloat(detalle.Impuesto), 0);
 
 		//Redondear Total a 2 decimales
 		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
@@ -477,6 +481,8 @@ function DocumentoSustentado({
 		}
 
 		setTotalMonto(totalRedondeado);
+
+		onTotalChange(totalRedondeado);
 	}, [articulos, documento.STR_AFECTACION]);
 
 

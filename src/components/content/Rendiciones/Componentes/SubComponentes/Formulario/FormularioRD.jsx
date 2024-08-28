@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 import { TabPanel, TabView } from "primereact/tabview";
+import FormDT from "./Sub/FormDT";
 
 import {
   useNavigate,
@@ -49,6 +50,8 @@ function FormularioRD() {
   const idDocumento = location.state && location.state.idDocumento;
   const editable = location.state && location.state.editable;
   const fechaSolicitud = location.state && location.state.fechaSolicitud;
+  const [totalRedondeado, setTotalRedondeado] = useState(0);
+
   const { id } = useParams();
   /* Agentes */
   let agentes = [
@@ -727,6 +730,12 @@ function FormularioRD() {
     STR_FECHA_DOC: false,
     STR_COMENTARIOS: false
   });
+
+  const handleTotalChange = (nuevoTotal) => {
+    console.log("TOTAL FOOTER: ", nuevoTotal);
+    setTotalRedondeado(nuevoTotal);
+  }
+
   return (
     <div>
       <Toast ref={toast} />
@@ -760,6 +769,7 @@ function FormularioRD() {
             //esModoDetail={esModoDetail}
             esModo={esModo}
             setCampoValidoCabecera={setCampoValidoCabecera}
+            onTotalChange={handleTotalChange}
           />
         </TabPanel>
         {/* <TabPanel header="General">
@@ -951,6 +961,10 @@ function FormularioRD() {
           onClick={() => navigate(ruta + `/rendiciones/${id}/documentos`)}
         /> */}
       </div>
+      {/* <FormDT
+        totalRedondeado={totalRedondeado}
+      >
+      </FormDT> */}
     </div>
   );
 }

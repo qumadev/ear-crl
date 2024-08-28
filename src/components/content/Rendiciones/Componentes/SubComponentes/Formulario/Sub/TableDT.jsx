@@ -6,21 +6,21 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
 import { SplitButton } from 'primereact/splitbutton'
 import { Toast } from 'primereact/toast'
+import DocumentoSustentado from '../DocumentoSustentado'
 
 import { borrarDocumento, obtenerDocumento } from '../../../../../../../services/axios.service'
 
 export default function TableDT({
   rendicion,
   setRendicion,
-
+  totalRedondeado
 }) {
 
   const navigate = useNavigate();
   const { usuario, ruta } = useContext(AppContext);
-
   const [loading, setLoading] = useState(false);
-
   console.log("Usuario", usuario)
+  console.log("Total redondeados: ", totalRedondeado);
 
   const toast = useRef(null);
 
@@ -56,12 +56,8 @@ export default function TableDT({
   ];
 
   const formatMontoRendido = (rowData) => {
-    // if (!rowData || !rowData.STR_MONEDA || !rowData.STR_TOTALDOC) {
-    //     return 'N/A';
-    // }
-
     const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
-    const monto = rowData.STR_TOTALDOC ?? 'N/A';
+    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegura que el monto sea un número con dos decimales
 
     return `${monto} ${moneda}`;
   };
@@ -100,14 +96,14 @@ export default function TableDT({
 
     const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
     console.log("log", rendicion?.STR_ESTADO_INFO)
-    const filteredItems = showEditButton ? items: [];
+    const filteredItems = showEditButton ? items : [];
     return (
       <div className="split-button">
         <SplitButton
           label='Ver'
           icon='pi pi-eye'
           model={filteredItems}
-          onClick={() => {navigate(ruta +`/rendiciones/${documentos.ID}/documentos/detail`);}}
+          onClick={() => { navigate(ruta + `/rendiciones/${documentos.ID}/documentos/detail`); }}
         />
         {/* {showEditButton ?
           (
