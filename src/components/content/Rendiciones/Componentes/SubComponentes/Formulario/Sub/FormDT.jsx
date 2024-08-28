@@ -897,6 +897,7 @@ export default function FormDT({ editable, totalRedondeado,
       </div>
       <TableDT
         rendicion={rendicion}
+        setRendicion={setRendicion}
         totalRedondeado={totalRedondeado}
       >
       </TableDT>

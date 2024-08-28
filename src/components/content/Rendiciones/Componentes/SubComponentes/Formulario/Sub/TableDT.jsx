@@ -67,6 +67,10 @@ export default function TableDT({
     try {
       const documentoResponse = await borrarDocumento(idDoc);
       if (documentoResponse.status === 200) {
+        setRendicion(prevRendicion => ({
+          ...prevRendicion,
+          documentos: prevRendicion.documentos.filter(doc => doc.ID !== idDoc)
+        }));
         showSuccess("Documento eliminado con éxito");
       } else {
         showError("Error al eliminar el documento");
