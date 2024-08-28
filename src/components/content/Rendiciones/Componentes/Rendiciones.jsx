@@ -260,8 +260,17 @@ function Rendiciones({
   //   }
   // }
 
+  // async function obtenerListaRendiciones() {
+  //   try {
+  //     const response = await listarRendiciones
+  //   } catch (error) {
+
+  //   }
+  // }
+
   async function aceptarAprobacionLocal(rowData) {
     setLoading(true);
+    console.log("ENVIR DATA: ", rowData);
     try {
       let response = await aceptarAprobRendicion(
         rowData.SOLICITUDRD.ID,
@@ -271,6 +280,7 @@ function Rendiciones({
         rowData.ID,
         usuario.branch
       );
+
       if (response.status < 300) {
         let body = response.data.Result[0];
         console.log(response.data);
@@ -492,6 +502,7 @@ function Rendiciones({
     try {
       // Obtiene Documentos
       let response = await obtenerRendicion(data.ID);
+      console.log("ENVIAR A APROB: ", response);
       if (response.status < 300) {
         let _rendicion = response.data.Result[0];
         let todosDocumentosValidos = true;
@@ -569,7 +580,7 @@ function Rendiciones({
       defaultFocus: "accept",
       acceptLabel: "Si",
       rejectLabel: "No",
-      accept: () => aceptarAprobacionLocal(),
+      accept: () => aceptarAprobacionLocal(rowData),
       //reject,
     });
   };
@@ -593,13 +604,13 @@ function Rendiciones({
     const showRevertirAprobacionButton = usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 12;
 
     const items = [
-      ...(showAprobacionButton ? [{
-        label: "Aceptar Aprobación",
-        icon: "pi pi-check",
-        command: () => {
-          confirmAceptacion(rowData);
-        },
-      }] : []),
+      // ...(showAprobacionButton ? [{
+      //   label: "Aceptar Aprobación",
+      //   icon: "pi pi-check",
+      //   command: () => {
+      //     confirmAceptacion(rowData);
+      //   },
+      // }] : []),
 
       ...(showRevertirAprobacionButton ? [{
         label: "Revertir Aprobación",
