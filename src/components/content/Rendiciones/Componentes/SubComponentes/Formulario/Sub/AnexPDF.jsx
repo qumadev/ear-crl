@@ -10,7 +10,7 @@ export default function AnexPDF({
   rendicion,
   showSuccess,
   showError
-  
+
 }) {
   const [pdfFiles, setPdfFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -54,7 +54,7 @@ export default function AnexPDF({
           console.log(response);
           if (response.status === 200) {
             // Suponiendo que response.data.Result es una lista de archivos
-            const files = response.data.Result.map(file => ({ name: file.name, id: file.id }));
+            const files = response.data.Result.map(file => ({ id: file.id, name: file.name }));
             console.log("archivos Files: ", files)
             setPdfFiles(files);
           } else {
@@ -83,10 +83,15 @@ export default function AnexPDF({
 
       const response = await uploadAdjuntoPDF(id, formData);
       if (response.status === 200) {
-        // Actualiza la lista de archivos después de subir
-        const uploadedFileNames = files.map(file => file.name);
-        setPdfFiles(prevFiles => [...prevFiles, ...uploadedFileNames]);
-        showSuccess("Carga exitosa");
+        // Obtener la lista actualizada de archivos
+        const updatedFilesResponse = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
+        if (updatedFilesResponse.status === 200) {
+          const files = updatedFilesResponse.data.Result.map(file => ({ id: file.id, name: file.name }));
+          setPdfFiles(files);
+          showSuccess("Carga exitosa");
+        } else {
+          showError("Error al obtener los archivos después de la carga");
+        }
       } else {
         showError("Error al subir los archivos");
       }
@@ -95,6 +100,7 @@ export default function AnexPDF({
       showError("Error al subir los archivos");
     }
   };
+
 
   const handleDownload = async (fileName) => {
     const id = rendicion?.ID;
