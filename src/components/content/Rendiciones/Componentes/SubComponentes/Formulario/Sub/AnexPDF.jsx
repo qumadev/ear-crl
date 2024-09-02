@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FileUpload } from 'primereact/fileupload';
 import { Button } from 'primereact/button';
-import { downloadAdjuntoPDF, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion } from '../../../../../../../services/axios.service';
+import { downloadAdjuntoPDF, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion, eliminarArchivosRendicion } from '../../../../../../../services/axios.service';
 import { Document, Page } from 'react-pdf';
 import { saveAs } from 'file-saver';
 import { AppContext } from "../../../../../../../App";
@@ -53,7 +53,7 @@ export default function AnexPDF({
           console.log(response);
           if (response.status === 200) {
             // Suponiendo que response.data.Result es una lista de archivos
-            const files = response.data.Result.map(file => file.id);
+            const files = response.data.Result.map(file => ({ id: file.id, name: file.name }));
             console.log("archivos Files: ", files)
             setPdfFiles(files);
           } else {
@@ -97,7 +97,11 @@ export default function AnexPDF({
 
   const handleDownload = async (fileName) => {
     const id = rendicion?.ID;
+    //LLAMAR AL ID DEL ARCHIVO SUBIDO
+
     try {
+      const respuesta = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
+      console.log(respuesta.data.Result[0])
       const response = await downloadAdjuntoPDF(id, fileName);
       if (response.status === 200) {
         const blob = new Blob([response.data], { type: 'application/pdf' });
@@ -111,6 +115,21 @@ export default function AnexPDF({
       showError('Error al descargar el archivo');
     }
   };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await eliminarArchivosRendicion(id);
+      if (response.status === 200) {
+        setPdfFiles((prevFiles) => prevFiles.filter((file) => file.id !== id));
+        showSuccess("Archivo eliminado exitosamente.");
+      } else {
+        showError("Error al eliminar el archivo");
+      }
+    } catch (error) {
+      console.error('Error al eliminar el archivo:', error);
+      showError("Error al eliminar el archivo.");
+    }
+  }
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -156,17 +175,17 @@ export default function AnexPDF({
 
       {pdfFiles.length > 0 && (
         <ul>
-          {pdfFiles.map((file, index) => (
-            <li key={index}>
-              <span>{file}</span>
+          {pdfFiles.map((file) => (
+            <li key={file.id}>
+              <span>{file.name}</span>
               <Button
                 icon="pi pi-download"
-                onClick={() => handleDownload(file)}
+                onClick={() => handleDownload(file.id)}
                 style={{ marginLeft: '20px' }}
               />
               <Button
                 icon="pi pi-trash"
-                onClick={() => handleDownload(file)}
+                onClick={() => handleDelete(file.id)}
                 style={{
                   marginLeft: '20px',
                   backgroundColor: 'red',

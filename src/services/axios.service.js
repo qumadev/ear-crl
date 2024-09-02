@@ -528,7 +528,7 @@ export const uploadAdjuntoPDF = (id, files) => {
 // Función para descargar PDF
 export const downloadAdjuntoPDF = (IdDoc) => {
   console.log(IdDoc);
-  return API.get(`rendicion/descargar-pdf/${IdDoc}`, {
+  return API.get(`rendicion/download-pdf/${IdDoc}`, {
     responseType: 'arraybuffer',
     validateStatus: function (status) {
       return status < 500;
@@ -547,6 +547,15 @@ export const obtenerArchivosRendicion = async (id) => {
   console.log("RES ARCHIVOS: ", response);
   return response;
 }
+
+// Funcion para eliminar los archivos subidos AnexPDF
+export const eliminarArchivosRendicion = async (id) => {
+  return API.delete(`rendicion/delete-pdf/${id}`, {
+    validateStatus: function(status) {
+      return status < 500;
+    },
+  });
+};
 
 /*
 export const uploadAdjunto = (file) => {
