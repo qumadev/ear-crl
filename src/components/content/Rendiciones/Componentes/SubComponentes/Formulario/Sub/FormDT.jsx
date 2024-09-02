@@ -908,7 +908,7 @@ export default function FormDT({ editable, totalRedondeado,
         <AnexPDF
           rendicion={rendicion}
           showSuccess={showSuccess}
-
+          // usuario={usuario}
           showError={showError}
         >
         </AnexPDF>

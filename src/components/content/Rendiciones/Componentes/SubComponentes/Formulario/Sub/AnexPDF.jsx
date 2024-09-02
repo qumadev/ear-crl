@@ -10,6 +10,7 @@ export default function AnexPDF({
   rendicion,
   showSuccess,
   showError
+  
 }) {
   const [pdfFiles, setPdfFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -53,7 +54,7 @@ export default function AnexPDF({
           console.log(response);
           if (response.status === 200) {
             // Suponiendo que response.data.Result es una lista de archivos
-            const files = response.data.Result.map(file => ({ id: file.id, name: file.name }));
+            const files = response.data.Result.map(file => ({ name: file.name, id: file.id }));
             console.log("archivos Files: ", files)
             setPdfFiles(files);
           } else {
@@ -192,6 +193,7 @@ export default function AnexPDF({
                   color: 'white',
                   borderColor: 'red'
                 }}
+                visible={usuario.rol?.id === "1" && rendicion?.STR_ESTADO_INFO.id === "9"}
               />
             </li>
           ))}
