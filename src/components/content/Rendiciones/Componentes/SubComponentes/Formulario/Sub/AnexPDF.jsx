@@ -1,96 +1,116 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FileUpload } from 'primereact/fileupload';
 import { Button } from 'primereact/button';
-import { downloadAdjuntoPDF, uploadAdjuntoPDF } from '../../../../../../../services/axios.service'
+import { downloadAdjuntoPDF, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion } from '../../../../../../../services/axios.service';
 import { Document, Page } from 'react-pdf';
-import { id } from "date-fns/locale";
 import { saveAs } from 'file-saver';
 import { AppContext } from "../../../../../../../App";
-const PDF_STORAGE_KEY = 'stored_pdf_file';
 
 export default function AnexPDF({
   rendicion,
   showSuccess,
-  showError }) {
+  showError
+}) {
   const [pdfFiles, setPdfFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [numPages, setNumPages] = useState(null);
-  const { usuario, ruta } = useContext(AppContext);
+  const [rendicionData, setRendicionData] = useState(null); // Estado para almacenar la rendición
+  const { usuario } = useContext(AppContext);
 
-  // Al cargar el componente, cargamos la lista de archivos desde la rendición
+  // Llamar a obtenerRendicion cuando el componente se monta o el ID de rendicion cambia
   useEffect(() => {
-    if (rendicion && rendicion.U_STR_FILER) {
-      const files = rendicion.U_STR_FILER.split(',');
-      const fileNames = files.map(file => file.split('/').pop());
-      setPdfFiles(fileNames);
-    }
-    const storedFiles = localStorage.getItem(PDF_STORAGE_KEY);
-    if (storedFiles) {
-      setPdfFiles(JSON.parse(storedFiles));
-    } else if (rendicion && rendicion.U_STR_FILER) {
-      const files = rendicion.U_STR_FILER.split(',');
-      const fileNames = files.map(file => file.split('/').pop());
-      setPdfFiles(fileNames);
-      localStorage.setItem(PDF_STORAGE_KEY, JSON.stringify(fileNames));
-    }
-  }, [rendicion]);
-
-  const handleUpload = async ({ files }) => {
-    // const file = files[0];
-    const id = rendicion?.ID; // Reemplaza con el ID adecuado
-    try {
-      const uploadedFileNames = [];
-      for (const file of files) {
-        const response = await uploadAdjuntoPDF(id, file);
-        if (response.status === 200) {
-          // alert(`Archivo ${file.name} subido correctamente`);
-          // Actualizamos la lista de archivos después de subir cada nuevo archivo
-          uploadedFileNames.push(file.name);
-        } else {
-          alert(`Error al subir el archivo ${file.name}`);
+    if (rendicion && rendicion.ID) {
+      const fetchRendicion = async () => {
+        try {
+          const response = await obtenerRendicion(rendicion.ID);
+          console.log("Respuesta de obtenerRendicion:", response);
+          if (response.status === 200) {
+            setRendicionData(response.data);
+          } else {
+            showError("Error al obtener los datos de la rendición");
+          }
+        } catch (error) {
+          console.error('Error al obtener la rendición:', error);
+          showError("Error al obtener los datos de la rendición");
         }
-      }
-      if (uploadedFileNames.length > 0) {
-        setPdfFiles(prevFiles => {
-          const updatedFiles = [...prevFiles, ...uploadedFileNames];
-          localStorage.setItem(PDF_STORAGE_KEY, JSON.stringify(updatedFiles));
-          return updatedFiles;
-        });
+      };
+
+      fetchRendicion();
+    } else {
+      // Resetear el estado si no hay una rendición válida
+      setRendicionData(null);
+      setPdfFiles([]);
+    }
+  }, [rendicion, showError]);
+
+  useEffect(() => {
+    if (rendicionData) {
+      const fetchArchivos = async () => {
+        try {
+          console.log("respuesta de API: ", rendicion);
+          console.log("numero rendicion: ", rendicion.STR_NRRENDICION);
+          const response = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
+          console.log(response);
+          if (response.status === 200) {
+            // Suponiendo que response.data.Result es una lista de archivos
+            const files = response.data.Result.map(file => file.id);
+            console.log("archivos Files: ", files)
+            setPdfFiles(files);
+          } else {
+            showError("Error al obtener los archivos");
+          }
+        } catch (error) {
+          console.error('Error al obtener los archivos:', error);
+          showError("Error al obtener los archivos");
+        }
+      };
+
+      fetchArchivos();
+    }
+  }, [rendicionData, showError]);
+
+  const handleUpload = async (event) => {
+    const id = rendicion?.STR_NRRENDICION; // Reemplaza con el ID adecuado
+    const files = event.files; // Archivos seleccionados por el usuario
+
+    try {
+      const formData = new FormData();
+
+      files.forEach((file, index) => {
+        formData.append(`file${index + 1}`, file); // `file1`, `file2`, etc.
+      });
+
+      const response = await uploadAdjuntoPDF(id, formData);
+      if (response.status === 200) {
+        // Actualiza la lista de archivos después de subir
+        const uploadedFileNames = files.map(file => file.name);
+        setPdfFiles(prevFiles => [...prevFiles, ...uploadedFileNames]);
         showSuccess("Carga exitosa");
+      } else {
+        showError("Error al subir los archivos");
       }
     } catch (error) {
       console.error('Error al subir los archivos:', error);
       showError("Error al subir los archivos");
-      // alert('Error al subir los archivos');
     }
   };
 
   const handleDownload = async (fileName) => {
     const id = rendicion?.ID;
     try {
-      const response = await downloadAdjuntoPDF(id);
+      const response = await downloadAdjuntoPDF(id, fileName);
       if (response.status === 200) {
         const blob = new Blob([response.data], { type: 'application/pdf' });
         saveAs(blob, fileName);
       } else {
         console.error('Error response:', response);
-        alert('Error al descargar el archivo');
+        showError('Error al descargar el archivo primero');
       }
     } catch (error) {
       console.error('Error al descargar el archivo:', error);
-      alert('Error al descargar el archivo');
+      showError('Error al descargar el archivo');
     }
   };
-
-  const handleDelete = (fileName) => {
-    // Eliminar del estado
-    setPdfFiles(prevFiles => {
-      const updatedFiles = prevFiles.filter(file => file !== fileName);
-      // Guardar en localStorage
-      localStorage.setItem(PDF_STORAGE_KEY, JSON.stringify(updatedFiles));
-      return updatedFiles;
-    });
-  }; 
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
@@ -98,9 +118,9 @@ export default function AnexPDF({
 
   return (
     <div className="card">
-      {usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
+      {usuario.rol?.id === "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
         <FileUpload
-          name="demo[]"
+          name="files"
           customUpload
           uploadHandler={handleUpload}
           multiple={true}
@@ -114,13 +134,11 @@ export default function AnexPDF({
           uploadOptions={{ style: { fontSize: '18px' } }}
           cancelOptions={{ style: { fontSize: '18px' } }}
         />
-      ) : null
-      }
+      ) : null}
+
       {pdfFiles.length === 0 && (
         <p>No hay archivos adjuntos disponibles.</p>
       )}
-
-
 
       {selectedFile && (
         <div>
@@ -142,16 +160,19 @@ export default function AnexPDF({
             <li key={index}>
               <span>{file}</span>
               <Button
-
                 icon="pi pi-download"
                 onClick={() => handleDownload(file)}
                 style={{ marginLeft: '20px' }}
               />
               <Button
-
                 icon="pi pi-trash"
-                onClick={() => handleDelete(file)}
-                style={{ marginLeft: '20px', backgroundColor: 'red', color:'white' }}
+                onClick={() => handleDownload(file)}
+                style={{
+                  marginLeft: '20px',
+                  backgroundColor: 'red',
+                  color: 'white',
+                  borderColor: 'red'
+                }}
               />
             </li>
           ))}
@@ -160,4 +181,3 @@ export default function AnexPDF({
     </div>
   );
 }
-

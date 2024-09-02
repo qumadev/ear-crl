@@ -506,11 +506,19 @@ export const tokenRendicion = (id) => {
 };
 
 // Función para cargar PDF
-export const uploadAdjuntoPDF = (id, file) => {
+export const uploadAdjuntoPDF = (id, files) => {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', files);
+
+  // AÑADIR CADA ARCHIVO
+  files.forEach((file, index) => {
+    formData.append(`file${index + 1}`, file);
+  });
 
   return API.post(`rendicion/upload-Pdf/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
     validateStatus: function (status) {
       return status < 500;
     }
@@ -518,14 +526,28 @@ export const uploadAdjuntoPDF = (id, file) => {
 };
 
 // Función para descargar PDF
-export const downloadAdjuntoPDF = (id) => {
-  return API.get(`rendicion/download-pdf/${id}`, {
+export const downloadAdjuntoPDF = (IdDoc) => {
+  console.log(IdDoc);
+  return API.get(`rendicion/descargar-pdf/${IdDoc}`, {
     responseType: 'arraybuffer',
     validateStatus: function (status) {
       return status < 500;
     }
   });
 };
+
+// Funcion para obtener los archivos AnexPDF
+export const obtenerArchivosRendicion = async (id) => {
+  console.log("ID:", id);
+  const response = await API.get(`rendicion/archivos/${id}`, {
+    validateStatus: function(status) {
+      return status < 500;
+    },
+  });
+  console.log("RES ARCHIVOS: ", response);
+  return response;
+}
+
 /*
 export const uploadAdjunto = (file) => {
   const formData = new FormData();
