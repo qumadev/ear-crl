@@ -9,6 +9,7 @@ import { Toast } from 'primereact/toast'
 import DocumentoSustentado from '../DocumentoSustentado'
 
 import { borrarDocumento, obtenerDocumento } from '../../../../../../../services/axios.service'
+import { comma } from 'postcss/lib/list'
 
 export default function TableDT({
   rendicion,
@@ -59,7 +60,7 @@ export default function TableDT({
     const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
     const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegura que el monto sea un número con dos decimales
 
-    return `${monto} ${moneda}`;
+    return `${monto}`;
   };
 
   const eliminarDocumento = async (idDoc) => {
@@ -96,6 +97,13 @@ export default function TableDT({
         icon: 'pi pi-trash',
         command: () => eliminarDocumento(rowData.ID),
       },
+      {
+        label: "RowData",
+        icon: "pi pi-info-circle",
+        command: () => {
+          console.log(rowData);
+        }
+      }
     ];
 
     const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;

@@ -460,6 +460,7 @@ function DocumentoSustentado({
 	const [TotalMonto, setTotalMonto] = useState("0.00");
 
 	useEffect(() => {
+		console.log("moneda: ", monedas)
 		const subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
 			.reduce((total, detalle) => total + (parseFloat(detalle.Precio) * parseFloat(detalle.Cantidad)), 0);
 
@@ -501,6 +502,8 @@ function DocumentoSustentado({
 		{ id: 'SOL', name: 'SOL' },
 		{ id: 'USD', name: 'USD' },
 	];
+
+	const [selectedMoneda, setSelectedMoneda] = useState(monedas[0]?.id || '');
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
@@ -888,7 +891,7 @@ function DocumentoSustentado({
 						<label className='col-2'>(*)Moneda</label>
 						<Dropdown
 							className='col-6'
-							value={documento.STR_MONEDA}
+							value={selectedMoneda}
 							onChange={
 								(e) => {
 									// setSelectedTipo(e.value.value);
