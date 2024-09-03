@@ -25,8 +25,8 @@ function FormDetalleDocumento({
 	selectedRowData,
 	editing,
 	setEditing,
-	onEdit
-
+	onEdit,
+	moneda
 }) {
 
 	const [article, setArticle] = useState(null);
@@ -38,7 +38,9 @@ function FormDetalleDocumento({
 	const [indImp, setIndImp] = useState(null);
 	const [precio, setPrecio] = useState(null);
 	const [cantidad, setCantidad] = useState(null);
-	const [impuesto, setImpuesto] = useState(null);
+	const [subtotal, setSubtotal] = useState(0);
+  const [impuesto, setImpuesto] = useState(0);
+  const [totalDetalle, setTotalDetalle] = useState(0);
 
 	const toast = useRef(null);
 	const showSuccess = (mensaje) => {
@@ -72,6 +74,7 @@ function FormDetalleDocumento({
 		Precio: null,
 		Cantidad: null,
 		Impuesto: null,
+		TotalDetalle: null
 	});
 
 	useEffect(() => {
@@ -90,6 +93,7 @@ function FormDetalleDocumento({
 				Precio: selectedRowData?.Precio || null,
 				Cantidad: selectedRowData?.Cantidad || null,
 				Impuesto: selectedRowData?.Impuesto || null,
+				TotalDetalle: selectedRowData?.TotalDetalle || null
 			});
 		} else {
 			setDetDoc({
@@ -104,7 +108,8 @@ function FormDetalleDocumento({
 				"IndImpuesto": { id: 'IGV', name: 'IGV (18%)' },
 				"Precio": null,
 				"Cantidad": null,
-				"Impuesto": null
+				"Impuesto": null,
+				"TotalDetalle": null
 			})
 		}
 	}, [editing, selectedRowData]);
@@ -196,6 +201,10 @@ function FormDetalleDocumento({
 		}
 	}
 
+	const calculateSubtotal = () => {
+		return (detDoc?.Precio * detDoc?.Cantidad).toFixed(2);
+	};
+
 	const calculateImpuesto = () => {
 		if (!detDoc?.IndImpuesto) return 0;
 
@@ -214,6 +223,17 @@ function FormDetalleDocumento({
 		setDetDoc(prevState => ({
 			...prevState,
 			Impuesto: calculateImpuesto(),
+		}));
+	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
+
+	useEffect(() => {
+		const subtotal = calculateSubtotal();
+		const impuesto = calculateImpuesto();
+
+		setDetDoc(prevState => ({
+			...prevState,
+			Impuesto: impuesto,
+			TotalDetalle: (parseFloat(subtotal) + parseFloat(impuesto)).toFixed(2)
 		}));
 	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
 
@@ -436,6 +456,12 @@ function FormDetalleDocumento({
 									Impuesto: e.target.value
 								}));
 							}}
+							disabled
+						/>
+						<label htmlFor="">(*)Total Detalle:</label>
+						<InputText
+							value={detDoc?.TotalDetalle}
+							onChange={(e) => setSubtotal(parseFloat(e.target.value))}
 							disabled
 						/>
 						{editing ?

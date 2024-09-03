@@ -462,7 +462,7 @@ function DocumentoSustentado({
 		// setDocumento(...documento, DocumentoDet)
 	}, []);
 
-	const [TotalMonto, setTotalMonto] = useState("0.00");
+	// const [TotalMonto, setTotalMonto] = useState("0.00");
 
 	useEffect(() => {
 		if (documento.STR_MONEDA) {
@@ -482,12 +482,8 @@ function DocumentoSustentado({
 			impuestoTotal *= 3;
 		}
 
-		console.log("IMPUESTO: ", impuestoTotal);
-
-		// Redondear Total a 2 decimales
 		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
 
-		// Condición para cambiar automáticamente a Retención
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			const afectacion = documento.STR_AFECTACION?.name;
 			if (documento.STR_AFECTACION.name !== 'Detraccion' && documento.STR_AFECTACION.name !== '-' && documento.STR_AFECTACION.name !== 'Retencion') {
@@ -498,7 +494,7 @@ function DocumentoSustentado({
 			}
 		}
 
-		setTotalMonto(totalRedondeado);
+		// setTotalMonto(totalRedondeado);
 
 		onTotalChange(totalRedondeado);
 	}, [articulos, documento.STR_AFECTACION, documento.STR_MONEDA]);
@@ -694,12 +690,11 @@ function DocumentoSustentado({
 		<ColumnGroup>
 			<Row>
 				<Column
-					footer="Total:"
+					footer="Monto Total:"
 					colSpan={13}
 					footerStyle={{ textAlign: 'right', }}
 				/>
-				<Column footerStyle={{}} footer={TotalMonto} />
-				<Column footer="" />
+				<Column  />
 			</Row>
 		</ColumnGroup>
 	);
@@ -1121,6 +1116,11 @@ function DocumentoSustentado({
 							body={(rowData) => formatCurrency(rowData.Cantidad * rowData.Precio, moneda)}
 							style={{ minWidth: "7rem" }}
 						></Column>
+						<Column
+							header="Total Detalle"
+							style={{ minWidth: "7rem" }}
+						>
+						</Column>
 					</DataTable>
 					{/* { esModoDetail ? "" :
                         // <Button
