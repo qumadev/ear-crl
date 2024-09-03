@@ -450,24 +450,41 @@ function DocumentoSustentado({
 				STR_AFECTACION: { id: '3', name: '-' },
 			}));
 		}
+
 	}, [])
+
+
+
 
 	useEffect(() => {
 		obtenerData();
 		setDocumentoDet(articulos);
 		// setDocumento(...documento, DocumentoDet)
 	}, []);
+
 	const [TotalMonto, setTotalMonto] = useState("0.00");
 
 	useEffect(() => {
-		console.log("moneda: ", monedas)
+		if (documento.STR_MONEDA) {
+			console.log("VALOR MON: ", documento.STR_MONEDA.name);
+		} else {
+			console.log("no hay");
+		}
+		console.log("moneda: ", monedas);
+
 		const subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
 			.reduce((total, detalle) => total + (parseFloat(detalle.Precio) * parseFloat(detalle.Cantidad)), 0);
 
-		const impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
+		let impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
 			.reduce((total, detalle) => total + parseFloat(detalle.Impuesto), 0);
 
-		//Redondear Total a 2 decimales
+		if (documento.STR_MONEDA && documento.STR_MONEDA.name === "USD") {
+			impuestoTotal *= 3;
+		}
+
+		console.log("IMPUESTO: ", impuestoTotal);
+
+		// Redondear Total a 2 decimales
 		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
 
 		// Condición para cambiar automáticamente a Retención
@@ -484,8 +501,7 @@ function DocumentoSustentado({
 		setTotalMonto(totalRedondeado);
 
 		onTotalChange(totalRedondeado);
-	}, [articulos, documento.STR_AFECTACION]);
-
+	}, [articulos, documento.STR_AFECTACION, documento.STR_MONEDA]);
 
 	// useEffect(()=>{
 	//     const articulosConSubtotal = articulos.map((detalle) => ({
@@ -894,14 +910,15 @@ function DocumentoSustentado({
 							value={selectedMoneda}
 							onChange={
 								(e) => {
+									console.log("VALOR MON: ", e.value);
 									// setSelectedTipo(e.value.value);
 									setDocumento((prevState) => ({
 										...prevState,
-										STR_MONEDA: e.target.value,
+										STR_MONEDA: e.value,
 									}));
 									setCampoValidoCabecera(prevState => ({
 										...prevState,
-										STR_MONEDA: Boolean(e.target.value)
+										STR_MONEDA: Boolean(e.value)
 									}));
 								}}
 							options={monedas}
