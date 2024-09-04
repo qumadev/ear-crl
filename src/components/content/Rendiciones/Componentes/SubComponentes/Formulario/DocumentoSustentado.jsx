@@ -454,50 +454,61 @@ function DocumentoSustentado({
 	}, [])
 
 
+	const getTotalSubtotal = () => {
+		return articulos.reduce((total, articulo) => total + (parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad)), 0);
+	};
+
+	const getTotalImpuesto = () => {
+		return articulos.reduce((total, articulo) => total + parseFloat(articulo.Impuesto), 0);
+	};
+
+	const getTotal = () => {
+		const subtotalTotal = getTotalSubtotal();
+		const impuestoTotal = getTotalImpuesto();
+		return subtotalTotal + impuestoTotal;
+	};
+
 
 
 	useEffect(() => {
 		obtenerData();
 		setDocumentoDet(articulos);
-		// setDocumento(...documento, DocumentoDet)
 	}, []);
 
-	// const [TotalMonto, setTotalMonto] = useState("0.00");
-
 	useEffect(() => {
-		if (documento.STR_MONEDA) {
-			console.log("VALOR MON: ", documento.STR_MONEDA.name);
-		} else {
-			console.log("no hay");
-		}
-		console.log("moneda: ", monedas);
+		// Verifica el valor de `documento.STR_MONEDA`
+		console.log("VALOR MONEDA: ", documento.STR_MONEDA?.name);
 
-		const subtotalTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
+		const subtotalTotal = articulos
+			.filter(detalle => detalle.FLG_ELIM !== 1)
 			.reduce((total, detalle) => total + (parseFloat(detalle.Precio) * parseFloat(detalle.Cantidad)), 0);
 
-		let impuestoTotal = articulos?.filter(detalle => detalle.FLG_ELIM !== 1)
+		let impuestoTotal = articulos
+			.filter(detalle => detalle.FLG_ELIM !== 1)
 			.reduce((total, detalle) => total + parseFloat(detalle.Impuesto), 0);
 
-		if (documento.STR_MONEDA && documento.STR_MONEDA.name === "USD") {
+		// Multiplica el impuestoTotal por 3 si la moneda es USD
+		if (documento.STR_MONEDA?.name === "USD") {
 			impuestoTotal *= 3;
 		}
 
 		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
 
+		// Verifica y actualiza el estado de `STR_AFECTACION` si es necesario
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			const afectacion = documento.STR_AFECTACION?.name;
-			if (documento.STR_AFECTACION.name !== 'Detraccion' && documento.STR_AFECTACION.name !== '-' && documento.STR_AFECTACION.name !== 'Retencion') {
-				setDocumento((prevState) => ({
+			if (afectacion !== 'Detraccion' && afectacion !== '-' && afectacion !== 'Retencion') {
+				setDocumento(prevState => ({
 					...prevState,
 					STR_AFECTACION: { id: '1', name: 'Retencion' }
 				}));
 			}
 		}
 
-		// setTotalMonto(totalRedondeado);
-
+		// Actualiza el total
 		onTotalChange(totalRedondeado);
-	}, [articulos, documento.STR_AFECTACION, documento.STR_MONEDA]);
+	}, [articulos, documento, onTotalChange]);
+
 
 	// useEffect(()=>{
 	//     const articulosConSubtotal = articulos.map((detalle) => ({
@@ -694,7 +705,7 @@ function DocumentoSustentado({
 					colSpan={13}
 					footerStyle={{ textAlign: 'right', }}
 				/>
-				<Column  />
+				<Column />
 			</Row>
 		</ColumnGroup>
 	);
@@ -902,18 +913,17 @@ function DocumentoSustentado({
 						<label className='col-2'>(*)Moneda</label>
 						<Dropdown
 							className='col-6'
-							value={selectedMoneda}
+							value={documento.STR_MONEDA}
 							onChange={
 								(e) => {
-									console.log("VALOR MON: ", e.value);
 									// setSelectedTipo(e.value.value);
 									setDocumento((prevState) => ({
 										...prevState,
-										STR_MONEDA: e.value,
+										STR_MONEDA: e.target.value,
 									}));
 									setCampoValidoCabecera(prevState => ({
 										...prevState,
-										STR_MONEDA: Boolean(e.value)
+										STR_MONEDA: Boolean(e.target.value)
 									}));
 								}}
 							options={monedas}
@@ -1113,12 +1123,13 @@ function DocumentoSustentado({
 						<Column
 							//field="Cantidad*Precio"
 							header="Subtotal"
-							body={(rowData) => formatCurrency(rowData.Cantidad * rowData.Precio, moneda)}
+							body={(rowData) => rowData.Cantidad * rowData.Precio}
 							style={{ minWidth: "7rem" }}
 						></Column>
 						<Column
 							header="Total Detalle"
 							style={{ minWidth: "7rem" }}
+							body={(rowData) => rowData.STR_SUBTOTAL + rowData.Impuesto}
 						>
 						</Column>
 					</DataTable>
