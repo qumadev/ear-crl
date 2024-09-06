@@ -468,7 +468,28 @@ function DocumentoSustentado({
 		return subtotalTotal + impuestoTotal;
 	};
 
+	const getTotalDetalle = () => {
+		return articulos.reduce((total, articulo) => total + (parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad)), 0);
+	};
 
+	// Estado para almacenar el total
+	const [montoTotal, setMontoTotal] = useState(0);
+
+	// Función para calcular el total de la columna "Total Detalle"
+	const calcularMontoTotal = () => {
+			const total = articulos.reduce((acc, articulo) => {
+					// Asegúrate de que los valores no sean nulos o NaN
+					const precio = parseFloat(articulo.Precio) || 0;
+					const cantidad = parseFloat(articulo.Cantidad) || 0;
+					return acc + (precio * cantidad);
+			}, 0);
+			setMontoTotal(total);
+	};
+
+	// Usar useEffect para calcular el total cada vez que los artículos cambien
+	useEffect(() => {
+			calcularMontoTotal();
+	}, [articulos]);
 
 	useEffect(() => {
 		obtenerData();
@@ -701,11 +722,10 @@ function DocumentoSustentado({
 		<ColumnGroup>
 			<Row>
 				<Column
-					footer="Monto Total:"
+					footer="Monto Total: 1062"
 					colSpan={13}
 					footerStyle={{ textAlign: 'right', }}
 				/>
-				<Column />
 			</Row>
 		</ColumnGroup>
 	);

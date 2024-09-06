@@ -96,13 +96,6 @@ export default function TableDT({
         label: 'Borrar',
         icon: 'pi pi-trash',
         command: () => eliminarDocumento(rowData.ID),
-      },
-      {
-        label: "RowData",
-        icon: "pi pi-info-circle",
-        command: () => {
-          console.log(rowData);
-        }
       }
     ];
 
