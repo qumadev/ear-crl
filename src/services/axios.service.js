@@ -525,11 +525,18 @@ export const uploadAdjuntoPDF = (id, files) => {
   });
 };
 
-// Función para descargar PDF
 export const downloadAdjuntoPDF = (IdDoc) => {
-  console.log(IdDoc);
   return API.get(`rendicion/download-pdf/${IdDoc}`, {
-    responseType: 'arraybuffer',
+    responseType: 'arraybuffer',  // Asegúrate de este tipo de respuesta
+    validateStatus: function (status) {
+      return status < 500;  // Solo aceptamos errores 500 y más para rechazar
+    }
+  });
+};
+
+export const downloadAdjuntoExcel = (IdDoc) => {
+  return API.get(`rendicion/download-excel/${IdDoc}`, {
+    responseType: 'arraybuffer',  // Asegúrate de este tipo de respuesta
     validateStatus: function (status) {
       return status < 500;
     }

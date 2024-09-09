@@ -656,6 +656,17 @@ export default function FormDT({ editable, totalRedondeado,
       //reject,
     });
   };
+
+  const handleDownloadPlantilla = () => {
+    const fileUrl = '/templates/PlantillaDocumentos.xlsx';
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.setAttribute('download', 'Plantila de Documentos.xlsx'); // Nombre con el que se descargará el archivo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Limpia el enlace después de hacer clic
+  };
+
   return (
     <>
       <ConfirmDialog />
@@ -715,6 +726,13 @@ export default function FormDT({ editable, totalRedondeado,
             onClick={() => {
               exportExcel();
             }}
+          />
+
+          <Button 
+            label='Descargar Plantilla'
+            icon='pi pi-download'
+            className='p-button-success'
+            onClick={handleDownloadPlantilla}
           />
 
           <FileUpload
