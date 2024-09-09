@@ -102,26 +102,23 @@ export default function AnexPDF({
   };
 
 
-  const handleDownload = async (fileName) => {
-    const id = rendicion?.ID;
-    //LLAMAR AL ID DEL ARCHIVO SUBIDO
-
+  const handleDownload = async (id) => {
     try {
-      const respuesta = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
-      console.log(respuesta.data.Result[0])
-      const response = await downloadAdjuntoPDF(id, fileName);
+      // Llamar a la API para obtener la información del archivo (si es necesario)
+      const response = await downloadAdjuntoPDF(id);
       if (response.status === 200) {
         const blob = new Blob([response.data], { type: 'application/pdf' });
-        saveAs(blob, fileName);
+        saveAs(blob, `documento-${id}.pdf`); // Usa un nombre de archivo adecuado
       } else {
         console.error('Error response:', response);
-        showError('Error al descargar el archivo primero');
+        showError('Error al descargar el archivo');
       }
     } catch (error) {
       console.error('Error al descargar el archivo:', error);
       showError('Error al descargar el archivo');
     }
   };
+
 
   const handleDelete = async (id) => {
     try {
@@ -187,7 +184,7 @@ export default function AnexPDF({
               <span>{file.name}</span>
               <Button
                 icon="pi pi-download"
-                onClick={() => handleDownload(file.id)}
+                onClick={() => handleDownload(file.id)} // Usa file.id aquí
                 style={{ marginLeft: '20px' }}
               />
               <Button
