@@ -26,7 +26,7 @@ import { AppContext } from "../../../../App";
 import { Tag } from "primereact/tag";
 import { SplitButton } from "primereact/splitbutton";
 import { useNavigate } from "react-router-dom";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Button } from "primereact/button";
@@ -61,6 +61,8 @@ function Rendiciones({
   const [primerCarga, setPrimerCarga] = useState(true);
   const primerCargaRef = useRef(true);
   const [totalSolicitado, setTotalSolicitado] = useState(0);
+
+  const [datosRendicion, setDatosRendicion] = useState(null);
 
   //   const [rendiciones,rendiciones]= useState(
 
@@ -268,10 +270,37 @@ function Rendiciones({
   //   }
   // }
 
-  async function aceptarAprobacionLocal(rowData) {
-    setLoading(true);
-    console.log("ENVIR DATA: ", rowData);
+  async function obtenerDatosRendicion(id) {
     try {
+      let response = await obtenerRendicion(id);
+      console.log("Respuesta de obtenerRendicion:", response);
+
+      if (response && response.status < 300) {
+        console.log("Datos de la rendición:", response.data.Result[0]);
+        return response.data.Result[0]; // Asumiendo que `data.Result` es el formato esperado
+      } else {
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response ? error.response.data.Message : error.message);
+      showError(error.response ? error.response.data.Message : "Error interno");
+    }
+    return null;
+  }
+
+  async function aceptarAprobacionLocal(idRendicion) {
+    setLoading(true);
+    try{
+      let rowData = await obtenerDatosRendicion(idRendicion);
+      
+      if (!rowData) {
+        showError("Nose encontraron datos para la rendicion");
+        setLoading(false);
+        return;
+      }
+
+      console.log("ENVIR DATA: ", rowData);
+
       let response = await aceptarAprobRendicion(
         rowData.SOLICITUDRD.ID,
         usuario.sapID,
@@ -288,21 +317,57 @@ function Rendiciones({
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
         } else {
-          showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum}`);
+          showSuccess(`Se migró a SAP la rendición con número ${body.DocNum}`);
         }
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        
         navigate(ruta + "/rendiciones");
       } else {
         console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
-      showError(error.response.data.Message);
+      console.log(error.response ? error.response.data.Message : error.message);
+      showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
       setLoading(false);
     }
   }
+
+  // async function aceptarAprobacionLocal(rowData) {
+  //   setLoading(true);
+  //   console.log("ENVIR DATA: ", rowData);
+  //   try {
+  //     let response = await aceptarAprobRendicion(
+  //       rowData.SOLICITUDRD.ID,
+  //       usuario.sapID,
+  //       usuario.branch,
+  //       rowData.STR_ESTADO,
+  //       rowData.ID,
+  //       usuario.branch
+  //     );
+
+  //     if (response.status < 300) {
+  //       let body = response.data.Result[0];
+  //       console.log(response.data);
+
+  //       if (body.AprobacionFinalizada == 0) {
+  //         showSuccess(`Se aprobó la rendición`);
+  //       } else {
+  //         showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum}`);
+  //       }
+  //       await new Promise((resolve) => setTimeout(resolve, 3000));
+  //       navigate(ruta + "/rendiciones");
+  //     } else {
+  //       console.log(response.Message);
+  //       showError(response.Message);
+  //     }
+  //   } catch (error) {
+  //     console.log(error.response.data.Message);
+  //     showError(error.response.data.Message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   async function ReversionAprobacionLocal(rendicionId) {
     setLoading(true);
@@ -578,10 +643,12 @@ function Rendiciones({
       header: "Confirmación solicitud",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
-      acceptLabel: "Si",
+      acceptLabel: "Sí",
       rejectLabel: "No",
-      accept: () => aceptarAprobacionLocal(rowData),
-      //reject,
+      accept: async () => {
+        await aceptarAprobacionLocal(rowData.ID);
+      },
+      // reject: () => console.log('Rechazado')
     });
   };
 
@@ -604,19 +671,27 @@ function Rendiciones({
     const showRevertirAprobacionButton = usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 12;
 
     const items = [
-      // ...(showAprobacionButton ? [{
-      //   label: "Aceptar Aprobación",
-      //   icon: "pi pi-check",
-      //   command: () => {
-      //     confirmAceptacion(rowData);
-      //   },
-      // }] : []),
+      ...(showAprobacionButton ? [{
+        label: "Aceptar Aprobación",
+        icon: "pi pi-check",
+        command: () => {
+          confirmAceptacion(rowData);
+        },
+      }] : []),
 
       ...(showRevertirAprobacionButton ? [{
         label: "Revertir Aprobación",
         icon: "pi pi-undo",
         command: () => {
           confirmReversion(rowData)
+        }
+      }] : []),
+
+      ...(showRevertirAprobacionButton ? [{
+        label: "ID",
+        icon: "pi pi-undo",
+        command: () => {
+          obtenerDatosRendicion(rowData.ID)
         }
       }] : [])
     ];
