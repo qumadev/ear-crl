@@ -290,9 +290,9 @@ function Rendiciones({
 
   async function aceptarAprobacionLocal(idRendicion) {
     setLoading(true);
-    try{
+    try {
       let rowData = await obtenerDatosRendicion(idRendicion);
-      
+
       if (!rowData) {
         showError("Nose encontraron datos para la rendicion");
         setLoading(false);
@@ -319,8 +319,14 @@ function Rendiciones({
         } else {
           showSuccess(`Se migró a SAP la rendición con número ${body.DocNum}`);
         }
+
+        // Actualizar el estado de la rendición en la lista
+        setRendiciones((prevRendiciones) =>
+          prevRendiciones.map(rendicion =>
+            rendicion.ID === idRendicion ? { ...rendicion, STR_ESTADO: body.STR_ESTADO } : rendicion
+          )
+        );
         
-        navigate(ruta + "/rendiciones");
       } else {
         console.log(response.Message);
         showError(response.Message);
@@ -676,7 +682,7 @@ function Rendiciones({
         icon: "pi pi-check",
         command: () => {
           confirmAceptacion(rowData);
-        },
+        }
       }] : []),
 
       ...(showRevertirAprobacionButton ? [{
@@ -685,15 +691,15 @@ function Rendiciones({
         command: () => {
           confirmReversion(rowData)
         }
-      }] : []),
-
-      ...(showRevertirAprobacionButton ? [{
-        label: "ID",
-        icon: "pi pi-undo",
-        command: () => {
-          obtenerDatosRendicion(rowData.ID)
-        }
       }] : [])
+
+      // ...(showRevertirAprobacionButton ? [{
+      //   label: "ID",
+      //   icon: "pi pi-undo",
+      //   command: () => {
+      //     obtenerDatosRendicion(rowData.ID)
+      //   }
+      // }] : [])
     ];
 
     if (
