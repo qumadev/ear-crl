@@ -294,12 +294,10 @@ function Rendiciones({
       let rowData = await obtenerDatosRendicion(idRendicion);
 
       if (!rowData) {
-        showError("Nose encontraron datos para la rendicion");
+        showError("No se encontraron datos para la rendición");
         setLoading(false);
         return;
       }
-
-      console.log("ENVIR DATA: ", rowData);
 
       let response = await aceptarAprobRendicion(
         rowData.SOLICITUDRD.ID,
@@ -312,7 +310,6 @@ function Rendiciones({
 
       if (response.status < 300) {
         let body = response.data.Result[0];
-        console.log(response.data);
 
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
@@ -320,19 +317,13 @@ function Rendiciones({
           showSuccess(`Se migró a SAP la rendición con número ${body.DocNum}`);
         }
 
-        // Actualizar el estado de la rendición en la lista
-        setRendiciones((prevRendiciones) =>
-          prevRendiciones.map(rendicion =>
-            rendicion.ID === idRendicion ? { ...rendicion, STR_ESTADO: body.STR_ESTADO } : rendicion
-          )
-        );
-        
+        // Aquí haces la recarga de la lista desde la API para obtener los datos actualizados
+        listarRendicionesLocal();  // Llama a tu función para listar rendiciones actualizadas desde la API
+
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response ? error.response.data.Message : error.message);
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
       setLoading(false);
