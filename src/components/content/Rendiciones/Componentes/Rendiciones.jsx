@@ -637,7 +637,7 @@ function Rendiciones({
   const confirmAceptacion = (rowData) => {
     confirmDialog({
       message: `¿Estás seguro de aceptar la Rendición con código #${rowData.ID}?`,
-      header: "Confirmación solicitud",
+      header: "Confirmar Rendición",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
       acceptLabel: "Sí",

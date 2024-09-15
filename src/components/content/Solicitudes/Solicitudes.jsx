@@ -15,6 +15,7 @@ import {
   rechazarSolicitudSR,
   reintentarEnvio,
   validacionSolicitud,
+  obtenerSolicitud
 } from "../../../services/axios.service";
 import { AppContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
@@ -217,51 +218,147 @@ function Solicitudes({
     "Rebase and merge",
   ];
 
-  const actionBodyTemplate = (rowData) => {
-    const items = [
-      {/*
-        label: "Editar",
-        icon: "pi pi-eye",
-        command: () => {
-          navigate(
-            ruta +
-            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-            }`,
-            {
-              state: {
-                create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
-              },
-            }
-          );
-        },
-      */},
-    ];
+  async function obtenerDataSolicitud(id) {
+    setLoading(true);
+    try {
+      let response = await obtenerSolicitud(id);
+      console.log("respuesta de obtenersolicitud: ", response);
 
-    if (
-      (usuario.rol.id != 1) &
-      ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {/*
-      items.push({
-        label: "Aceptar",
+      if (response && response.status < 300) {
+        console.log("Datos de la solicitud: ", response.data);
+        return response.data.Result[0]; // Asumiendo que `data.Result` es el formato esperado
+      } else {
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log(error.response ? error.response.data.Message : error.message);
+      showError(error.response ? error.response.data.Message : "Error interno");
+    }
+    return null;
+  }
+
+  async function aceptarAprobacionSolicitudLocal(idSolicitud) {
+    setLoading(true);
+    try {
+      let rowData = await obtenerDataSolicitud(idSolicitud);
+
+      if (!rowData) {
+        showError("No se encontraron datos para la solicitud");
+        setLoading(false);
+        return;
+      }
+
+      let response = await aceptarSolicitudSR(
+        rowData.ID,
+        usuario.sapID,
+        usuario.branch,
+        rowData.STR_ESTADO
+      );
+
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+
+        if (body.AprobacionFinalizada == 0) {
+          showSuccess(`Se aprobó la solicitud`);
+        } else {
+          showSuccess(`Se migró a SAP la solicitud con número ${body.DocNum}`);
+        }
+
+        listarSolicitudes();
+
+      } else {
+        showError(response.Message);
+      }
+    } catch (error) {
+      showError(error.response ? error.response.data.Message : "Error interno");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const confirmarAceptacion = (rowData) => {
+    confirmDialog({
+      message: `¿Estás seguro de aceptar la Solicitud con código #${rowData.ID}`,
+      header: "Confimar Solicitud",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Sí",
+      rejectLabel: "No",
+      accept: async () => {
+        await aceptarAprobacionSolicitudLocal(rowData.ID)
+      }
+    });
+  };
+
+  async function revertirAprobacionSolicitudLocal(params) {
+    
+  }
+
+  const confirmarReversion = (rowData) => {
+    confirmDialog({
+      message: `¿Estás seguro de revertir la aprobación de la Solicitud con código #${rowData.ID}?`,
+      header: "Revertir Solicitud",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Si",
+      rejectLabel: "No",
+      accept: () =>
+        ReversionAprobacionLocal(rowData.ID),
+    });
+  };
+
+  const actionBodyTemplate = (rowData) => {
+    const showAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3" ) && rowData?.STR_ESTADO <= 2;
+    const showRevertirAprobacionButton = usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 2;
+
+    const items = [
+      // {
+      //   label: "Editar",
+      //   icon: "pi pi-eye",
+      //   command: () => {
+      //     navigate(
+      //       ruta +
+      //       `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
+      //       }`,
+      //       {
+      //         state: {
+      //           create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
+      //         },
+      //       }
+      //     );
+      //   },
+      // },
+      ...(showAprobacionButton ? [{
+        label: "Aceptar Aprobación",
         icon: "pi pi-check",
         command: () => {
-          confirmAceptacion(rowData);
-        },
-      });
-    */}
+          confirmarAceptacion(rowData)
+        }
+      }] : []),
 
-    if (
-      (usuario.rol.id != 1) &
-      ((rowData.STR_ESTADO == 2) | (rowData.STR_ESTADO == 3))
-    ) {/*
-      items.push({
-        label: "Rechazar",
-        icon: "pi pi-times",
-        command: () => {
-          confirmRechazo(rowData);
+      ...(showRevertirAprobacionButton ? [{
+        label: "Revertir Aprobación",
+        icon: "pi pi-undo",
+        // command: () => {
+
+        // }
+      }] : []),
+      {
+        label: "ID",
+        icon: "pi pi-info-circle",
+        command: async () => {
+          // Aquí llamamos a obtenerDataSolicitud y mostramos los datos en la consola
+          const solicitudData = await obtenerDataSolicitud(rowData.ID);
+          if (solicitudData) {
+            console.log("Datos de la solicitud:", solicitudData);
+            showInfo(`Datos de la solicitud con ID: ${rowData.ID} obtenidos`);
+          } else {
+            showError("Error al obtener los datos de la solicitud");
+          }
         },
-      });
-    */}
+      },
+    ];
+
     if (
       ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
       (usuario.rol.id == 1)
@@ -283,71 +380,6 @@ function Solicitudes({
         },
       });
     */}
-
-    if ((rowData.STR_ESTADO == 7) & (usuario.rol.id == 4)) 
-    {/*items.push({
-        label: "Reintentar Migracion",
-        icon: "pi pi-pencil",
-        command: () => {
-          reintentarMigracion(rowData.ID);
-          // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-        },
-      });
-    */}
-
-    if (rowData.STR_ESTADO == 6) 
-    {/*
-      items.push({
-        label: "Descargar Solicitud",
-        icon: "pi pi-file-pdf",
-        command: () => {
-          downloadAndOpenPdf(
-            rowData.STR_DOCENTRY,
-            rowData.STR_NRRENDICION,
-            rowData.STR_TIPORENDICION
-          );
-          // navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-        },
-      });
-    */}
-
-    if (rowData.STR_ESTADO == 1 && usuario.rol.id == 1) 
-    {/*
-      items.push({
-        label: "Enviar Aprobación",
-        icon: "pi pi-send",
-        command: () => {
-          confirm1(rowData);
-        },
-      });
-    */}
-
-    const downloadAndOpenPdf = async (docEntry, numRendi, tipoEar) => {
-      setLoading(true);
-      try {
-        const host = import.meta.env.VITE_REACT_APP_BASE_URL;
-        const tk = localStorage.getItem("tk_pw");
-        const response = await fetch(
-          `${host}reporte?id=${docEntry}&numRendicion=${numRendi}&tipo=${tipoEar}`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${tk}`,
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const arrayBuffer = await response.arrayBuffer();
-        const pdfBlob = new Blob([arrayBuffer], { type: "application/pdf" });
-        saveAs(pdfBlob, `${numRendi}.pdf`);
-      } catch (error) {
-        console.error("Error al obtener el PDF:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
     /******************************************************* */
     // Enviar Solicitud de Aprobación
@@ -476,41 +508,23 @@ function Solicitudes({
 
     return (
       <div className="split-button">
-        <Button
-          label = "Ver"
-          icon = "pi pi-eye"
+        <SplitButton
+          label="Ver"
+          icon="pi pi-eye"
+          model={items}
           onClick={() => {
+            // Acción principal del botón
             navigate(
               ruta +
-              `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-              }`,
+              `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY}`,
               {
                 state: {
-                  create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
+                  create: rowData.CREATE === "PWB" ? "PWB" : "SAP",
                 },
               }
             );
           }}
-          severity="success"
-        >
-          {/*<div className="flex gap-3 align-items-center justify-content-center">
-            <span>Ver</span>
-            <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-          </div>*/}
-        </Button>
-        {/*<div className="dropdown-content">
-          {items.map((data, key) => (
-            <Button
-              key={key}
-              onClick={() => {
-                data.command();
-              }}
-            >
-              <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-              {data.label}
-            </Button>
-          ))}
-        </div>*/}
+        />
       </div>
     );
   };
