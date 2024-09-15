@@ -308,26 +308,10 @@ function Solicitudes({
   };
 
   const actionBodyTemplate = (rowData) => {
-    const showAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3" ) && rowData?.STR_ESTADO <= 2;
+    const showAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData?.STR_ESTADO >= 2;
     const showRevertirAprobacionButton = usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 2;
 
     const items = [
-      // {
-      //   label: "Editar",
-      //   icon: "pi pi-eye",
-      //   command: () => {
-      //     navigate(
-      //       ruta +
-      //       `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-      //       }`,
-      //       {
-      //         state: {
-      //           create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
-      //         },
-      //       }
-      //     );
-      //   },
-      // },
       ...(showAprobacionButton ? [{
         label: "Aceptar Aprobación",
         icon: "pi pi-check",
@@ -343,20 +327,20 @@ function Solicitudes({
 
         // }
       }] : []),
-      {
-        label: "ID",
-        icon: "pi pi-info-circle",
-        command: async () => {
-          // Aquí llamamos a obtenerDataSolicitud y mostramos los datos en la consola
-          const solicitudData = await obtenerDataSolicitud(rowData.ID);
-          if (solicitudData) {
-            console.log("Datos de la solicitud:", solicitudData);
-            showInfo(`Datos de la solicitud con ID: ${rowData.ID} obtenidos`);
-          } else {
-            showError("Error al obtener los datos de la solicitud");
-          }
-        },
-      },
+      // {
+      //   label: "ID",
+      //   icon: "pi pi-info-circle",
+      //   command: async () => {
+      //     // Aquí llamamos a obtenerDataSolicitud y mostramos los datos en la consola
+      //     const solicitudData = await obtenerDataSolicitud(rowData.ID);
+      //     if (solicitudData) {
+      //       console.log("Datos de la solicitud:", solicitudData);
+      //       showInfo(`Datos de la solicitud con ID: ${rowData.ID} obtenidos`);
+      //     } else {
+      //       showError("Error al obtener los datos de la solicitud");
+      //     }
+      //   },
+      // },
     ];
 
     if (
