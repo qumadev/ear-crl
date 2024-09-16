@@ -39,8 +39,8 @@ function FormDetalleDocumento({
 	const [precio, setPrecio] = useState(null);
 	const [cantidad, setCantidad] = useState(null);
 	const [subtotal, setSubtotal] = useState(0);
-  const [impuesto, setImpuesto] = useState(0);
-  const [totalDetalle, setTotalDetalle] = useState(0);
+	const [impuesto, setImpuesto] = useState(0);
+	const [totalDetalle, setTotalDetalle] = useState(0);
 
 	const toast = useRef(null);
 	const showSuccess = (mensaje) => {
@@ -295,7 +295,7 @@ function FormDetalleDocumento({
 									...prevState,
 									Proyecto: Boolean(e.target.value)
 								}));
-								console.log("PROYECTO ID: ", e.target.value.id ,"|| PROYEC NAME: ", e.target.value.name)
+								console.log("PROYECTO ID: ", e.target.value.id, "|| PROYEC NAME: ", e.target.value.name)
 							}}
 							options={proyectos}
 							filter

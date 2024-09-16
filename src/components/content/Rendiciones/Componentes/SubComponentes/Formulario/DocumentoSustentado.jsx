@@ -478,12 +478,11 @@ function DocumentoSustentado({
 	// Función para calcular el total de la columna "Total Detalle"
 	const calcularMontoTotal = () => {
 		const total = articulos.reduce((acc, articulo) => {
-			// Asegúrate de que los valores no sean nulos o NaN
-			const precio = parseFloat(articulo.Precio) || 0;
-			const cantidad = parseFloat(articulo.Cantidad) || 0;
-			return acc + (precio * cantidad);
+			const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+			const impuesto = parseFloat(articulo.Impuesto) || 0;
+			return acc + (subtotal + impuesto);
 		}, 0);
-		setMontoTotal(total);
+		setMontoTotal(total.toFixed(2)); // Guardar el total con 2 decimales
 	};
 
 	// Usar useEffect para calcular el total cada vez que los artículos cambien
@@ -718,17 +717,6 @@ function DocumentoSustentado({
 			</React.Fragment>
 		);
 	};
-	const footerGroup = (
-		<ColumnGroup>
-			<Row>
-				<Column
-					footer="Monto Total: "
-					colSpan={13}
-					footerStyle={{ textAlign: 'right', }}
-				/>
-			</Row>
-		</ColumnGroup>
-	);
 
 	const formatCurrency = (amount, currency) => {
 		// Asegúrate de que currency sea una cadena
@@ -744,6 +732,22 @@ function DocumentoSustentado({
 			return amount; // Devuelve el monto sin formato en caso de error
 		}
 	};
+
+	const footerGroup = (
+		<ColumnGroup>
+			<Row>
+				<Column
+					footer="Monto Total: "
+					colSpan={14}
+					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+				/>
+				<Column
+					footer={formatCurrency(montoTotal, documento.STR_MONEDA?.id)} // Mostrar el monto total calculado
+					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+				/>
+			</Row>
+		</ColumnGroup>
+	);
 
 	return (
 		<div>
