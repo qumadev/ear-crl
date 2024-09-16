@@ -38,6 +38,7 @@ function Rendiciones({
   setRendiciones,
   filtrado,
   emptyProduct,
+  montoRendido
 }) {
 
   const statusBodyTemplate = (rowData) => {
@@ -63,6 +64,8 @@ function Rendiciones({
   const [totalSolicitado, setTotalSolicitado] = useState(0);
 
   const [datosRendicion, setDatosRendicion] = useState(null);
+
+  const [montosRendidos, setMontosRendidos] = useState({});
 
   //   const [rendiciones,rendiciones]= useState(
 
@@ -199,8 +202,11 @@ function Rendiciones({
     });
   };
 
-  const priceBodyTemplate = (product) => {
-    return formatCurrency(product.STR_TOTALRENDIDO);
+  console.log(montoRendido);
+
+  const priceBodyTemplate = (rowData) => {
+    const montoRendido = montosRendidos[rowData.ID] || 0;  // Obtener el valor de montosRendidos
+    return formatCurrency(montoRendido);
   };
 
   const priceBodySolicitudTemplate = (product) => {
@@ -989,6 +995,30 @@ function Rendiciones({
       usuario.rol?.id === "3" ?
         rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
         rendiciones)
+  }, [rendiciones]);
+
+  const obtenerTotalRendido = async (rendicionId) => {
+    try {
+      const response = await obtenerRendicion(rendicionId);  // Llama a la API por ID
+      const documentos = response.data.Result[0]?.documentos || [];
+
+      const totalRendido = documentos.reduce((sum, doc) => sum + parseFloat(doc.STR_TOTALDOC || 0), 0);
+
+      console.log(`Rendición ID: ${rendicionId}, Documentos:`, documentos);
+      console.log(`Total rendido para la rendición ${rendicionId}:`, totalRendido);
+
+      setMontosRendidos((prev) => ({ ...prev, [rendicionId]: totalRendido }));
+    } catch (error) {
+      console.error("Error al obtener los detalles de la rendición:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (rendiciones.length > 0) {
+      rendiciones.forEach((rendicion) => {
+        obtenerTotalRendido(rendicion.ID);  // Llama a la API para obtener el monto rendido de cada rendición
+      });
+    }
   }, [rendiciones]);
 
   return (
