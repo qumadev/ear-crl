@@ -1153,7 +1153,11 @@ function DocumentoSustentado({
 						<Column
 							header="Total Detalle"
 							style={{ minWidth: "7rem" }}
-							body={(rowData) => rowData.STR_SUBTOTAL + rowData.Impuesto}
+							body={(rowData) => {
+								const subtotal = rowData.Cantidad && rowData.Precio ? parseFloat(rowData.Cantidad) * parseFloat(rowData.Precio) : 0;
+								const impuesto = rowData.Impuesto ? parseFloat(rowData.Impuesto) : 0;
+								return (subtotal + impuesto).toFixed(2); // Suma subtotal e impuesto y lo formatea a 2 decimales
+							}}
 						>
 						</Column>
 					</DataTable>
