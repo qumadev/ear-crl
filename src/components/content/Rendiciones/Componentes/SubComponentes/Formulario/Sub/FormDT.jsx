@@ -149,10 +149,10 @@ export default function FormDT({ editable, totalRedondeado,
   */
 
   const confirmarDiferenciaMontos = () => {
-    let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO
+    let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - montoRendido;
     let mensaje = diferencia < 0 ?
       `Monto Solicitado : ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}
-    Monto Rendido : ${rendicion.STR_TOTALRENDIDO}
+    Monto Rendido : ${montoRendido}
     ¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con un reembolso de ${(-1) * diferencia} ?`
       : diferencia > 0 ? `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con una devolucion de ${diferencia}?`
         : `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID}`
@@ -167,6 +167,7 @@ export default function FormDT({ editable, totalRedondeado,
       //reject,
     });
   };
+
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
   async function ValidacionEnvio() {
