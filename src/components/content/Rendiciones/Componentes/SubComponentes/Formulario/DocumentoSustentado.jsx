@@ -477,18 +477,18 @@ function DocumentoSustentado({
 
 	// Función para calcular el total de la columna "Total Detalle"
 	const calcularMontoTotal = () => {
-			const total = articulos.reduce((acc, articulo) => {
-					// Asegúrate de que los valores no sean nulos o NaN
-					const precio = parseFloat(articulo.Precio) || 0;
-					const cantidad = parseFloat(articulo.Cantidad) || 0;
-					return acc + (precio * cantidad);
-			}, 0);
-			setMontoTotal(total);
+		const total = articulos.reduce((acc, articulo) => {
+			// Asegúrate de que los valores no sean nulos o NaN
+			const precio = parseFloat(articulo.Precio) || 0;
+			const cantidad = parseFloat(articulo.Cantidad) || 0;
+			return acc + (precio * cantidad);
+		}, 0);
+		setMontoTotal(total);
 	};
 
 	// Usar useEffect para calcular el total cada vez que los artículos cambien
 	useEffect(() => {
-			calcularMontoTotal();
+		calcularMontoTotal();
 	}, [articulos]);
 
 	useEffect(() => {
@@ -722,7 +722,7 @@ function DocumentoSustentado({
 		<ColumnGroup>
 			<Row>
 				<Column
-					footer="Monto Total: 1062"
+					footer="Monto Total: "
 					colSpan={13}
 					footerStyle={{ textAlign: 'right', }}
 				/>

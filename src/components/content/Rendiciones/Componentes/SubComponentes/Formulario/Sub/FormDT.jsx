@@ -43,6 +43,8 @@ export default function FormDT({ editable, totalRedondeado,
   const [rendicion, setRendicion] = useState(null);
   const [detalles, setDetalles] = useState([]);
   const [dataForExport, setDataForExport] = useState([]);
+  const [rendicionData, setRendicionData] = useState(null);
+  const [montoRendido, setMontoRendido] = useState(0);
   // const [dataEarExport, setDataEarExport] = useState([]);
 
   const [habilitado, setHabilitado] = useState(false);
@@ -667,6 +669,42 @@ export default function FormDT({ editable, totalRedondeado,
     document.body.removeChild(link); // Limpia el enlace después de hacer clic
   };
 
+  async function obtenerDataRendicion(idRendicion) {
+    try {
+      console.log(`Obteniendo datos de la rendición con ID: ${idRendicion}`);
+
+      const response = await obtenerRendicion(idRendicion);
+
+      if (response.status === 200 && response.data.Result && response.data.Result.length > 0) {
+        const rendicion = response.data.Result[0];
+
+        console.log('Datos de la rendición:', rendicion);
+
+        const totalSTR_TOTALDOC = rendicion.documentos.reduce((sum, documento) => {
+          return sum + (documento.STR_TOTALDOC || 0); // Asegurarse de que no sea undefined
+        }, 0);
+
+        console.log("Total STR_TOTALDOC: ", totalSTR_TOTALDOC)
+
+        setMontoRendido(totalSTR_TOTALDOC);
+
+        setRendicionData({ ...rendicion, totalSTR_TOTALDOC });
+      } else {
+        console.log("No se encotnraron datos para la rendicion")
+      }
+    } catch (error) {
+      console.error('Error al obtener datos de la rendición:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      obtenerDataRendicion(id);
+    }
+  }, [id]);
+
+
+
   return (
     <>
       <ConfirmDialog />
@@ -841,8 +879,8 @@ export default function FormDT({ editable, totalRedondeado,
               Monto Rendido:
             </label>
             <InputText
-              value={rendicion?.STR_TOTALRENDIDO}
-              placeholder=" N° Rendición"
+              value={montoRendido} // Mostrar el valor calculado
+              placeholder="Monto Rendido"
               disabled
             />
           </div>

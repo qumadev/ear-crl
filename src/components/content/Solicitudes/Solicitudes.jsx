@@ -270,6 +270,7 @@ function Solicitudes({
         showError(response.Message);
       }
     } catch (error) {
+      console.log("aqui 2"); // AGARRA ESTE ERROR
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
       setLoading(false);
