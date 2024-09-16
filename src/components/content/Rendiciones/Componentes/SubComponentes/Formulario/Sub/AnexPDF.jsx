@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FileUpload } from 'primereact/fileupload';
 import { Button } from 'primereact/button';
-import { downloadAdjuntoPDF, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion, eliminarArchivosRendicion } from '../../../../../../../services/axios.service';
+import { downloadAdjuntoPDF, descargarArchivosRendicion, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion, eliminarArchivosRendicion } from '../../../../../../../services/axios.service';
 import { Document, Page } from 'react-pdf';
 import { saveAs } from 'file-saver';
 import { AppContext } from "../../../../../../../App";
@@ -51,10 +51,10 @@ export default function AnexPDF({
           console.log("respuesta de API: ", rendicion);
           console.log("numero rendicion: ", rendicion.STR_NRRENDICION);
           const response = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
-          console.log(response);
+          console.log(response.data);
           if (response.status === 200) {
             // Suponiendo que response.data.Result es una lista de archivos
-            const files = response.data.Result.map(file => ({ id: file.id, name: file.name }));
+            const files = response.data.Result.map(file => ({ id: file.id, name: file.name, ruta: file.ruta }));
             console.log("archivos Files: ", files)
             setPdfFiles(files);
           } else {
@@ -101,24 +101,23 @@ export default function AnexPDF({
     }
   };
 
-
-  const handleDownload = async (id) => {
+  const handleDownload = async (filePath) => {
     try {
-      // Llamar a la API para obtener la información del archivo (si es necesario)
-      const response = await downloadAdjuntoPDF(id);
+      const response = await descargarArchivosRendicion(filePath);
+
       if (response.status === 200) {
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        saveAs(blob, `documento-${id}.pdf`); // Usa un nombre de archivo adecuado
+        const contentType = response.headers['content-type'];
+        const blob = new Blob([response.data], { type: contentType });
+
+        const fileName = filePath.split('/').pop();  // Extraer el nombre del archivo de la ruta
+        saveAs(blob, fileName);  // Guardar el archivo
       } else {
-        console.error('Error response:', response);
         showError('Error al descargar el archivo');
       }
     } catch (error) {
-      console.error('Error al descargar el archivo:', error);
       showError('Error al descargar el archivo');
     }
   };
-
 
   const handleDelete = async (id) => {
     try {
@@ -184,7 +183,7 @@ export default function AnexPDF({
               <span>{file.name}</span>
               <Button
                 icon="pi pi-download"
-                onClick={() => handleDownload(file.id)} // Usa file.id aquí
+                onClick={() => handleDownload(file.ruta)}  // Usa `file.name` o la ruta completa del archivo
                 style={{ marginLeft: '20px' }}
               />
               <Button

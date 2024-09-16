@@ -564,6 +564,20 @@ export const eliminarArchivosRendicion = async (id) => {
   });
 };
 
+// Funcion para descargar los archivos en la rendicion
+export const descargarArchivosRendicion = async (filePath) => {
+  console.log("Descargando archivo desde:", filePath);
+
+  return API.get('rendicion/download-file', {
+    params: { filePath },
+    responseType: 'blob',
+    validateStatus: function(status) {
+      return status < 500;
+    }
+  });
+};
+
+
 /*
 export const uploadAdjunto = (file) => {
   const formData = new FormData();
