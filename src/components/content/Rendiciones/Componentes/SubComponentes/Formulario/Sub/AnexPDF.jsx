@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { FileUpload } from 'primereact/fileupload';
 import { Button } from 'primereact/button';
 import { downloadAdjuntoPDF, descargarArchivosRendicion, uploadAdjuntoPDF, obtenerRendicion, obtenerArchivosRendicion, eliminarArchivosRendicion } from '../../../../../../../services/axios.service';
@@ -17,6 +17,7 @@ export default function AnexPDF({
   const [numPages, setNumPages] = useState(null);
   const [rendicionData, setRendicionData] = useState(null); // Estado para almacenar la rendición
   const { usuario } = useContext(AppContext);
+  const fileUploadRef = useRef(null); // Referencia al componente FileUpload
 
   // Llamar a obtenerRendicion cuando el componente se monta o el ID de rendicion cambia
   useEffect(() => {
@@ -70,9 +71,9 @@ export default function AnexPDF({
     }
   }, [rendicionData, showError]);
 
-  const handleUpload = async (event) => {
+  const handleUpload = async () => {
     const id = rendicion?.STR_NRRENDICION; // Reemplaza con el ID adecuado
-    const files = event.files; // Archivos seleccionados por el usuario
+    const files = fileUploadRef.current.getFiles(); // Obtener los archivos seleccionados
 
     try {
       const formData = new FormData();
@@ -88,6 +89,7 @@ export default function AnexPDF({
         if (updatedFilesResponse.status === 200) {
           const files = updatedFilesResponse.data.Result.map(file => ({ id: file.id, name: file.name }));
           setPdfFiles(files);
+          fileUploadRef.current.clear(); // Limpiar los archivos pendientes tras la subida exitosa
           showSuccess("Carga exitosa");
         } else {
           showError("Error al obtener los archivos después de la carga");
@@ -141,21 +143,24 @@ export default function AnexPDF({
   return (
     <div className="card">
       {usuario.rol?.id === "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
-        <FileUpload
-          name="files"
-          customUpload
-          uploadHandler={handleUpload}
-          multiple={true}
-          accept="application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-          maxFileSize={1000000}
-          emptyTemplate={<p className="m-0">Arrastra y suelta archivos aquí para subir.</p>}
-          chooseLabel="Seleccionar archivo"
-          uploadLabel="Subir archivo"
-          cancelLabel="Cancelar"
-          chooseOptions={{ style: { fontSize: '18px' } }}
-          uploadOptions={{ style: { fontSize: '18px' } }}
-          cancelOptions={{ style: { fontSize: '18px' } }}
-        />
+        <>
+          <FileUpload
+            ref={fileUploadRef} // Referencia al FileUpload
+            name="files"
+            customUpload
+            uploadHandler={handleUpload}
+            multiple={true}
+            accept="application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            maxFileSize={1000000}
+            emptyTemplate={<p className="m-0">Arrastra y suelta archivos aquí para subir.</p>}
+            chooseLabel="Seleccionar archivo"
+            uploadLabel="Subir archivo"
+            cancelLabel="Cancelar"
+            chooseOptions={{ style: { fontSize: '18px' } }}
+            uploadOptions={{ style: { fontSize: '18px' } }}
+            cancelOptions={{ style: { fontSize: '18px' } }}
+          />
+        </>
       ) : null}
 
       {pdfFiles.length === 0 && (
