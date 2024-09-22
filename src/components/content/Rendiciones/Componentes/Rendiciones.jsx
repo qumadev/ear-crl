@@ -925,17 +925,14 @@ function Rendiciones({
     return `${year}/${month}/${day}`;
   }
 
-
   async function listarRendicionesLocal() {
-
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
     let fechaFin = "";
-    let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
+    let numeroRendicion = filtrado.numeroSolicitudORendicion != null ? filtrado.numeroSolicitudORendicion : "";
 
-    let estado = filtrado.estados != null ? filtrado.estados.map((data) => data.id).join(",")
-      : "";
+    let estado = filtrado.estados != null ? filtrado.estados.map((data) => data.id).join(",") : "";
 
     if (filtrado.rangoFecha?.length > 1) {
       fechaInicial = obtieneFecha(filtrado.rangoFecha[0]);
@@ -952,11 +949,12 @@ function Rendiciones({
       usuario.rol.id,
       fechaInicial,
       fechaFin,
-      nrendicion,
+      numeroRendicion,  // Cambiado aquí
       estado,
-      usuario.branch //usuario.filial.
+      usuario.branch
     )
       .then((response) => {
+        console.log("Filtrando por N° de Solicitud: ", filtrado.nrRendicion);
         console.log(response.data);
         setRendiciones(response.data.Result);
         console.log("RESPUESTA DE API", response.data.Result);

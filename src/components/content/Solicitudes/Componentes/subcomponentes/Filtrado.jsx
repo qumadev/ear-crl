@@ -119,14 +119,14 @@ export default function Filtrado({
         <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column gap-2 justify-content-center">
             <InputText
-              value={filtrado.nrRendicion}
+              value={filtrado.numeroSolicitudORendicion} // El campo compartido
               onChange={(e) =>
                 setFiltrado((prevFiltrado) => ({
                   ...prevFiltrado,
-                  nrRendicion: e.target.value,
+                  numeroSolicitudORendicion: e.target.value, // Actualiza el valor correctamente
                 }))
               }
-              placeholder={esModuloSolicitudes ? "N° de Solicitud" : "N° de Rendición"}
+              placeholder={esModuloSolicitudes ? "N° de Solicitud" : "N° de Rendición"} // Cambia el placeholder según el módulo
             />
           </div>
         </div>

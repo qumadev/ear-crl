@@ -292,7 +292,7 @@ function Solicitudes({
   };
 
   async function revertirAprobacionSolicitudLocal(params) {
-    
+
   }
 
   const confirmarReversion = (rowData) => {
@@ -603,20 +603,21 @@ function Solicitudes({
   };
 
   async function listarSolicitudes() {
-
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
     let fechaFin = "";
-    let nrendicion = filtrado.nrRendicion != null ? filtrado.nrRendicion : "";
+    let numeroSolicitud = filtrado.numeroSolicitudORendicion != null ? filtrado.numeroSolicitudORendicion : "";
 
-    let estado =filtrado.estados != null? filtrado.estados.map((data) => data.id).join(",")
-        : "";
+    let estado = filtrado.estados != null ? filtrado.estados.map((data) => data.id).join(",") : "";
 
     if (filtrado.rangoFecha?.length > 1) {
       fechaInicial = obtieneFecha(filtrado.rangoFecha[0]);
       fechaFin = obtieneFecha(filtrado.rangoFecha[1]);
     }
+
+    console.log("Número de Solicitud:", numeroSolicitud); // Log para verificar el valor del número de solicitud
+    console.log("Estado seleccionado:", estado); // Log para verificar el valor del estado
 
     await listarSolicitud(
       usuario.sapID,
@@ -628,12 +629,11 @@ function Solicitudes({
       usuario.rol.id,
       fechaInicial,
       fechaFin,
-      nrendicion,
+      numeroSolicitud,  // Cambiado aquí
       estado,
-      usuario.branch //usuario.filial.
+      usuario.branch
     )
       .then((response) => {
-        console.log(response.data);
         setSolicitudes(response.data.Result);
         console.log(response.data.Result);
       })
