@@ -730,17 +730,67 @@ function Solicitudes({
           headerStyle={{ width: "3rem" }}
           body={(data, options) => options.rowIndex + 1}
         ></Column>
-        <Column
+        {/* <Column
           field="ID"
           header="Código"
           style={{ width: "7rem" }}
           className="font-bold"
-        ></Column>
-        {/* <Column
-          field="STR_NRRENDICION"
-          header="N° Rendición"
-          style={{ minWidth: "12rem" }}
         ></Column> */}
+        <Column
+          field="STR_NRSOLICITUD"
+          header="N° de la SR"
+          style={{ minWidth: "8rem" }}
+        ></Column>
+        <Column
+          field="STR_FECHAREGIS"
+          header="Fecha de Solicitud"
+          style={{ minWidth: "15rem" }}
+          body={fecBodyTemplate}
+        ></Column>
+        <Column
+          header="Tipo"
+          style={{ minWidth: "10rem" }}
+          body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
+        ></Column>
+        <Column
+          field="STR_EMPLDASIG_ID"
+          header="Emp. Asignado"
+          style={{ minWidth: "5rem" }}
+        ></Column>
+        <Column
+          header="Motivo"
+          style={{ minWidth: "10rem" }}
+          body={(rowData) => rowData.STR_TIPORENDICION?.name}
+        ></Column>
+        <Column
+          field="STR_TOTALSOLICITADO"
+          body={priceBodyTemplate}
+          header="Monto Solicitado"
+          style={{ minWidth: "12rem" }}
+        ></Column>
+        <Column
+          header="Comentario"
+          style={{ minWidth: "10rem" }}
+          body={(rowData) => rowData.STR_COMENTARIO}
+        ></Column>
+        <Column
+          field="STR_ESTADO_INFO"
+          header="Estado"
+          style={{ minWidth: "9rem" }}
+          body={statusBodyTemplate}
+        ></Column>
+        <Column
+          field="STR_DOCENTRY"
+          header="DocEntry"
+          style={{ minWidth: "10rem" }}
+        ></Column>
+        <Column
+          field="STR_MOTIVOMIGR"
+          header="Mensaje de Migración"
+          style={{ minWidth: "20rem" }}
+        // frozen={true}
+        // alignFrozen="right"
+        ></Column>
         <Column
           header="Acciones"
           body={actionBodyTemplate}
@@ -750,53 +800,16 @@ function Solicitudes({
           rowSpan={3}
         // alignFrozen="right"
         ></Column>
-        <Column
-          field="STR_ESTADO_INFO"
-          header="Estado"
-          style={{ minWidth: "9rem" }}
-          body={statusBodyTemplate}
-        ></Column>
-        <Column
-          field="STR_EMPLDASIG_ID"
-          header="Emp. Asignado"
-          style={{ minWidth: "5rem" }}
-        ></Column>
-        <Column
-          field="STR_NRSOLICITUD"
-          header="N° de la SR"
-          style={{ minWidth: "8rem" }}
-        ></Column>
-        <Column
-          field="STR_FECHAREGIS"
-          header="Fecha de Solicitud"
-          style={{ minWidth: "10rem" }}
-          body={fecBodyTemplate}
-        ></Column>
-        <Column
-          field="STR_TOTALSOLICITADO"
-          body={priceBodyTemplate}
-          header="Monto Solicitado"
+        {/* <Column
+          field="STR_NRRENDICION"
+          header="N° Rendición"
           style={{ minWidth: "12rem" }}
-        ></Column>
-        <Column
-          field="STR_DOCENTRY"
-          header="DocEntry"
-          style={{ minWidth: "10rem" }}
-        ></Column>
+        ></Column> */}
         {/* <Column
           field="STR_CARGADOCS"
           header="Carga Docs"
           style={{ minWidth: "7rem" }}
         ></Column> */}
-        <Column
-          field="STR_MOTIVOMIGR"
-          header="Mensaje de Migración"
-          style={{ minWidth: "20rem" }}
-        // frozen={true}
-        // alignFrozen="right"
-        ></Column>
-        {/* </>
-        )} */}
       </DataTable>
     </div>
   );
