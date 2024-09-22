@@ -24,7 +24,7 @@ export function BodySL({ responsiveSizeMobile }) {
 
   const [filtrado, setFiltrado] = useState({
     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-    nrRendicion: null,
+    numeroSolicitudORendicion: '',
     estados:
       /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1
         ? [
@@ -144,7 +144,7 @@ export function BodySL({ responsiveSizeMobile }) {
           Lista de Solicitudes
         </div>
         <div className="flex flex-row flex-wrap gap-2">
-          <Button
+          {/* <Button
             icon="pi pi-refresh"
             onClick={() => {
               setFiltrado((prevFiltrado) => ({
@@ -152,13 +152,13 @@ export function BodySL({ responsiveSizeMobile }) {
               }));
             }}
             severity="secondary"
-          />
+          /> */}
           <Button
             icon="pi pi-eraser"
             onClick={() => {
               setFiltrado({
                 rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-                nrRendicion: null,
+                numeroSolicitudORendicion: '',
                 estados: null,
               });
             }}
