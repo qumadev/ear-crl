@@ -738,7 +738,7 @@ function Solicitudes({
         ></Column> */}
         <Column
           field="STR_NRSOLICITUD"
-          header="N° de la SR"
+          header="N° de la Solicitud"
           style={{ minWidth: "8rem" }}
         ></Column>
         <Column

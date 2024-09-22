@@ -21,6 +21,9 @@ export default function Filtrado({
   // Options para los DropDown0
   const [estadosTemp, setEstadosTemp] = useState([]);
   const [empleados, setEmpleados] = useState([]);
+
+  const esModuloSolicitudes = location.pathname.includes("solicitudes")
+  const esModuloRendiciones = location.pathname.includes("rendiciones")
   /*
   async function obtenerEstadosLocal() {
     await obtenerEstados(esSolicitudes ? "<8" : ">7")
@@ -123,7 +126,7 @@ export default function Filtrado({
                   nrRendicion: e.target.value,
                 }))
               }
-              placeholder="N° de Rendición"
+              placeholder={esModuloSolicitudes ? "N° de Solicitud" : "N° de Rendición"}
             />
           </div>
         </div>
