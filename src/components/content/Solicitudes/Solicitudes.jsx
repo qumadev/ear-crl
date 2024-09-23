@@ -277,6 +277,47 @@ function Solicitudes({
     }
   }
 
+  async function rechazarAprobacionSolicitudLocal(idSolicitud) {
+    setLoading(true);
+    try {
+      let rowData = await obtenerDataSolicitud(idSolicitud);
+
+      if (!rowData) {
+        showError("No se encontraron datos para la solicitud");
+        setLoading(false);
+        return;
+      }
+
+      let response = await rechazarSolicitudSR(
+        rowData.ID,
+        usuario.sapID,
+        rowData.STR_COMENTARIO || "",
+        usuario.branch,
+        rowData.STR_ESTADO
+      );
+
+      if (response.status < 300) {
+        let body = response.data.Result[0];
+
+        if (body.AprobacionFinalizada == 0) {
+          showInfo(`Se rechazó la solicitud`);
+        } else {
+          showInfo(`Se rechazó la solicitud`);
+        }
+
+        listarSolicitudes();
+
+      } else {
+        showError(response.Message);
+      }
+    } catch (error) {
+      console.log("aqui 2"); // AGARRA ESTE ERROR
+      showError(error.response ? error.response.data.Message : "Error interno");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const confirmarAceptacion = (rowData) => {
     confirmDialog({
       message: `¿Estás seguro de aceptar la Solicitud con código #${rowData.ID}`,
@@ -291,8 +332,18 @@ function Solicitudes({
     });
   };
 
-  async function revertirAprobacionSolicitudLocal(params) {
-
+  const rechazarAceptacion = (rowData) => {
+    confirmDialog({
+      message: `¿Estás seguro de rechazar la Solicitud con código #${rowData.ID}`,
+      header: "Rechazar Solicitud",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "accept",
+      acceptLabel: "Sí",
+      rejectLabel: "No",
+      accept: async () => {
+        await rechazarAprobacionSolicitudLocal(rowData.ID)
+      }
+    })
   }
 
   const confirmarReversion = (rowData) => {
@@ -324,9 +375,9 @@ function Solicitudes({
       ...(showRevertirAprobacionButton ? [{
         label: "Revertir Aprobación",
         icon: "pi pi-undo",
-        // command: () => {
-
-        // }
+        command: () => {
+          rechazarAceptacion(rowData)
+        }
       }] : []),
       // {
       //   label: "ID",
