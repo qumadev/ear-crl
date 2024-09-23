@@ -326,8 +326,8 @@ function FormularioSL() {
 
   const confirmRechazo = () => {
     confirmDialog({
-      message: `¿Estás seguro de rechazar la Solicitud de Aprobación con código #${solicitudRD.id}?`,
-      header: "Confirmación solicitud",
+      message: `¿Estás seguro de rechazar la Solicitud de Aprobación con código #${solicitudRD.ID}?`,
+      header: "Rechazar solicitud",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
       accept: (comments) => rechazoLocal(comments),
@@ -342,10 +342,11 @@ function FormularioSL() {
     setLoading(true);
     try {
       let response = await rechazarSolicitudSR(
-        solicitudRD.id,
-        usuario.empId,
+        solicitudRD.ID,
+        usuario.sapID,
         comentarios,
-        usuario.SubGerencia
+        usuario.branch,
+        solicitudRD.STR_ESTADO
       );
       //console.log(response);
       if (response.status == 200) {

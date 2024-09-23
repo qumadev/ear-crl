@@ -337,9 +337,18 @@ export const rechazarSolicitudSR = (
   solicitudId,
   aprobadorId,
   comentarios,
-  areaAprobador
+  areaAprobador,
+  estado
 ) => {
-  return null;
+  return API.patch(
+    `/solicitudEar/aprobacion/rechazar?id=${solicitudId}&aprobadorId=${aprobadorId}&areaAprobador=${areaAprobador}&estado=${estado}`,
+    { comentarios: encodeURIComponent(comentarios) }, // ADMITIR CARACTERES ESPECIALES EN COMENTARIOS
+    {
+      validateStatus: function (status) {
+        return status < 500;
+      }
+    }
+  );
 };
 
 export const reintentarEnvio = (id) => {
@@ -547,7 +556,7 @@ export const downloadAdjuntoExcel = (IdDoc) => {
 export const obtenerArchivosRendicion = async (id) => {
   console.log("ID:", id);
   const response = await API.get(`rendicion/archivos/${id}`, {
-    validateStatus: function(status) {
+    validateStatus: function (status) {
       return status < 500;
     },
   });
@@ -558,7 +567,7 @@ export const obtenerArchivosRendicion = async (id) => {
 // Funcion para eliminar los archivos subidos AnexPDF
 export const eliminarArchivosRendicion = async (id) => {
   return API.delete(`rendicion/delete-pdf/${id}`, {
-    validateStatus: function(status) {
+    validateStatus: function (status) {
       return status < 500;
     },
   });
@@ -571,7 +580,7 @@ export const descargarArchivosRendicion = async (filePath) => {
   return API.get('rendicion/download-file', {
     params: { filePath },
     responseType: 'blob',
-    validateStatus: function(status) {
+    validateStatus: function (status) {
       return status < 500;
     }
   });
