@@ -89,6 +89,14 @@ function BodyRD({ responsiveSizeMobile }) {
     let response = await obtenerEstados(">7" /*esSolicitudes ? "<8" : ">7"*/);
     let body = response.data.Result;
 
+    // Excluir los estados con los IDs que no deseas mostrar
+    const estadosFiltrados = body.filter(
+      (estado) => !['4', '8', '12', '13', '14', '15', '18', '19', '20'].includes(estado.id)
+    );
+
+    setEstados(estadosFiltrados);
+
+    console.log(estadosFiltrados);
     // if (filtrado.estados == null && usuario.TipoUsuario == 2) {
     //   setFiltrado((...prevFiltrado) => ({
     //     ...prevFiltrado,
@@ -110,8 +118,6 @@ function BodyRD({ responsiveSizeMobile }) {
     //     estados: [body[0], body[1]],
     //   });
     // }
-
-    setEstados(response.data.Result);
   }
   /*----------------------------- */
 

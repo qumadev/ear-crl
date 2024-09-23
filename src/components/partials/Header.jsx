@@ -164,7 +164,7 @@ export function Header({
             </div>
           )}
 
-          <div
+          {/* <div
             className={`flex flex-column align-items-center cursor-pointer ${
               isHoveredConfig? "hoveredconfig" : ""
             }`}
@@ -189,7 +189,7 @@ export function Header({
             >
               Configuración
             </span>
-          </div>
+          </div> */}
 
           <div
             className={`flex flex-column align-items-center cursor-pointer ${

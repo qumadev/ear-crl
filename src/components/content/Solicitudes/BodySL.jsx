@@ -67,7 +67,13 @@ export function BodySL({ responsiveSizeMobile }) {
   async function obtenerEstadosLocal() {
     let response = await obtenerEstados("<8" /*esSolicitudes ? "<8" : ">7"*/);
     let body = response.data.Result;
-    console.log(response.data.Result);
+
+    // Excluir los estados con los IDs que no deseas mostrar
+    const estadosFiltrados = body.filter(
+      (estado) => !['4', '8', '12', '13', '14', '15', '18', '19', '20'].includes(estado.id)
+    );
+
+    console.log(estadosFiltrados);
 
     /*
     if (filtrado.estados == null && usuario.TipoUsuario == 2) {
@@ -82,7 +88,9 @@ export function BodySL({ responsiveSizeMobile }) {
       }));
     }
     */
-    setEstados(response.data.Result);
+
+    // Actualizar el estado con los estados filtrados
+    setEstados(estadosFiltrados);
   }
   /*----------------------------- */
 
