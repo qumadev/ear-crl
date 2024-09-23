@@ -28,21 +28,21 @@ export function BodySL({ responsiveSizeMobile }) {
     estados:
       /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1
         ? [
-            {
-              id: 1,
-              name: "Borrador",
-            },
-            {
-              id: 5,
-              name: "Rechazado SR",
-            },
-            {
-              id: 7,
-              name: "Error Mig SR",
-            },
-          ]
+          {
+            id: 1,
+            name: "Borrador",
+          },
+          {
+            id: 5,
+            name: "Rechazado SR",
+          },
+          {
+            id: 7,
+            name: "Error Mig SR",
+          },
+        ]
         : usuario.TipoUsuario == 2
-        ? [
+          ? [
             {
               id: 2,
               name: "Pendiente",
@@ -52,14 +52,14 @@ export function BodySL({ responsiveSizeMobile }) {
               name: "En Autorización SR",
             },
           ]
-        : usuario.TipoUsuario == 4
-        ? [
-            {
-              id: 7,
-              name: "Error Mig SR",
-            },
-          ]
-        : null,
+          : usuario.TipoUsuario == 4
+            ? [
+              {
+                id: 7,
+                name: "Error Mig SR",
+              },
+            ]
+            : null,
     empleadoAsig: null,
   });
 
@@ -68,7 +68,7 @@ export function BodySL({ responsiveSizeMobile }) {
     let response = await obtenerEstados("<8" /*esSolicitudes ? "<8" : ">7"*/);
     let body = response.data.Result;
     console.log(response.data.Result);
- 
+
     /*
     if (filtrado.estados == null && usuario.TipoUsuario == 2) {
       setFiltrado((...prevFiltrado) => ({
@@ -136,10 +136,9 @@ export function BodySL({ responsiveSizeMobile }) {
     <>
       <div className="flex justify-content-between flex-wrap">
         <div
-          className={`flex ${
-            responsiveSizeMobile ? `text-xl` : `text-2xl`
-          } align-items-center`}
-          // className={`flex  text-2xl align-items-center`}
+          className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
+            } align-items-center`}
+        // className={`flex  text-2xl align-items-center`}
         >
           Lista de Solicitudes
         </div>

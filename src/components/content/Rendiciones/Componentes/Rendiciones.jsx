@@ -930,7 +930,8 @@ function Rendiciones({
     let tipousuario = usuario.TipoUsuario;
     let fechaInicial = "";
     let fechaFin = "";
-    let numeroRendicion = filtrado.numeroSolicitudORendicion != null ? filtrado.numeroSolicitudORendicion : "";
+    let numeroRendicion = filtrado.numeroSolicitudORendicion || ''; // Verificar si tiene un valor correcto
+    console.log("Filtrando por N° de Rendición:", numeroRendicion);
 
     let estado = filtrado.estados != null ? filtrado.estados.map((data) => data.id).join(",") : "";
 
@@ -938,6 +939,19 @@ function Rendiciones({
       fechaInicial = obtieneFecha(filtrado.rangoFecha[0]);
       fechaFin = obtieneFecha(filtrado.rangoFecha[1]);
     }
+
+    console.log("Parámetros enviados a la API:", {
+      sapID: usuario.sapID,
+      empleadoAsig: filtrado.empleadoAsig == null ? null : filtrado.empleadoAsig.id,
+      rolId: usuario.rol.id,
+      fechaInicial: fechaInicial,
+      fechaFin: fechaFin,
+      numeroRendicion: numeroRendicion,
+      estado: estado,
+      branch: usuario.branch
+    });
+
+    console.log("Estados para filtrar:", estado);
 
     await listarRendiciones(
       usuario.sapID,
@@ -954,16 +968,15 @@ function Rendiciones({
       usuario.branch
     )
       .then((response) => {
-        console.log("Filtrando por N° de Solicitud: ", filtrado.nrRendicion);
-        console.log(response.data);
+        console.log("Respuesta de API para rendiciones filtradas:", response.data);
+        console.log("Estado de la respuesta:", response.status);
         setRendiciones(response.data.Result);
-        console.log("RESPUESTA DE API", response.data.Result);
       })
       .catch((err) => {
         console.log(err.message);
       })
       .finally(() => {
-        console.log("Se terminó de traer solicitud");
+        console.log("Se terminó de traer rendicion");
         setLoading(false);
       });
   }

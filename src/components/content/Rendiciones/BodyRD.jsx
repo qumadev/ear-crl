@@ -8,32 +8,32 @@ import Rendiciones from "./Componentes/Rendiciones";
 import { obtenerEstados } from "../../../services/axios.service";
 import { AppContext } from "../../../App";
 
-function BodyRD({responsiveSizeMobile}) {
+function BodyRD({ responsiveSizeMobile }) {
   const [estados, setEstados] = useState([]);
   const [rendiciones, setRendiciones] = useState([]);
   const [primeraCarga, setPrimeraCarga] = useState(true);
-  const { usuario,ruta } = useContext(AppContext);
+  const { usuario, ruta } = useContext(AppContext);
   const navigate = useNavigate();
 
   const now = new Date();
   // Valores iniciales
   const [filtrado, setFiltrado] = useState({
     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-    nrRendicion: null,
-     
+    numeroSolicitudORendicion: '',
+
     estados:
-      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1? 
-      [
+      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1 ?
+        [
           {
             id: 8,
             name: "Aperturado",
- 
+
           },
           {
             id: 9,
             name: "En carga",
-      
-       
+
+
           },
           {
             id: 12,
@@ -42,7 +42,7 @@ function BodyRD({responsiveSizeMobile}) {
 
           },
           {
-           id: 15,
+            id: 15,
             name: "Rechazado RD",
 
 
@@ -53,14 +53,14 @@ function BodyRD({responsiveSizeMobile}) {
             {
               id: 11,
               name: "Revisado",
-     
-     
+
+
             },
             {
               id: 13,
               name: "En Autorización RD",
-   
-   
+
+
             },
           ]
           : usuario.TipoUsuario == 3
@@ -76,13 +76,13 @@ function BodyRD({responsiveSizeMobile}) {
 
               },
             ]
-            
-           : null,
-           
-  });
-  
 
-  
+            : null,
+
+  });
+
+
+
 
   /* Obtiene Estados */
   async function obtenerEstadosLocal() {
@@ -149,17 +149,16 @@ function BodyRD({responsiveSizeMobile}) {
   const header = (
     <>
       <div className="flex justify-content-between flex-wrap">
-        
-      <div
-          className={`flex ${
-            responsiveSizeMobile ? `text-xl` : `text-2xl`
-          } align-items-center`}
-          // className={`flex  text-2xl align-items-center`}
+
+        <div
+          className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
+            } align-items-center`}
+        // className={`flex  text-2xl align-items-center`}
         >
           Lista de Rendiciones
         </div>
         <div className="flex flex-row flex-wrap gap-2">
-          <Button
+          {/* <Button
             icon="pi pi-refresh"
             onClick={() => {
               setFiltrado((prevFiltrado) => ({
@@ -167,13 +166,13 @@ function BodyRD({responsiveSizeMobile}) {
               }));
             }}
             severity="secondary"
-          />
+          /> */}
           <Button
             icon="pi pi-eraser"
             onClick={() => {
               setFiltrado({
                 rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
-                nrRendicion: null,
+                numeroSolicitudORendicion: '',
                 estados: null,
               });
             }}
