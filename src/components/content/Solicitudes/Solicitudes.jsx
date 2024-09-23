@@ -361,7 +361,7 @@ function Solicitudes({
 
   const actionBodyTemplate = (rowData) => {
     const showAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData?.STR_ESTADO >= 2;
-    const showRevertirAprobacionButton = usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 2;
+    const showRevertirAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData?.STR_ESTADO >= 2;
 
     const items = [
       ...(showAprobacionButton ? [{
