@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import {
 	obtenerAreas, obtenerArticulos, obtenerCentroCosto,
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
-	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio
+	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -46,6 +46,8 @@ function DocumentoSustentado({
 	const [visibleEditar, setVisibleEditar] = useState(false);
 	const [detalleEditar, setDetalleEditar] = useState(null);
 	const [modoEditar, setModoEditar] = useState("agregar");
+	const [monedas, setMonedas] = useState([]);
+	const [selectedMoneda, setSelectedMoneda] = useState(null);
 
 	const toast = useRef(null);
 
@@ -541,12 +543,29 @@ function DocumentoSustentado({
 	//     console.log("doc3: ", documento)
 	// }, [documento])
 
-	const monedas = [
-		{ id: 'SOL', name: 'SOL' },
-		{ id: 'USD', name: 'USD' },
-	];
+	const obtenerMonedas = async () => {
+		try {
+			const response = await obtenerTiposMonedas();
+			setMonedas(response.data.Result);
+		} catch (error) {
+			console.error('Error al obtener monedas: ', error)
+		}
+	}
 
-	const [selectedMoneda, setSelectedMoneda] = useState(monedas[0]?.id || '');
+	useEffect(() => {
+		obtenerMonedas();
+	}, []);
+
+	const handleMonedaChange = (e) => {
+    setDocumento((prevState) => ({
+      ...prevState,
+      STR_MONEDA: e.value, // Guardamos el objeto seleccionado en el documento
+    }));
+    setCampoValidoCabecera((prevState) => ({
+      ...prevState,
+      STR_MONEDA: Boolean(e.value),
+    }));
+  };
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
@@ -938,20 +957,9 @@ function DocumentoSustentado({
 						<Dropdown
 							className='col-6'
 							value={documento.STR_MONEDA}
-							onChange={
-								(e) => {
-									// setSelectedTipo(e.value.value);
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_MONEDA: e.target.value,
-									}));
-									setCampoValidoCabecera(prevState => ({
-										...prevState,
-										STR_MONEDA: Boolean(e.target.value)
-									}));
-								}}
+							onChange={handleMonedaChange}
 							options={monedas}
-							optionLabel="name"
+							optionLabel="Code"
 							filter
 							filterBy='name'
 							placeholder='Seleccione Moneda'
