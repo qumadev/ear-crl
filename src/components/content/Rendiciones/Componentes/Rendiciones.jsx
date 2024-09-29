@@ -195,10 +195,10 @@ function Rendiciones({
     }
   }
 
-  const formatCurrency = (value) => {
+  const formatCurrency = (value, currency) => {
     return value.toLocaleString("es-PE", {
       style: "currency",
-      currency: "SOL",
+      currency: currency,
     });
   };
 
@@ -206,23 +206,26 @@ function Rendiciones({
 
   const priceBodyTemplate = (rowData) => {
     const montoRendido = montosRendidos[rowData.ID] || 0;  // Obtener el valor de montosRendidos
-    return formatCurrency(montoRendido);
+    const moneda = rowData.STR_MONEDA?.id || 'SOL';
+    return formatCurrency(montoRendido, moneda);
   };
 
-  const priceBodySolicitudTemplate = (product) => {
-    return formatCurrency(product.STR_TOTALAPERTURA);
+  const priceBodySolicitudTemplate = (rowData) => {
+    const moneda = rowData.STR_MONEDA?.id || 'SOL';
+    return formatCurrency(rowData.STR_TOTALAPERTURA, moneda);
   };
 
   const priceDiferenciaTemplate = (rowData) => {
     const montoRendir = rowData.STR_TOTALAPERTURA || 0;
     const montoRendido = rowData.STR_TOTALRENDIDO || 0;
     const diferencia = montoRendir - montoRendido;
+    const moneda = rowData.STR_MONEDA?.id || 'SOL';
 
     const color = diferencia < 0 ? 'green' : 'red';
 
     return (
       <span style={{ color: color, fontWeight: 'bold' }}>
-        {formatCurrency(diferencia)}
+        {formatCurrency(diferencia, moneda)}
       </span>
     );
   };
@@ -969,7 +972,6 @@ function Rendiciones({
     )
       .then((response) => {
         console.log("Respuesta de API para rendiciones filtradas:", response.data);
-        console.log("Estado de la respuesta:", response.status);
         setRendiciones(response.data.Result);
       })
       .catch((err) => {
@@ -982,7 +984,6 @@ function Rendiciones({
   }
 
   useEffect(() => {
-
     if (usuario.sapID != null) {
       listarRendicionesLocal();
     }
@@ -1011,12 +1012,13 @@ function Rendiciones({
   const obtenerTotalRendido = async (rendicionId) => {
     try {
       const response = await obtenerRendicion(rendicionId);  // Llama a la API por ID
+
       const documentos = response.data.Result[0]?.documentos || [];
 
       const totalRendido = documentos.reduce((sum, doc) => sum + parseFloat(doc.STR_TOTALDOC || 0), 0);
 
-      console.log(`Rendición ID: ${rendicionId}, Documentos:`, documentos);
-      console.log(`Total rendido para la rendición ${rendicionId}:`, totalRendido);
+      // console.log(`Rendición ID: ${rendicionId}, Documentos:`, documentos);
+      // console.log(`Total rendido para la rendición ${rendicionId}:`, totalRendido);
 
       setMontosRendidos((prev) => ({ ...prev, [rendicionId]: totalRendido }));
     } catch (error) {
