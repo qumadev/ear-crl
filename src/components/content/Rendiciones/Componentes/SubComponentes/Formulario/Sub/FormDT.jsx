@@ -880,7 +880,7 @@ export default function FormDT({ editable, totalRedondeado,
               Monto Rendido:
             </label>
             <InputText
-              value={montoRendido} // Mostrar el valor calculado
+              value={`${rendicion?.STR_MONEDA?.name || ''} ${montoRendido} `} // Mostrar el valor del monto y el tipo de moneda
               placeholder="Monto Rendido"
               disabled
             />
