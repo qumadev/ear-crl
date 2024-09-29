@@ -957,6 +957,10 @@ function DocumentoSustentado({
 									...prevState,
 									STR_MONEDA: { ...prevState.STR_MONEDA, id: e.value }
 								}));
+								setCampoValidoCabecera(prevState => ({
+									...prevState,
+									STR_MONEDA: Boolean(e.target.value)
+								}))
 							}}
 							options={monedas}
 							optionLabel="Code"  // Mostrar el nombre de la moneda en el menú
