@@ -586,6 +586,15 @@ export const descargarArchivosRendicion = async (filePath) => {
   });
 };
 
+// Servicio para traer los tipos monedas 
+export const obtenerTiposMonedas = async () => {
+  return API.get('solicitudEar/moneda', {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  })
+}
+
 
 /*
 export const uploadAdjunto = (file) => {

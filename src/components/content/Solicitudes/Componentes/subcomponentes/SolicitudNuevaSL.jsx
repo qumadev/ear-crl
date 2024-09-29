@@ -7,6 +7,7 @@ import {
   obtenerProveedores,
   obtenerTipoDocs,
   obtenerTipos,
+  obtenerTiposMonedas
 } from "../../../../../services/axios.service";
 import { Dropdown } from "primereact/dropdown";
 import "primeflex/primeflex.css";
@@ -19,11 +20,12 @@ import { FormDetalle } from "../../../Rendiciones/Componentes/SubComponentes/For
 import { AppContext } from "../../../../../App";
 import { Navigate } from "react-router-dom";
 
-function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
+function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
   const { usuario, ruta, config } = useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [tipos, setTipos] = useState(null);
   const [motivos, setMotivos] = useState(null);
+  const [monedas, setMonedas] = useState(null)
 
   const crearSolicitud = async () => {
     try {
@@ -37,10 +39,19 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
   };
 
   async function obtenerData() {
-    const response = await Promise.all([obtenerTipos(), obtenerMotivos()]);
+    const response = await Promise.all([obtenerTipos(), obtenerMotivos(), obtenerTiposMonedas()]);
 
     setTipos(response[0].data.Result);
     setMotivos(response[1].data.Result);
+
+    const monedasMapped = response[2].data.Result.map(moneda => ({
+      label: moneda.Code, // LO QUE SE MUESTRA EN EL DROPDOWN
+      value: moneda.Code  // EL VALOR QUE SE GUARDARÁ EN solicitudRD.STR_MONEDA
+    }));
+
+    console.log(monedasMapped);
+
+    setMonedas(monedasMapped);
   }
   useEffect(() => {
     obtenerData();
@@ -54,11 +65,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
     return `${year}/${month}/${day}`;
   }
 
-  const monedas = [
-    { id: "SOL", name: "SOL" },
-    { id: "USD", name: "USD" },
-  ];
-
   return (
     <div>
       {visible && <FormDetalleNewSolicitud setVisible={setVisible} />}
@@ -70,6 +76,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
             value={solicitudRD.STR_EMPLDREGI?.nombres + ' ' + solicitudRD.STR_EMPLDREGI.apellidos}
             disabled={true}
           />
+          {console.log("TIPOS: ", tipos)}
           <label htmlFor="">(*)Tipo:</label>
           <Dropdown
             value={solicitudRD.STR_TIPORENDICION}
@@ -89,17 +96,17 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD,estadosEditables }) {
             }
           />
           <label htmlFor="">(*)Moneda:</label>
+          {console.log("Opciones de monedas en Dropdown:", monedas)}
+          {console.log("Valor de STR_MONEDA:", solicitudRD.STR_MONEDA)}
           <Dropdown
-            value={solicitudRD.STR_MONEDA}
+            value={solicitudRD.STR_MONEDA?.id}
             onChange={(e) => {
-              // setSelectedMoneda(e.value);
               setSolicitudRD((prevState) => ({
                 ...prevState,
-                STR_MONEDA: e.value,
+                STR_MONEDA: { ...prevState.STR_MONEDA, id: e.value }
               }));
             }}
             options={monedas}
-            optionLabel="name"
             placeholder="Seleccione Moneda"
             disabled={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
