@@ -286,6 +286,7 @@ function FormularioRD() {
         //STR_VALIDA_SUNAT: null,
         STR_OPERACION: null,
         STR_PARTIDAFLUJO: null,
+        STR_MONEDA: documento.STR_MONEDA,
         STR_TOTALDOC: subtotalTotal,
         STR_CANTIDAD: null,
         STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
@@ -385,6 +386,7 @@ function FormularioRD() {
           STR_RENDICION: documento.STR_RD_ID,
           STR_OPERACION: null,
           STR_PARTIDAFLUJO: null,
+          STR_MONEDA: documento.STR_MONEDA,
           STR_TOTALDOC: subtotalTotal,
           STR_CANTIDAD: null,
           //STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
