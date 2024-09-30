@@ -1,7 +1,7 @@
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { DataTable } from 'primereact/datatable'
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
 import { SplitButton } from 'primereact/splitbutton'
@@ -43,6 +43,32 @@ export default function TableDT({
     });
   };
 
+  const obtenerDocumentos = async () => {
+    try {
+      const documentosActualizados = await Promise.all(
+        rendicion.documentos.map(async (doc) => {
+          // Llama a la API para obtener los detalles de cada documento
+          const response = await obtenerDocumento(doc.ID);
+          const documentoActualizado = response.data.Result[0]; // Asegúrate de que el formato sea correcto
+          return { ...doc, STR_TOTALDOC: documentoActualizado.STR_TOTALDOC }; // Actualiza el documento con STR_TOTALDOC
+        })
+      );
+      // Actualiza la rendición con los documentos actualizados
+      setRendicion(prevRendicion => ({
+        ...prevRendicion,
+        documentos: documentosActualizados
+      }));
+    } catch (error) {
+      console.error('Error al obtener los documentos:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (rendicion?.documentos?.length > 0) {
+      obtenerDocumentos(); // Llama a la función para obtener los detalles de cada documento
+    }
+  }, [rendicion]);
+
   const items = [
 
     {
@@ -58,7 +84,8 @@ export default function TableDT({
 
   const formatMontoRendido = (rowData) => {
     const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
-    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0';
+    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegúrate de mostrar solo STR_TOTALDOC
+    console.log("Moneda:", moneda, "Monto:", monto);
     return `${moneda} ${monto}`;
   };
 
@@ -218,11 +245,16 @@ export default function TableDT({
             style={{ width: "3rem" }}
           ></Column>
           <Column
-            field='STR_TOTALDOC'
+            field="STR_TOTALDOC"
             header="Monto Rendido"
             style={{ width: "3rem" }}
-            body={formatMontoRendido}
-          ></Column>
+            body={(rowData) => {
+              // Asegúrate de mostrar el valor actualizado de STR_TOTALDOC
+              return rowData.STR_TOTALDOC
+                ? parseFloat(rowData.STR_TOTALDOC).toFixed(2)
+                : '0.00'; // Maneja valores nulos o indefinidos
+            }}
+          />
           <Column
             field='STR_PROVEEDOR.CardName'
             header="Proveedor"

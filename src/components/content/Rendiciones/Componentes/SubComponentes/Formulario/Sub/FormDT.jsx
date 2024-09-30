@@ -62,6 +62,7 @@ export default function FormDT({ editable, totalRedondeado,
     try {
       const response = await obtenerRendicion(id);
       const documentos = response.data.Result[0]?.documentos || [];
+      console.log("Documentos recibidos de la API:", documentos);
       const documentosFormateados = documentos.map(doc => ({
         ID: doc.ID,
         N_STRRENDICION: doc.STR_NRRENDICION,
@@ -74,7 +75,7 @@ export default function FormDT({ editable, totalRedondeado,
         STR_MONEDA: doc.STR_MONEDA
       }))
 
-      console.log("Data para exportar:", documentosFormateados);
+      console.log("Documentos formateados:", documentosFormateados);
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
       console.log("respuesta de APIREN: ", { ...response.data.Result[0], documentos: documentosFormateados });
@@ -768,7 +769,7 @@ export default function FormDT({ editable, totalRedondeado,
             }}
           />
 
-          <Button 
+          <Button
             label='Descargar Plantilla'
             icon='pi pi-download'
             className='p-button-success'
@@ -878,10 +879,10 @@ export default function FormDT({ editable, totalRedondeado,
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Monto Rendido:
+              Total Monto Rendido:
             </label>
             <InputText
-              value={`${rendicion?.STR_MONEDA?.name || ''} ${montoRendido} `} // Mostrar el valor del monto y el tipo de moneda
+              value={`${rendicion?.STR_MONEDA?.name || ''} ${rendicion?.STR_TOTALRENDIDO.toFixed(2) || '0'}`}
               placeholder="Monto Rendido"
               disabled
             />

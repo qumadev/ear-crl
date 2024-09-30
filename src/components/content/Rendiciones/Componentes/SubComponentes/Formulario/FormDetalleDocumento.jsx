@@ -218,7 +218,6 @@ function FormDetalleDocumento({
 		return (detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto).toFixed(2);
 	};
 
-
 	useEffect(() => {
 		setDetDoc(prevState => ({
 			...prevState,
