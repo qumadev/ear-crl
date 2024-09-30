@@ -984,21 +984,23 @@ function DocumentoSustentado({
 						<label className='col-2'>Afectacion</label>
 						<Dropdown
 							className='col-6'
-							value={documento.STR_AFECTACION}
-							onChange={
-								(e) => {
+							value={documento.STR_AFECTACION?.id}  // Usamos el id para manejar la selección
+							onChange={(e) => {
+								if (esModo !== 'Ver') {  // Solo permitimos cambios si no estamos en el modo "Ver"
+									const selectedAfectacion = afectacion.find(item => item.id === e.value);  // Encuentra el objeto completo
 									setDocumento((prevState) => ({
 										...prevState,
-										STR_AFECTACION: e.target.value,
+										STR_AFECTACION: selectedAfectacion  // Guardamos el objeto completo en STR_AFECTACION
 									}));
-									console.log("value: ", e.target.value.name)
-								}}
+								}
+							}}
 							options={afectacion}
-							optionLabel="name"
+							optionLabel="name"  // Mostrar el 'name' en el menú desplegable
+							optionValue="id"  // Usamos el 'id' para la comparación en el Dropdown
 							filter
 							filterBy='name'
 							placeholder='Seleccione Afectacion'
-							disabled={esModoValidate}
+							disabled={esModo === 'Ver'}  // Deshabilitar si estamos en modo "Ver"
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">

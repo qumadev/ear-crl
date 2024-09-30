@@ -92,7 +92,7 @@ export default function TableDT({
   const eliminarDocumento = async (idDoc) => {
     setLoading(true);
     try {
-      const documentoResponse = await borrarDocumento(idDoc);
+      const documentoResponse = await borrarDocumento(idDoc, rendicion.ID);
       if (documentoResponse.status === 200) {
         setRendicion(prevRendicion => ({
           ...prevRendicion,

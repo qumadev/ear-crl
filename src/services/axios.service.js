@@ -154,8 +154,8 @@ export const actualizarDocumento = (body) => {
   });
 };
 
-export const borrarDocumento = (idDoc) => {
-  return API.delete(`/rendicion/documento/${idDoc}`, {
+export const borrarDocumento = (idDoc, idRendicion) => {
+  return API.delete(`/rendicion/documento/${idDoc}/rendicion/${idRendicion}`, {
     validateStatus: function (status) {
       return status < 500;
     },
