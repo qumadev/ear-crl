@@ -249,10 +249,9 @@ export default function TableDT({
             header="Monto Rendido"
             style={{ width: "3rem" }}
             body={(rowData) => {
-              // Asegúrate de mostrar el valor actualizado de STR_TOTALDOC
-              return rowData.STR_TOTALDOC
-                ? parseFloat(rowData.STR_TOTALDOC).toFixed(2)
-                : '0.00'; // Maneja valores nulos o indefinidos
+              const moneda = rowData?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
+              const monto = parseFloat(rowData.STR_TOTALDOC).toFixed(2); // Monto formateado
+              return `${moneda} ${monto}`; // Mostrar moneda y monto juntos
             }}
           />
           <Column
