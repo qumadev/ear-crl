@@ -730,15 +730,19 @@ function DocumentoSustentado({
 		);
 	};
 
-	const formatCurrency = (amount, currency) => {
-		// Usar el código de la moneda del objeto o 'USD' como predeterminado
-		const currencyCode = currency?.Code || 'SOL';
+	const formatCurrency = (amount, currencyCode) => {
+		// Imprimir valores para depurar
+		console.log("currencyCode recibido:", currencyCode);
+		const currency = currencyCode || 'SOL';
 
 		try {
-			return new Intl.NumberFormat('es-PE', {
+			const formattedAmount = new Intl.NumberFormat('es-PE', {
 				style: 'currency',
-				currency: currencyCode,
+				currency: currency,  // Usamos el 'Code' de la moneda
 			}).format(amount);
+
+			console.log("Monto formateado:", formattedAmount); // Ver el resultado del formateo
+			return formattedAmount;
 		} catch (error) {
 			console.error('Error formatting currency:', error);
 			return amount; // Devuelve el monto sin formato en caso de error
@@ -754,7 +758,10 @@ function DocumentoSustentado({
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 				<Column
-					footer={formatCurrency(montoTotal, documento.STR_MONEDA)} // Mostrar el monto total calculado con la moneda seleccionada
+					footer={() => {
+						console.log("documento.STR_MONEDA:", documento.STR_MONEDA); // Verificar el objeto completo de la moneda
+						return formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL'); // Usar el 'Code' de la moneda o 'SOL' como predeterminado
+					}}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 			</Row>
@@ -950,23 +957,26 @@ function DocumentoSustentado({
 						{console.log("Opciones de monedas en Dropdown:", monedas)}
 						{console.log("Valor de STR_MONEDA:", documento.STR_MONEDA)}
 						<Dropdown
-							className='col-6'
-							value={documento.STR_MONEDA?.id}  // Este campo ahora contendrá el Code de la moneda
+							className="col-6"
+							value={documento.STR_MONEDA?.Id}  // Usar el Id para manejar la selección correctamente
 							onChange={(e) => {
+								const selectedMoneda = monedas.find(moneda => moneda.Id === e.value);  // Encuentra el objeto completo
+								console.log("Moneda seleccionada:", selectedMoneda);  // Verificar el objeto seleccionado
 								setDocumento((prevState) => ({
 									...prevState,
-									STR_MONEDA: { ...prevState.STR_MONEDA, id: e.value }
+									STR_MONEDA: selectedMoneda  // Guardar el objeto completo en STR_MONEDA
 								}));
 								setCampoValidoCabecera(prevState => ({
 									...prevState,
-									STR_MONEDA: Boolean(e.target.value)
-								}))
+									STR_MONEDA: Boolean(selectedMoneda.Id)
+								}));
 							}}
 							options={monedas}
-							optionLabel="Code"  // Mostrar el nombre de la moneda en el menú
+							optionLabel="Code"  // Mostrar el 'Code' en el menú desplegable
+							optionValue="Id"  // Aquí usamos el 'Id' para comparar y mostrar la moneda seleccionada
 							filter
-							filterBy='Nombre'
-							placeholder='Seleccione Moneda'
+							filterBy="Nombre"
+							placeholder="Seleccione Moneda"
 							disabled={esModoValidate}
 						/>
 					</div>
