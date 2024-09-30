@@ -70,7 +70,8 @@ export default function FormDT({ editable, totalRedondeado,
         STR_TOTALDOC: doc.STR_TOTALDOC,
         STR_PROVEEDOR: doc.STR_PROVEEDOR,
         STR_COMENTARIOS: doc.STR_COMENTARIOS,
-        STR_SERIE: doc.STR_SERIE_DOC
+        STR_SERIE: doc.STR_SERIE_DOC,
+        STR_MONEDA: doc.STR_MONEDA
       }))
 
       console.log("Data para exportar:", documentosFormateados);

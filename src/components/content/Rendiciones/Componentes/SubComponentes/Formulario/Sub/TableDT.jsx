@@ -58,9 +58,8 @@ export default function TableDT({
 
   const formatMontoRendido = (rowData) => {
     const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
-    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegura que el monto sea un número con dos decimales
-
-    return `${monto}`;
+    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0';
+    return `${moneda} ${monto}`;
   };
 
   const eliminarDocumento = async (idDoc) => {
