@@ -276,7 +276,10 @@ function FormularioRD() {
         STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
         STR_IMPUESTO: detalle.Impuesto,
       }));
-      let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
+      let subtotalTotal = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0);
+      let totalImpuestos = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0);
+      console.log("SUBTTOTAL TOTAL: ", subtotalTotal)
+      console.log("TOTAL IMPEUSTO: ", totalImpuestos)
       //let fechaFormateada = formatearFecha(documento.STR_FECHA_DOC);
       let _documento = {
         ...documento,
@@ -290,7 +293,7 @@ function FormularioRD() {
           id: documento.STR_MONEDA?.id.Code,
           name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Nombre
         },
-        STR_TOTALDOC: subtotalTotal,
+        STR_TOTALDOC: subtotalTotal + totalImpuestos,
         STR_CANTIDAD: null,
         STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
@@ -383,6 +386,7 @@ function FormularioRD() {
           FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
         let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
+        let totalImpuestos = _detalles.reduce((total, detalle) => total + detalle.STR_IMPUESTO, 0);
         let _documento = {
           ...documento,
           ID: id,
@@ -393,7 +397,7 @@ function FormularioRD() {
             id: documento.STR_MONEDA?.id.Code || documento.STR_MONEDA?.Code,
             name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Nombre
           },
-          STR_TOTALDOC: subtotalTotal,
+          STR_TOTALDOC: subtotalTotal + totalImpuestos,
           STR_CANTIDAD: null,
           //STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
           //STR_FECHA_DOC: documento.STR_FECHA_DOC,
