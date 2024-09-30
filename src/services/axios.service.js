@@ -129,7 +129,6 @@ export const obtenerDocumento = async (id) => {
 };
 
 export const obtenerRendicion = async (id) => {
-  console.log("id", id);
   const respuesta = await API.get(`/rendicion/${id}`, {
     validateStatus: function (status) {
       return status < 500;
