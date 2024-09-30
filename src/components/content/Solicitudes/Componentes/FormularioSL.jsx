@@ -200,6 +200,7 @@ function FormularioSL() {
           let body = response.data.Result[0];
           console.log("reg: ", body.ID)
           showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
+          navigate(ruta + "/solicitudes");
           setLoading(false);
           return body.ID;
           //await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -214,6 +215,7 @@ function FormularioSL() {
           //let body = response.data.Result[0];
 
           showSuccess(`Se actualizo exitosamente solicitud #${solicitudRD.ID}`);
+          navigate(ruta + "/solicitudes");
           //await new Promise((resolve) => setTimeout(resolve, 2000));
           //navigate(ruta + "/solicitudes");
         } else {

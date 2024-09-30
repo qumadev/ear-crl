@@ -262,6 +262,7 @@ function Solicitudes({
           showSuccess(`Se aprobó la solicitud`);
         } else {
           showSuccess(`Se migró a SAP la solicitud con número ${body.DocNum}`);
+          showSuccess('Se envió a su correo la aprobación');
         }
 
         listarSolicitudes();
@@ -373,7 +374,7 @@ function Solicitudes({
       }] : []),
 
       ...(showRevertirAprobacionButton ? [{
-        label: "Revertir Aprobación",
+        label: "Rechazar Aprobación",
         icon: "pi pi-undo",
         command: () => {
           rechazarAceptacion(rowData)
