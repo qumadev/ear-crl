@@ -94,10 +94,18 @@ export default function TableDT({
     try {
       const documentoResponse = await borrarDocumento(idDoc, rendicion.ID);
       if (documentoResponse.status === 200) {
+        const documentosRestantes = rendicion.documentos.filter(doc => doc.ID !== idDoc);
+
+        // Recalcular el nuevo monto total
+        const nuevoTotalRendido = documentosRestantes.reduce((total, doc) => total + parseFloat(doc.STR_TOTALDOC), 0);
+
+        // Actualizar la rendición con los documentos restantes y el nuevo total
         setRendicion(prevRendicion => ({
           ...prevRendicion,
-          documentos: prevRendicion.documentos.filter(doc => doc.ID !== idDoc)
+          documentos: documentosRestantes,
+          STR_TOTALRENDIDO: nuevoTotalRendido // Actualizar el total monto rendido
         }));
+
         showSuccess("Documento eliminado con éxito");
       } else {
         showError("Error al eliminar el documento");
