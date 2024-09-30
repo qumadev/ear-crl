@@ -42,7 +42,6 @@ function Rendiciones({
 }) {
 
   const statusBodyTemplate = (rowData) => {
-    console.log(rowData);
     return (
       <Tag
         className="font-bold"
@@ -202,12 +201,10 @@ function Rendiciones({
     });
   };
 
-  console.log(montoRendido);
-
   const priceBodyTemplate = (rowData) => {
-    const montoRendido = montosRendidos[rowData.ID] || 0;  // Obtener el valor de montosRendidos
-    const moneda = rowData.STR_MONEDA?.id || 'SOL';
-    return formatCurrency(montoRendido, moneda);
+    const montoRendido = rowData.STR_TOTALRENDIDO || 0; // Obtener el valor de STR_TOTALRENDIDO
+    const moneda = rowData.STR_MONEDA?.id || 'SOL'; // Asumir la moneda si no está disponible
+    return formatCurrency(montoRendido, moneda); // Formatear el monto con la moneda correcta
   };
 
   const priceBodySolicitudTemplate = (rowData) => {
