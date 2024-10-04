@@ -63,11 +63,11 @@ export default function TableDT({
     }
   };
 
-  useEffect(() => {
-    if (rendicion?.documentos?.length > 0) {
-      obtenerDocumentos(); // Llama a la función para obtener los detalles de cada documento
-    }
-  }, [rendicion]);
+  // useEffect(() => {
+  //   if (rendicion?.documentos?.length > 0) {
+  //     obtenerDocumentos(); // Llama a la función para obtener los detalles de cada documento
+  //   }
+  // }, [rendicion]);
 
   const items = [
 
