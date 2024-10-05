@@ -63,6 +63,31 @@ export default function TableDT({
     }
   };
 
+  useEffect(() => {
+    const obtenerDocumentosSiEsNecesario = async () => {
+      if (rendicion?.documentos?.length > 0) {
+        const documentosActualizados = await Promise.all(
+          rendicion.documentos.map(async (doc) => {
+            const response = await obtenerDocumento(doc.ID);
+            const documentoActualizado = response.data.Result[0];
+            return { ...doc, STR_TOTALDOC: documentoActualizado.STR_TOTALDOC };
+          })
+        );
+
+        // Solo actualiza el estado si los documentos realmente cambiaron
+        if (JSON.stringify(rendicion.documentos) !== JSON.stringify(documentosActualizados)) {
+          setRendicion(prevRendicion => ({
+            ...prevRendicion,
+            documentos: documentosActualizados
+          }));
+        }
+      }
+    };
+
+    obtenerDocumentosSiEsNecesario();
+  }, [rendicion?.documentos]); // Se ejecuta cuando cambian los documentos
+
+
   // useEffect(() => {
   //   if (rendicion?.documentos?.length > 0) {
   //     obtenerDocumentos(); // Llama a la función para obtener los detalles de cada documento
