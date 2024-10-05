@@ -431,7 +431,8 @@ function FormularioSL() {
           showSuccess(
             `Se acepto la solicitud, se logró realizar la migración a SAP con el número ${response.data.Result[0].DocNum}`
           );
-
+          await new Promise((resolve) => setTimeout(resolve, 1000));  // Retraso de 1 segundo
+          showSuccess('Se envió a su correo la aprobación de dicha solicitud');
           await new Promise((resolve) => setTimeout(resolve, 3000));
         } else {
           showInfo(

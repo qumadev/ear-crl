@@ -259,10 +259,12 @@ function Solicitudes({
         let body = response.data.Result[0];
 
         if (body.AprobacionFinalizada == 0) {
-          showSuccess(`Se aprobó la solicitud`);
-        } else {
+          showSuccess("Se aceptó la primera aprobación, quedá pendiente de la segunda");
+        }
+        if (body.AprobacionFinalizada == 1) {
           showSuccess(`Se migró a SAP la solicitud con número ${body.DocNum}`);
-          showSuccess('Se envió a su correo la aprobación');
+          await new Promise((resolve) => setTimeout(resolve, 1000));  // Retraso de 1 segundo
+          showSuccess('Se envió a su correo la aprobación de dicha solicitud');
         }
 
         listarSolicitudes();
