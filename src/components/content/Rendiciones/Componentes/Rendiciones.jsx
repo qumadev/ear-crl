@@ -1119,11 +1119,11 @@ function Rendiciones({
           header="DocNum"
           style={{ minWidth: "7rem" }}
         ></Column>
-        <Column
+        {/* <Column
           field="STR_DOCENTRY"
           header="DocEntry"
           style={{ minWidth: "7rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"

@@ -833,11 +833,11 @@ function Solicitudes({
           style={{ minWidth: "9rem" }}
           body={statusBodyTemplate}
         ></Column>
-        <Column
+        {/* <Column
           field="STR_DOCENTRY"
           header="DocEntry"
           style={{ minWidth: "10rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
