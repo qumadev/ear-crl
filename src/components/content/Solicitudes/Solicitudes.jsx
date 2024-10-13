@@ -673,31 +673,31 @@ function Solicitudes({
     console.log("Número de Solicitud:", numeroSolicitud); // Log para verificar el valor del número de solicitud
     console.log("Estado seleccionado:", estado); // Log para verificar el valor del estado
 
-    await listarSolicitud(
-      usuario.sapID,
-      usuario.rol?.id == 1
-        ? usuario.sapID
-        : filtrado.empleadoAsig == null
-          ? null
-          : filtrado.empleadoAsig.id,
-      usuario.rol.id,
-      fechaInicial,
-      fechaFin,
-      numeroSolicitud,  // Cambiado aquí
-      estado,
-      usuario.branch
-    )
-      .then((response) => {
-        setSolicitudes(response.data.Result);
-        console.log(response.data.Result);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      })
-      .finally(() => {
-        console.log("Se terminó de traer solicitud");
-        setLoading(false);
-      });
+    try {
+      const response = await listarSolicitud(
+        usuario.sapID,
+        usuario.rol?.id == 1
+          ? usuario.sapID
+          : filtrado.empleadoAsig == null
+            ? null
+            : filtrado.empleadoAsig.id,
+        usuario.rol.id,
+        fechaInicial,
+        fechaFin,
+        numeroSolicitud,
+        estado,
+        usuario.branch
+      );
+
+      console.log("Datos completos de la API:", response.data);
+
+      setSolicitudes(response.data.Result);
+    } catch (err) {
+      console.error("Error al obtener solicitudes:", err.message);
+    } finally {
+      console.log("Se terminó de traer solicitud");
+      setLoading(false);
+    }
   }
 
   const statusBodyTemplate = (rowData) => {
