@@ -807,9 +807,9 @@ function Solicitudes({
           body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
         ></Column>
         <Column
-          field="STR_EMPLDASIG_ID"
-          header="Emp. Asignado"
-          style={{ minWidth: "5rem" }}
+          field="STR_EMPLDASIG_NOMBRE"
+          header="Empleado Asignado"
+          style={{ minWidth: "15rem" }}
         ></Column>
         <Column
           header="Motivo"
