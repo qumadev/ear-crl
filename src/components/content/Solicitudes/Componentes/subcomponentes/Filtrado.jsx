@@ -132,6 +132,19 @@ export default function Filtrado({
         </div>
 
         <div className="col-12 md:col-6 lg:col-3">
+          <InputText
+            value={filtrado.empNombre || ""}
+            onChange={(e) =>
+              setFiltrado((prevFiltrado) => ({
+                ...prevFiltrado,
+                empNombre: e.target.value, // Actualiza correctamente empNombre
+              }))
+            }
+            placeholder="Nombre del Empleado"
+          />
+        </div>
+
+        <div className="col-12 md:col-6 lg:col-3">
           <div className="mb-3 flex flex-column gap-2 justify-content-center">
             {" "}
             <MultiSelect

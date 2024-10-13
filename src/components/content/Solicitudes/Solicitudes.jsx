@@ -659,6 +659,7 @@ function Solicitudes({
   async function listarSolicitudes() {
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
+    let empNombre = filtrado.empNombre || "";
     let fechaInicial = "";
     let fechaFin = "";
     let numeroSolicitud = filtrado.numeroSolicitudORendicion != null ? filtrado.numeroSolicitudORendicion : "";
@@ -681,6 +682,7 @@ function Solicitudes({
           : filtrado.empleadoAsig == null
             ? null
             : filtrado.empleadoAsig.id,
+        empNombre,
         usuario.rol.id,
         fechaInicial,
         fechaFin,
