@@ -385,8 +385,16 @@ function FormularioRD() {
           STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
           FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
-        let subtotalTotal = _detalles.reduce((total, detalle) => total + detalle.STR_SUBTOTAL, 0);
-        let totalImpuestos = _detalles.reduce((total, detalle) => total + detalle.STR_IMPUESTO, 0);
+        let subtotalTotal = _detalles.reduce(
+          (total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0
+        );
+
+        let totalImpuestos = _detalles.reduce(
+          (total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0
+        );
+
+        // Aquí sumamos el subtotal más los impuestos sin duplicarlos
+        let totalDocumento = (subtotalTotal + totalImpuestos).toFixed(2);
         let _documento = {
           ...documento,
           ID: id,
@@ -397,7 +405,7 @@ function FormularioRD() {
             id: documento.STR_MONEDA?.id.Code || documento.STR_MONEDA?.Code,
             name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Nombre
           },
-          STR_TOTALDOC: subtotalTotal + totalImpuestos,
+          STR_TOTALDOC: parseFloat(totalDocumento),
           STR_CANTIDAD: null,
           //STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
           //STR_FECHA_DOC: documento.STR_FECHA_DOC,
@@ -408,7 +416,13 @@ function FormularioRD() {
           STR_VALIDA_SUNAT: compExisteSunat,
           detalles: _detalles, // Detalles
         };
+        
         console.log("envio: ", _documento);
+        console.log("Detalles:", _detalles);
+        console.log("Subtotal Total:", subtotalTotal);
+        console.log("Total Impuestos:", totalImpuestos);
+        console.log("Total Documento:", totalDocumento);
+
         let response = await actualizarDocumento(_documento); // _documento - Crea Documento
         if (response.CodRespuesta != "99") {
           var content = response.data.Result[0];
