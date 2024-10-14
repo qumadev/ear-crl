@@ -1051,6 +1051,28 @@ function DocumentoSustentado({
 							disabled={esModoValidate}
 						/>
 					</div>
+					<div className="flex col-12 align-items-center gap-5">
+						<label className='col-2'>Tipo de Cambio</label>
+						<InputText
+							className='col-6'
+							placeholder='Tipo de Cambio'
+							value={documento.STR_TIPO_CAMBIO}
+							onChange={(e) => {
+								const inputValue = e.target.value;
+								if (/^\d*\.?\d*$/.test(inputValue)) { // Validación para permitir solo números y decimales
+									setDocumento((prevState) => ({
+										...prevState,
+										STR_TIPO_CAMBIO: inputValue,
+									}));
+									setCampoValidoCabecera((prevState) => ({
+										...prevState,
+										STR_TIPO_CAMBIO: Boolean(inputValue),
+									}));
+								}
+							}}
+							disabled={esModoValidate}
+						/>
+					</div>
 					<div className="flex col-12">
 						{esModoValidate ? "" :
 							<>
