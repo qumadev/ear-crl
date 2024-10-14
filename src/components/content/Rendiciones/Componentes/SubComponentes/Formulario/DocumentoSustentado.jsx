@@ -764,13 +764,14 @@ function DocumentoSustentado({
 
 	useEffect(() => {
 		calcularMontoTotalConTipoCambio();
+		console.log("Tipo de cambio recibido:", documento.STR_TIPO_CAMBIO);
 	}, [articulos, documento.STR_TIPO_CAMBIO]);
 
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
 				<Column
-					footer="Monto Total: "
+					footer="Monto Total: " 
 					colSpan={15}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
