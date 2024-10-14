@@ -292,6 +292,7 @@ export const listarSolicitud = (
 export const listarRendiciones = (
   usrCreate,
   usrAsign,
+  empNombre,
   perfil,
   fecini,
   fecfin,
@@ -300,7 +301,7 @@ export const listarRendiciones = (
   area
 ) => {
   return API.get(
-    `/rendicion/lista?usrCreate=${usrCreate}&usrAsign=${usrAsign}&perfil=${perfil}&fecini=${fecini}&fecfin=${fecfin}&nrrendi=${nrrendi}&estados=${estado}&area=${area}`,
+    `/rendicion/lista?usrCreate=${usrCreate}&usrAsign=${usrAsign}&empNombre=${empNombre}&perfil=${perfil}&fecini=${fecini}&fecfin=${fecfin}&nrrendi=${nrrendi}&estados=${estado}&area=${area}`,
     {
       validateStatus: function (status) {
         return status < 500;

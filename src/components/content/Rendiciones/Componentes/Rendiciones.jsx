@@ -928,6 +928,7 @@ function Rendiciones({
   async function listarRendicionesLocal() {
     setLoading(true);
     let tipousuario = usuario.TipoUsuario;
+    let empNombre = filtrado.empNombre || '';
     let fechaInicial = "";
     let fechaFin = "";
     let numeroRendicion = filtrado.numeroSolicitudORendicion || ''; // Verificar si tiene un valor correcto
@@ -943,6 +944,7 @@ function Rendiciones({
     console.log("Parámetros enviados a la API:", {
       sapID: usuario.sapID,
       empleadoAsig: filtrado.empleadoAsig == null ? null : filtrado.empleadoAsig.id,
+      empNombre: filtrado.empNombre,
       rolId: usuario.rol.id,
       fechaInicial: fechaInicial,
       fechaFin: fechaFin,
@@ -960,6 +962,7 @@ function Rendiciones({
         : filtrado.empleadoAsig == null
           ? null
           : filtrado.empleadoAsig.id,
+      empNombre,
       usuario.rol.id,
       fechaInicial,
       fechaFin,
@@ -1086,9 +1089,9 @@ function Rendiciones({
           body={fecBodyTemplate}
         ></Column>
         <Column
-          field="STR_EMPLDASIG"
-          header="Emp. Asignado"
-          style={{ minWidth: "5rem" }}
+          field="STR_EMPLDASIG_NOMBRE"
+          header="Empleado Asignado"
+          style={{ minWidth: "15rem" }}
         ></Column>
         <Column
           field="STR_TOTALAPERTURA"
