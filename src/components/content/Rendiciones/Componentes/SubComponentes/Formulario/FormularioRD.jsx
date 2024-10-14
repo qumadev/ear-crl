@@ -293,6 +293,7 @@ function FormularioRD() {
           id: documento.STR_MONEDA?.id,
           name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Code
         },
+        STR_TIPO_CAMBIO: documento.STR_TIPO_CAMBIO,
         STR_TOTALDOC: subtotalTotal + totalImpuestos,
         STR_CANTIDAD: null,
         STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
@@ -416,7 +417,7 @@ function FormularioRD() {
           STR_VALIDA_SUNAT: compExisteSunat,
           detalles: _detalles, // Detalles
         };
-        
+
         console.log("envio: ", _documento);
         console.log("Detalles:", _detalles);
         console.log("Subtotal Total:", subtotalTotal);

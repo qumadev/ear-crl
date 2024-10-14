@@ -749,6 +749,23 @@ function DocumentoSustentado({
 		}
 	};
 
+	const calcularMontoTotalConTipoCambio = () => {
+		const totalBase = articulos.reduce((acc, articulo) => {
+			const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+			const impuesto = parseFloat(articulo.Impuesto) || 0;
+			return acc + subtotal + impuesto;
+		}, 0);
+
+		const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
+		const totalConCambio = totalBase * tipoCambio;
+
+		setMontoTotal(totalConCambio.toFixed(2)); // Actualiza el total
+	};
+
+	useEffect(() => {
+		calcularMontoTotalConTipoCambio();
+	}, [articulos, documento.STR_TIPO_CAMBIO]);
+
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
@@ -759,8 +776,8 @@ function DocumentoSustentado({
 				/>
 				<Column
 					footer={() => {
-						console.log("documento.STR_MONEDA:", documento.STR_MONEDA); // Verificar el objeto completo de la moneda
-						return formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL'); // Usar el 'Code' de la moneda o 'SOL' como predeterminado
+						console.log("Tipo de cambio:", documento.STR_TIPO_CAMBIO);
+						return formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL');
 					}}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
