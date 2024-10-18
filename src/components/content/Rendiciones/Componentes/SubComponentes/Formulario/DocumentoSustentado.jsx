@@ -458,17 +458,17 @@ function DocumentoSustentado({
 
 	}, [detalles])
 
-	useEffect(() => {
-		if (detalles && detalles.length > 0) {
-			const articles = detalles.map((detalle, index) => ({
-				ID: detalle.ID || `temp-${index}`,  // Asignar un ID temporal si no hay ID
-				...detalle
-			}));
-			setArticulos(articles);
-		} else {
-			setArticulos([]);
-		}
-	}, [detalles]);
+	// useEffect(() => {
+	// 	if (detalles && detalles.length > 0) {
+	// 		const articles = detalles.map((detalle, index) => ({
+	// 			ID: detalle.ID || `temp-${index}`,  // Asignar un ID temporal si no hay ID
+	// 			...detalle
+	// 		}));
+	// 		setArticulos(articles);
+	// 	} else {
+	// 		setArticulos([]);
+	// 	}
+	// }, [detalles]);
 
 	useEffect(() => {
 		if (esModo === "Agregar") {
