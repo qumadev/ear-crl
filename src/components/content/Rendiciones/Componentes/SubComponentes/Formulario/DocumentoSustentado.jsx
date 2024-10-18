@@ -70,24 +70,37 @@ function DocumentoSustentado({
 	//     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
 	//     setArticulos(updatedArticulos);
 	// };
-	const deleteProduct = async (rowData) => {
 
-		// const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-		// setArticulos(updatedArticulos);
-		const updatedArticulos = articulos.map((item) => {
-			if (item.ID === rowData.ID) {
-				return {
-					...item,
-					FLG_ELIM: 1
-				};
-			}
-			return item;
-		});
-		console.log("rowid: ", rowData.ID)
-		console.log("elimin: ", updatedArticulos)
+	// const deleteProduct = async (rowData) => {
+
+	// 	// const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
+	// 	// setArticulos(updatedArticulos);
+	// 	const updatedArticulos = articulos.map((item) => {
+	// 		if (item.ID === rowData.ID) {
+	// 			return {
+	// 				...item,
+	// 				FLG_ELIM: 1
+	// 			};
+	// 		}
+	// 		return item;
+	// 	});
+	// 	console.log("rowid: ", rowData.ID)
+	// 	console.log("elimin: ", updatedArticulos)
+	// 	setArticulos(updatedArticulos);
+	// };
+
+	const deleteProduct = (rowIndex) => {
+		const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
 		setArticulos(updatedArticulos);
-	};
 
+		// Mostrar mensaje de confirmación
+		toast.current.show({
+			severity: "info",
+			summary: "Detalle eliminado",
+			detail: `Se eliminó el detalle en la posición ${rowIndex + 1}`,
+			life: 3000,
+		});
+	};
 
 	// const editDetalle = (rowData) => {
 	//     // setDetalleEditar(rowData);
@@ -444,6 +457,18 @@ function DocumentoSustentado({
 		}
 
 	}, [detalles])
+
+	useEffect(() => {
+		if (detalles && detalles.length > 0) {
+			const articles = detalles.map((detalle, index) => ({
+				ID: detalle.ID || `temp-${index}`,  // Asignar un ID temporal si no hay ID
+				...detalle
+			}));
+			setArticulos(articles);
+		} else {
+			setArticulos([]);
+		}
+	}, [detalles]);
 
 	useEffect(() => {
 		if (esModo === "Agregar") {
@@ -1147,7 +1172,25 @@ function DocumentoSustentado({
 							<Column
 								header="Acciones"
 								headerStyle={{ width: "3rem" }}
-								body={actionBodyTemplate}
+								body={(rowData, { rowIndex }) => (  // Accedemos a rowIndex
+									<React.Fragment>
+										<Button
+											icon={"pi pi-pencil"}
+											rounded
+											outlined
+											className="mr-2"
+											onClick={() => editDetallep(rowData)}  // Editar el detalle
+										/>
+										<Button
+											icon="pi pi-trash"
+											rounded
+											outlined
+											severity="danger"
+											onClick={() => deleteProduct(rowIndex)}  // Eliminar usando el índice
+											disabled={editable}
+										/>
+									</React.Fragment>
+								)}
 							>
 							</Column>
 							: null
