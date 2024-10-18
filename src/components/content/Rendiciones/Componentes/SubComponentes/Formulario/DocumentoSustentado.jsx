@@ -750,11 +750,13 @@ function DocumentoSustentado({
 	};
 
 	const calcularMontoTotalConTipoCambio = () => {
-		const totalBase = articulos.reduce((acc, articulo) => {
-			const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
-			const impuesto = parseFloat(articulo.Impuesto) || 0;
-			return acc + subtotal + impuesto;
-		}, 0);
+		const totalBase = articulos
+			.filter(item => item.FLG_ELIM !== 1) // Excluir artículos eliminados
+			.reduce((acc, articulo) => {
+				const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+				const impuesto = parseFloat(articulo.Impuesto) || 0;
+				return acc + subtotal + impuesto;
+			}, 0);
 
 		const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
 		const totalConCambio = totalBase * tipoCambio;
@@ -767,19 +769,26 @@ function DocumentoSustentado({
 		console.log("Tipo de cambio recibido:", documento.STR_TIPO_CAMBIO);
 	}, [articulos, documento.STR_TIPO_CAMBIO]);
 
+	useEffect(() => {
+		const subtotalTotal = articulos
+			.filter(item => item.FLG_ELIM !== 1) // Solo artículos no eliminados
+			.reduce((total, item) => total + (parseFloat(item.Precio) * parseFloat(item.Cantidad)), 0);
+
+		const impuestoTotal = articulos
+			.filter(item => item.FLG_ELIM !== 1)
+			.reduce((total, item) => total + parseFloat(item.Impuesto || 0), 0);
+
+		const totalRedondeado = (subtotalTotal + impuestoTotal).toFixed(2);
+
+		setMontoTotal(totalRedondeado); // Actualizamos el monto total en el estado
+	}, [articulos]); // Se recalcula cada vez que cambian los artículos
+
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
+				<Column footer="Monto Total: " colSpan={15} footerStyle={{ textAlign: 'right', fontWeight: 'bold' }} />
 				<Column
-					footer="Monto Total: " 
-					colSpan={15}
-					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
-				/>
-				<Column
-					footer={() => {
-						console.log("Tipo de cambio:", documento.STR_TIPO_CAMBIO);
-						return formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL');
-					}}
+					footer={() => `${formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL')}`}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 			</Row>

@@ -597,8 +597,8 @@ export const obtenerTiposMonedas = async () => {
 }
 
 // Servicio para eliminar los detalles dentro de un documento
-export const eliminarDetalleEnDocumento = async (idDet, idDoc) => {
-  return API.delete(`/rendicion/detalle/${idDet}/documento/${idDoc}`, {
+export const eliminarDetalleEnDocumento = async (idDet, idDoc, idRend) => {
+  return API.delete(`/rendicion/detalle/${idDet}/documento/${idDoc}/rendicion/${idRend}`, {
     validateStatus: function (status) {
       return status < 500;
     },
