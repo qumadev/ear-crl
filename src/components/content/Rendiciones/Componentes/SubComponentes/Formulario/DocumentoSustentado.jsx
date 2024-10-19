@@ -1070,7 +1070,7 @@ function DocumentoSustentado({
 							filter
 							filterBy='name'
 							placeholder='Seleccione Afectacion'
-							disabled={esModo === 'Ver'}  // Deshabilitar si estamos en modo "Ver"
+							disabled={esModoValidate}
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
