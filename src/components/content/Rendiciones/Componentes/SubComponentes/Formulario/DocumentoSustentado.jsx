@@ -774,24 +774,28 @@ function DocumentoSustentado({
 		}
 	};
 
-	const calcularMontoTotalConTipoCambio = () => {
-		const totalBase = articulos
-			.filter(item => item.FLG_ELIM !== 1) // Excluir artículos eliminados
-			.reduce((acc, articulo) => {
-				const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
-				const impuesto = parseFloat(articulo.Impuesto) || 0;
-				return acc + subtotal + impuesto;
-			}, 0);
-
-		const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
-		const totalConCambio = totalBase * tipoCambio;
-
-		setMontoTotal(totalConCambio.toFixed(2)); // Actualiza el total
-	};
-
 	useEffect(() => {
+		const calcularMontoTotalConTipoCambio = () => {
+			const totalBase = articulos
+				.filter(item => item.FLG_ELIM !== 1)
+				.reduce((acc, articulo) => {
+					const precio = parseFloat(articulo.Precio) || 0;
+					const cantidad = parseFloat(articulo.Cantidad) || 0;
+					const impuesto = parseFloat(articulo.Impuesto) || 0;
+					return acc + (precio * cantidad) + impuesto;
+				}, 0);
+
+			const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
+			const totalConCambio = totalBase * tipoCambio;
+
+			console.log("Total Base:", totalBase);
+			console.log("Tipo de Cambio:", tipoCambio);
+			console.log("Total con Cambio:", totalConCambio);
+
+			setMontoTotal(totalConCambio.toFixed(2)); // Actualizar estado
+		};
+
 		calcularMontoTotalConTipoCambio();
-		console.log("Tipo de cambio recibido:", documento.STR_TIPO_CAMBIO);
 	}, [articulos, documento.STR_TIPO_CAMBIO]);
 
 	useEffect(() => {
@@ -811,9 +815,23 @@ function DocumentoSustentado({
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
-				<Column footer="Monto Total: " colSpan={15} footerStyle={{ textAlign: 'right', fontWeight: 'bold' }} />
 				<Column
-					footer={() => `${formatCurrency(montoTotal, documento.STR_MONEDA?.Code || 'SOL')}`}
+					footer="Monto Total: "
+					colSpan={15}
+					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+				/>
+				<Column
+					footer={() => formatCurrency(
+						articulos
+							.filter(item => item.FLG_ELIM !== 1)
+							.reduce((acc, articulo) => {
+								const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+								const impuesto = parseFloat(articulo.Impuesto) || 0;
+								return acc + subtotal + impuesto;
+							}, 0)
+						* (parseFloat(documento.STR_TIPO_CAMBIO) || 1),
+						documento.STR_MONEDA?.Code || 'SOL'
+					)}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 			</Row>
@@ -1154,6 +1172,7 @@ function DocumentoSustentado({
 					<DataTable
 						//value={articulos}
 						value={articulos.filter(item => item.FLG_ELIM !== 1)}
+						key={montoTotal}
 						sortMode="multiple"
 						paginator
 						rows={5}
