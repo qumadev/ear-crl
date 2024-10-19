@@ -37,6 +37,8 @@ function DocumentoSustentado({
 	onTotalChange
 }) {
 
+	console.log("Prop documento recibido:", documento);
+
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
 	const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -574,6 +576,9 @@ function DocumentoSustentado({
 		}
 	}
 
+	console.log("Moneda del documento:", documento.STR_MONEDA);
+	console.log("Opciones disponibles de monedas:", monedas);
+
 	useEffect(() => {
 		obtenerMonedas();
 	}, []);
@@ -812,6 +817,9 @@ function DocumentoSustentado({
 		setMontoTotal(totalRedondeado); // Actualizamos el monto total en el estado
 	}, [articulos]); // Se recalcula cada vez que cambian los artículos
 
+	console.log("Moneda del documento:", documento.STR_MONEDA);
+	console.log("Opciones disponibles de monedas:", monedas);
+
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
@@ -1026,26 +1034,41 @@ function DocumentoSustentado({
 						<label className='col-2'>(*)Moneda</label>
 						{console.log("Opciones de monedas en Dropdown:", monedas)}
 						{console.log("Valor de STR_MONEDA:", documento.STR_MONEDA)}
+						{useEffect(() => {
+							if (documento.STR_MONEDA) {
+								const monedaEncontrada = monedas.find(
+									(moneda) => moneda.Code === documento.STR_MONEDA.name
+								);
+
+								if (monedaEncontrada) {
+									setDocumento((prevState) => ({
+										...prevState,
+										STR_MONEDA: monedaEncontrada,  // Asegúrate de usar el objeto correcto
+									}));
+								}
+							}
+						}, [documento, monedas])}
 						<Dropdown
 							className="col-6"
-							value={documento.STR_MONEDA?.Id}  // Usar el Id para manejar la selección correctamente
+							value={documento.STR_MONEDA?.Code || null}  // Usar 'Code' para la selección
 							onChange={(e) => {
-								const selectedMoneda = monedas.find(moneda => moneda.Id === e.value);  // Encuentra el objeto completo
-								console.log("Moneda seleccionada:", selectedMoneda);  // Verificar el objeto seleccionado
+								const selectedMoneda = monedas.find((moneda) => moneda.Code === e.value);
+								console.log("Moneda seleccionada:", selectedMoneda);  // Depuración
+
 								setDocumento((prevState) => ({
 									...prevState,
-									STR_MONEDA: selectedMoneda  // Guardar el objeto completo en STR_MONEDA
+									STR_MONEDA: selectedMoneda,  // Guardamos el objeto completo
 								}));
-								setCampoValidoCabecera(prevState => ({
+
+								setCampoValidoCabecera((prevState) => ({
 									...prevState,
-									STR_MONEDA: Boolean(selectedMoneda.Id)
+									STR_MONEDA: Boolean(selectedMoneda?.Code),
 								}));
 							}}
-							options={monedas}
-							optionLabel="Code"  // Mostrar el 'Code' en el menú desplegable
-							optionValue="Id"  // Aquí usamos el 'Id' para comparar y mostrar la moneda seleccionada
+							options={monedas}  // Opciones de monedas
+							optionLabel="Code"  // Mostrar 'Code' como etiqueta
+							optionValue="Code"  // Usar 'Code' como valor
 							filter
-							filterBy="Nombre"
 							placeholder="Seleccione Moneda"
 							disabled={esModoValidate}
 						/>
