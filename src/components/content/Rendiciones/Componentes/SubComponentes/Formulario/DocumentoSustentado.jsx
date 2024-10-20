@@ -945,6 +945,77 @@ function DocumentoSustentado({
 		</ColumnGroup>
 	);
 
+	const handleMonedaChange = (e) => {
+		const selectedMoneda = monedas.find((moneda) => moneda.Code === e.value);
+		console.log("Moneda seleccionada:", selectedMoneda);
+
+		setDocumento((prevState) => ({
+			...prevState,
+			STR_MONEDA: selectedMoneda,
+		}));
+
+		setCampoValidoCabecera((prevState) => ({
+			...prevState,
+			STR_MONEDA: Boolean(selectedMoneda?.Code),
+		}));
+	};
+
+	const handleTipoCambioChange = (e) => {
+		const inputValue = e.target.value;
+		console.log("Nuevo tipo de cambio ingresado:", inputValue);
+
+		if (/^\d*\.?\d*$/.test(inputValue)) {
+			setDocumento((prevState) => ({
+				...prevState,
+				STR_TIPO_CAMBIO: inputValue,
+			}));
+			setCampoValidoCabecera((prevState) => ({
+				...prevState,
+				STR_TIPO_CAMBIO: Boolean(inputValue),
+			}));
+
+			// Verifica si el tipo de cambio es distinto a 1 y actualiza la moneda**
+			if (parseFloat(inputValue) !== 1) {
+				console.log("Cambiando moneda a la de la rendición:", rendicion?.STR_MONEDA); // Depuración
+
+				setDocumento((prevState) => ({
+					...prevState,
+					STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
+				}));
+			}
+		}
+	};
+
+	useEffect(() => {
+		console.log("Estado actualizado del documento:", documento);
+
+		if (documento?.STR_RD_ID) {
+			obtenerRendicionPorId(documento.STR_RD_ID);
+		}
+	}, [documento, documento.STR_RD_ID]);
+
+	useEffect(() => {
+		if (rendicion) {
+			console.log("Rendición cargada:", rendicion);
+			console.log("Moneda desde la rendición:", rendicion?.STR_MONEDA);
+		}
+	}, [rendicion]);
+
+	const monedaCambiada  = useRef(false);
+
+	useEffect(() => {
+		if (documento.STR_TIPO_CAMBIO && parseFloat(documento.STR_TIPO_CAMBIO) !== 1 && !monedaCambiada.current) {
+			console.log("Aplicando cambio automático de moneda a:", rendicion?.STR_MONEDA);
+
+			setDocumento((prevState) => ({
+				...prevState,
+				STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
+			}));
+
+			monedaCambiada.current = true;
+		}
+	}, [documento.STR_TIPO_CAMBIO, rendicion]);
+
 	return (
 		<div>
 			<Toast ref={toast} />
@@ -1146,27 +1217,11 @@ function DocumentoSustentado({
 									}));
 								}
 							}
-						}, [documento.STR_MONEDA, monedas])
-						
-						
-						}
+						}, [documento.STR_MONEDA, monedas])}
 						<Dropdown
 							className="col-6"
 							value={documento.STR_MONEDA?.Code || null}  // Usar 'Code' para la selección
-							onChange={(e) => {
-								const selectedMoneda = monedas.find((moneda) => moneda.Code === e.value);
-								console.log("Moneda seleccionada:", selectedMoneda);  // Depuración
-
-								setDocumento((prevState) => ({
-									...prevState,
-									STR_MONEDA: selectedMoneda,  // Guardamos el objeto completo
-								}));
-
-								setCampoValidoCabecera((prevState) => ({
-									...prevState,
-									STR_MONEDA: Boolean(selectedMoneda?.Code),
-								}));
-							}}
+							onChange={handleMonedaChange}
 							options={monedas}  // Opciones de monedas
 							optionLabel="Code"  // Mostrar 'Code' como etiqueta
 							optionValue="Code"  // Usar 'Code' como valor
@@ -1252,19 +1307,7 @@ function DocumentoSustentado({
 							className='col-6'
 							placeholder='Tipo de Cambio'
 							value={documento.STR_TIPO_CAMBIO}
-							onChange={(e) => {
-								const inputValue = e.target.value;
-								if (/^\d*\.?\d*$/.test(inputValue)) { // Validación para permitir solo números y decimales
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_TIPO_CAMBIO: inputValue,
-									}));
-									setCampoValidoCabecera((prevState) => ({
-										...prevState,
-										STR_TIPO_CAMBIO: Boolean(inputValue),
-									}));
-								}
-							}}
+							onChange={handleTipoCambioChange}
 							disabled={esModoValidate}
 						/>
 					</div>
