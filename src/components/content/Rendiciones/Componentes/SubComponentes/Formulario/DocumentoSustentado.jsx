@@ -12,7 +12,8 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import {
 	obtenerAreas, obtenerArticulos, obtenerCentroCosto,
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
-	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas, eliminarDetalleEnDocumento
+	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas,
+	eliminarDetalleEnDocumento, obtenerRendicion
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -37,7 +38,6 @@ function DocumentoSustentado({
 	onTotalChange
 }) {
 
-
 	console.log("Prop recibido de documento: ", documento)
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
@@ -50,6 +50,7 @@ function DocumentoSustentado({
 	const [modoEditar, setModoEditar] = useState("agregar");
 	const [monedas, setMonedas] = useState([]);
 	const [selectedMoneda, setSelectedMoneda] = useState(null);
+	const [rendicion, setRendicion] = useState(null); // almacenar la rendcion
 
 	const toast = useRef(null);
 
@@ -90,6 +91,60 @@ function DocumentoSustentado({
 	// 	console.log("elimin: ", updatedArticulos)
 	// 	setArticulos(updatedArticulos);
 	// };
+
+	const obtenerRendicionPorId = async (idRend) => {
+		try {
+			const response = await obtenerRendicion(idRend)
+			if (response.status < 300 && response.data) {
+				const datosRendicion = response.data.Result[0];
+				console.log("Rendicion obtenida: ", datosRendicion);
+				setRendicion(datosRendicion);
+
+				compararMonedas(datosRendicion.STR_MONEDA, documento.STR_MONEDA)
+			} else {
+				showError("No se encontró la rendicion con el ID")
+			}
+		} catch (error) {
+			console.error("Error al obtener la rendicion: ", error);
+			showError("Ocurrió un error al intentar obtener la rendición")
+		}
+	}
+
+	const compararMonedas = (monedaAPI, monedaDocumento) => {
+		const apiMonedaId = monedaAPI?.id || monedaAPI?.name;
+		const documentoMonedaCode = monedaDocumento?.Code;
+
+		if (apiMonedaId === documentoMonedaCode) {
+			console.log("Las monedas coinciden: ", apiMonedaId);
+		} else {
+			console.log("Las monedas no coinciden: ", apiMonedaId, "Documento: ", documentoMonedaCode);
+			aplicarTipoCambiosSiEsNecesario();
+		}
+	}
+
+	const aplicarTipoCambiosSiEsNecesario = () => {
+		const tipoCambio = rendicion?.STR_TIPO_CAMBIO || 1;
+
+		if (tipoCambio !== 1) {
+			console.log(`Aplicando tipo de cambio: ${tipoCambio}`);
+
+			const documentoActualizado = {
+				...documento,
+				STR_MONEDA: rendicion.STR_MONEDA, // Actualizamos la moneda del documento
+			};
+
+			console.log("Documento actualizado con tipo de cambio:", documentoActualizado);
+			setDocumento(documentoActualizado); // Actualiza el estado del documento
+		} else {
+			console.log("El tipo de cambio es 1, no se aplica conversion");
+		}
+	}
+
+	useEffect(() => {
+		if (documento && documento.STR_RD_ID) {
+			obtenerRendicionPorId(documento.STR_RD_ID);
+		}
+	}, [documento.STR_RD_ID])
 
 	const handleEliminarDetalle = async (detalle, rowIndex) => {
 		const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
@@ -1091,7 +1146,10 @@ function DocumentoSustentado({
 									}));
 								}
 							}
-						}, [documento, monedas])}
+						}, [documento.STR_MONEDA, monedas])
+						
+						
+						}
 						<Dropdown
 							className="col-6"
 							value={documento.STR_MONEDA?.Code || null}  // Usar 'Code' para la selección
