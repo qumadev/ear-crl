@@ -403,8 +403,8 @@ function FormularioRD() {
           STR_OPERACION: null,
           STR_PARTIDAFLUJO: null,
           STR_MONEDA: {
-            id: documento.STR_MONEDA?.id.Code || documento.STR_MONEDA?.Code,
-            name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Nombre
+            id: documento.STR_MONEDA?.id,
+            name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Code
           },
           STR_TOTALDOC: parseFloat(totalDocumento),
           STR_CANTIDAD: null,
