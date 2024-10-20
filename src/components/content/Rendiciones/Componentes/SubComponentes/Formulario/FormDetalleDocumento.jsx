@@ -41,6 +41,7 @@ function FormDetalleDocumento({
 	const [subtotal, setSubtotal] = useState(0);
 	const [impuesto, setImpuesto] = useState(0);
 	const [totalDetalle, setTotalDetalle] = useState(0);
+	const [manualEdit, setManualEdit] = useState(false);
 
 	const toast = useRef(null);
 	const showSuccess = (mensaje) => {
@@ -226,15 +227,17 @@ function FormDetalleDocumento({
 	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
 
 	useEffect(() => {
-		const subtotal = calculateSubtotal();
-		const impuesto = calculateImpuesto();
+		if (!manualEdit) {
+			const subtotal = calculateSubtotal();
+			const impuesto = calculateImpuesto();
 
-		setDetDoc(prevState => ({
-			...prevState,
-			Impuesto: impuesto,
-			TotalDetalle: (parseFloat(subtotal) + parseFloat(impuesto)).toFixed(2)
-		}));
-	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
+			setDetDoc(prevState => ({
+				...prevState,
+				Impuesto: impuesto,
+				TotalDetalle: (parseFloat(subtotal) + parseFloat(impuesto)).toFixed(2)
+			}));
+		}
+	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto, manualEdit]);
 
 	return (
 		<div>
@@ -455,13 +458,23 @@ function FormDetalleDocumento({
 									Impuesto: e.target.value
 								}));
 							}}
-							disabled
 						/>
 						<label htmlFor="">(*)Total Detalle:</label>
 						<InputText
 							value={detDoc?.TotalDetalle}
-							onChange={(e) => setSubtotal(parseFloat(e.target.value))}
-							disabled
+							onChange={(e) => {
+								setManualEdit(true); // Activa la edición manual
+								setDetDoc(prevState => ({
+									...prevState,
+									TotalDetalle: e.target.value
+								}));
+							}}
+							onBlur={() => {
+								// Reinicia a cálculo automático si el campo está vacío
+								if (!detDoc.TotalDetalle) {
+									setManualEdit(false); // Volvemos al cálculo automático
+								}
+							}}
 						/>
 						{editing ?
 							<Button
