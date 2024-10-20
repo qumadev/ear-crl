@@ -239,6 +239,16 @@ function FormDetalleDocumento({
 		}
 	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto, manualEdit]);
 
+	useEffect(() => {
+		if (!manualEdit) {
+			const subtotal = calculateSubtotal();
+			setDetDoc(prevState => ({
+				...prevState,
+				TotalDetalle: (parseFloat(subtotal) + parseFloat(detDoc.Impuesto || 0)).toFixed(2)
+			}));
+		}
+	}, [detDoc.Impuesto, manualEdit]);
+
 	return (
 		<div>
 			<Toast ref={toast} />
@@ -475,6 +485,7 @@ function FormDetalleDocumento({
 									setManualEdit(false); // Volvemos al cálculo automático
 								}
 							}}
+							disabled
 						/>
 						{editing ?
 							<Button
