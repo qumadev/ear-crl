@@ -12,7 +12,7 @@ import React, { useContext, useEffect, useState, useRef } from 'react';
 import {
 	obtenerAreas, obtenerArticulos, obtenerCentroCosto,
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
-	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas
+	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas, eliminarDetalleEnDocumento
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -37,8 +37,8 @@ function DocumentoSustentado({
 	onTotalChange
 }) {
 
-	console.log("Prop documento recibido:", documento);
 
+	console.log("Prop recibido de documento: ", documento)
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
 	const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -91,18 +91,61 @@ function DocumentoSustentado({
 	// 	setArticulos(updatedArticulos);
 	// };
 
-	const deleteProduct = (rowIndex) => {
-		const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
-		setArticulos(updatedArticulos);
+	const handleEliminarDetalle = async (detalle, rowIndex) => {
+		const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
+		const idRend = documento.STR_RD_ID;
 
-		// Mostrar mensaje de confirmación
-		toast.current.show({
-			severity: "info",
-			summary: "Detalle eliminado",
-			detail: `Se eliminó el detalle en la posición ${rowIndex + 1}`,
-			life: 3000,
-		});
-	};
+		if (!idDet) {
+			// CASO 1: DETALLE SIN ID (no creado en la BD)
+			console.log("El detalle no tiene ID");
+			const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
+			setArticulos(updatedArticulos);
+
+			toast.current.show({
+				severity: "info",
+				summary: "Detalle eliminado",
+				detail: `Se eliminó el detalle en la posición ${rowIndex + 1}.`,
+				life: 3000,
+			});
+		} else {
+			//CASO 2: DETALLE CON ID (creado en la BD)
+			try {
+				const response = await eliminarDetalleEnDocumento(idDet, idDoc, idRend);
+
+				if (response.status < 300) {
+					const updatedArticulos = articulos.filter((item) => item.ID !== idDet);
+					setArticulos(updatedArticulos);
+
+					toast.current.show({
+						severity: "success",
+						summary: "Éxito",
+						detail: "Detalle eliminado correctamente",
+						life: 3000,
+					});
+
+					calcularMontoTotal();
+				} else {
+					showError("Error al eliminar el detalle en la base de datos")
+				}
+			} catch (error) {
+				console.error("Error al eliminar el detalle:", error);
+				showError("Ocurrió un error al intentar eliminar el detalle.");
+			}
+		}
+	}
+
+	// const deleteProduct = (rowIndex) => {
+	// 	const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
+	// 	setArticulos(updatedArticulos);
+
+	// 	// Mostrar mensaje de confirmación
+	// 	toast.current.show({
+	// 		severity: "info",
+	// 		summary: "Detalle eliminado",
+	// 		detail: `Se eliminó el detalle en la posición ${rowIndex + 1}`,
+	// 		life: 3000,
+	// 	});
+	// };
 
 	// const editDetalle = (rowData) => {
 	//     // setDetalleEditar(rowData);
@@ -452,6 +495,7 @@ function DocumentoSustentado({
 				Cantidad: detalle.STR_CANTIDAD,
 				Impuesto: detalle.STR_IMPUESTO
 			}));
+			// console.log(articles);
 			// Actualizamos el estado articulos con el nuevo array de objetos personalizados
 			setArticulos(articles);
 		} else {
@@ -1228,7 +1272,7 @@ function DocumentoSustentado({
 											rounded
 											outlined
 											severity="danger"
-											onClick={() => deleteProduct(rowIndex)}  // Eliminar usando el índice
+											onClick={() => handleEliminarDetalle(rowData, rowIndex)}  // Eliminar usando el índice
 											disabled={editable}
 										/>
 									</React.Fragment>
