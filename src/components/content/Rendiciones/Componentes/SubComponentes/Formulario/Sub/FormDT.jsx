@@ -663,7 +663,7 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   const handleDownloadPlantilla = () => {
-    const fileUrl = '/templates/PlantillaDocumentos.xlsx';
+    const fileUrl = '/templates/PlantillaCargaDocumentos.xlsx';
     const link = document.createElement('a');
     link.href = fileUrl;
     link.setAttribute('download', 'Plantila de Documentos.xlsx'); // Nombre con el que se descargará el archivo
