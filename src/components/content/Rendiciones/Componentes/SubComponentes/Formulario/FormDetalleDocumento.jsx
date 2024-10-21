@@ -244,10 +244,10 @@ function FormDetalleDocumento({
 			const subtotal = calculateSubtotal();
 			setDetDoc(prevState => ({
 				...prevState,
-				TotalDetalle: (parseFloat(subtotal) + parseFloat(detDoc.Impuesto || 0)).toFixed(2)
+				TotalDetalle: (parseFloat(subtotal) + parseFloat(detDoc?.Impuesto || 0)).toFixed(2)
 			}));
 		}
-	}, [detDoc.Impuesto, manualEdit]);
+	}, [detDoc?.Impuesto, manualEdit]);
 
 	const roundToTwo = (num) => Math.round(num * 100) / 100;
 
