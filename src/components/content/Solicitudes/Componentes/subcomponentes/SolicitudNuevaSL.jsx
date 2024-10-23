@@ -161,7 +161,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             rows={5}
             maxLength={254}
             cols={30}
-            disabled={
+            readOnly={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
               (usuario.rol.id != 1)
             }

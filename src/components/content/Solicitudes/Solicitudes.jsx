@@ -751,6 +751,15 @@ function Solicitudes({
     }
   }, [filtrado, usuario]);
 
+  const comentarioBodyTemplate = (rowData) => {
+    const comentario = rowData.STR_COMENTARIO || "";
+    const maxLength = 80;
+
+    return comentario.length > maxLength
+      ? comentario.substring(0, maxLength) + "..."
+      : comentario;
+  }
+
   return (
     <div>
       <Toast ref={toast} />
@@ -827,7 +836,7 @@ function Solicitudes({
         <Column
           header="Comentario"
           style={{ minWidth: "10rem" }}
-          body={(rowData) => rowData.STR_COMENTARIO}
+          body={comentarioBodyTemplate}
         ></Column>
         <Column
           field="STR_ESTADO_INFO"
