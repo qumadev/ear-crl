@@ -151,7 +151,7 @@ export default function AnexPDF({
             uploadHandler={handleUpload}
             multiple={true}
             accept="application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            maxFileSize={20000000} // Aumentar el tamaño máximo del archivo
+            maxFileSize={28000000} // Aumentar el tamaño máximo del archivo
             emptyTemplate={<p className="m-0">Arrastra y suelta archivos aquí para subir.</p>}
             chooseLabel="Seleccionar archivo"
             uploadLabel="Subir archivo"
