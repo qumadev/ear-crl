@@ -20,69 +20,13 @@ function BodyRD({ responsiveSizeMobile }) {
   const [filtrado, setFiltrado] = useState({
     rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
     numeroSolicitudORendicion: '',
-
-    estados:
-      /*usuario.TipoUsuario == 2 ? [estados[1]] :*/ usuario.TipoUsuario == 1 ?
-        [
-          {
-            id: 8,
-            name: "Aperturado",
-
-          },
-          {
-            id: 9,
-            name: "En carga",
-
-
-          },
-          {
-            id: 12,
-            name: "Devuelto",
-
-
-          },
-          {
-            id: 15,
-            name: "Rechazado RD",
-
-
-          },
-        ]
-        : usuario.TipoUsuario == 2
-          ? [
-            {
-              id: 11,
-              name: "Revisado",
-
-
-            },
-            {
-              id: 13,
-              name: "En Autorización RD",
-
-
-            },
-          ]
-          : usuario.TipoUsuario == 3
-            ? [
-              {
-                id: 10,
-                name: "Cargado",
-
-              },
-              {
-                id: 17,
-                name: "Error Mig RD",
-
-              },
-            ]
-
-            : null,
-
+    estados: null,
+    empleadoAsig: null,
+    empNombre: "",
   });
 
-
-
+  // Estado local para el formulario
+  const [localFiltrado, setLocalFiltrado] = useState({ ...filtrado });
 
   /* Obtiene Estados */
   async function obtenerEstadosLocal() {
@@ -175,23 +119,35 @@ function BodyRD({ responsiveSizeMobile }) {
           /> */}
           <Button
             icon="pi pi-eraser"
+            severity="secondary"
             onClick={() => {
-              setFiltrado({
+              const initialFilters = {
                 rangoFecha: [new Date(now.getFullYear(), 0, 1), new Date()],
                 numeroSolicitudORendicion: '',
+                empNombre: '',
                 estados: null,
-              });
+                empleadoAsig: null,
+              };
+
+              // Reiniciar el estado local
+              setLocalFiltrado(initialFilters);
+
+              // Sincronizar el estado global para que la tabla vuelva al estado inicial
+              setFiltrado(initialFilters);
             }}
-            severity="secondary"
           />
-          {/* <Button
-            label="Ver"
-            icon="pi pi-eye"
+          <Button
+            icon="pi pi-search"
+            label="Buscar"
             severity="success"
-            onClick={() => {
-              navigate(ruta + "/rendiciones/ver");
-            }}
-          /> */}
+            onClick={() => setFiltrado({ ...localFiltrado })} // Actualiza los filtros globales
+            disabled={
+              !localFiltrado.numeroSolicitudORendicion &&
+              !localFiltrado.empNombre &&
+              !localFiltrado.estados?.length &&
+              (!localFiltrado.rangoFecha || localFiltrado.rangoFecha.length === 0)
+            }
+          />
           <Button
             label="Exportar"
             icon="pi pi-upload"
@@ -207,8 +163,8 @@ function BodyRD({ responsiveSizeMobile }) {
       <Filtrado
         estados={estados}
         setEstados={setEstados}
-        filtrado={filtrado}
-        setFiltrado={setFiltrado}
+        localFiltrado={localFiltrado}
+        setLocalFiltrado={setLocalFiltrado}
       />
     </>
   );
