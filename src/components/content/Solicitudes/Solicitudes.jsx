@@ -834,6 +834,26 @@ function Solicitudes({
           style={{ minWidth: "12rem" }}
         ></Column>
         <Column
+          header="Proyecto"
+          field="STR_PROYECTO"
+          style={{ minWidth: "10rem" }}
+        ></Column>
+        <Column
+          header="Centro de Costo (CeCo)"
+          field="STR_CENTRO_COSTO"
+          style={{ minWidth: "10rem" }}
+        ></Column>
+        <Column
+          header="N° de cuenta corriente y/o CCI"
+          field="STR_CCI"
+          style={{ minWidth: "10rem" }}
+        ></Column>
+        <Column
+          header="N° DNI, pasaporte, RUC o CE"
+          field="STR_TIPO_IDENTIFICACION"
+          style={{ minWidth: "10rem" }}
+        ></Column>
+        <Column
           header="Comentario"
           style={{ minWidth: "10rem" }}
           body={comentarioBodyTemplate}

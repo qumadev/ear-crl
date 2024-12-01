@@ -89,7 +89,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }}
             options={tipos}
             optionLabel="name"
-            placeholder="Seleccione Tipo"
+            placeholder="Tipo"
             disabled={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
               (usuario.rol.id != 1)
@@ -142,12 +142,78 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }}
             options={motivos}
             optionLabel="name"
-            placeholder="Seleccione Motivo"
+            placeholder="Motivo"
             disabled={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
               (usuario.rol.id != 1)
             }
           />
+
+          <label htmlFor="">(*)Proyecto:</label>
+          <InputText
+            value={solicitudRD.STR_PROYECTO}
+            onChange={(e) => {
+              //setMonto(e.target.value);
+              setSolicitudRD((prevState) => ({
+                ...prevState,
+                STR_PROYECTO: e.target.value,
+              }));
+            }}
+            placeholder="Proyecto"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
+          />
+          <label htmlFor="">(*)Centro de Costo (CeCo):</label>
+          <InputText
+            value={solicitudRD.STR_CENTRO_COSTO}
+            onChange={(e) => {
+              //setMonto(e.target.value);
+              setSolicitudRD((prevState) => ({
+                ...prevState,
+                STR_CENTRO_COSTO: e.target.value,
+              }));
+            }}
+            placeholder="Centro de Costo"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
+          />
+          <label htmlFor="">(*)N° de cuenta corriente y/o CCI:</label>
+          <InputText
+            value={solicitudRD.STR_CCI}
+            onChange={(e) => {
+              //setMonto(e.target.value);
+              setSolicitudRD((prevState) => ({
+                ...prevState,
+                STR_CCI: e.target.value,
+              }));
+            }}
+            placeholder="Cuenta Corriente y/o CCI"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
+          />
+          <label htmlFor="">(*)Tipo de Identificación:</label>
+          <InputText
+            value={solicitudRD.STR_TIPO_IDENTIFICACION}
+            onChange={(e) => {
+              //setMonto(e.target.value);
+              setSolicitudRD((prevState) => ({
+                ...prevState,
+                STR_TIPO_IDENTIFICACION: e.target.value,
+              }));
+            }}
+            placeholder="DNI, RUC, Pasaporte o CE"
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
+          />
+
           <label htmlFor="">(*)Comentario:</label>
           <InputTextarea
             value={solicitudRD.STR_COMENTARIO}
