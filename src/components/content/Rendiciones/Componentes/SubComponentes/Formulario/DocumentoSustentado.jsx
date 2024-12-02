@@ -1161,7 +1161,7 @@ function DocumentoSustentado({
 							disabled
 						/>
 					</div>
-					<div className="flex col-12 align-items-center gap-5">
+					{/* <div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>Direccion</label>
 						<InputText
 							value={documento.STR_DIRECCION}
@@ -1175,8 +1175,8 @@ function DocumentoSustentado({
 							placeholder='Direccion'
 							disabled={esModoValidate}
 						/>
-					</div>
-					<div className="flex col-12 align-items-center gap-5">
+					</div> */}
+					{/* <div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>(*)Motivo</label>
 						<Dropdown
 							className='col-6'
@@ -1199,7 +1199,7 @@ function DocumentoSustentado({
 							placeholder='Seleccione Motivo'
 							disabled={esModoValidate}
 						/>
-					</div>
+					</div> */}
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>(*)Moneda</label>
 						{console.log("Opciones de monedas en Dropdown:", monedas)}

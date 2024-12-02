@@ -752,7 +752,6 @@ function FormularioRD() {
     STR_SERIE_DOC: false,
     STR_CORR_DOC: false,
     STR_PROVEEDOR: false,
-    STR_MOTIVORENDICION: false,
     STR_MONEDA: false,
     STR_FECHA_DOC: false,
     STR_COMENTARIOS: false
