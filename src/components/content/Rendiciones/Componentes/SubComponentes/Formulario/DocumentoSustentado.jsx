@@ -701,7 +701,9 @@ function DocumentoSustentado({
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
 		{ id: 'IGV_LEY', name: 'IGV (10%)' },
-		{ id: 'EXO', name: 'EXO' }
+		{ id: 'EXO', name: 'EXO' },
+		{ id: 'NDM', name: 'No domiciliados (24%)' },
+		{ id: 'RH', name: 'Recibo por honorarios (8%)' }
 	];
 
 	const selectedOptionTemplate = (option, props) => {
