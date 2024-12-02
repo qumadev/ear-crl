@@ -254,32 +254,18 @@ export default function TableDT({
             body={(data, options) => options.rowIndex + 1}
           ></Column>
           <Column
-            header="N° documento"
-            field="ID"
-            style={{ width: "8rem" }}
-            sortable
-          ></Column>
-          <Column
-            header="Acciones"
-            style={{ width: "3rem" }}
-            body={(rowData) => actionverDoc(rowData, rowData)}
-            exportable={false}
-            frozen
-            alignFrozen="right"
-          ></Column>
-          <Column
             field='STR_TIPO_DOC.name'
-            header="Tipo"
+            header="Tipo de comprobante"
             style={{ width: "3rem" }}
           ></Column>
           <Column
             field='STR_FECHA_DOC'
-            header="Fecha del Documento"
+            header="Fecha de comprobante"
             style={{ width: "3rem" }}
           ></Column>
           <Column
             field="STR_TOTALDOC"
-            header="Monto Rendido"
+            header="Monto de comprobante"
             style={{ width: "3rem" }}
             body={(rowData) => {
               const moneda = rowData?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
@@ -296,8 +282,21 @@ export default function TableDT({
             field='STR_COMENTARIOS'
             header="Comentario"
             style={{ width: "3rem" }}
-
           ></Column>
+          <Column
+            header="Acciones"
+            style={{ width: "3rem" }}
+            body={(rowData) => actionverDoc(rowData, rowData)}
+            exportable={false}
+            frozen
+            alignFrozen="right"
+          ></Column>
+          {/* <Column
+            header="N° documento"
+            field="ID"
+            style={{ width: "8rem" }}
+            sortable
+          ></Column> */}
           {/* <Column
 
             header="Estado"
