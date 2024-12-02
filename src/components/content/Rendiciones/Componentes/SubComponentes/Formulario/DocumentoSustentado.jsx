@@ -33,7 +33,6 @@ function DocumentoSustentado({
 	moneda,
 	esModo,
 	editable,
-	showError,
 	setCampoValidoCabecera,
 	onTotalChange
 }) {
@@ -64,6 +63,15 @@ function DocumentoSustentado({
 		toast.current.show({
 			severity: "info",
 			summary: "Info",
+			detail: mensaje,
+			life: 3000,
+		});
+	};
+
+	const showError = (mensaje) => {
+		toast.current.show({
+			severity: "error",
+			summary: "Error",
 			detail: mensaje,
 			life: 3000,
 		});
@@ -1001,7 +1009,7 @@ function DocumentoSustentado({
 		}
 	}, [rendicion]);
 
-	const monedaCambiada  = useRef(false);
+	const monedaCambiada = useRef(false);
 
 	useEffect(() => {
 		if (documento.STR_TIPO_CAMBIO && parseFloat(documento.STR_TIPO_CAMBIO) !== 1 && !monedaCambiada.current) {
@@ -1015,6 +1023,56 @@ function DocumentoSustentado({
 			monedaCambiada.current = true;
 		}
 	}, [documento.STR_TIPO_CAMBIO, rendicion]);
+
+	const boletaVentaID = '03';
+
+	const validarBoletaYProveedor = (tipoDoc, proveedor) => {
+		// Verificar si el tipo de documento es boleta de venta y si el RUC del proveedor empieza con '20'
+		if (tipoDoc?.id === boletaVentaID && proveedor?.LicTradNum.startsWith('20')) {
+			showError("No se puede seleccionar un proveedor con RUC que comience con '20' para una Boleta de Venta.");
+			return true;  // Indicamos que hubo un error
+		}
+		return false;  // Si la validación es correcta
+	};
+
+	const handleTipoDocChange = (e) => {
+		const tipoDocSeleccionado = e.target.value;
+
+		// Validar antes de cambiar el estado
+		if (validarBoletaYProveedor(tipoDocSeleccionado, documento.STR_PROVEEDOR)) {
+			return;  // No se actualiza el estado si la validación falla
+		}
+
+		setDocumento((prevState) => ({
+			...prevState,
+			STR_TIPO_DOC: tipoDocSeleccionado,
+		}));
+
+		setCampoValidoCabecera(prevState => ({
+			...prevState,
+			STR_TIPO_DOC: Boolean(tipoDocSeleccionado),
+		}));
+	};
+
+	// Función para manejar el cambio del proveedor
+	const handleProveedorChange = (selectedProveedor) => {
+		// Validar antes de cambiar el estado
+		if (validarBoletaYProveedor(documento.STR_TIPO_DOC, selectedProveedor)) {
+			return;  // No se actualiza el estado si la validación falla
+		}
+
+		setDocumento((prevState) => ({
+			...prevState,
+			STR_PROVEEDOR: selectedProveedor,
+			STR_RUC: selectedProveedor.LicTradNum,
+			STR_RAZONSOCIAL: selectedProveedor.CardName,
+		}));
+
+		setCampoValidoCabecera(prevState => ({
+			...prevState,
+			STR_PROVEEDOR: Boolean(selectedProveedor),
+		}));
+	};
 
 	return (
 		<div>
@@ -1036,26 +1094,7 @@ function DocumentoSustentado({
 						<Dropdown
 							className='col-6'
 							value={documento.STR_TIPO_DOC}
-							onChange={
-								(e) => {
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_TIPO_DOC: e.target.value,
-									}));
-									//console.log("value: ", e.target.value)
-									setCampoValidoCabecera(prevState => ({
-										...prevState,
-										STR_TIPO_DOC: Boolean(e.target.value)
-									}));
-									if (e.target.value.name === 'Factura') {
-										showInfo("Las facturas comienzan con 'F' o 'E' en N° de serie");
-										//console.log("factura")
-									}
-									// if (e.target.value.name === 'Boleta de venta') {
-									// 	showInfo("Las boletas de venta comienzan con 'B' en N° de serie");
-									// 	//console.log("boleta")
-									// }
-								}}
+							onChange={handleTipoDocChange}
 							options={tipos}
 							optionLabel="name"
 							filter
@@ -1128,20 +1167,7 @@ function DocumentoSustentado({
 						<Dropdown
 							className='col-6'
 							value={documento.STR_PROVEEDOR}
-							onChange={(e) => {
-								// handleChangeProveedor(e.value)
-								// setRazon(e.value.CardName)
-								setDocumento((prevState) => ({
-									...prevState,
-									STR_PROVEEDOR: e.target.value,
-									STR_RUC: e.target.value.LicTradNum,
-									STR_RAZONSOCIAL: e.target.value.CardName
-								}));
-								setCampoValidoCabecera(prevState => ({
-									...prevState,
-									STR_PROVEEDOR: Boolean(e.target.value)
-								}));
-							}}
+							onChange={(e) => handleProveedorChange(e.value)}
 							options={proveedores}
 							optionLabel="LicTradNum"
 							filter
