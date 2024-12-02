@@ -1298,6 +1298,7 @@ function DocumentoSustentado({
 							className='col-6'
 							rows={5}
 							cols={30}
+							maxLength={50}
 							disabled={esModoValidate}
 						/>
 					</div>
