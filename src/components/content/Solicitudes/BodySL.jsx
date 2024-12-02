@@ -62,18 +62,25 @@ export function BodySL({ responsiveSizeMobile }) {
     // Actualizar el estado con los estados filtrados
     setEstados(estadosFiltrados);
   }
-  /*----------------------------- */
 
   const exportExcel = async () => {
     const XLSX = await import("xlsx");
-    const worksheet = XLSX.utils.json_to_sheet(solicitudes);
+
+    const solicitudesConFecha = solicitudes.map(solicitud => {
+      if (!solicitud.STR_FECHA_APROBACION) {
+        solicitud.STR_FECHA_APROBACION = "No se aprobó aún";  // Mensaje en caso de no haber fecha
+      }
+      return solicitud;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(solicitudesConFecha);
     const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
 
-    saveAsExcelFile(excelBuffer, "solicitudes");
+    saveAsExcelFile(excelBuffer, "Solicitudes");
   };
 
   const saveAsExcelFile = async (buffer, fileName) => {
@@ -141,10 +148,10 @@ export function BodySL({ responsiveSizeMobile }) {
                 estados: null,
                 empleadoAsig: null,
               };
-          
+
               // Reiniciar el estado local
               setLocalFiltrado(initialFilters);
-          
+
               // Sincronizar el estado global para que la tabla vuelva al estado inicial
               setFiltrado(initialFilters);
             }}
