@@ -1311,18 +1311,23 @@ function DocumentoSustentado({
 						<label className='col-2'>(*)Comentario</label>
 						<InputTextarea
 							value={documento.STR_COMENTARIOS}
-							onChange={
-								(e) => {
-									// setSelectedTipo(e.value.value);
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_COMENTARIOS: e.target.value,
-									}));
-									setCampoValidoCabecera(prevState => ({
-										...prevState,
-										STR_COMENTARIOS: Boolean(e.target.value)
-									}));
-								}}
+							onChange={(e) => {
+								const newValue = e.target.value;
+
+								// setSelectedTipo(e.value.value);
+								setDocumento((prevState) => ({
+									...prevState,
+									STR_COMENTARIOS: newValue,
+								}));
+								setCampoValidoCabecera(prevState => ({
+									...prevState,
+									STR_COMENTARIOS: Boolean(newValue)
+								}));
+
+								if (newValue.length >= 50) {
+									showInfo("El comentario ha alcanzado el límite de 50 caracteres.");
+								}
+							}}
 							className='col-6'
 							rows={5}
 							cols={30}

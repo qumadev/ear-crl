@@ -777,12 +777,13 @@ function Solicitudes({
         })}
         sortMode="multiple"
         paginator
-        rows={5}
+        rows={25}
         rowsPerPageOptions={[5, 10, 25, 50]}
         tableStyle={{ minWidth: "12rem" }}
         header={header}
         loading={loading}
         emptyMessage="No se encontraron Solicitudes"
+        cellStyle={{ border: '5px solid #ddd' }}
       // scrollable
       // scrollHeight="400px"
       >
@@ -804,7 +805,7 @@ function Solicitudes({
         <Column
           field="STR_NRSOLICITUD"
           header="N° de la Solicitud"
-          style={{ minWidth: "8rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_FECHAREGIS"
@@ -817,15 +818,19 @@ function Solicitudes({
           style={{ minWidth: "10rem" }}
           body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
         ></Column>
-        <Column
-          field="STR_EMPLDASIG_NOMBRE"
-          header="Empleado Asignado"
+        {/* <Column
+          header="Rango de fecha del evento"
           style={{ minWidth: "15rem" }}
-        ></Column>
+        ></Column> */}
         <Column
           header="Motivo"
           style={{ minWidth: "10rem" }}
           body={(rowData) => rowData.STR_TIPORENDICION?.name}
+        ></Column>
+        <Column
+          field="STR_EMPLDASIG_NOMBRE"
+          header="Empleado Asignado"
+          style={{ minWidth: "15rem" }}
         ></Column>
         <Column
           field="STR_TOTALSOLICITADO"

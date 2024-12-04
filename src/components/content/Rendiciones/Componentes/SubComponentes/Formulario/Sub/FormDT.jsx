@@ -825,6 +825,19 @@ export default function FormDT({ editable, totalRedondeado,
             />
           </div>
         </div>
+        
+        <div className="col-12 md:col-5 lg:col-3">
+          <div className="mb-3 flex flex-column  justify-content-center">
+            <label htmlFor="buttondisplay" className="font-bold block mb-2">
+              N° de la SR:
+            </label>
+            <InputText
+              value={rendicion?.STR_SOLICITUD}
+              placeholder="N° de la SR"
+              disabled
+            />
+          </div>
+        </div>
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
@@ -845,18 +858,6 @@ export default function FormDT({ editable, totalRedondeado,
             <InputText
               value={rendicion?.STR_EMPLDASIG}
               placeholder="Emp.Asignado"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              N° de la SR:
-            </label>
-            <InputText
-              value={rendicion?.STR_SOLICITUD}
-              placeholder="N° de la SR"
               disabled
             />
           </div>
