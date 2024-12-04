@@ -1049,7 +1049,7 @@ function Rendiciones({
         }
         sortMode="multiple"
         paginator
-        rows={5}
+        rows={25}
         rowsPerPageOptions={[5, 10, 25, 50]}
         tableStyle={{ minWidth: "12rem" }}
         header={header}
@@ -1093,6 +1093,17 @@ function Rendiciones({
           header="Empleado Asignado"
           style={{ minWidth: "15rem" }}
         ></Column>
+        <Column
+          field="STR_CENTRO_COSTO"
+          header="Centro de Costo (CeCo)"
+          style={{ minWidth: "15rem" }}
+        ></Column>
+        <Column
+          field="STR_PROYECTO"
+          header="Proyecto"
+          style={{ minWidth: "15rem" }}
+        >
+        </Column>
         <Column
           field="STR_TOTALAPERTURA"
           body={priceBodySolicitudTemplate}

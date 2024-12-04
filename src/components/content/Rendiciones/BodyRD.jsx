@@ -67,13 +67,21 @@ function BodyRD({ responsiveSizeMobile }) {
 
   const exportExcel = async () => {
     const XLSX = await import("xlsx");
+
+    const rendicionConFecha = rendiciones.map(rendicion => {
+      if (!rendicion.STR_FECHA_APROBACION) {
+        rendicion.STR_FECHA_APROBACION = "No se aprobó aún";
+      }
+      return rendicion;
+    });
+
     const worksheet = XLSX.utils.json_to_sheet(rendiciones);
     const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
-    saveAsExcelFile(excelBuffer, "rendiciones");
+    saveAsExcelFile(excelBuffer, "Rendiciones");
   };
 
   const saveAsExcelFile = async (buffer, fileName) => {
