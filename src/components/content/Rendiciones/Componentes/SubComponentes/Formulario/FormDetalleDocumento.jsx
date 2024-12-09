@@ -131,6 +131,86 @@ function FormDetalleDocumento({
 		);
 	};
 
+	const selectedProyectoOptionTemplate = (option, props) => {
+		if (option) {
+			return <div>{option.id}</div>;
+		}
+
+		return <span>{props.placeholder}</span>;
+	}
+
+	const complementoProyectoOptionTemplate = (option) => {
+		return (
+			<div>
+				{option.id} - {option.name}
+			</div>
+		);
+	};
+
+	const selectedUndOptionTemplate = (option, props) => {
+		if (option) {
+			return <div>{option.id}</div>;
+		}
+
+		return <span>{props.placeholder}</span>;
+	}
+
+	const completementoUndOptionTemplate = (option) => {
+		return (
+			<div>
+				{option.id} - {option.name}
+			</div>
+		);
+	}
+
+	const selectedFilialOptionTemplate = (option, props) => {
+		if (option) {
+			return <div>{option.id}</div>;
+		}
+
+		return <span>{props.placeholder}</span>;
+	}
+
+	const completementoFilialOptionTemplate = (option) => {
+		return (
+			<div>
+				{option.id} - {option.name}
+			</div>
+		);
+	}
+
+	const selectedAreaOptionTemplate = (option, props) => {
+		if (option) {
+			return <div>{option.id}</div>;
+		}
+
+		return <span>{props.placeholder}</span>;
+	}
+
+	const complementoAreaOptionTemplate = (option) => {
+		return (
+			<div>
+				{option.id} - {option.name}
+			</div>
+		);
+	}
+
+	const selectedCeCoOptionTempalte = (option, props) => {
+		if (option) {
+			return <div>{option.id}</div>;
+		}
+
+		return <span>{props.placeholder}</span>;
+	}
+
+	const complementoCeCoOptionTemplate = (option) => {
+		return (
+			<div>
+				{option.id} - {option.name}
+			</div>
+		);
+	}
+
 	const addDetDoc = () => {
 		if (validarCampos()) {
 			setArticulos([...articulos, detDoc]);
@@ -291,7 +371,7 @@ function FormDetalleDocumento({
 							}}
 							options={articles}
 							filter
-							filterBy='ItemName'
+							filterBy='ItemCode,ItemName'
 							optionLabel="ItemCode"
 							placeholder='Seleccione Articulo/Servicio'
 							valueTemplate={selectedOptionTemplate}
@@ -313,9 +393,11 @@ function FormDetalleDocumento({
 							}}
 							options={proyectos}
 							filter
-							filterBy='name'
-							optionLabel="name"
+							filterBy='id,name'
+							optionLabel="id"
 							placeholder='Seleccione Proyecto'
+							valueTemplate={selectedProyectoOptionTemplate}
+							itemTemplate={complementoProyectoOptionTemplate}
 						/>
 						<label htmlFor="">(*)Unidad de Negocio:</label>
 						<Dropdown
@@ -332,9 +414,11 @@ function FormDetalleDocumento({
 							}}
 							options={unidNegocios}
 							filter
-							filterBy='name'
-							optionLabel={"name"}
+							filterBy='id,name'
+							optionLabel="id"
 							placeholder='Seleccione Unidad de Negocio'
+							valueTemplate={selectedUndOptionTemplate}
+							itemTemplate={completementoUndOptionTemplate}
 						/>
 						<label htmlFor="">(*)Filial:</label>
 						<Dropdown
@@ -352,9 +436,11 @@ function FormDetalleDocumento({
 							}}
 							options={filial}
 							filter
-							filterBy='name'
-							optionLabel="name"
+							filterBy='id,name'
+							optionLabel="id"
 							placeholder='Seleccione Filial'
+							valueTemplate={selectedFilialOptionTemplate}
+							itemTemplate={completementoFilialOptionTemplate}
 						/>
 						<label htmlFor="">(*)Area:</label>
 						<Dropdown
@@ -372,9 +458,11 @@ function FormDetalleDocumento({
 							}}
 							options={areas}
 							filter
-							filterBy='name'
-							optionLabel="name"
+							filterBy='id,name'
+							optionLabel="id"
 							placeholder='Seleccione Area'
+							valueTemplate={selectedAreaOptionTemplate}
+							itemTemplate={complementoAreaOptionTemplate}
 						/>
 						<label htmlFor="">(*)Centro Costo:</label>
 						<Dropdown
@@ -392,9 +480,11 @@ function FormDetalleDocumento({
 							}}
 							options={centroCostos}
 							filter
-							filterBy='name'
-							optionLabel="name"
+							filterBy='id,name'
+							optionLabel="id"
 							placeholder='Seleccione Centro Costo'
+							valueTemplate={selectedCeCoOptionTempalte}
+							itemTemplate={complementoCeCoOptionTemplate}
 						/>
 						<label htmlFor="">(*)Ind. Impuesto:</label>
 						<Dropdown

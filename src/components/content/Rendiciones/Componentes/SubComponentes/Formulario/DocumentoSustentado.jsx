@@ -73,7 +73,7 @@ function DocumentoSustentado({
 			severity: "error",
 			summary: "Error",
 			detail: mensaje,
-			life: 3000,
+			life: 5000,
 		});
 	};
 
