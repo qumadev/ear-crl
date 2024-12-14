@@ -66,12 +66,6 @@ function Rendiciones({
 
   const [montosRendidos, setMontosRendidos] = useState({});
 
-  //   const [rendiciones,rendiciones]= useState(
-
-  //     {
-  // ID:null
-  //     }
-  //    )
   /* States Globales */
   const showSuccess = (mensaje) => {
     toast.current.show({
@@ -289,7 +283,6 @@ function Rendiciones({
       if (response.status < 300) {
         let body = response.data.Result[0];
 
-        // if (body.AprobacionFinalizada == 0) {
         showSuccess(`Se revertio la aprobacion de la rendición`);
         // } else {
         //   showSuccess(
@@ -732,27 +725,27 @@ function Rendiciones({
     setProductDialog(true);
   };
 
-  const obtenerTotalRendido = async (rendicionId) => {
-    try {
-      const response = await obtenerRendicion(rendicionId);  // Llama a la API por ID
+  // const obtenerTotalRendido = async (rendicionId) => {
+  //   try {
+  //     const response = await obtenerRendicion(rendicionId);  // Llama a la API por ID
 
-      const documentos = response.data.Result[0]?.documentos || [];
+  //     const documentos = response.data.Result[0]?.documentos || [];
 
-      const totalRendido = documentos.reduce((sum, doc) => sum + parseFloat(doc.STR_TOTALDOC || 0), 0);
+  //     const totalRendido = documentos.reduce((sum, doc) => sum + parseFloat(doc.STR_TOTALDOC || 0), 0);
 
-      setMontosRendidos((prev) => ({ ...prev, [rendicionId]: totalRendido }));
-    } catch (error) {
-      console.error("Error al obtener los detalles de la rendición:", error);
-    }
-  }
+  //     setMontosRendidos((prev) => ({ ...prev, [rendicionId]: totalRendido }));
+  //   } catch (error) {
+  //     console.error("Error al obtener los detalles de la rendición:", error);
+  //   }
+  // }
 
-  useEffect(() => {
-    if (rendiciones.length > 0) {
-      rendiciones.forEach((rendicion) => {
-        obtenerTotalRendido(rendicion.ID);  // Llama a la API para obtener el monto rendido de cada rendición
-      });
-    }
-  }, [rendiciones]);
+  // useEffect(() => {
+  //   if (rendiciones.length > 0) {
+  //     rendiciones.forEach((rendicion) => {
+  //       obtenerTotalRendido(rendicion.ID);  // Llama a la API para obtener el monto rendido de cada rendición
+  //     });
+  //   }
+  // }, [rendiciones]);
 
   return (
     <div>
