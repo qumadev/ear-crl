@@ -162,19 +162,17 @@ function Rendiciones({
     }
   };
 
-  const [estados, setEstados] = useState([])
-  async function obtenerEstadosLocalR() {
-    let response = await obtenerEstadosRendiciones();
-    let body = response.data.Result;
+  // const [estados, setEstados] = useState([])
+  // async function obtenerEstadosLocalR() {
+  //   let response = await obtenerEstadosRendiciones();
+  //   let body = response.data.Result;
 
-    setEstados(response.data.Result);
-  }
+  //   setEstados(response.data.Result);
+  // }
 
-
-
-  useEffect(() => {
-    obtenerEstadosLocalR();
-  }, []);
+  // useEffect(() => {
+  //   obtenerEstadosLocalR();
+  // }, []);
 
   async function actualizarRendiEnCarga(body) {
     try {

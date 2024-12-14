@@ -99,10 +99,12 @@ function FormularioRD() {
   }
 
   useEffect(() => {
-    if (id) {
-      obtenerRendicionPorId(id)
+    const rendicionId = documento?.STR_RD_ID ?? id;
+
+    if (rendicionId) {
+      obtenerRendicionPorId(rendicionId)
     }
-  }, [id])
+  }, [documento?.STR_RD_ID, id])
 
   async function obtenerData() {
     //let id = 8
@@ -298,9 +300,6 @@ function FormularioRD() {
   const updateRD = async () => {
     setLoading(true);
     try {
-      // let _detalles = detalles.map((e) => {
-      //   return typeof e.ID == "number" ? e : { ...e, ID: null };
-      // });
       if (detalle && detalle.length > 0) {
         const _detalles = detalle.map((detalle) => ({
           ID: detalle.ID ? detalle.ID : null,
@@ -323,16 +322,25 @@ function FormularioRD() {
           STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
           FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
-        let subtotalTotal = _detalles.reduce(
-          (total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0
-        );
 
-        let totalImpuestos = _detalles.reduce(
-          (total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0
-        );
+        let subtotalTotal = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0);
+        let totalImpuestos = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0);
 
         // Aquí sumamos el subtotal más los impuestos sin duplicarlos
-        let totalDocumento = (subtotalTotal + totalImpuestos).toFixed(2);
+        let totalDocumento = subtotalTotal + totalImpuestos
+
+        const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1; // Tipo de cambio
+        let totalConvertido = totalDocumento;
+
+        console.log("documento.STR_MONEDA:", documento.STR_MONEDA);
+        console.log("rendicion.STR_MONEDA:", rendicion?.STR_MONEDA);
+
+        if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+          totalConvertido = totalDocumento / tipoCambio; // Convertir de SOL a USD
+        } else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+          totalConvertido = totalDocumento * tipoCambio; // Convertir de USD a SOL
+        }
+
         let _documento = {
           ...documento,
           ID: id,
@@ -343,11 +351,9 @@ function FormularioRD() {
             id: documento.STR_MONEDA?.id,
             name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Code
           },
-          STR_TOTALDOC: parseFloat(totalDocumento),
+          STR_TOTALDOC: totalDocumento,
+          STR_TOTALDOC_CONVERTIDO: totalConvertido,
           STR_CANTIDAD: null,
-          //STR_FECHA_CONTABILIZA: documento.STR_FECHA_DOC,
-          //STR_FECHA_DOC: documento.STR_FECHA_DOC,
-          //STR_FECHA_VENCIMIENTO: documento.STR_FECHA_DOC,
           STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
@@ -511,96 +517,6 @@ function FormularioRD() {
             onTotalChange={handleTotalChange}
           />
         </TabPanel>
-        {/* <TabPanel header="General">
-          <GeneralRD
-            fechaContabilizacion={documento.STR_FECHA_CONTABILIZA}
-            fechaDocumento={documento.STR_FECHA_DOC}
-            fechaVencimiento={documento.STR_FECHA_VENCIMIENTO}
-            proveedor={documento.STR_PROVEEDOR}
-            ruc={documento.STR_PROVEEDOR?.LicTradNum}
-            razonSocial={documento.STR_PROVEEDOR?.CardName}
-            tipoAgente={documento.STR_TIPO_AGENTE}
-            comentarios={documento.STR_COMENTARIOS}
-            setDocumento={setDocumento}
-            selectedOptionDefault={selectedOptionTemplate}
-            complementoOptionDefault={complementoOptionTemplate}
-            proveedores={proveedores}
-            agentes={agentes}
-            consultSunat={consultSunat}
-            setConsultSunat={setConsultSunat}
-            setProveedores={setProveedores}
-            showSuccess={showSuccess}
-            showError={showError}
-            existeEnSunat={existeEnSunat}
-            setExisteEnSunat={setExisteEnSunat}
-            editable={editable}
-            fechaSolicitud={fechaSolicitud}
-            getFechaLargo={getFechaLargo}
-          />
-        </TabPanel>
-        <TabPanel header="Comprobante">
-          <Comprobante
-            tipo={documento.STR_TIPO_DOC}
-            serie={documento.STR_SERIE_DOC}
-            correlativo={documento.STR_CORR_DOC}
-            fechaEmision={documento.STR_FECHA_DOC}
-            setDocumento={setDocumento}
-            tpoDocs={tpoDocs}
-            showSuccess={showSuccess}
-            existeSunat={documento.STR_VALIDA_SUNAT}
-            //setCompExisteSunat={setCompExisteSunat}
-            ruc={documento.STR_PROVEEDOR?.LicTradNum}
-            fechaDocumento={documento.STR_FECHA_DOC}
-            showError={showError}
-            monto={documento.STR_TOTALDOC}
-            editable={editable}
-          />
-        </TabPanel>
-        <TabPanel header="Detalle">
-          <DetalleRD
-            almacen={almacen}
-            setDetalles={setDetalles}
-            detalles={detalles}
-            moneda={documento.STR_MONEDA}
-            tipo={documento.STR_TIPO_DOC}
-            serie={documento.STR_SERIE_DOC}
-            correlativo={documento.STR_CORR_DOC}
-            fechaEmision={documento.STR_FECHA_DOC}
-            //documento={documento}
-            setDocumento={setDocumento}
-            selectedOptionDefault={selectedOptionTemplate}
-            complementoOptionDefault={complementoOptionTemplate}
-            showSuccess={showSuccess}
-            showError={showError}
-            loading={loading}
-            setLoading={setLoading}
-            items={items}
-            proyectos={proyectos}
-            indicadores={indicadores}
-            cups={cups}
-            setCups={setCups}
-            centroCosto={centroCosto}
-            idDetalle={idDetalle}
-            tpoOperacion={config.STR_OPERACION}
-            documentoId={documento.ID}
-            editable={editable}
-          />
-        </TabPanel>
-        <TabPanel header="Anexos">
-          <AnexoRD
-            anexos={anexos}
-            setAnexos={setAnexos}
-            setDocumento={setDocumento}
-            showSuccess={showSuccess}
-            showError={showError}
-            fileUploadRef={fileUploadRef}
-            STR_ANEXO_ADJUNTO={documento.STR_ANEXO_ADJUNTO}
-            changeFileTitle={changeFileTitle}
-            files={files}
-            setFiles={setFiles}
-            editable={editable}
-          />
-        </TabPanel> */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
         {esModo === "Detalle" ? "" :

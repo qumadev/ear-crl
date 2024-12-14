@@ -38,6 +38,8 @@ function DocumentoSustentado({
 }) {
 	const { id } = useParams();
 
+	console.log("documento prop: ", documento);
+
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
 	const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -80,18 +82,19 @@ function DocumentoSustentado({
 	const obtenerRendicionPorId = async (idRendicion) => {
 		try {
 			const response = await obtenerRendicion(idRendicion)
+			console.log("Response de obtenerRendicion:", response.data.Result);
 
 			if (response.status < 300 && response.data) {
 				const datosRendicion = response.data.Result[0];
 				setRendicion(datosRendicion);
 
-				compararMonedas(datosRendicion.STR_MONEDA, documento.STR_MONEDA)
+				compararMonedas(datosRendicion?.STR_MONEDA, documento?.STR_MONEDA?.Code)
 			} else {
 				showError("No se encontró la rendicion con el ID")
 			}
 		} catch (error) {
 			console.error("Error al obtener la rendicion: ", error);
-			showError("Ocurrió un error al intentar obtener la rendición")
+			showError(`Ocurrió un error al intentar obtener la rendición: ${error.message}`);
 		}
 	}
 
@@ -115,7 +118,7 @@ function DocumentoSustentado({
 				...documento,
 				STR_MONEDA: rendicion.STR_MONEDA, // Actualizamos la moneda del documento
 			};
-			
+
 			setDocumento(documentoActualizado); // Actualiza el estado del documento
 		} else {
 			console.log("El tipo de cambio es 1, no se aplica conversion");
@@ -686,10 +689,12 @@ function DocumentoSustentado({
 	}, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
 
 	useEffect(() => {
-		if (id) {
-			obtenerRendicionPorId(id)
+		const rendicionId = documento?.STR_RD_ID ?? id;
+
+		if (rendicionId) {
+			obtenerRendicionPorId(rendicionId)
 		}
-	}, [id])
+	}, [documento?.STR_RD_ID, id])
 
 	// const monedaCambiada = useRef(false);
 
