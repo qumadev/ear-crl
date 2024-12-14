@@ -465,28 +465,8 @@ function FormularioSL() {
 
         {!esModoRegistrar && (
           <div className="flex text-2xl align-items-center gap-2 p-2">
-            {/*<Button
-              type="button"
-              icon="pi pi-file-pdf"
-              severity="warning"
-              rounded
-              onClick={downloadAndOpenPdf}
-              data-pr-tooltip="PDF"
-        />*/}
           </div>
         )}
-        {/* {(solicitudRD.estado > 5) & (solicitudRD.estado != 7) && (
-          <div className="flex text-2xl align-items-center gap-2 p-2">
-            <Button
-              type="button"
-              icon="pi pi-file-pdf"
-              severity="warning"
-              rounded
-              onClick={downloadAndOpenPdf}
-              data-pr-tooltip="PDF"
-            />
-          </div>
-        )} */}
       </div>
       <Divider />
       <TabView
@@ -505,77 +485,10 @@ function FormularioSL() {
           <TabPanel header="Aprobadores">
             <Aprobaciones
               solicitudRD={solicitudRD}
-              //setSolicitudRD={setSolicitudRD}
               aprobadores={aprobadores}
             />
           </TabPanel>
         )}
-        {/* <TabPanel header="General">
-          <GeneralSL
-            solicitudRD={solicitudRD}
-            setSolicitudRD={setSolicitudRD}
-            usuario={usuario}
-            solicitando={solicitando}
-            setDetalles={setDetalles}
-            estadosEditables={estadosEditables}
-            //vencimientoRef={vencimientoRef}
-          />
-        </TabPanel>
-        <TabPanel header="Detalle">
-          <DetalleSL
-            solicitudRD={solicitudRD}
-            setSolicitudRD={setSolicitudRD}
-            usuario={usuario}
-            nOrden={nOrden}
-            setNorden={setNorden}
-            detalles={detalles}
-            setDetalles={setDetalles}
-            solicitando={solicitando}
-            showSuccess={showSuccess}
-            showError={showError}
-            setLoading={setLoading}
-            estadosEditables={estadosEditables}
-            viaticos={viaticos}
-          />
-        </TabPanel>
-        <TabPanel header="Anexos">
-          <AnexoSL
-            setLoadingSkeleton={setLoadingSkeleton}
-            solicitudRD={solicitudRD}
-            setSolicitudRD={setSolicitudRD}
-            usuario={usuario}
-            adjuntos={adjuntos}
-            setAdjuntos={setAdjuntos}
-            fileUploadRef={fileUploadRef}
-            changeFileTitle={changeFileTitle}
-            solicitando={solicitando}
-            estadosEditables={estadosEditables}
-            showError={showError}
-            showSuccess={showSuccess}
-          />
-        </TabPanel>
-        {/* ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) }
-
-        {[2, 3, 4, 5, 6, 7].includes(solicitudRD.estado) && (
-          <TabPanel header="Aprobadores">
-            <Aprobaciones
-              solicitudRD={solicitudRD}
-              setSolicitudRD={setSolicitudRD}
-              usuario={usuario}
-              adjuntos={adjuntos}
-              setAdjuntos={setAdjuntos}
-              fileUploadRef={fileUploadRef}
-              changeFileTitle={changeFileTitle}
-              solicitando={solicitando}
-              estadosEditables={estadosEditables}
-              showError={showError}
-              showSuccess={showSuccess}
-              aprobadores={aprobadores}
-              setAprobadores={setAprobadores}
-            />
-          </TabPanel>
-        )}
-         */}
       </TabView>
       <div className="card flex flex-wrap  gap-3 mx-3">
         {usuario.rol.id == "1" ? (
@@ -585,11 +498,7 @@ function FormularioSL() {
             size="large"
             style={{ backgroundColor: "black", borderColor: "black" }}
             onClick={(e) => {
-              //setSolicitando(false);
               registrarSR();
-              // if (esModoRegistrar) {
-              //   navigate("/solicitudes");
-              // }
             }}
             loading={loading}
             disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO)}
@@ -605,7 +514,9 @@ function FormularioSL() {
             }}
             loading={loading}
             disabled={
-              (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+              solicitudRD.STR_ESTADO === 3 &&
+              usuario.rol.id === "2" ||
+              (solicitudRD.STR_ESTADO > 3 || solicitudRD.STR_ESTADO === 1)
             }
           />
         )}
@@ -625,7 +536,9 @@ function FormularioSL() {
             size="large"
             onClick={confirmRechazo}
             disabled={
-              (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
+              (solicitudRD.STR_ESTADO === 3 && usuario.rol.id === "2") ||
+              solicitudRD.STR_ESTADO > 3 ||
+              solicitudRD.STR_ESTADO === 1
             }
             loading={loading}
           />

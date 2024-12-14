@@ -49,3 +49,17 @@ body {
     font-size: 1.25rem;
 }
 
+.no-caret .p-splitbutton-menubutton {
+    display: none; /* Oculta la flecha */
+}
+
+.no-caret .p-splitbutton {
+    justify-content: center; /* Asegura que el botón principal esté centrado */
+}
+
+.button-left-align {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem; /* Espacio entre el ícono y el texto */
+}

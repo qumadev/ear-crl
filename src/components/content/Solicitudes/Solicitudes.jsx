@@ -346,12 +346,19 @@ function Solicitudes({
   };
 
   const actionBodyTemplate = (rowData) => {
-    const showAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData?.STR_ESTADO >= 2;
-    const showRevertirAprobacionButton = (usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData?.STR_ESTADO >= 2;
+    const showAprobacionButton =
+      ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
+        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
+      rowData?.STR_ESTADO >= 2;
+
+    const showRevertirAprobacionButton =
+      ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
+        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
+      rowData?.STR_ESTADO >= 2;
 
     const items = [
       ...(showAprobacionButton ? [{
-        label: "Aceptar Aprobación",
+        label: "Aprobar Solicitud",
         icon: "pi pi-check",
         command: () => {
           confirmarAceptacion(rowData)
@@ -359,35 +366,13 @@ function Solicitudes({
       }] : []),
 
       ...(showRevertirAprobacionButton ? [{
-        label: "Rechazar Aprobación",
+        label: "Rechazar Solicitud",
         icon: "pi pi-undo",
         command: () => {
           rechazarAceptacion(rowData)
         }
       }] : []),
     ];
-
-    if (
-      ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
-      (usuario.rol.id == 1)
-    ) {/*
-      items.push({
-        label: "Editar",
-        icon: "pi pi-pencil",
-        command: () => {
-          navigate(
-            ruta +
-            `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-            }`,
-            {
-              state: {
-                create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
-              },
-            }
-          );
-        },
-      });
-    */}
 
     /******************************************************* */
     // Enviar Solicitud de Aprobación
@@ -476,23 +461,43 @@ function Solicitudes({
 
     return (
       <div className="split-button">
-        <SplitButton
-          label="Ver"
-          icon="pi pi-eye"
-          model={items}
-          onClick={() => {
-            // Acción principal del botón
-            navigate(
-              ruta +
-              `/solicitudes/editar/${rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY}`,
-              {
-                state: {
-                  create: rowData.CREATE === "PWB" ? "PWB" : "SAP",
-                },
-              }
-            );
-          }}
-        />
+        {items.length > 0 ? (
+          <SplitButton
+            label="Ver"
+            icon="pi pi-eye"
+            style={{ width: '118px' }}
+            model={items}
+            onClick={() => {
+              navigate(
+                ruta +
+                `/solicitudes/editar/${rowData.CREATE === "PWB" ? rowData.ID : rowData.STR_DOCENTRY}`,
+                {
+                  state: {
+                    create: rowData.CREATE === "PWB" ? "PWB" : "SAP",
+                  },
+                }
+              );
+            }}
+          />
+        ) : (
+          <Button
+            label="Ver"
+            icon="pi pi-eye"
+            className="button-left-align"
+            style={{ width: '118px' }}
+            onClick={() => {
+              navigate(
+                ruta +
+                `/solicitudes/editar/${rowData.CREATE === "PWB" ? rowData.ID : rowData.STR_DOCENTRY}`,
+                {
+                  state: {
+                    create: rowData.CREATE === "PWB" ? "PWB" : "SAP",
+                  },
+                }
+              );
+            }}
+          />
+        )}
       </div>
     );
   };
@@ -716,7 +721,7 @@ function Solicitudes({
         ></Column>
         <Column
           header="Comentario"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "15rem" }}
           body={comentarioBodyTemplate}
         ></Column>
         <Column
