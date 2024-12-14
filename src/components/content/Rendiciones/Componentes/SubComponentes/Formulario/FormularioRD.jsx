@@ -332,9 +332,6 @@ function FormularioRD() {
         const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1; // Tipo de cambio
         let totalConvertido = totalDocumento;
 
-        console.log("documento.STR_MONEDA:", documento.STR_MONEDA);
-        console.log("rendicion.STR_MONEDA:", rendicion?.STR_MONEDA);
-
         if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
           totalConvertido = totalDocumento / tipoCambio; // Convertir de SOL a USD
         } else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {

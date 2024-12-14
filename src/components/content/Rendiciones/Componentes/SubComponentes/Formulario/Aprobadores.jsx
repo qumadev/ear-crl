@@ -34,10 +34,8 @@ export function Aprobadores() {
         // Description: 0 no es aprobador  / 1 ya aprobó
         setAprobadores(_aprobadores);
       } else {
-        console.log("Error interno");
       }
     } catch (error) {
-      console.log(error);
     }
   }
 

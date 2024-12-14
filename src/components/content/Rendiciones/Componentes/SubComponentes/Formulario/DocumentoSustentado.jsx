@@ -38,8 +38,6 @@ function DocumentoSustentado({
 }) {
 	const { id } = useParams();
 
-	console.log("documento prop: ", documento);
-
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
 	const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -82,7 +80,6 @@ function DocumentoSustentado({
 	const obtenerRendicionPorId = async (idRendicion) => {
 		try {
 			const response = await obtenerRendicion(idRendicion)
-			console.log("Response de obtenerRendicion:", response.data.Result);
 
 			if (response.status < 300 && response.data) {
 				const datosRendicion = response.data.Result[0];

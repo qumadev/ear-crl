@@ -83,7 +83,6 @@ function AnexoRD({
           showError(err.message);
         })
         .finally(() => {
-          console.log("Termino de handleUpload");
         });
     });
   }

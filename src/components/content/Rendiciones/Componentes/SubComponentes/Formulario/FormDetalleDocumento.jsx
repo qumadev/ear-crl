@@ -275,7 +275,6 @@ function FormDetalleDocumento({
 
 	const handleHide = () => {
 		if (editing) {
-			console.log("")
 		} else {
 			// setDetDoc(null)
 		}

@@ -290,7 +290,6 @@ export function FormDetalle({
         //setCups(listCups);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
         setCups(listCups);
