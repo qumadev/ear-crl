@@ -133,31 +133,49 @@ export default function FormDT({ editable, totalRedondeado,
     });
   };
 
-  /*
-  const enviarAprobacionConDiferenciaMontos = () => {
-    EnviarSolicitud();
-  };
-  */
-
   const confirmarDiferenciaMontos = () => {
     let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - montoRendido;
-    let mensaje = diferencia < 0 ?
-      `Monto Solicitado : ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}
-    Monto Rendido : ${montoRendido}
-    ¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con un reembolso de ${(-1) * diferencia} ?`
-      : diferencia > 0 ? `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID} con una devolucion de ${diferencia}?`
-        : `¿Estás seguro de Enviar a aprobar la rendición #${rendicion.ID}`
+    diferencia = parseFloat(diferencia.toFixed(2)); // Redondear a dos decimales
+    let mensaje;
+
+    if (diferencia < 0) {
+      mensaje = `
+        <div style="line-height: 1.6; font-size: 14px;">
+          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
+          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con un <strong>reembolso</strong> de ${(-1) * diferencia}?</p>
+        </div>
+      `;
+    } else if (diferencia > 0) {
+      mensaje = `
+        <div style="line-height: 1.6; font-size: 14px;">
+          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
+          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con una <strong>devolución</strong> de ${diferencia}?</p>
+        </div>
+      `;
+    } else {
+      mensaje = `
+        <div style="line-height: 1.6; font-size: 14px;">
+          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
+          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong>?</p>
+        </div>
+      `;
+    }
+
     confirmDialog({
-      message: mensaje,
+      message: <div dangerouslySetInnerHTML={{ __html: mensaje }} />,
       header: "Confirmación Rendición",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
-      acceptLabel: "Si",
-      rejectLabel: "No",
+      acceptLabel: "Confirmar",
+      rejectLabel: "Cancelar",
       accept: accept,
-      //reject,
+      // reject,
     });
   };
+
 
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -216,7 +234,7 @@ export default function FormDT({ editable, totalRedondeado,
                   //ValidacionEnvio();
                   e.preventDefault();
                   confirmarDiferenciaMontos()
-                  //showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}`);
+                  //showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${ rendicion.SOLICITUDRD.STR_TOTALSOLICITADO } `);
                 }
                 */
               }}
@@ -322,7 +340,7 @@ export default function FormDT({ editable, totalRedondeado,
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
         } else {
-          showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum}`);
+          showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum} `);
         }
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones");
@@ -359,7 +377,7 @@ export default function FormDT({ editable, totalRedondeado,
         showSuccess(`Se revertio la aprobacion de la rendición`);
         // } else {
         //   showSuccess(
-        //     `Se migró a a SAP la rendición con número ${body.DocNum}`
+        //     `Se migró a a SAP la rendición con número ${ body.DocNum } `
         //   );
         // }
         await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -416,10 +434,10 @@ export default function FormDT({ editable, totalRedondeado,
       if (response.status === 200) {
         return response.data;
       } else {
-        console.error(`Error al obtener el documento ${id}:`, response.statusText);
+        console.error(`Error al obtener el documento ${id}: `, response.statusText);
       }
     } catch (error) {
-      console.error(`Error al obtener el documento ${id}:`, error);
+      console.error(`Error al obtener el documento ${id}: `, error);
     }
   }
 
@@ -512,7 +530,7 @@ export default function FormDT({ editable, totalRedondeado,
           }
         } else {
           showError(
-            `El archivo ${file.name} no tiene la extensión permitida (.xlsx).`
+            `El archivo ${file.name} no tiene la extensión permitida(.xlsx).`
           );
           setExcel(null);
           fileUploadRef.current.clear();
@@ -668,7 +686,7 @@ export default function FormDT({ editable, totalRedondeado,
             }}
           ></i>
           <div className={`flex ${responsiveSizeMobile ? `text-xl` : `text-2xl`
-            } align-items-center`}>
+            } align - items - center`}>
             Rendición info
           </div>
         </div>
@@ -699,7 +717,7 @@ export default function FormDT({ editable, totalRedondeado,
             severity="success"
             onClick={() => {
               navigate(ruta +
-                `/rendiciones/${rendicion?.ID}/documentos/agregar`);
+                `/ rendiciones / ${rendicion?.ID} /documentos/agregar`);
             }}
 
 
@@ -760,7 +778,7 @@ export default function FormDT({ editable, totalRedondeado,
             />
           </div>
         </div>
-        
+
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
@@ -809,7 +827,7 @@ export default function FormDT({ editable, totalRedondeado,
               disabled
               locale='es'
               showIcon />
-            {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${new Date(fecBodyTemplate).toLocaleDateString('es-ES')}` : ''}</p> */}
+            {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${ new Date(fecBodyTemplate).toLocaleDateString('es-ES') } ` : ''}</p> */}
           </div>
         </div>
         <div className="col-12 md:col-5 lg:col-3">
@@ -818,7 +836,7 @@ export default function FormDT({ editable, totalRedondeado,
               Total Monto Rendido:
             </label>
             <InputText
-              value={`${rendicion?.STR_MONEDA?.name || ''} ${rendicion?.STR_TOTALRENDIDO.toFixed(2) || '0'}`}
+              value={`${rendicion?.STR_MONEDA?.name || ''} ${rendicion?.STR_TOTALRENDIDO.toFixed(2) || '0'} `}
               placeholder="Monto Rendido"
               disabled
             />
