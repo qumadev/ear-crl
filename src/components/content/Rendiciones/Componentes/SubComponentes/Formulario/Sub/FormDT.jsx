@@ -748,18 +748,6 @@ export default function FormDT({ editable, totalRedondeado,
 
       <Divider />
       <div className="grid mt-3">
-        {/* <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Código:
-            </label>
-            <InputText
-              value={rendicion?.ID}
-              placeholder="codigo"
-              disabled
-            />
-          </div>
-        </div> */}
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
@@ -848,59 +836,10 @@ export default function FormDT({ editable, totalRedondeado,
               showIcon />
           </div>
         </div>
-        {/* <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              CargaDocs:
-            </label>
-            <InputText
-              // value={rendicion?.}
-              placeholder="CargaDocs"
-              disabled
-            />
-          </div>
-        </div> */}
-        {/* <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              DocEntry:
-            </label>
-            <InputText
-              value={rendicion?.STR_DOCENTRY}
-              placeholder="DocEntry"
-              disabled
-            />
-          </div>
-        </div> */}
       </div>
       <Divider />
 
       <div className="card flex flex-wrap  gap-3 mx-3">
-
-        {/* Botones por rol */}
-        {/*usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 ? (
-            <Button
-              label="Revertir Aprobación"
-              size="large"
-              style={{ backgroundColor: "#FFA500" }}
-              onClick={() => confirmReversion(rendicion?.ID)}
-            // disabled={
-            //   !estadosEditables.includes(solicitudRD.STR_ESTADO) | loading
-            // }
-            />
-          )*/}
-
-        {/*usuario.rol?.id == "3" ? (
-              <Button
-                label="Autorizar Edicion"
-                severity="danger"
-                size="large"
-                onClick={() => confirmAutorizarReversion(rendicion?.ID)}
-              // disabled={
-              //   (solicitudRD.STR_ESTADO > 3) | (solicitudRD.STR_ESTADO == 1)
-              // }
-              />
-            ) : ""*/}
       </div>
       <TableDT
         rendicion={rendicion}
@@ -910,7 +849,6 @@ export default function FormDT({ editable, totalRedondeado,
       </TableDT>
       <Divider />
       {
-        //  usuario.rol?.id == "1" && rendicion?.STR_ESTADO_INFO.id === "9" ? (
 
         <AnexPDF
           rendicion={rendicion}
@@ -919,7 +857,6 @@ export default function FormDT({ editable, totalRedondeado,
           showError={showError}
         >
         </AnexPDF>
-        // ) : null
       }
       <Divider />
 
