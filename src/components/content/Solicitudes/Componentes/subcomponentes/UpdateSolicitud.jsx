@@ -26,7 +26,6 @@ function UpdateSolicitud() {
             var response = await createSolicitud(solicitudRD);
         } catch (error) {
             showError(error.Message);
-            console.log(error.Message);
         }
     }
     const [tipos, setTipos] = useState(null);
@@ -101,8 +100,6 @@ function UpdateSolicitud() {
     });
 
     const showSolicitud = () => {
-        console.log(solicitud)
-        console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
     }
 
     return (

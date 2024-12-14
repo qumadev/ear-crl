@@ -17,27 +17,11 @@ export default function Filtrado({
   setLocalFiltrado
 }) {
   const { usuario } = useContext(AppContext);
-  //const esSolicitudes = location.pathname.includes("solicitudes");
-  // Options para los DropDown0
   const [estadosTemp, setEstadosTemp] = useState([]);
   const [empleados, setEmpleados] = useState([]);
 
   const esModuloSolicitudes = location.pathname.includes("solicitudes")
   const esModuloRendiciones = location.pathname.includes("rendiciones")
-  /*
-  async function obtenerEstadosLocal() {
-    await obtenerEstados(esSolicitudes ? "<8" : ">7")
-      .then((response) => {
-        setEstados(response.data.Result);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      })
-      .finally(() => {
-        console.log("Finalizo de obtener Estados");
-      });
-  }
-*/
 
   const handleInputChange = (field, value) => {
     setLocalFiltrado((prev) => ({ ...prev, [field]: value }));
@@ -64,21 +48,6 @@ export default function Filtrado({
   };
 
   async function obtenerEmpleadosLocal() {
-    /*
-    await obtenerEmpleados()
-      .then((response) => {
-        const listEmpleados = response.data.Result.map((e) => ({
-          id: e.empID,
-          name: e.Nombres,
-        }));
-        setEmpleados(listEmpleados);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      })
-      .finally(() => {
-        console.log("Termino de obtener Empleados");
-      });*/
   }
 
   useEffect(() => {
@@ -88,16 +57,6 @@ export default function Filtrado({
     }
   }, []);
 
-  function changeEstadoFilt(value) {
-    setFiltrado((prevFiltrado) => ({
-      ...prevFiltrado,
-      estado: value,
-    }));
-  }
-
-  // UseStates para el funcionamiento
-
-  //const [rangoFec, setRangoFec] = useState(null);
 
   return (
     <>

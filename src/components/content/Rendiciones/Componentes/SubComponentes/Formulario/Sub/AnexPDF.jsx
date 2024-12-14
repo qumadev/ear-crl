@@ -25,7 +25,6 @@ export default function AnexPDF({
       const fetchRendicion = async () => {
         try {
           const response = await obtenerRendicion(rendicion.ID);
-          console.log("Respuesta de obtenerRendicion:", response);
           if (response.status === 200) {
             setRendicionData(response.data);
           } else {
@@ -49,14 +48,10 @@ export default function AnexPDF({
     if (rendicionData) {
       const fetchArchivos = async () => {
         try {
-          console.log("respuesta de API: ", rendicion);
-          console.log("numero rendicion: ", rendicion.STR_NRRENDICION);
           const response = await obtenerArchivosRendicion(rendicion.STR_NRRENDICION);
-          console.log(response.data);
           if (response.status === 200) {
             // Suponiendo que response.data.Result es una lista de archivos
             const files = response.data.Result.map(file => ({ id: file.id, name: file.name, ruta: file.ruta }));
-            console.log("archivos Files: ", files)
             setPdfFiles(files);
           } else {
             showError("Error al obtener los archivos");

@@ -111,7 +111,6 @@ function DetalleSL({
   };
 
   const editDetalle = (detalle) => {
-    console.log(detalle);
     setDetalle({ ...detalle, cup: detalle.cup });
     setProductDialog(true);
   };
@@ -207,22 +206,12 @@ function DetalleSL({
     if (solicitudRD.tipoear) {
       await obtenerItems(solicitudRD.tipoear.id, usuario.fax)
         .then((response) => {
-          console.log(response.data.Result);
           let data = response.data.Result;
-          /*
-          const listProducts = response.data.Result.map((e) => ({
-            id: e.ItemCode,
-            name: e.ItemName,
-            posFinanciera: e.posFinanciera,
-          }));
-          */
           setItems(data);
         })
         .catch((err) => {
-          console.log(err.message);
         })
         .finally(() => {
-          console.log("Se terminó de cargar los Items");
         });
     }
   }
@@ -305,7 +294,6 @@ function DetalleSL({
   }
 
   const confirm1 = (value) => {
-    //console.log("fonr");
     confirmDialog({
       message: `Al cambiar al tipo de Rendición Orden de Viaje se borrará los detalles agregados, ¿Estás seguro de continuar?`,
       header: "Eliminar detalle",
@@ -336,30 +324,19 @@ function DetalleSL({
   };
 
   async function obtenerCentroCostoLocal() {
-    console.log("obteniendo centro de costo");
     await obtenerCentroCosto(solicitudRD.empldAsig.id)
       .then((response) => {
-        console.log(response.data.Result);
         const listCentCst = response.data.Result.map((e) => ({
           name: e.CostCenter,
         }));
         setCentCostos(listCentCst);
-        // setDetalle((prevDetalle) => ({
-        //   ...prevDetalle,
-        //   centCostos: listCentCst,
-        //   CentroCosto: listCentCst[0].name,
-        // }));
-        // console.log(listCentCst);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
-        console.log("Se terminó de traer el centro de costo");
       });
   }
 
-  //  Template de EmptyProduct
   let emptyProduct = {
     articulo: {
       id: null,
@@ -403,88 +380,10 @@ function DetalleSL({
           footerStyle={{ textAlign: "right" }}
         />
         <Column footer={totalColumns} />
-        {/* 
-        {(solicitudRD.estado < 6) & (solicitudRD.tipoear?.id != "ORV") && (
-          <Column
-            footer="Presupuesto Restante:"
-            colSpan={1}
-            footerStyle={{ textAliegn: "right" }}
-            style={
-              presupuesto == 0 ? { color: "#FF0B0B" } : { color: "#4CAF50" }
-            }
-          />
-        )}
-
-        {solicitudRD.estado < 6 && (
-          <Column
-            footer={Math.abs(parseFloat(presupuesto)).toFixed(3)}
-            style={
-              presupuesto == 0 ? { color: "#FF0B0B" } : { color: "#4CAF50" }
-            }
-          />
-        )}
-         */}
       </Row>
     </ColumnGroup>
   );
-  /*
-
-  useEffect(() => {
-    if (detalles.length > 0) {
-      console.log("validaDetallesPresupuestar");
-      validaDetallesPresupuestar();
-    }
-  }, [detalle]);
-
-  async function validaDetallesPresupuestar() {
-    let _detalles = detalles;
-    console.log(_detalles);
-    try {
-      const updatedDetalles = await Promise.all(
-        detalles.map(async (detalle) => {
-          const response = await consultarPresupuesto(
-            detalle.centCostos[0].name,
-            detalle.posFinanciera.id,
-            new Date().getFullYear(),
-            -1 * detalle.precioTotal
-          );
-
-          if (response.data.CodRespuesta === "00") {
-            return {
-              ...detalle,
-              presupuesto: response.data.Result[0].name,
-            };
-          } else {
-            return {
-              ...detalle,
-              presupuesto: 0.0,
-            };
-          }
-        })
-      );
-
-      setDetalles(updatedDetalles);
-      // for (let i = 0; i < _detalles.length; i++) {
-      //   let response = await consultarPresupuesto(
-      //     _detalles[i].centCostos[0].name,
-      //     _detalles[i].posFinanciera.id,
-      //     new Date().getFullYear(),
-      //     -1 * _detalles[i].precioTotal
-      //   );
-      //   console.log(response);
-      //   if (response.data.CodRespuesta == "00") {
-      //     _detalles[i].presupuesto = response.data.Result[0].name;
-      //   } else {
-      //     _detalles[i].presupuesto = 0.0;
-      //   }
-      // }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      //setDetalles(_detalles);
-    }
-  }
-*/
+  
   async function consultaPresupuestoLocal(ceco, posf) {
     let totalDet = 0;
 
@@ -509,10 +408,8 @@ function DetalleSL({
         }
       } else {
         showError("Se tuvo un error interno al obtener presupuesto");
-        console.log(response.data.Message);
       }
     } catch (error) {
-      console.log(error);
     } finally {
     }
   }
@@ -520,10 +417,6 @@ function DetalleSL({
   useEffect(() => {
     obtenerItemsLocal();
   }, [solicitudRD.tipoear]);
-
-  // useEffect(() => {
-  //   obtenerTipoViaticosLocal();
-  // }, []);
 
   return (
     <>

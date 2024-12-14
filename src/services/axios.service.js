@@ -124,7 +124,6 @@ export const obtenerDocumento = async (id) => {
       return status < 500;
     },
   });
-  console.log("RES DOC: ", respuesta);
   return respuesta;
 };
 
@@ -134,7 +133,6 @@ export const obtenerRendicion = async (id) => {
       return status < 500;
     },
   });
-  console.log("REES: ", respuesta);
   return respuesta;
 };
 
@@ -438,8 +436,6 @@ export const enviarAprobRendicion = (
   areaAprobador,
   montoDiferencia
 ) => {
-  // console.log("body: ", id)
-  // console.log("body: ", id, idSolicitud, usuarioId, estado, areaAprobador)
   return API.post(
     `rendicion/aprobacion/${id}?idSolicitud=${idSolicitud}&usuarioId=${usuarioId}&estado=${estado}&areaAprobador=${areaAprobador}&montoDiferencia=${montoDiferencia}`,
     {
@@ -555,13 +551,11 @@ export const downloadAdjuntoExcel = (IdDoc) => {
 
 // Funcion para obtener los archivos AnexPDF
 export const obtenerArchivosRendicion = async (id) => {
-  console.log("ID:", id);
   const response = await API.get(`rendicion/archivos/${id}`, {
     validateStatus: function (status) {
       return status < 500;
     },
   });
-  console.log("RES ARCHIVOS: ", response);
   return response;
 }
 
@@ -576,7 +570,6 @@ export const eliminarArchivosRendicion = async (id) => {
 
 // Funcion para descargar los archivos en la rendicion
 export const descargarArchivosRendicion = async (filePath) => {
-  console.log("Descargando archivo desde:", filePath);
 
   return API.get('rendicion/download-file', {
     params: { filePath },

@@ -194,7 +194,6 @@ function DetalleRD({
     if (response.data.CodRespuesta != "99") {
       setDetalleSolicitud(response.data.Result);
     } else {
-      console.log(response.data.DescRespuesta);
       showError(response.data.DescRespuesta);
     }
   }

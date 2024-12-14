@@ -28,7 +28,6 @@ function Direccion({ solicitudRD, setSolicitudRD, estadosEditables, usuario }) {
       (search == null) | (search == "") ? "LIMA" : search
     )
       .then((response) => {
-        console.log(response.data.Result);
         const listaResults = response.data.Result.map((element) => ({
           Ubigeo: element.Ubigeo,
           Departamento: element.Departamento,
@@ -37,11 +36,9 @@ function Direccion({ solicitudRD, setSolicitudRD, estadosEditables, usuario }) {
         }));
 
         setProducts(listaResults);
-        console.log(listaResults);
       })
       .catch((err) => console.log(err.message))
       .finally(() => {
-        console.log("Termino de traer distritos");
       });
   }
 
@@ -124,7 +121,6 @@ function Direccion({ solicitudRD, setSolicitudRD, estadosEditables, usuario }) {
                   solicitudRD.ubigeo == null ? "" : solicitudRD.ubigeo.Distrito
                 }
                 onSelectionChange={(e) => CapturaUbigeo(e.value)}
-                //onColumnResizerClick={(e) => console.log("click")}
                 onRowClick={(e) => setVisible(false)}
               >
                 <Column field="Departamento" header="Departamento"></Column>

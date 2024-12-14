@@ -209,12 +209,10 @@ function FormDetalle({
 
     if (detalle.ID != null) {
       await eliminarDetalleSolicitud(detalle.ID).catch((err) => {
-        console.log(err.message);
         showError("No se pudo eliminar detalle");
       });
     }
 
-    //showSuccess("Concepto Eliminiado");
     setLoading(false);
   };
 
@@ -300,7 +298,6 @@ function FormDetalle({
   );
 
   const changeItemFrm = async (item) => {
-    console.log(item);
     setDetalle((prevDetalle) => ({
       ...prevDetalle,
       articulo: item,
@@ -312,7 +309,6 @@ function FormDetalle({
     }));
 
     if (detalle.ceco != null) {
-      // console.log(detalle.centCostos);
       obtieneListadoCups(item);
     }
 
@@ -320,7 +316,6 @@ function FormDetalle({
       .then((response) => {
         const listPrecio = response.data.Result;
         if (listPrecio.length < 1) {
-          console.log("No se encontró precio por defecto con este articulo");
         } else {
           setDetalle((prevDetalle) => ({
             ...prevDetalle,
@@ -330,10 +325,8 @@ function FormDetalle({
         }
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
-        console.log("Termino de obtener Precio");
       });
   };
 
@@ -349,7 +342,6 @@ function FormDetalle({
     )
       .then((response) => {
         listCups = response.data.Result;
-        console.log(listCups);
 
         // De un inicio dará NULL
         // si en caso es NULL o diferente al que tiene ahorita hará la busqueda con
@@ -363,9 +355,7 @@ function FormDetalle({
         ) {
           // Busca el like de codArticulo y cup.name
 
-          console.log(data);
           let _listCups = listCups.filter((e) => e.U_DESCRIPTION == data.name);
-          //console.log(listCups[0]);
           if (_listCups.length > 0) {
             setDetalle((prevDetalle) => ({
               ...prevDetalle,
@@ -380,22 +370,11 @@ function FormDetalle({
             }));
           }
         }
-        /* else if (detalle.cup == null) {
-          setDetalle((prevDetalle) => ({
-            ...prevDetalle,
-            cup: null,
-            //ItemCup: null,
-          }));
-        }*/
-        //setCups(listCups);
-        console.log(cups);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
         setCups(listCups);
-        console.log("Se terminó de traer el listado CUP");
       });
   }
 
@@ -575,7 +554,6 @@ function FormDetalle({
           <div className="card flex">
             <Dropdown
               value={detalle.posFinanciera}
-              onChange={(e) => console.log(e)}
               options={[detalle.posFinanciera]}
               optionLabel="name"
               placeholder="Posición Financiera"

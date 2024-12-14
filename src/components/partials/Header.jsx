@@ -70,7 +70,6 @@ export function Header({
       showError("Error en servidor");
       console.error(err.message);
     } finally {
-      console.log("Terminó de obtener información del usuario");
     }
   }
   //obtnDataUsuario();

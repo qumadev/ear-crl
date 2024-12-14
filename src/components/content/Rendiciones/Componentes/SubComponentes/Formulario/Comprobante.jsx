@@ -39,13 +39,7 @@ function Comprobante({
   async function handleConsultSunat() {
     try {
       setLoading(true);
-      console.log(
-        ruc,
-        tipo.id,
-        serie,
-        correlativo,
-        fechaDocumento.toISOString().split("T")[0]
-      );
+      
       if (
         ruc != null &&
         tipo != null &&

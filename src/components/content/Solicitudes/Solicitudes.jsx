@@ -106,7 +106,6 @@ function Solicitudes({
         usuario.empId,
         usuario.SubGerencia
       );
-      console.log(response.data.Result[0].AprobacionFinalizada);
       if (response.status == 200) {
         if (response.data.Result[0].AprobacionFinalizada == 1) {
           showSuccess(
@@ -121,12 +120,9 @@ function Solicitudes({
         //listarSolicitudes();
       } else {
         showError(response.data);
-        console.log(response.data);
       }
     } catch (error) {
-      console.log(error);
       showError(error.response.data.Message);
-      console.log(error.response.data.Message);
     } finally {
       setLoadingBtn(false);
       setLoading(false);
@@ -143,17 +139,14 @@ function Solicitudes({
         comentarios,
         usuario.SubGerencia
       );
-      console.log(response);
       if (response.status == 200) {
         showInfo("Se rechazó la solicitud");
         await new Promise((resolve) => setTimeout(resolve, 3000));
         listarSolicitudes();
       } else {
-        console.log(response);
         showError(response.data?.Message);
       }
     } catch (error) {
-      console.log(error.Message);
     } finally {
       setLoading(false);
     }
@@ -168,16 +161,11 @@ function Solicitudes({
         showSuccess(
           "Se realizó la migración exitosamente con número " + data.DocNum
         );
-        console.log(
-          "Se realizó la migración exitosamente con número " + data.DocNum
-        );
       } else {
         showError(response.data.Message);
-        console.log(response.data);
       }
     } catch (error) {
       showError(error.response.data.Message);
-      console.log(error);
     } finally {
       listarSolicitudes();
       setLoading(false);
@@ -222,16 +210,13 @@ function Solicitudes({
     setLoading(true);
     try {
       let response = await obtenerSolicitud(id);
-      console.log("respuesta de obtenersolicitud: ", response);
 
       if (response && response.status < 300) {
-        console.log("Datos de la solicitud: ", response.data);
         return response.data.Result[0]; // Asumiendo que `data.Result` es el formato esperado
       } else {
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response ? error.response.data.Message : error.message);
       showError(error.response ? error.response.data.Message : "Error interno");
     }
     return null;
@@ -273,7 +258,6 @@ function Solicitudes({
         showError(response.Message);
       }
     } catch (error) {
-      console.log("aqui 2"); // AGARRA ESTE ERROR
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
       setLoading(false);
@@ -314,7 +298,6 @@ function Solicitudes({
         showError(response.Message);
       }
     } catch (error) {
-      console.log("aqui 2"); // AGARRA ESTE ERROR
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
       setLoading(false);
@@ -382,20 +365,6 @@ function Solicitudes({
           rechazarAceptacion(rowData)
         }
       }] : []),
-      // {
-      //   label: "ID",
-      //   icon: "pi pi-info-circle",
-      //   command: async () => {
-      //     // Aquí llamamos a obtenerDataSolicitud y mostramos los datos en la consola
-      //     const solicitudData = await obtenerDataSolicitud(rowData.ID);
-      //     if (solicitudData) {
-      //       console.log("Datos de la solicitud:", solicitudData);
-      //       showInfo(`Datos de la solicitud con ID: ${rowData.ID} obtenidos`);
-      //     } else {
-      //       showError("Error al obtener los datos de la solicitud");
-      //     }
-      //   },
-      // },
     ];
 
     if (
@@ -424,7 +393,6 @@ function Solicitudes({
     // Enviar Solicitud de Aprobación
 
     const confirm1 = (data) => {
-      //console.log("fonr");
       confirmDialog({
         message: `¿Estás seguro de Enviar a aprobar la solicitud de rendición?`,
         header: "Confirmación solicitud",
@@ -451,7 +419,6 @@ function Solicitudes({
             acumulador[clave].STR_TOTAL += precioTotal;
           } else {
             // Si no existe, crear una nueva entrada
-            console.log(data);
             let fecha = data.STR_FECHAREGIS.split("/");
             acumulador[clave] = {
               STR_POSFIN: posFinanciera.name,
@@ -473,7 +440,6 @@ function Solicitudes({
       try {
         if (responsValida.status != 200) {
           showError(responsValida.data.Message);
-          console.log(responsValida.data.Message);
           await new Promise((resolve) => setTimeout(resolve, 3000));
           //navigate(ruta + "/solicitudes");
         } else {
@@ -499,7 +465,6 @@ function Solicitudes({
             listarSolicitudes();
           } else {
             showError(response.data.Message);
-            console.log(response.data.Message);
           }
         }
       } catch (error) {
@@ -507,42 +472,6 @@ function Solicitudes({
       } finally {
         setLoading(false);
       }
-    };
-
-    /******************************************************* */
-
-    // var items2 = [
-    //   {
-    //     label: "export",
-    //     onClick: () => {
-    //       console.log("exported");
-    //     },
-    //   },
-    // ];
-
-    let items3 = [
-      {
-        label: "export",
-        onClick: () => {
-          console.log("exported");
-        },
-      },
-      {
-        label: "export",
-        onClick: () => {
-          console.log("exported");
-        },
-      },
-      {
-        label: "export",
-        onClick: () => {
-          console.log("exported");
-        },
-      },
-    ];
-
-    const handleMainButtonClick = () => {
-      console.log("Main button clicked");
     };
 
     return (
@@ -567,50 +496,6 @@ function Solicitudes({
       </div>
     );
   };
-
-  // async function obtenerEstadoLocal() {
-  //   await obtenerEstados("<8")
-  //     .then((response) => {
-  //       console.log(response.data.Result);
-
-  //       setRepresentatives(
-  //         response.data.Result.map((estado) => ({
-  //           id: estado.Id,
-  //           name: estado.Nombre,
-  //         }))
-  //       );
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  //     .finally(() => {
-  //       console.log("Termino de obtener Estados");
-  //     });
-  // }
-  /* 
-  <SplitButton
-          label="Ver"
-          onClick={() => {
-            navigate(
-              ruta +
-                `/solicitudes/editar/${
-                  rowData.CREATE == "PWB" ? rowData.ID : rowData.STR_DOCENTRY
-                }`,
-              {
-                state: {
-                  create: rowData.CREATE == "PWB" ? "PWB" : "SAP",
-                },
-              }
-            );
-          }}
-          icon="pi pi-plus"
-          model={items}
-          rounded
-          loading={loadingBtn}
-        >
-          {" "}
-        </SplitButton> 
-  */
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);
@@ -671,9 +556,6 @@ function Solicitudes({
       fechaFin = obtieneFecha(filtrado.rangoFecha[1]);
     }
 
-    console.log("Número de Solicitud:", numeroSolicitud); // Log para verificar el valor del número de solicitud
-    console.log("Estado seleccionado:", estado); // Log para verificar el valor del estado
-
     try {
       const response = await listarSolicitud(
         usuario.sapID,
@@ -691,22 +573,16 @@ function Solicitudes({
         usuario.branch
       );
 
-      console.log("Datos completos de la API:", response.data);
 
       setSolicitudes(response.data.Result);
     } catch (err) {
       console.error("Error al obtener solicitudes:", err.message);
     } finally {
-      console.log("Se terminó de traer solicitud");
       setLoading(false);
     }
   }
 
   const statusBodyTemplate = (rowData) => {
-    //console.log(typeof rowData.STR_ESTADO_INFO)
-    // if((usuario.rol?.id === "2" || usuario.rol?.id === "3") && rowData.STR_ESTADO_INFO === "Borrador"){
-    //   return null;
-    // }
     return (
       <Tag
         className="font-bold"
@@ -745,7 +621,6 @@ function Solicitudes({
   };
 
   useEffect(() => {
-    //obtenerEstadoLocal();
     if (usuario.sapID != null) {
       listarSolicitudes();
     }
@@ -766,14 +641,11 @@ function Solicitudes({
       <ConfirmDialog />
       <DataTable
         value={solicitudes.filter(rowData => {
-          // return !((usuario.rol.id !== 2 && usuario.rol.id !== 3) && rowData.STR_ESTADO_INFO === "Borrador");
-          // return ((usuario.rol.id != 2 && usuario.rol.id != 3) && rowData.STR_ESTADO_INFO === "Borrador");
           switch (usuario.rol?.id) {
             case "1": return true;
             case "2": return rowData.STR_ESTADO >= 2;
             case "3": return rowData.STR_ESTADO >= 3;
           }
-          // return rowData.STR_ESTADO_INFO === "Borrador" ? usuario.rol.id === 1 : true;
         })}
         sortMode="multiple"
         paginator
@@ -784,24 +656,12 @@ function Solicitudes({
         loading={loading}
         emptyMessage="No se encontraron Solicitudes"
         cellStyle={{ border: '5px solid #ddd' }}
-      // scrollable
-      // scrollHeight="400px"
       >
-        {/* {responsiveSizeMobile ? (
-          <></>
-        ) : (
-          <> */}
         <Column
           header="#"
           headerStyle={{ width: "3rem" }}
           body={(data, options) => options.rowIndex + 1}
         ></Column>
-        {/* <Column
-          field="ID"
-          header="Código"
-          style={{ width: "7rem" }}
-          className="font-bold"
-        ></Column> */}
         <Column
           field="STR_NRSOLICITUD"
           header="N° de la Solicitud"
@@ -818,10 +678,6 @@ function Solicitudes({
           style={{ minWidth: "10rem" }}
           body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
         ></Column>
-        {/* <Column
-          header="Rango de fecha del evento"
-          style={{ minWidth: "15rem" }}
-        ></Column> */}
         <Column
           header="Motivo"
           style={{ minWidth: "10rem" }}
@@ -877,7 +733,7 @@ function Solicitudes({
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
-          style={{ minWidth: "20rem" }}
+          style={{ minWidth: "12rem" }}
         // frozen={true}
         // alignFrozen="right"
         ></Column>

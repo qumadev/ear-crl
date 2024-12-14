@@ -30,11 +30,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
   const crearSolicitud = async () => {
     try {
       var response = await createSolicitud(solicitudRD);
-      console.log(response);
       Navigate(ruta + "/solicitudes");
     } catch (error) {
       showError(error.Message);
-      console.log(error.Message);
     }
   };
 
@@ -48,8 +46,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
       label: moneda.Code, // LO QUE SE MUESTRA EN EL DROPDOWN
       value: moneda.Code  // EL VALOR QUE SE GUARDARÁ EN solicitudRD.STR_MONEDA
     }));
-
-    console.log(monedasMapped);
 
     setMonedas(monedasMapped);
   }
@@ -76,7 +72,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             value={solicitudRD.STR_EMPLDREGI?.nombres + ' ' + solicitudRD.STR_EMPLDREGI.apellidos}
             disabled={true}
           />
-          {console.log("TIPOS: ", tipos)}
           <label htmlFor="">(*)Tipo:</label>
           <Dropdown
             value={solicitudRD.STR_TIPORENDICION}
@@ -96,8 +91,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }
           />
           <label htmlFor="">(*)Moneda:</label>
-          {console.log("Opciones de monedas en Dropdown:", monedas)}
-          {console.log("Valor de STR_MONEDA:", solicitudRD.STR_MONEDA)}
           <Dropdown
             value={solicitudRD.STR_MONEDA?.id}
             onChange={(e) => {
@@ -133,8 +126,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
           <Dropdown
             value={solicitudRD.STR_MOTIVORENDICION}
             onChange={(e) => {
-              //setSelectedMotivo(e.value);
-              //console.log(e.value);
               setSolicitudRD((prevState) => ({
                 ...prevState,
                 STR_MOTIVORENDICION: e.value,

@@ -64,55 +64,20 @@ export default function TokenCorreo() {
     </div>
   );
 
-  // async function EnviarTokenaBackend() {
-  //   try {
-  //     //console.log(id);
-  //     let response = await enviarTokenAback(id);
-  //     console.log(response);
-  //     if (response.status < 300) {
-  //       let body = response.data;
-  //       setToken(body);
-  //       setSuccess(true);
-  //       showSuccess("Se completo la aprobación correctamente");
-  //     } else {
-  //       console.log(response);
-  //       showError(response.Message);
-  //       setDescripErr(response.Message);
-  //       setSuccess(false);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.response.data.Message);
-  //     showError(error.response.data.Message);
-  //     setDescripErr(error.response.data.Message);
-  //   } finally {
-  //     setLoadingSkeleton(false);
-  //   }
-  // }
-
   const pageRefConf = useBeforeunload((event) => {
     if (loadingSkeleton == true) {
       event.preventDefault();
-      // alert(
-      //   "Se detecto una transacción pendiente. ¿Seguro que deseas cerrar ventana?"
-      // );
-      //event.preventDefault. = "fsf";
     }
   });
 
   useEffect(() => {
-    //if (loadingSkeleton) {
-    // Solo envía la solicitud si no se ha enviado antes
-    //setLoadingSkeleton(false);
-
     async function EnviarToken() {
       try {
-        //console.log(id);
 
         let response = esSolicitud
           ? await tokenSolicitud(id)
           : await tokenRendicion(id);
 
-        console.log(response);
         if (response.status < 300) {
           let body = response.data;
           setToken(body);
@@ -120,14 +85,12 @@ export default function TokenCorreo() {
           showSuccess("Se completo la aprobación correctamente");
           setLoadingSkeleton(false);
         } else {
-          console.log(response);
           showError(response.Message);
           setDescripErr(response.Message);
           setSuccess(false);
           setLoadingSkeleton(false);
         }
       } catch (error) {
-        console.log(error.response.data.Message);
         showError(error.response.data.Message);
         setDescripErr(error.response.data.Message);
         setLoadingSkeleton(false);

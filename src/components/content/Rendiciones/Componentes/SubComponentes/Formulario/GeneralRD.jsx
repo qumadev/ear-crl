@@ -100,7 +100,6 @@ function GeneralRD({
       //-------------------------------------------------
       // Busca en proveedores
       let _proveedor = proveedores.find((c) => c.LicTradNum == e);
-      console.log(_proveedor);
 
       if ((_proveedor != null) & (_proveedor.CardCode != "P99999999999")) {
         setDocumento((prevDocumento) => ({
@@ -141,7 +140,6 @@ function GeneralRD({
       }
     } catch (error) {
       showError("Ruc NO existente en SUNAT");
-      console.log(error);
     } finally {
       setLoading(false);
     }

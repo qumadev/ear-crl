@@ -87,10 +87,8 @@ export function BodyDocs() {
       let response = await obtenerRendicion(id);
 
       setRendicion(response.data.Result[0]);
-      console.log(response.data.Result);
     } catch (error) {
       showError(error.Message);
-      console.log(error.Message);
     } finally {
       if (!fresh) setLoading(false);
     }
@@ -108,14 +106,12 @@ export function BodyDocs() {
       for (const e of rendicion.documentos) {
         try {
           setLoadingBtn(true);
-          console.log(e);
           const response = await validacionDocumento(e.ID);
           if (response.status !== 200) {
             showError(response.Message);
             todosDocumentosValidos = false;
           }
         } catch (error) {
-          console.log(error.response.data.Message);
           showError(error.response.data.Message);
           todosDocumentosValidos = false;
         }
@@ -169,9 +165,6 @@ export function BodyDocs() {
         usuario.SubGerencia
       );
       if (response.status < 300) {
-        console.log(
-          "Rendición fue enviada a aprobación. Se le notificará por correo electronico cuando se tenga respuesta"
-        );
         showSuccess(
           "Rendición fue enviada a aprobación. Se le notificará por correo electronico cuando se tenga respuesta"
         );
@@ -179,7 +172,6 @@ export function BodyDocs() {
         navigate(ruta + "/rendiciones");
       } else {
         showError("Ocurrio error interno");
-        console.log(response.data.Message);
       }
     } catch (error) {
     } finally {
@@ -192,12 +184,8 @@ export function BodyDocs() {
     try {
       let response = await extraerPlantilla();
 
-      console.log(response);
-      console.log(typeof response.data); // Debería ser "string"
-      //let result = response.data.Result[0];
-      //console.log(result);
       const url = URL.createObjectURL(new Blob([response.data]));
-      console.log(url);
+
       // Crear un elemento <a> temporal
       const link = document.createElement("a");
       link.href = url;
@@ -211,7 +199,6 @@ export function BodyDocs() {
       document.body.removeChild(link);
     } catch (error) {
       showError("Error interno");
-      console.log(error);
     }
   }
 
@@ -219,12 +206,9 @@ export function BodyDocs() {
     setLoading(true);
     const allowedExtensions = ["xlsx"];
 
-    //console.log(event.files);
-
     try {
       event.files.forEach(async (file) => {
         const fileExtension = getFileExtension(file.name);
-        console.log(fileExtension);
         if (allowedExtensions.includes(fileExtension.toLowerCase())) {
           let response = await importarPlantilla(file, rendicion.ID);
 
@@ -252,7 +236,6 @@ export function BodyDocs() {
       });
     } catch (error) {
       showError("Error interno");
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -269,7 +252,6 @@ export function BodyDocs() {
   ) {
     try {
       setLoadingBtn(true);
-      console.log(proveedor, tipoDoc, serieDoc, corrDoc, fechaDoc);
       if (
         proveedor != null &&
         tipoDoc != null &&
@@ -289,7 +271,6 @@ export function BodyDocs() {
         };
         let response = await consultaComprobante(comprobanteReq);
         let compResponse = response.data.Result[0];
-        console.log(compResponse);
         if (
           (compResponse.data == null) |
           (compResponse.data?.estadoCp == "0")
@@ -331,7 +312,6 @@ export function BodyDocs() {
       }
       setLoading(false);
     } catch (error) {
-      console.log(error);
       showError("Error al consultar el comprobante");
       setLoading(false);
       // setDocumento((prevDocumento) => ({
@@ -352,7 +332,6 @@ export function BodyDocs() {
         showSuccess(`Se eliminó documento ${data.id} exitosamente`);
       });
     } catch (error) {
-      console.log(error);
       showError("Error interno");
     } finally {
       if (fresh) obtenerRendicionLocal();
@@ -372,7 +351,6 @@ export function BodyDocs() {
       );
       if (response.status < 300) {
         let body = response.data.Result[0];
-        console.log(response.data);
 
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
@@ -384,11 +362,9 @@ export function BodyDocs() {
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones");
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
       showError(error.response.data.Message);
     } finally {
       setLoading(false);
@@ -414,7 +390,6 @@ export function BodyDocs() {
         showError(response.data.Message);
       }
     } catch (error) {
-      console.log(error);
       showError("Error interno");
     } finally {
       setLoadingBtn(false);
@@ -566,83 +541,6 @@ export function BodyDocs() {
     });
   };
 
-  /*
-  async function aceptarAprobacionLocal(
-    idSoli,
-    idUsr,
-    area,
-    estado,
-    rendicionId,
-    areas
-  ) {
-    setLoadingBtn(true);
-    try {
-      let response = await aceptarAprobRendicion(
-        idSoli,
-        idUsr,
-        area,
-        estado,
-        rendicionId,
-        areas
-      );
-      if (response.status < 300) {
-        let body = response.data.Result[0];
-        console.log(response.data);
-
-        if (body.AprobacionFinalizada == 0) {
-          showSuccess(`Se aprobó la rendición`);
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-          navigate(ruta + "/rendiciones");
-        } else {
-          showSuccess(
-            `Se migró a a SAP la rendición con número ${body.DocNum}`
-          );
-        }
-      } else {
-        console.log(response.Message);
-        showError(response.Message);
-      }
-    } catch (error) {
-      console.log(error.response.data.Message);
-      showError("Error interno");
-    } finally {
-      setLoadingBtn(false);
-    }
-  }*/
-  /*
-  async function rechazarAprobacionLocal(
-    idSoli,
-    idUsr,
-    area,
-    estado,
-    rendicionId,
-    areas
-  ) {
-    setLoadingBtn(true);
-    try {
-      let response = await rechazarAprobRendicion(
-        idSoli,
-        idUsr,
-        area,
-        estado,
-        rendicionId,
-        areas
-      );
-      if (response.status == 200) {
-        showInfo("Se rechazó la rendición");
-        await new Promise((resolve) => setTimeout(resolve, 3000));
-        navigate(ruta + "/rendiciones");
-      } else {
-        showError(response.data.Message);
-      }
-    } catch (error) {
-      console.log(error.response.data.Message);
-      showError("Error interno");
-    } finally {
-      setLoadingBtn(false);
-    }
-  }
-*/
   const confirmAceptacion = () => {
     confirmDialog({
       message: `¿Estás seguro de aceptar la Rendición con código #${rendicion.ID}?`,
@@ -680,7 +578,6 @@ export function BodyDocs() {
   }
 
   function ValidaEditable() {
-    console.log(usuario.TipoUsuario, rendicion.STR_ESTADO_INFO.Id);
     if (
       usuario.TipoUsuario == 1 &&
       (rendicion.STR_ESTADO_INFO.Id == 9) | (rendicion.STR_ESTADO_INFO.Id == 8)

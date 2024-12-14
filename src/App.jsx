@@ -117,7 +117,6 @@ export default function MyApp() {
   async function obtenerConfLocal() {
     let response = await obtenerConf();
     if (response.data.CodRespuesta != "99") {
-      console.log(response.data.Result);
       setConfig(response.data.Result);
     } else {
       showError(response.data.DescRespuesta);

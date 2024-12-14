@@ -21,7 +21,6 @@ export function Aprobadores() {
 
       if (response.status < 300) {
         let body = response.data.Result;
-        console.log(body);
         let ord = 0;
         let aprobadores1 = body.map((e) => {
           ord += 1;
@@ -31,8 +30,6 @@ export function Aprobadores() {
           return e.aprobadores;
         });
         let _aprobadores = [].concat(...aprobadores1);
-        console.log(_aprobadores);
-        //console.log(aprobadores);
 
         // Description: 0 no es aprobador  / 1 ya aprobó
         setAprobadores(_aprobadores);
@@ -69,8 +66,6 @@ export function Aprobadores() {
   useEffect(() => {
     obtieneAprobadoreLocal();
   }, []);
-
-  console.log(id);
 
   return (
     <div>

@@ -9,7 +9,6 @@ function VerificarContraseña() {
     const [currentPassword, setCurrentPassword] = useState("");
     const navigate = useNavigate();
     const { usuario, ruta } = useContext(AppContext);
-    console.log(usuario.password)
 
     return(
         <>

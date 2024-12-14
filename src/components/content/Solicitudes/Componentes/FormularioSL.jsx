@@ -92,48 +92,23 @@ function FormularioSL() {
   });
 
   async function solicitarAprobacion() {
-    //setLoadingSkeleton(true);
     setLoading(true);
     try {
-      // const resultado = detalles.reduce((acc, detalle) => {
       let ID;
-      // if (solicitudRD.ID == null) {
-      //   // Si solicitudRD.id es nulo, llama a registrarSR y obtén el id
-      //   const responseRegistrarSR = await registraRDSolo();
-      //   //console.log(responseRegistrarSR);
-      //   ID = responseRegistrarSR;
-
-      //   if (ID == null) {
-      //     showError("Se produjo un error al registrar solicitud");
-      //     console.log("Se produjo un error al registrar solicitud");
-      //     setLoading(false);
-      //     return;
-      //   }
-
-      //   showSuccess(`Se creó la solicitud con código: ${id}`);
-      //   await new Promise((resolve) => setTimeout(resolve, 3000));
-      // } else {
-      //   ID = solicitudRD.ID;
-      // }
 
       // Guardar Borrador
       if (esModoRegistrar) {
         var res = await createSolicitud(solicitudRD);
         if (res.status < 300) {
           let body = res.data.Result[0];
-          console.log("reg: ", body.ID)
           showSuccess(`Se creó la solicitud exitosamente con id: ${body.ID}`);
           ID = body.ID;
-          // navigate(ruta + "/solicitudes")
-          //await new Promise((resolve) => setTimeout(resolve, 2000));
-          //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al crear la solicitud");
         }
       } else {
         ID = solicitudRD.ID;
       }
-      console.log("id: ", ID)
       let presupuestoSuficiente = true;
 
       let response = await enviarSolicitudAproba(ID, {
@@ -150,15 +125,11 @@ function FormularioSL() {
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/solicitudes");
       } else {
-        // showError(response.data.Message);
-        // console.log(response.data.Message);
       }
     } catch (error) {
       showError(error.Message);
-      console.log(error);
     } finally {
       setLoading(false);
-      // setLoadingSkeleton(false);
     }
   }
 
@@ -191,20 +162,16 @@ function FormularioSL() {
 
   const registrarSR = async () => {
     setLoading(true);
-    // let body = obtieneJsonAregistrar();
     try {
       if (id == null) {
         var response = await createSolicitud(solicitudRD);
 
         if (response.status < 300) {
           let body = response.data.Result[0];
-          console.log("reg: ", body.ID)
           showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
           navigate(ruta + "/solicitudes");
           setLoading(false);
           return body.ID;
-          //await new Promise((resolve) => setTimeout(resolve, 2000));
-          //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al crear la solicitud");
         }
@@ -212,25 +179,20 @@ function FormularioSL() {
       } else {
         var response = await actualizarSolicitud(solicitudRD);
         if (response.status < 300) {
-          //let body = response.data.Result[0];
 
           showSuccess(`Se actualizo exitosamente solicitud #${solicitudRD.ID}`);
           navigate(ruta + "/solicitudes");
-          //await new Promise((resolve) => setTimeout(resolve, 2000));
-          //navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al actualizar la solicitud");
         }
       }
     } catch (error) {
-      console.log(error.Message);
     } finally {
       setLoading(false);
     }
   };
 
   const confirm1 = () => {
-    //console.log("fonr");
     confirmDialog({
       message: `¿Estás seguro de Enviar a aprobar la solicitud de rendición?`,
       header: "Confirmación solicitud",
@@ -249,12 +211,9 @@ function FormularioSL() {
 
   async function obtieneAprobadoresLocal(id) {
     try {
-      //console.log("obtieneAprobadoresLocal");
       let response = await obtieneAprobadoresSL(id);
-      //console.log(response);
       if (response.status < 300) {
         let body = response.data.Result;
-        //console.log(body);
         let ord = 0;
         let aprobadores1 = body.map((e) => {
           ord += 1;
@@ -264,8 +223,6 @@ function FormularioSL() {
           return e.aprobadores;
         });
         let _aprobadores = [].concat(...aprobadores1);
-        //console.log(_aprobadores);
-        //console.log(aprobadores);
 
         // Description: 0 no es aprobador  / 1 ya aprobó
         setAprobadores(_aprobadores);
@@ -280,7 +237,6 @@ function FormularioSL() {
         // }
       }
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -350,7 +306,6 @@ function FormularioSL() {
         usuario.branch,
         solicitudRD.STR_ESTADO
       );
-      //console.log(response);
       if (response.status == 200) {
         showInfo("Se rechazó la solicitud");
         await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -360,7 +315,6 @@ function FormularioSL() {
       }
     } catch (error) {
       showError(error.Message);
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -426,7 +380,6 @@ function FormularioSL() {
         solicitudRD.STR_ESTADO
       );
       if (response.status == 200) {
-        //console.log(response.data.Result[0].AprobacionFinalizada);
         if (response.data.Result[0].AprobacionFinalizada ?? 0 == 1) {
           showSuccess(
             `Se acepto la solicitud, se logró realizar la migración a SAP con el número ${response.data.Result[0].DocNum}`
@@ -440,19 +393,15 @@ function FormularioSL() {
           );
 
           await new Promise((resolve) => setTimeout(resolve, 3000));
-
-          //console.log("fsafs");
         }
       } else {
         showError(
           "Se presentó error al realizar la migración: ",
           response.data
         );
-        console.log(response.data);
       }
     } catch (error) {
       showError(error.response?.data.Message);
-      console.log(error);
     } finally {
       setLoadingSkeleton(false);
       return navigate(ruta + "/solicitudes");
@@ -474,7 +423,6 @@ function FormularioSL() {
 
       if (response.status < 300) {
         let body = response.data.Result[0];
-        console.log(body);
         setSolicitudRD(body);
 
         if (body.STR_ESTADO > 1) {

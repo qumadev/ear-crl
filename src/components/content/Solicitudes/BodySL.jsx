@@ -14,8 +14,6 @@ export function BodySL({ responsiveSizeMobile }) {
   const [solicitudes, setSolicitudes] = useState([]);
   const { usuario, ruta } = useContext(AppContext);
 
-  console.log(ruta);
-
   const navigate = useNavigate();
 
   const esSolicitudes = location.pathname.includes("solicitudes");
@@ -42,22 +40,6 @@ export function BodySL({ responsiveSizeMobile }) {
     const estadosFiltrados = body.filter(
       (estado) => !['4', '8', '12', '13', '14', '15', '18', '19', '20'].includes(estado.id)
     );
-
-    console.log(estadosFiltrados);
-
-    /*
-    if (filtrado.estados == null && usuario.TipoUsuario == 2) {
-      setFiltrado((...prevFiltrado) => ({
-        ...prevFiltrado,
-        estados: [body[1], body[2]], // Pendiente y En Autorización SR (Autorizador)
-      }));
-    } else if (filtrado.estados == null && usuario.TipoUsuario == 1) {
-      setFiltrado((...prevFiltrado) => ({
-        ...prevFiltrado,
-        estados: [body[0], body[4], body[6]], // Borrador y En Autorización SR (Usuario)
-      }));
-    }
-    */
 
     // Actualizar el estado con los estados filtrados
     setEstados(estadosFiltrados);
@@ -101,15 +83,6 @@ export function BodySL({ responsiveSizeMobile }) {
 
   async function changeEstadosValida() {
     obtenerEstadosLocal();
-    // if (estados?.length > 0) {
-    //   if (filtrado.estados == null && usuario.TipoUsuario == 2) {
-    //     console.log("useEffect filtrado 2", estados);
-    //     setFiltrado((...prevFiltrado) => ({
-    //       ...prevFiltrado,
-    //       estados: [estados[1], estados[2]],
-    //     }));
-    //   }
-    // }
   }
 
   useEffect(() => {

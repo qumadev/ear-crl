@@ -47,39 +47,10 @@ function AnexoSL({
           showSuccess("Se cargó adjunto exitosamente");
         } catch (err) {
           showError("Error al subir adjunto");
-          console.log(err.message);
         } finally {
-          console.log("Termino de handleUpload");
         }
       }
       setLoadingSkeleton(false);
-      //fileUploadRef.current.setFiles(event.files);
-      /*
-      event.files.forEach(async (file) => {
-        //setLoadingSkeleton(true);
-        await uploadAdjunto(file)
-          .then((response) => {
-            //console.log(response.data);
-            if (response.data.codRespuesta == 0) {
-              listaFiles.push(response.data.filePath);
-              setSolicitudRD((prevSolicitudRD) => ({
-                ...prevSolicitudRD,
-                rutaAnexo: listaFiles,
-              }));
-            }
-            file.status = "Cargado";
-            //changeFileTitle();
-            showSuccess("Se cargó adjunto exitosamente");
-          })
-          .catch((err) => {
-            showError("Error al subir adjunto");
-            console.log(err.message);
-          })
-          .finally(() => {
-            console.log("Termino de handleUpload");
-          });
-      });*/
-      //setLoadingSkeleton(false);
     } finally {
       setLoadingSkeleton(false);
     }
@@ -92,7 +63,6 @@ function AnexoSL({
     adjuntos.forEach.forEach(async (file) => {
       await uploadAdjunto(file)
         .then((response) => {
-          //console.log(response.data);
           if (response.data.codRespuesta == 0) {
             listaFiles.push(response.data.filePath);
             setSolicitudRD((prevSolicitudRD) => ({
@@ -105,33 +75,26 @@ function AnexoSL({
           changeFileTitle();
         })
         .catch((err) => {
-          console.log(err.message);
           showError(err.message);
         })
         .finally(() => {
           setLoadingSkeleton(false);
-          console.log("Termino de handleUpload");
         });
     });
   }
 
   function eliminarAdjunto(nombreArchivo) {
-    console.log("eliminarAdjunto");
-    console.log(adjuntos);
     const nuevosAdjuntos = adjuntos.filter(
       (adjunto) => adjunto.name !== nombreArchivo
     );
-    console.log(nuevosAdjuntos);
     fileUploadRef.current.setFiles(nuevosAdjuntos);
     setAdjuntos(nuevosAdjuntos);
     // También puedes realizar lógica de eliminación en tu servidor aquí si es necesario
   }
 
   useEffect(() => {
-    console.log("useE");
     changeFileTitle();
     if (fileUploadRef.current != null) {
-      //console.log(fileUploadRef.current);
       fileUploadRef.current.setFiles(adjuntos);
       changeFileTitle();
     }
@@ -164,29 +127,16 @@ function AnexoSL({
     });
   }
 
-  /*
-  if (loadingSkeleton) {
-    return (
-      <div className="card flex justify-content-center">
-        <Toast ref={toast} />
-        <ProgressSpinner />
-      </div>
-    );
-  }
-*/
   return (
     <div className="card">
-      {/* <Toast ref={toast} /> */}
       {solicitando && solicitudRD.rutaAnexo < 1 && (
         <small className="p-error">Adjunto es requerido</small>
       )}
-      {/* {children} */}
       <FileUpload
         files={adjuntos}
         name="demo[]"
         ref={fileUploadRef}
         onDoubleClick={() => {
-          console.log("dobleclick");
           if (adjuntos.length > 0) {
             descargarAdjuntos();
           }
@@ -197,14 +147,12 @@ function AnexoSL({
         className="fileSL"
         multiple
         accept="*"
-        //maxFileSize={1000000}
         emptyTemplate={
           <p className="m-0">Arrastre y suelte archivos aquí para cargarlos.</p>
         }
         on
         onSelect={(e) => {
           setAdjuntos(e.files);
-          console.log(e.files);
         }}
         onRemove={(e) => {
           let adjs = adjuntos.filter((ad) => ad != e.file);

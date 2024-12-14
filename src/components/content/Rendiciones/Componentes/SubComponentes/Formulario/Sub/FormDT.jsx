@@ -51,38 +51,28 @@ export default function FormDT({ editable, totalRedondeado,
 
   const estadosEditablesUsr = [8, 9, 12];
 
-  console.log("TOT RED: ", totalRedondeado);
-
-  // const handleNuevoTotal = (total) => {
-  //   setTotalRedondeado(total);
-  // }
-
   async function obtenerData(fresh = false) {
     if (!fresh) setLoading(true);
     try {
       const response = await obtenerRendicion(id);
       const documentos = response.data.Result[0]?.documentos || [];
-      console.log("Documentos recibidos de la API:", documentos);
       const documentosFormateados = documentos.map(doc => ({
         ID: doc.ID,
         N_STRRENDICION: doc.STR_NRRENDICION,
         STR_TIPO_DOC: doc.STR_TIPO_DOC,
         STR_FECHA_DOC: doc.STR_FECHA_DOC,
         STR_TOTALDOC: doc.STR_TOTALDOC,
+        STR_TOTALDOC_CONVERTIDO: doc.STR_TOTALDOC_CONVERTIDO,
         STR_PROVEEDOR: doc.STR_PROVEEDOR,
         STR_COMENTARIOS: doc.STR_COMENTARIOS,
         STR_SERIE: doc.STR_SERIE_DOC,
         STR_MONEDA: doc.STR_MONEDA
       }))
 
-      console.log("Documentos formateados:", documentosFormateados);
-
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });
-      console.log("respuesta de APIREN: ", { ...response.data.Result[0], documentos: documentosFormateados });
 
     } catch (error) {
       showError(error.Message);
-      console.log(error.Message);
     }
     finally {
       if (!fresh) setLoading(false);
@@ -117,7 +107,6 @@ export default function FormDT({ editable, totalRedondeado,
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } else {
         showError("Ocurrio error interno");
-        console.log(response.data.Message);
       }
     } catch (error) {
     } finally {
@@ -183,14 +172,12 @@ export default function FormDT({ editable, totalRedondeado,
       for (const e of rendicion.documentos) {
         try {
           setLoadingBtn(true);
-          console.log(e);
           const response = await validacionDocumento(e.ID);
           if (response.status !== 200) {
             showError(response.Message);
             todosDocumentosValidos = false;
           }
         } catch (error) {
-          console.log(error.response.data.Message);
           showError(error.response.data.Message);
           todosDocumentosValidos = false;
         }
@@ -331,7 +318,6 @@ export default function FormDT({ editable, totalRedondeado,
       );
       if (response.status < 300) {
         let body = response.data.Result[0];
-        console.log(response.data);
 
         if (body.AprobacionFinalizada == 0) {
           showSuccess(`Se aprobó la rendición`);
@@ -341,11 +327,9 @@ export default function FormDT({ editable, totalRedondeado,
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones");
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
       showError(error.response.data.Message);
     } finally {
       setLoading(false);
@@ -380,11 +364,9 @@ export default function FormDT({ editable, totalRedondeado,
         // }
         await new Promise((resolve) => setTimeout(resolve, 3000));
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error);
       showError("Error interno");
     } finally {
       navigate(ruta + "/rendiciones");
@@ -420,10 +402,8 @@ export default function FormDT({ editable, totalRedondeado,
       let response = await obtenerRendicion(id);
 
       setRendicion(response.data.Result[0]);
-      console.log(response.data.Result);
     } catch (error) {
       showError(error.Message);
-      console.log(error.Message);
     } finally {
       if (!fresh) setLoading(false);
     }
@@ -434,7 +414,6 @@ export default function FormDT({ editable, totalRedondeado,
     try {
       const response = await obtenerDocumento(id);
       if (response.status === 200) {
-        console.log(`Detalles del documento ${id}:`, response.data);
         return response.data;
       } else {
         console.error(`Error al obtener el documento ${id}:`, response.statusText);
@@ -450,8 +429,6 @@ export default function FormDT({ editable, totalRedondeado,
     try {
       const response = await obtenerRendicion(id);
       const documentos = response.data.Result[0]?.documentos || [];
-      console.log("DOC OBTENIDOS: ", documentos);
-      console.log("RENDICION: ", response.data);
 
       setRendicion({ ...response.data.Result[0], documentos });
 
@@ -459,16 +436,11 @@ export default function FormDT({ editable, totalRedondeado,
       const detallesDocumentos = [];
       for (const doc of documentos) {
         const detalle = await fetchDocumentDetails(doc.ID);
-        console.log(`Detalle para documento ${doc.ID}:`, detalle); // Verifica el detalle
         if (detalle && detalle.Result && detalle.Result.length > 0) {
           const detalleDocumento = detalle.Result[0]; // Accede al primer resultado
           detallesDocumentos.push(detalleDocumento);
         }
       }
-
-      // const dataEarExport = documentos.map(doc => ({
-      //   N_EAR: doc.STR_NRRENDICION,
-      // }))
 
       // PREPARAR DATA PARA EL EXPORTAR EXCEL
       const dataForExport = detallesDocumentos.map(doc => ({
@@ -485,6 +457,7 @@ export default function FormDT({ editable, totalRedondeado,
         STR_FECHA_DOC: doc.STR_FECHA_DOC,
         STR_COMENTARIOS: doc.STR_COMENTARIOS,
         STR_TOTALDOC: doc.STR_TOTALDOC,
+        STR_TOTALDOC_CONVERTIDO: doc.STR_TOTALDOC_CONVERTIDO,
         detalles: doc.detalles.map(detalle => ({
           // ID: detalle.ID,
           COD_ARTICULO: detalle.STR_CODARTICULO,
@@ -506,16 +479,8 @@ export default function FormDT({ editable, totalRedondeado,
       setDataForExport(dataForExport);
       setDetalles(detallesDocumentos);
 
-      // console.log("N EAR: ", dataEarExport);
-      console.log("detallesDOC: ", detallesDocumentos);
-      console.log("Data para exportar:", dataForExport);
-
-      // Opcional: hacer algo con los detalles de los documentos obtenidos
-      console.log("Detalles de todos los documentos:", detallesDocumentos);
-
     } catch (error) {
       showError(error.Message);
-      console.log(error.Message);
     } finally {
       if (!fresh) setLoading(false);
     }
@@ -525,12 +490,9 @@ export default function FormDT({ editable, totalRedondeado,
     setLoading(true);
     const allowedExtensions = ["xlsx"];
 
-    //console.log(event.files);
-
     try {
       event.files.forEach(async (file) => {
         const fileExtension = getFileExtension(file.name);
-        console.log(fileExtension);
         if (allowedExtensions.includes(fileExtension.toLowerCase())) {
           let response = await importarPlantilla(file, rendicion.ID);
 
@@ -558,19 +520,10 @@ export default function FormDT({ editable, totalRedondeado,
       });
     } catch (error) {
       showError("Error interno");
-      console.log(error);
     } finally {
       setLoading(false);
     }
   };
-
-  // const validaEditable =
-  //   usuario.rol?.id == 1
-  //     ? !estadosEditablesUsr.includes(rendicion.STR_ESTADO)
-  //     : usuario.TipoUsuario == 3
-  //       ? !estadosEditablesCont.includes(rendicion.STR_ESTADO)
-  //       : true;
-
 
   const exportExcel = () => {
     const data = dataForExport.flatMap(doc =>
@@ -588,7 +541,8 @@ export default function FormDT({ editable, totalRedondeado,
         "Afectacion": doc.STR_AFECTACION.name,
         "Fecha de Creacion": doc.STR_FECHA_DOC,
         "Comentarios": doc.STR_COMENTARIOS,
-        "Importe Total": doc.STR_TOTALDOC,
+        "Importe Total Base": doc.STR_TOTALDOC,
+        "Import Total Convertido": doc.STR_TOTALDOC_CONVERTIDO,
         "": "", // Columna en blanco
         "Codigo de Articulo": detalle.COD_ARTICULO.ItemCode,
         "Concepto": detalle.CONCEPTO,
@@ -674,26 +628,19 @@ export default function FormDT({ editable, totalRedondeado,
 
   async function obtenerDataRendicion(idRendicion) {
     try {
-      console.log(`Obteniendo datos de la rendición con ID: ${idRendicion}`);
-
       const response = await obtenerRendicion(idRendicion);
 
       if (response.status === 200 && response.data.Result && response.data.Result.length > 0) {
         const rendicion = response.data.Result[0];
 
-        console.log('Datos de la rendición:', rendicion);
-
         const totalSTR_TOTALDOC = rendicion.documentos.reduce((sum, documento) => {
           return sum + (documento.STR_TOTALDOC || 0); // Asegurarse de que no sea undefined
         }, 0);
-
-        console.log("Total STR_TOTALDOC: ", totalSTR_TOTALDOC)
 
         setMontoRendido(totalSTR_TOTALDOC);
 
         setRendicionData({ ...rendicion, totalSTR_TOTALDOC });
       } else {
-        console.log("No se encotnraron datos para la rendicion")
       }
     } catch (error) {
       console.error('Error al obtener datos de la rendición:', error);

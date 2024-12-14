@@ -37,12 +37,10 @@ function AnexoRD({
       setAnexos(event.files);
       let listaFiles = [];
 
-      //console.log(event.files);
       setFiles(event.files);
       event.files.forEach(async (file) => {
         await uploadAdjunto(file)
           .then((response) => {
-            //console.log(response.data);
             if (response.data.codRespuesta == 0) {
               listaFiles.push(response.data.filePath);
               setDocumento((prevDocumento) => ({
@@ -55,10 +53,8 @@ function AnexoRD({
           })
           .catch((err) => {
             showError("Error al subir adjunto");
-            console.log(err.message);
           })
           .finally(() => {
-            console.log("Termino de handleUpload");
           });
       });
     } else {
@@ -72,7 +68,6 @@ function AnexoRD({
     anexos.forEach.forEach(async (file) => {
       await uploadAdjunto(file)
         .then((response) => {
-          //console.log(response.data);
           if (response.data.codRespuesta == 0) {
             listaFiles.push(response.data.filePath);
             setDocumento((prevDocumento) => ({
@@ -85,7 +80,6 @@ function AnexoRD({
           changeFileTitle();
         })
         .catch((err) => {
-          console.log(err.message);
           showError(err.message);
         })
         .finally(() => {
@@ -103,10 +97,7 @@ function AnexoRD({
   }, []);
 
   useEffect(() => {
-    console.log(files);
     files.forEach((e) => {
-      console.log(e.name);
-      console.log(e.objectURL);
     });
   }, [files]);
 

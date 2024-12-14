@@ -53,7 +53,6 @@ export function FormDetalle({
 
     let _detalles = [...detalles];
     let _detalle = { ...detalle };
-    console.log(_detalle);
     if (
       detalle.STR_CODARTICULO.id != null &&
       detalle.STR_CENTCOSTO.CostCenter > 0 &&
@@ -122,7 +121,6 @@ export function FormDetalle({
 
     if (typeof detalle.ID == "number") {
       await borrarDocumentoDet(detalle.ID, documentoId).catch((err) => {
-        console.log(err.message);
         showError("No se pudo eliminar detalle");
       });
     }
@@ -236,36 +234,9 @@ export function FormDetalle({
     }
   }
 
-  /*
-  async function obtenerListaCupLocal(
-    ceco = detalle.STR_CENTCOSTO,
-    posFinanciera = detalle.posFinanciera?.name,
-    anio = 2022
-  ) {
-    // Obten Lista de CUPS cuando se cambie de Item
-
-    var response = await obtenerListaCup(ceco, posFinanciera, anio);
-    if (response.data.CodRespuesta != "99") {
-      // Obtiene lista de CUPS
-      const data = response.data.Result;
-
-      // Busca con el nombre del articulo;
-      if ((detalle.STR_CUP == null) | detalle.STR_CODARTICULO) {
-        let _listCups = data.filter((e) => e.U_DESCRIPTION == data.name);
-      }
-
-      setCups(data);
-    } else {
-      showError(response.data.Message);
-      console.log(response.data.Message);
-    }
-  }
-  */
-
   useEffect(() => {
     if (cups?.length > 0) {
       validaIgualdadEnDetalle(detalle.STR_CODARTICULO);
-      console.log("Termino de cargar los CUPS e items");
     }
   }, [cups, detalle.STR_CODARTICULO]);
 
@@ -281,7 +252,6 @@ export function FormDetalle({
     )
       .then((response) => {
         listCups = response.data.Result;
-        console.log(listCups);
 
         // De un inicio dará NULL
         // si en caso es NULL o diferente al que tiene ahorita hará la busqueda con
@@ -295,9 +265,7 @@ export function FormDetalle({
         ) {
           // Busca el like de codArticulo y cup.name
 
-          console.log(data);
           let _listCups = listCups.filter((e) => e.U_DESCRIPTION == data.name);
-          //console.log(listCups[0]);
           if (_listCups.length > 0) {
             setDetalle((prevDetalle) => ({
               ...prevDetalle,
@@ -320,14 +288,12 @@ export function FormDetalle({
           }));
         }*/
         //setCups(listCups);
-        console.log(cups);
       })
       .catch((err) => {
         console.log(err.message);
       })
       .finally(() => {
         setCups(listCups);
-        console.log("Se terminó de traer el listado CUP");
       });
   }
 
@@ -335,20 +301,9 @@ export function FormDetalle({
     obtieneListadoCups();
   }, [productDialog]);
   const [visible, setVisible] = useState(false);
-  /*
-  useEffect(() => {
-    if (detalle.STR_CODARTICULO.posFinanciera && centroCosto[0].CostCenter) {
-      console.log("entro");
-      obtenerListaCupLocal(
-        centroCosto[0].CostCenter,
-        detalle.STR_CODARTICULO.posFinanciera
-      );
-    }
-  }, [detalle.STR_CODARTICULO.posFinanciera, centroCosto[0].CostCenter]);
-  */
+
   return (
     <>
-   
       <Dialog 
         visible={productDialog}
         setVisible={setVisible}

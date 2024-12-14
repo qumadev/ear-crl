@@ -13,9 +13,7 @@ import { addLocale } from "primereact/api";
 export function Formulario() {
   const [loading, setLoading] = useState(false);
   const { setUsuario, usuario, ruta, config } = useContext(AppContext);
-  // console.log(AppContext)
   const toast = useRef(null);
-  //const sociedades = [{ name: "ELECTROPERU", code: "ELPTSERVER" }];
   const sociedades = [{ name: "REGATAS", code: "ELPTSERVER" }];
   const [selectSociedad, setSelectSociedad] = useState(sociedades[0]);
   const navigate = useNavigate();
@@ -61,7 +59,6 @@ export function Formulario() {
         })
         .finally(() => {
           setLoading(false);
-          console.log("Termino de validar");
         });
     } else {
       setLoading(false);
@@ -71,7 +68,6 @@ export function Formulario() {
 
   useEffect(() => {
     if (usuario != null && usuario.empId != null) {
-      //console.log(config);
       navigate(ruta + "/inicio", { replace: true });
     }
   }, [usuario]);

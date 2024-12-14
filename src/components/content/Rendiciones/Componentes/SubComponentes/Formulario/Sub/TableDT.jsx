@@ -16,12 +16,9 @@ export default function TableDT({
   setRendicion,
   totalRedondeado
 }) {
-
   const navigate = useNavigate();
   const { usuario, ruta } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
-  console.log("Usuario", usuario)
-  console.log("Total redondeados: ", totalRedondeado);
 
   const toast = useRef(null);
 
@@ -87,15 +84,7 @@ export default function TableDT({
     obtenerDocumentosSiEsNecesario();
   }, [rendicion?.documentos]); // Se ejecuta cuando cambian los documentos
 
-
-  // useEffect(() => {
-  //   if (rendicion?.documentos?.length > 0) {
-  //     obtenerDocumentos(); // Llama a la función para obtener los detalles de cada documento
-  //   }
-  // }, [rendicion]);
-
   const items = [
-
     {
       label: 'Editar',
       icon: 'pi pi-external-link',
@@ -110,7 +99,6 @@ export default function TableDT({
   const formatMontoRendido = (rowData) => {
     const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
     const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegúrate de mostrar solo STR_TOTALDOC
-    console.log("Moneda:", moneda, "Monto:", monto);
     return `${moneda} ${monto}`;
   };
 
@@ -159,7 +147,6 @@ export default function TableDT({
     ];
 
     const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
-    console.log("log", rendicion?.STR_ESTADO_INFO)
     const filteredItems = showEditButton ? items : [];
     return (
       <div className="split-button">
@@ -169,69 +156,9 @@ export default function TableDT({
           model={filteredItems}
           onClick={() => { navigate(ruta + `/rendiciones/${documentos.ID}/documentos/detail`); }}
         />
-        {/* {showEditButton ?
-          (
-            <Button
-              onClick={() => {
-                navigate(
-                  ruta +
-                  `/rendiciones/${documentos.ID}/documentos/editar`
-                );
-              }}
-              severity="success"
-            >
-              <div className="flex gap-3 align-items-center justify-content-center">
-                <i className='pi pi-pencil' style={{ fontSize: '1em' }} ></i>
-                <span>Editar</span>
-              </div>
-            </Button>) : null}
-        {showEditButton ?
-          (
-            <Button onClick={() => eliminarDocumento(documentos.ID)} severity='danger'>
-              <div className="flex gap-3 align-items-center justify-content-center">
-                <i className='pi pi-trash' style={{ fontSize: '1em' }} ></i>
-                <span>Borrar</span>
-              </div>
-            </Button>) : null} */}
-        {/* <div className="dropdown-content">
-          {showEditButton ?
-            (
-              items.map((data, key) => (
-                <Button
-                  key={key}
-                  onClick={() => {
-                    data.command();
-                  }}
-                >
-                  <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-                  {data.label}
-                </Button>
-              ))
-            ) :
-            (
-              <Button
-                disabled
-                onClick={() => {
-                  navigate(
-                    ruta +
-                    `/rendiciones/${documentos.ID}/documentos/detail`
-                  );
-                }}
-              >
-                <div className="flex gap-3 align-items-center justify-content-center">
-                  <span>Ver</span>
-                  <i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-                </div>
-              </Button>
-            )
-          }
-        </div> */}
       </div>
     );
   };
-
-  //exportar po excel 
-
 
   return (
     <>
@@ -274,6 +201,16 @@ export default function TableDT({
             }}
           />
           <Column
+            field="STR_TOTALDOC_CONVERTIDO"
+            header="Monto de comprobante convertido"
+            style={{ width: "3rem" }}
+            body={(rowData) => {
+              const monedaRendicion = rendicion?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
+              const montoConvertido = parseFloat(rowData.STR_TOTALDOC_CONVERTIDO).toFixed(2); // Monto formateado
+              return `${monedaRendicion} ${montoConvertido}`;
+            }}
+          ></Column>
+          <Column
             field='STR_PROVEEDOR.CardName'
             header="Proveedor"
             style={{ width: "3rem" }}
@@ -291,19 +228,6 @@ export default function TableDT({
             frozen
             alignFrozen="right"
           ></Column>
-          {/* <Column
-            header="N° documento"
-            field="ID"
-            style={{ width: "8rem" }}
-            sortable
-          ></Column> */}
-          {/* <Column
-
-            header="Estado"
-            style={{ width: "3rem" }}
-
-          ></Column> */}
-
         </DataTable>
       </div>
     </>

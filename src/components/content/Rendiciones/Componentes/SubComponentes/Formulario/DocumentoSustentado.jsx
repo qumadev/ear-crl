@@ -19,7 +19,7 @@ import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
 import { CodeBracketIcon } from '@heroicons/react/16/solid';
 import { AppContext } from '../../../../../../App';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 import { Toast } from 'primereact/toast';
@@ -36,8 +36,8 @@ function DocumentoSustentado({
 	setCampoValidoCabecera,
 	onTotalChange
 }) {
+	const { id } = useParams();
 
-	console.log("Prop recibido de documento: ", documento)
 	//  const {moneda, setmoneda }
 	const navigate = useNavigate();
 	const [esModoValidate] = useState(esModo === "Detalle" ? true : false)
@@ -77,35 +77,12 @@ function DocumentoSustentado({
 		});
 	};
 
-	// const deleteProduct = async (rowData) => { 
-	//     const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-	//     setArticulos(updatedArticulos);
-	// };
-
-	// const deleteProduct = async (rowData) => {
-
-	// 	// const updatedArticulos = articulos.filter((item) => item.ID !== rowData.ID);
-	// 	// setArticulos(updatedArticulos);
-	// 	const updatedArticulos = articulos.map((item) => {
-	// 		if (item.ID === rowData.ID) {
-	// 			return {
-	// 				...item,
-	// 				FLG_ELIM: 1
-	// 			};
-	// 		}
-	// 		return item;
-	// 	});
-	// 	console.log("rowid: ", rowData.ID)
-	// 	console.log("elimin: ", updatedArticulos)
-	// 	setArticulos(updatedArticulos);
-	// };
-
-	const obtenerRendicionPorId = async (idRend) => {
+	const obtenerRendicionPorId = async (idRendicion) => {
 		try {
-			const response = await obtenerRendicion(idRend)
+			const response = await obtenerRendicion(idRendicion)
+
 			if (response.status < 300 && response.data) {
 				const datosRendicion = response.data.Result[0];
-				console.log("Rendicion obtenida: ", datosRendicion);
 				setRendicion(datosRendicion);
 
 				compararMonedas(datosRendicion.STR_MONEDA, documento.STR_MONEDA)
@@ -125,7 +102,6 @@ function DocumentoSustentado({
 		if (apiMonedaId === documentoMonedaCode) {
 			console.log("Las monedas coinciden: ", apiMonedaId);
 		} else {
-			console.log("Las monedas no coinciden: ", apiMonedaId, "Documento: ", documentoMonedaCode);
 			aplicarTipoCambiosSiEsNecesario();
 		}
 	}
@@ -134,25 +110,17 @@ function DocumentoSustentado({
 		const tipoCambio = rendicion?.STR_TIPO_CAMBIO || 1;
 
 		if (tipoCambio !== 1) {
-			console.log(`Aplicando tipo de cambio: ${tipoCambio}`);
 
 			const documentoActualizado = {
 				...documento,
 				STR_MONEDA: rendicion.STR_MONEDA, // Actualizamos la moneda del documento
 			};
-
-			console.log("Documento actualizado con tipo de cambio:", documentoActualizado);
+			
 			setDocumento(documentoActualizado); // Actualiza el estado del documento
 		} else {
 			console.log("El tipo de cambio es 1, no se aplica conversion");
 		}
 	}
-
-	useEffect(() => {
-		if (documento && documento.STR_RD_ID) {
-			obtenerRendicionPorId(documento.STR_RD_ID);
-		}
-	}, [documento.STR_RD_ID])
 
 	const handleEliminarDetalle = async (detalle, rowIndex) => {
 		const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
@@ -160,7 +128,6 @@ function DocumentoSustentado({
 
 		if (!idDet) {
 			// CASO 1: DETALLE SIN ID (no creado en la BD)
-			console.log("El detalle no tiene ID");
 			const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
 			setArticulos(updatedArticulos);
 
@@ -197,286 +164,14 @@ function DocumentoSustentado({
 		}
 	}
 
-	// const deleteProduct = (rowIndex) => {
-	// 	const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
-	// 	setArticulos(updatedArticulos);
-
-	// 	// Mostrar mensaje de confirmación
-	// 	toast.current.show({
-	// 		severity: "info",
-	// 		summary: "Detalle eliminado",
-	// 		detail: `Se eliminó el detalle en la posición ${rowIndex + 1}`,
-	// 		life: 3000,
-	// 	});
-	// };
-
-	// const editDetalle = (rowData) => {
-	//     // setDetalleEditar(rowData);
-	//     // setModoEditar("editar");
-	//     setProductDialog(true);
-	// };
-
-
-
-
-
-
-
-	//Modificar  esto para edioa6||
-	const actionBodyTemplate1 = (rowData) => {
-		const items = [
-			{
-				label: "Editar",
-				icon: "pi pi-eye",
-				command: async () => {
-					console.log("logdata",)
-					editDetalle(articles)
-				}
-				// command: async () => {
-				//     try {
-				//         if (rowData.STR_ESTADO == 8) {
-				//             await actualizarRendiEnCarga(rowData);
-				//             await new Promise((resolve) => setTimeout(resolve, 5000));
-				//         }
-				//     } catch (error) {
-				//     } finally {
-				//         sw
-
-
-				//         // Navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-				//         // console.log("entra")
-				//         // navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-				//     }
-				// },
-			},
-		];
-
-		if (usuario.rol.id == 2) {
-			items.push(
-				{
-					label: "Aprobar",
-					icon: "pi pi-eye",
-					command: () => {
-						console.log("aprobando solicitud")
-					},
-				},
-			)
-		}
-
-		if (
-			((usuario.TipoUsuario == 1) &
-				((rowData.STR_ESTADO == 8) |
-					(rowData.STR_ESTADO == 9) |
-					(rowData.STR_ESTADO == 12))) |
-			((usuario.TipoUsuario == 3) & (rowData.STR_ESTADO == 10))
-		) {
-			items.push({
-				label:
-					rowData.STR_ESTADO == 8 ||
-						rowData.STR_ESTADO == 12 ||
-						rowData.STR_ESTADO == 15
-						? "Rendir"
-						: "Modificar",
-				icon: "pi pi-pencil",
-				command: () => {
-					try {
-						if (
-							rowData.STR_ESTADO == 8 ||
-							rowData.STR_ESTADO == 12 ||
-							rowData.STR_ESTADO == 15
-						) {
-							actualizarRendiEnCarga(rowData);
-						}
-					} catch (error) {
-					} finally {
-						navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-					}
-				},
-			});
-		}
-
-		if (
-			((usuario.TipoUsuario != 1) &
-				((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-			(rowData.STR_ESTADO == 13)
-		) {
-			items.push({
-				label: "Aceptar",
-				icon: "pi pi-check",
-				command: () => {
-					confirmAceptacion(
-						rowData.STR_SOLICITUD,
-						usuario.empId,
-						usuario.SubGerencia,
-						rowData.STR_ESTADO_INFO.Id,
-						rowData.ID,
-						usuario.SubGerencia
-					);
-
-					// aceptacionLocal(rowData);
-				},
-			});
-		}
-
-		if (
-			((usuario.TipoUsuario != 1) &
-				((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-			(rowData.STR_ESTADO == 13)
-		) {
-			items.push({
-				label: "Rechazar",
-				icon: "pi pi-times",
-				command: () => {
-					confirmRechazo(
-						rowData.STR_SOLICITUD,
-						usuario.empId,
-						usuario.SubGerencia,
-						rowData.STR_ESTADO_INFO.Id,
-						rowData.ID,
-						usuario.SubGerencia
-					);
-					//rechazoLocal(rowData);
-				},
-			});
-		}
-
-		if (
-			((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
-			(usuario.TipoUsuario == 1)
-		) {
-			items.push({
-				label: "Editar",
-				icon: "pi pi-pencil",
-				command: () => {
-					navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-				},
-			});
-		}
-
-		if (
-			(rowData.STR_ESTADO == 16) |
-			(rowData.STR_ESTADO == 18) |
-			(rowData.STR_ESTADO == 19)
-		) {
-			items.push({
-				label: "Descargar Liquidación",
-				icon: "pi pi-file-pdf",
-				command: () => {
-					downloadAndOpenPdf(rowData.STR_NRRENDICION);
-				},
-			});
-		}
-
-		if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
-			items.push({
-				label: "Reintentar Migracion",
-				icon: "pi pi-pencil",
-				command: () => {
-					reintentarMigracion(rowData.ID);
-					// navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-				},
-			});
-		}
-
-		if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
-			items.push({
-				label: "Ver Aprobadores",
-				icon: "pi pi-eye",
-				command: () => {
-					//reintentarMigracion(rowData.ID);
-					// navigate(`/solicitud/aprobacion/reintentar/${rowData.ID}`);
-					navigate(ruta + `rendiciones/aprobadores/${rowData.ID}`);
-					//      navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-				},
-			});
-		}
-
-		if (usuario.TipoUsuario == 1 && rowData.STR_ESTADO == 9) {
-			items.push({
-				label: "Enviar Aprobación",
-				icon: "pi pi-send",
-				command: () => {
-					confirmEnvio(rowData);
-				},
-			});
-		}
-
-		async function reintentarMigracion(id) {
-			try {
-				setLoading(true);
-				let response = await reintentarRendi(id);
-				if (response.status < 300) {
-					let data = response.data.Result[0];
-					showSuccess(
-						"Se realizó la migración exitosamente con número " + data.DocNum
-					);
-				} else {
-					showError(response.data.Message);
-					console.log(response.data);
-				}
-			} catch (error) {
-				showError(error.response.data.Message);
-				console.log(error);
-			} finally {
-				listarRendicionesLocal();
-				setLoading(false);
-			}
-		}
-
-
-		return (
-			<div className="split-button">
-				<Button
-					onClick={() => {
-						try {
-							if (rowData.STR_ESTADO == 8) {
-								actualizarRendiEnCarga(rowData);
-							}
-						} catch (error) {
-						} finally {
-							// navigate(ruta + "/rendiciones/ver");
-							// navigate(ruta + `/rendiciones/${id}/documentos/agregar`, {
-							// navigate(ruta + `/rendiciones/${rowData.ID}/documentos`);
-							navigate(ruta + `/rendiciones/${rowData.ID}/documentos/agregar`);
-						}
-					}}
-					severity="success"
-				>
-					<div className="flex gap-3 align-items-center justify-content-center">
-						<span>Ver</span>
-						<i className="pi pi-chevron-down" style={{ color: "white" }}></i>
-					</div>
-				</Button>
-				<div className="dropdown-content">
-					{items.map((data, key) => (
-						<Button
-							key={key}
-							onClick={() => {
-								data.command();
-							}}
-						>
-							<i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-							{data.label}
-						</Button>
-					))}
-				</div>
-			</div>
-		);
-	};
-
 	const [productDialog, setProductDialog] = useState(false);
 	const [visible, setVisible] = useState(false);
-
-
 
 	const openNew = () => {
 		setEditing(false);
 		setProductDialog(true);
 		//setDetalle(articulos);
 	};
-
-	//console.log("nuevof",articulos)
-
 
 	const [tipos, setTipos] = useState(null);
 	const [afectacion, setAfectacion] = useState(null);
@@ -558,26 +253,12 @@ function DocumentoSustentado({
 				Cantidad: detalle.STR_CANTIDAD,
 				Impuesto: detalle.STR_IMPUESTO
 			}));
-			// console.log(articles);
-			// Actualizamos el estado articulos con el nuevo array de objetos personalizados
 			setArticulos(articles);
 		} else {
 			setArticulos([]);
 		}
 
 	}, [detalles])
-
-	// useEffect(() => {
-	// 	if (detalles && detalles.length > 0) {
-	// 		const articles = detalles.map((detalle, index) => ({
-	// 			ID: detalle.ID || `temp-${index}`,  // Asignar un ID temporal si no hay ID
-	// 			...detalle
-	// 		}));
-	// 		setArticulos(articles);
-	// 	} else {
-	// 		setArticulos([]);
-	// 	}
-	// }, [detalles]);
 
 	useEffect(() => {
 		if (esModo === "Agregar") {
@@ -588,7 +269,6 @@ function DocumentoSustentado({
 		}
 
 	}, [])
-
 
 	const getTotalSubtotal = () => {
 		return articulos.reduce((total, articulo) => total + (parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad)), 0);
@@ -662,41 +342,18 @@ function DocumentoSustentado({
 		onTotalChange(totalRedondeado);
 	}, [articulos, documento, onTotalChange]);
 
-	// useEffect(()=>{
-	//     const articulosConSubtotal = articulos.map((detalle) => ({
-	//         ...detalle,
-	//         Subtotal: detalle.Precio * detalle.Cantidad,
-	//     }));
-	//     setArticulos(articulosConSubtotal);
-	// },[articulos])
-	// useEffect(() => {
-	//     console.log("doc3: ", documento)
-	// }, [documento])
-
 	const obtenerMonedas = async () => {
 		try {
 			const response = await obtenerTiposMonedas();
-			console.log("Monedas obtenidas:", response.data.Result);
 			setMonedas(response.data.Result);
 		} catch (error) {
 			console.error('Error al obtener monedas: ', error)
 		}
 	}
 
-	console.log("Moneda del documento:", documento.STR_MONEDA);
-	console.log("Opciones disponibles de monedas:", monedas);
-
 	useEffect(() => {
 		obtenerMonedas();
 	}, []);
-
-	// const handleMonedaChange = (e) => {
-	// 	console.log("Moneda selected: ", e.value)
-	// 	setDocumento((prevState) => ({
-	// 		...prevState,
-	// 		STR_MONEDA: { id: e.value.Id, name: e.value.Code },  // Asegúrate de pasar el código y nombre correctamente
-	// 	}));
-	// };
 
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
@@ -741,18 +398,6 @@ function DocumentoSustentado({
 			setEsValido(false);
 		}
 	};
-
-	const saveDocumento = () => { }
-
-	const quitArticulo = () => { }
-
-	const showDoc = () => {
-		console.log("nuevaData", articulos)
-		// console.log("d: ", documento)
-		// console.log("a: ", articulos)
-	}
-
-	console.log("mi", articulos)
 
 	// Personalizando campos
 	const transformDataForExport = (articulos) => {
@@ -837,15 +482,9 @@ function DocumentoSustentado({
 
 	const editDetallep = (rowData) => {
 		setRowData(rowData); // Update rowData state
-		console.log("f", rowData)
 		setProductDialog(true);
 		setEditing(true);
 	};
-	// const editDetallep = (detalles) => {
-	//     setDetalle({ ...detalles });
-	//     console.log(...detalles)
-	//     setProductDialog(true);
-	//   };
 
 	const actionBodyTemplate = (rowData) => {
 		return (
@@ -871,7 +510,6 @@ function DocumentoSustentado({
 
 	const formatCurrency = (amount, currencyCode) => {
 		// Imprimir valores para depurar
-		console.log("currencyCode recibido:", currencyCode);
 		const currency = currencyCode || 'SOL';
 
 		try {
@@ -880,7 +518,6 @@ function DocumentoSustentado({
 				currency: currency,  // Usamos el 'Code' de la moneda
 			}).format(amount);
 
-			console.log("Monto formateado:", formattedAmount); // Ver el resultado del formateo
 			return formattedAmount;
 		} catch (error) {
 			console.error('Error formatting currency:', error);
@@ -900,17 +537,25 @@ function DocumentoSustentado({
 				}, 0);
 
 			const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
-			const totalConCambio = totalBase * tipoCambio;
 
-			console.log("Total Base:", totalBase);
-			console.log("Tipo de Cambio:", tipoCambio);
-			console.log("Total con Cambio:", totalConCambio);
+			let totalConCambio = totalBase;
+
+			if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+				// Si la solicitud está en soles y la rendición en dólares, dividimos
+				totalConCambio = totalBase / tipoCambio;
+			} else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+				// Si la solicitud está en dólares y la rendición en soles, multiplicamos
+				totalConCambio = totalBase * tipoCambio;
+			} else {
+				// Si las monedas son iguales, no se hace ninguna conversión
+				totalConCambio = totalBase;
+			}
 
 			setMontoTotal(totalConCambio.toFixed(2)); // Actualizar estado
 		};
 
 		calcularMontoTotalConTipoCambio();
-	}, [articulos, documento.STR_TIPO_CAMBIO]);
+	}, [articulos, documento.STR_TIPO_CAMBIO, documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
 
 	useEffect(() => {
 		const subtotalTotal = articulos
@@ -926,38 +571,73 @@ function DocumentoSustentado({
 		setMontoTotal(totalRedondeado); // Actualizamos el monto total en el estado
 	}, [articulos]); // Se recalcula cada vez que cambian los artículos
 
-	console.log("Moneda del documento:", documento.STR_MONEDA);
-	console.log("Opciones disponibles de monedas:", monedas);
-
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
 				<Column
-					footer="Monto Total: "
+					footer="Monto Total Base: "
 					colSpan={15}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 				<Column
-					footer={() => formatCurrency(
-						articulos
-							.filter(item => item.FLG_ELIM !== 1)
+					footer={() => {
+						const totalBase = articulos
+							.filter(item => item.FLG_ELIM !== 1) // Filtrar los artículos no eliminados
 							.reduce((acc, articulo) => {
 								const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
 								const impuesto = parseFloat(articulo.Impuesto) || 0;
-								return acc + subtotal + impuesto;
-							}, 0)
-						* (parseFloat(documento.STR_TIPO_CAMBIO) || 1),
-						documento.STR_MONEDA?.Code || 'SOL'
-					)}
+								return acc + subtotal + impuesto; // Sumar subtotal + impuesto
+							}, 0);
+
+						return formatCurrency(
+							totalBase.toFixed(2),
+							documento?.STR_MONEDA?.Code || 'SOL' // Usar siempre la moneda del documento
+						);
+					}}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 			</Row>
+			{documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code && (
+				<Row>
+					<Column
+						footer="Monto Total Convertido: "
+						colSpan={15}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+					<Column
+						footer={() => {
+							const totalBase = articulos
+								.filter(item => item.FLG_ELIM !== 1) // Filtrar los artículos no eliminados
+								.reduce((acc, articulo) => {
+									const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+									const impuesto = parseFloat(articulo.Impuesto) || 0;
+									return acc + subtotal + impuesto; // Sumar subtotal + impuesto
+								}, 0);
+
+							const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
+							let totalConCambio = totalBase;
+
+							// Lógica de conversión de monedas
+							if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+								totalConCambio = totalBase / tipoCambio; // Dividir si documento en SOL y rendición en USD
+							} else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+								totalConCambio = totalBase * tipoCambio; // Multiplicar si documento en USD y rendición en SOL
+							}
+
+							return formatCurrency(
+								totalConCambio.toFixed(2),
+								rendicion?.STR_MONEDA?.id || 'SOL'
+							);
+						}}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+				</Row>
+			)}
 		</ColumnGroup>
 	);
 
 	const handleMonedaChange = (e) => {
 		const selectedMoneda = monedas.find((moneda) => moneda.Code === e.value);
-		console.log("Moneda seleccionada:", selectedMoneda);
 
 		setDocumento((prevState) => ({
 			...prevState,
@@ -972,7 +652,6 @@ function DocumentoSustentado({
 
 	const handleTipoCambioChange = (e) => {
 		const inputValue = e.target.value;
-		console.log("Nuevo tipo de cambio ingresado:", inputValue);
 
 		if (/^\d*\.?\d*$/.test(inputValue)) {
 			setDocumento((prevState) => ({
@@ -984,47 +663,48 @@ function DocumentoSustentado({
 				STR_TIPO_CAMBIO: Boolean(inputValue),
 			}));
 
-			// Verifica si el tipo de cambio es distinto a 1 y actualiza la moneda**
-			if (parseFloat(inputValue) !== 1) {
-				console.log("Cambiando moneda a la de la rendición:", rendicion?.STR_MONEDA); // Depuración
+			// // Verifica si el tipo de cambio es distinto a 1 y actualiza la moneda**
+			// if (parseFloat(inputValue) !== 1) {
+			// 	console.log("Cambiando moneda a la de la rendición:", rendicion?.STR_MONEDA); // Depuración
 
-				setDocumento((prevState) => ({
-					...prevState,
-					STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
-				}));
-			}
+			// 	setDocumento((prevState) => ({
+			// 		...prevState,
+			// 		STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
+			// 	}));
+			// }
 		}
 	};
 
+	// Detectar el cambio de moneda y ajustar el tipo de cambio
 	useEffect(() => {
-		console.log("Estado actualizado del documento:", documento);
-
-		if (documento?.STR_RD_ID) {
-			obtenerRendicionPorId(documento.STR_RD_ID);
-		}
-	}, [documento, documento.STR_RD_ID]);
-
-	useEffect(() => {
-		if (rendicion) {
-			console.log("Rendición cargada:", rendicion);
-			console.log("Moneda desde la rendición:", rendicion?.STR_MONEDA);
-		}
-	}, [rendicion]);
-
-	const monedaCambiada = useRef(false);
-
-	useEffect(() => {
-		if (documento.STR_TIPO_CAMBIO && parseFloat(documento.STR_TIPO_CAMBIO) !== 1 && !monedaCambiada.current) {
-			console.log("Aplicando cambio automático de moneda a:", rendicion?.STR_MONEDA);
-
+		if (rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code) {
 			setDocumento((prevState) => ({
 				...prevState,
-				STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
+				STR_TIPO_CAMBIO: '1', // Establece el tipo de cambio a 1
 			}));
-
-			monedaCambiada.current = true;
 		}
-	}, [documento.STR_TIPO_CAMBIO, rendicion]);
+	}, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
+
+	useEffect(() => {
+		if (id) {
+			obtenerRendicionPorId(id)
+		}
+	}, [id])
+
+	// const monedaCambiada = useRef(false);
+
+	// useEffect(() => {
+	// 	if (documento.STR_TIPO_CAMBIO && parseFloat(documento.STR_TIPO_CAMBIO) !== 1 && !monedaCambiada.current) {
+	// 		console.log("Aplicando cambio automático de moneda a:", rendicion?.STR_MONEDA);
+
+	// 		setDocumento((prevState) => ({
+	// 			...prevState,
+	// 			STR_MONEDA: rendicion?.STR_MONEDA || prevState.STR_MONEDA,
+	// 		}));
+
+	// 		monedaCambiada.current = true;
+	// 	}
+	// }, [documento.STR_TIPO_CAMBIO, rendicion]);
 
 	const boletaVentaID = '03';
 
@@ -1092,7 +772,6 @@ function DocumentoSustentado({
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>(*)Tipo</label>
-						{/*console.log(typeof STR_TIPO_DOC)*/}
 						<Dropdown
 							className='col-6'
 							value={documento.STR_TIPO_DOC}
@@ -1111,16 +790,18 @@ function DocumentoSustentado({
 							value={documento.STR_SERIE_DOC}
 							maxLength={4}
 							onChange={(e) => {
+								const upperValue = e.target.value.toUpperCase();
+
 								setDocumento((prevState) => ({
 									...prevState,
-									STR_SERIE_DOC: e.target.value,
+									STR_SERIE_DOC: upperValue,
 								}));
 								setCampoValidoCabecera(prevState => ({
 									...prevState,
-									STR_SERIE_DOC: Boolean(e.target.value)
+									STR_SERIE_DOC: Boolean(upperValue)
 								}));
 								if (documento.STR_TIPO_DOC === 'Factura') {
-									const primeraLetra = e.target.value.charAt(0).toUpperCase();
+									const primeraLetra = upperValue.charAt(0).toUpperCase();
 									if (primeraLetra === 'F' || primeraLetra === 'E') {
 										alert("1");
 									} else {
@@ -1158,8 +839,6 @@ function DocumentoSustentado({
 									STR_CORR_DOC: paddedValue,
 								}));
 							}}
-							// value={numero}
-							// onChange={handleNumeroChange}
 							disabled={esModoValidate}
 						/>
 						{!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
@@ -1189,49 +868,8 @@ function DocumentoSustentado({
 							disabled
 						/>
 					</div>
-					{/* <div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>Direccion</label>
-						<InputText
-							value={documento.STR_DIRECCION}
-							onChange={(e) => {
-								setDocumento((prevState) => ({
-									...prevState,
-									STR_DIRECCION: e.target.value,
-								}));
-							}}
-							className='col-6'
-							placeholder='Direccion'
-							disabled={esModoValidate}
-						/>
-					</div> */}
-					{/* <div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Motivo</label>
-						<Dropdown
-							className='col-6'
-							value={documento.STR_MOTIVORENDICION}
-							onChange={
-								(e) => {
-									setDocumento((prevState) => ({
-										...prevState,
-										STR_MOTIVORENDICION: e.target.value,
-									}));
-									setCampoValidoCabecera(prevState => ({
-										...prevState,
-										STR_MOTIVORENDICION: Boolean(e.target.value)
-									}));
-								}}
-							options={motivos}
-							optionLabel="name"
-							filter
-							filterBy='name'
-							placeholder='Seleccione Motivo'
-							disabled={esModoValidate}
-						/>
-					</div> */}
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>(*)Moneda</label>
-						{console.log("Opciones de monedas en Dropdown:", monedas)}
-						{console.log("Valor de STR_MONEDA:", documento.STR_MONEDA)}
 						{useEffect(() => {
 							if (documento.STR_MONEDA) {
 								const monedaEncontrada = monedas.find(
@@ -1286,9 +924,6 @@ function DocumentoSustentado({
 						<Calendar
 							className='col-6'
 							value={documento.STR_FECHA_DOC}
-							//value={fecha}
-							// readOnlyInput
-							// disabled
 							placeholder={documento.STR_FECHA_DOC}
 							onChange={
 								(e) => {
@@ -1324,14 +959,14 @@ function DocumentoSustentado({
 									STR_COMENTARIOS: Boolean(newValue)
 								}));
 
-								if (newValue.length >= 50) {
-									showInfo("El comentario ha alcanzado el límite de 50 caracteres.");
+								if (newValue.length >= 254) {
+									showInfo("El comentario ha alcanzado el límite de 254 caracteres.");
 								}
 							}}
 							className='col-6'
 							rows={5}
 							cols={30}
-							maxLength={50}
+							maxLength={254}
 							disabled={esModoValidate}
 						/>
 					</div>
@@ -1339,10 +974,14 @@ function DocumentoSustentado({
 						<label className='col-2'>Tipo de Cambio</label>
 						<InputText
 							className='col-6'
-							placeholder='Tipo de Cambio'
+							placeholder='1'
 							value={documento.STR_TIPO_CAMBIO}
 							onChange={handleTipoCambioChange}
-							disabled={esModoValidate}
+							disabled={
+								esModoValidate ||
+								(!rendicion?.STR_MONEDA?.id || !documento?.STR_MONEDA?.Code) ||
+								(rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code)
+							}
 						/>
 					</div>
 					<div className="flex col-12">
@@ -1353,11 +992,6 @@ function DocumentoSustentado({
 									label="Agregar Detalle"
 									onClick={openNew}
 								/>
-								{/* <Button 
-                  className='col-4'
-                  label="Eliminar Seleccionados"
-                  onClick={() => { }}
-              /> */}
 							</>
 						}
 						<Button
@@ -1498,13 +1132,6 @@ function DocumentoSustentado({
 						>
 						</Column>
 					</DataTable>
-					{/* { esModoDetail ? "" :
-                        // <Button
-                        //     className='col-4'
-                        //     label="Guardar Cambios"
-                        //     onClick={saveDocumento}
-                        // />
-                    } */}
 				</div>
 			</div>
 			<FormDetalleDocumento
@@ -1531,23 +1158,6 @@ function DocumentoSustentado({
 				indImpuestos={indImpuestos}
 			>
 			</FormDetalleDocumento>
-
-			{/* <Button
-                className='col-4'
-                label="Show Doc"
-                onClick={showDoc}
-            />  */}
-			{/* <Button
-                className='col-4'
-                label="Exportar"
-                icon="pi pi-upload"
-                severity="secondary"
-                style={{ backgroundColor: "black" }}
-                onClick={() => {
-                    exportExcel();
-                }}
-            />  */}
-
 		</div>
 	);
 }

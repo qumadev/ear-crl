@@ -81,7 +81,6 @@ export function Documentos({
   /* --- */
 
   const validSUNATTemplate = (rowData) => {
-    //console.log(rowData);
     if (rowData.STR_VALIDA_SUNAT == true) {
       return (
         <div className="flex justify-content-center">
@@ -186,12 +185,7 @@ export function Documentos({
         },
       ];
     }
-
-    // if (ValidaEditable) {
-    //   items = [];
-    //   console.log(items);
-    // }
-    //console.log(fechaSolicitud);
+    
     return (
       <React.Fragment>
         <SplitButton

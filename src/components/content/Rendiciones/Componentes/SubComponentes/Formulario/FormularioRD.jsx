@@ -24,6 +24,7 @@ import {
   obtenerProyectos,
   obtenerTipoDocs,
   obtieneAdjuntosDoc,
+  obtenerRendicion
 } from "../../../../../../services/axios.service";
 import GeneralRD from "./GeneralRD";
 import DetalleRD from "./DetalleRD";
@@ -78,61 +79,30 @@ function FormularioRD() {
     },
   ];
 
-  /* Registro de Documentos */
-  /*const [documento, setDocumento] = useState(
-    {
-      ID: 1,
-      STR_RENDICION: 123,
-      STR_FECHA_CONTABILIZA: "2024-04-22",
-      STR_FECHA_DOC: "2024-04-21",
-      STR_FECHA_VENCIMIENTO: "2024-05-01",
-      STR_PROVEEDOR: { CardCode: "P10081558791", CardName: "MAMANI MARTINEZ MARIA SOLEDAD", LicTradNum: "10081558791" },
-      STR_MONEDA: { id: "SOL", name: "SOL" },
-      STR_COMENTARIOS: "Comentarios sobre el documento",
-      STR_TIPO_DOC: { id: "01", name: "Factura" },
-      STR_SERIE_DOC: null,
-      STR_CORR_DOC: null,
-      STR_VALIDA_SUNAT: true,
-      STR_OPERACION: 1,
-      STR_PARTIDAFLUJO: 456,
-      STR_TOTALDOC: 1234.56,
-      STR_RD_ID: 1,
-      STR_CANTIDAD: 2,
-      STR_ALMACEN: "Almacén ABC",
-      STR_RUC: "12345678901",
-      STR_RAZONSOCIAL: "Razón Social XYZ",
-      STR_DIRECCION: "Nueva Direccion",
-      STR_MOTIVORENDICION: { id: "VIA", name: "Viaticos" },
-      detalles: [
-        {
-          ID: 1,
-          STR_CODARTICULO: {
-            ItemCode: "0050600008",
-            ItemName: "REGISTRO DE BRONCE 4\"",
-            U_BPP_TIPUNMED: "PZA",
-            WhsCode: "ALM002",
-            Stock: 0.0,
-            Precio: 0.0
-          },
-          STR_SUBTOTAL: 100.0,
-          STR_INDIC_IMPUESTO: { id: "IGV", name: "IGV" },
-          STR_DIM1: { id: "01", name: "CLUB" },
-          STR_DIM2: { id: "001", name: "CHORRILLOS" },
-          STR_DIM4: { id: "100", name: "CONSEJO DIRECTIVO" },
-          STR_DIM5: { id: "10001", name: "CONSEJO DE DIRECTIVO" },
-          STR_ALMACEN: "ALM002",
-          STR_CANTIDAD: 2,
-          STR_TPO_OPERACION: "operacion",
-          STR_DOC_ID: 123,
-          STR_CONCEPTO: "Concepto del documento",
-          STR_PROYECTO: { id: "PG", name: "Proyecto Genérico" },
-          STR_PRECIO: 50.0,
-          STR_IMPUESTO: 18
-        }
-      ]
-    }
-  );*/
+  const [rendicion, setRendicion] = useState(null);
   const [documento, setDocumento] = useState({ STR_AFECTACION: '-' });
+
+  const obtenerRendicionPorId = async (idRendicion) => {
+    try {
+      const response = await obtenerRendicion(idRendicion)
+
+      if (response.status < 300 && response.data) {
+        const datosRendicion = response.data.Result[0];
+        setRendicion(datosRendicion);
+      } else {
+        showError("No se encontró la rendicion con el ID")
+      }
+    } catch (error) {
+      console.error("Error al obtener la rendicion: ", error);
+      showError("Ocurrió un error al intentar obtener la rendición")
+    }
+  }
+
+  useEffect(() => {
+    if (id) {
+      obtenerRendicionPorId(id)
+    }
+  }, [id])
 
   async function obtenerData() {
     //let id = 8
@@ -140,13 +110,13 @@ function FormularioRD() {
       // obtenerTipos(),
       obtenerDocumento(id),
     ]);
-    console.log("obt: ", response[0].data.Result[0]);
     let body = response[0].data.Result[0]
     body.STR_FECHA_DOC = getFechaLargo(body.STR_FECHA_DOC)
     body.STR_FECHA_VENCIMIENTO = getFechaLargo(body.STR_FECHA_VENCIMIENTO)
     body.STR_FECHA_CONTABILIZA = getFechaLargo(body.STR_FECHA_CONTABILIZA)
     setDocumento(body)
   }
+
   function getFechaLargo(fechaCorta) {
     const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
 
@@ -212,39 +182,6 @@ function FormularioRD() {
   const [existeEnSunat, setExisteEnSunat] = useState(true);
   const [compExisteSunat, setCompExisteSunat] = useState(false);
 
-  // limpiar data del documento en blanco 
-  // useEffect(() => {
-  //   if(esModo==="Agregar"){
-  //     let _documento = {
-  //       ...documento,
-  //       ID: null,
-  //       STR_RENDICION: null,
-  //       STR_FECHA_CONTABILIZA: null,
-  //       STR_FECHA_DOC: null,
-  //       STR_FECHA_VENCIMIENTO: null,
-  //       STR_PROVEEDOR: null,
-  //       STR_MONEDA: null,
-  //       STR_COMENTARIOS: null,
-  //       STR_TIPO_DOC: null,
-  //       STR_SERIE_DOC: null,
-  //       STR_CORR_DOC: null,
-  //       STR_VALIDA_SUNAT: null,
-  //       STR_OPERACION: null,
-  //       STR_PARTIDAFLUJO: null,
-  //       STR_TOTALDOC: null,
-  //       STR_RD_ID: null,
-  //       STR_CANTIDAD: null,
-  //       STR_ALMACEN: null,
-  //       STR_RUC: null,
-  //       STR_RAZONSOCIAL: null,
-  //       STR_DIRECCION: null,
-  //       detalles: null,
-  //     };
-  //     console.log("docagre: ",_documento)
-  //     setDocumento(_documento);
-  //   }
-  // }, [esModo]);
-
   function formatearFecha(fecha) {
     const fechaOriginal = new Date(fecha);
     const dia = fechaOriginal.getDate().toString().padStart(2, '0');
@@ -278,9 +215,17 @@ function FormularioRD() {
       }));
       let subtotalTotal = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0);
       let totalImpuestos = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0);
-      console.log("SUBTTOTAL TOTAL: ", subtotalTotal)
-      console.log("TOTAL IMPEUSTO: ", totalImpuestos)
-      //let fechaFormateada = formatearFecha(documento.STR_FECHA_DOC);
+      let totalDocumento = subtotalTotal + totalImpuestos
+
+      const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1; // Tipo de cambio
+      let totalConvertido = totalDocumento; // Valor inicial, por si las monedas son iguales
+
+      if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+        totalConvertido = totalDocumento / tipoCambio; // Convertir de SOL a USD
+      } else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+        totalConvertido = totalDocumento * tipoCambio; // Convertir de USD a SOL
+      }
+
       let _documento = {
         ...documento,
         ID: id,
@@ -294,24 +239,19 @@ function FormularioRD() {
           name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Code
         },
         STR_TIPO_CAMBIO: documento.STR_TIPO_CAMBIO,
-        STR_TOTALDOC: subtotalTotal + totalImpuestos,
+        STR_TOTALDOC: totalDocumento,
+        STR_TOTALDOC_CONVERTIDO: totalConvertido,
         STR_CANTIDAD: null,
         STR_FECHA_CONTABILIZA: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         detalles: _detalles,
         STR_VALIDA_SUNAT: compExisteSunat,
-        // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
-        //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
-        //   : documento.STR_ANEXO_ADJUNTO,
       };
-      console.log("datos enviados: ", _documento)
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
-        console.log(`Documento creado con ID: ${content.id}`);
         showSuccess(`Documento creado con ID: ${content.id}`);
-        // navigate(ruta + `/rendiciones/${id}/documentos/agregar`);
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones/info/" + id)
@@ -319,7 +259,6 @@ function FormularioRD() {
         showError("Error al crear documento");
       }
     } catch (error) {
-      console.log(error);
       showError("Error al crear documento");
     } finally {
       setLoading(false);
@@ -362,9 +301,7 @@ function FormularioRD() {
       // let _detalles = detalles.map((e) => {
       //   return typeof e.ID == "number" ? e : { ...e, ID: null };
       // });
-      console.log("docx: ", documento);
       if (detalle && detalle.length > 0) {
-        console.log("detx: ", detalle);
         const _detalles = detalle.map((detalle) => ({
           ID: detalle.ID ? detalle.ID : null,
           STR_CODARTICULO: detalle.Cod,
@@ -418,16 +355,9 @@ function FormularioRD() {
           detalles: _detalles, // Detalles
         };
 
-        console.log("envio: ", _documento);
-        console.log("Detalles:", _detalles);
-        console.log("Subtotal Total:", subtotalTotal);
-        console.log("Total Impuestos:", totalImpuestos);
-        console.log("Total Documento:", totalDocumento);
-
         let response = await actualizarDocumento(_documento); // _documento - Crea Documento
         if (response.CodRespuesta != "99") {
           var content = response.data.Result[0];
-          console.log(`Documento actualizado con ID: ${content.id}`);
           showSuccess(`Documento actualizado con ID: ${content.id}`);
           await new Promise((resolve) => setTimeout(resolve, 3000));
           navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
@@ -436,131 +366,12 @@ function FormularioRD() {
           showError("Error al Actualizar documento");
         }
       }
-      // let _documento = {
-      //   ...documento,
-      //   STR_FECHA_CONTABILIZA:documento.STR_FECHA_CONTABILIZA,
-      //   STR_FECHA_DOC: documento.STR_FECHA_DOC,
-      //   STR_FECHA_VENCIMIENTO: documento.STR_FECHA_VENCIMIENTO,
-      //   //detalles: _detalles, // Detalles
-      //   //STR_VALIDA_SUNAT: compExisteSunat,
-      //   // STR_ANEXO_ADJUNTO: Array.isArray(documento.STR_ANEXO_ADJUNTO)
-      //   //   ? documento.STR_ANEXO_ADJUNTO.join(", ")
-      //   //   : documento.STR_ANEXO_ADJUNTO,
-      // };
-
-
-      // console.log("detalle: ",detalle);
-      // let _documento = {
-      //   ...documento,
-      //   detalles: detalle, // Detalles
-      // };
-      // console.log("envio: ",_documento);
-      // let response = await actualizarDocumento(_documento); // _documento - Crea Documento
-      // if (response.CodRespuesta != "99") {
-      //   var content = response.data.Result[0];
-      //   console.log(`Documento actualizado con ID: ${content.id}`);
-      //   showSuccess(`Documento actualizado con ID: ${content.id}`);
-      //   //navigate(`/rendiciones/${id}/documentos`);
-      // } else {
-      //   showError("Error al Actualizar documento");
-      // }
     } catch (error) {
       console.log("err: ", error);
     } finally {
       setLoading(false);
     }
   };
-
-  // function changeFileTitle() {
-  //   try {
-  //     // console.log("changeFileTitle");
-  //     const fileUploadNode = ReactDOM.findDOMNode(
-  //       fileUploadRef.current.props.emptyTemplate._owner.child.child.child.child
-  //         .stateNode
-  //     );
-  //     // console.log(fileUploadNode);
-  //     if (fileUploadNode) {
-  //       const fileBadgeSpans = fileUploadNode.querySelectorAll(
-  //         ".p-fileupload-file-badge"
-  //       );
-  //       //  console.log(fileBadgeSpans);
-  //       fileBadgeSpans.forEach((fileBadgeSpan) => {
-  //         if (documento.STR_ANEXO_ADJUNTO.length > 0) {
-  //           console.log("cambiando estado");
-  //           fileBadgeSpan.innerText = "Cargado";
-  //           fileBadgeSpan.classList.remove("p-badge-warning");
-  //           fileBadgeSpan.classList.add("p-badge-success");
-  //         }
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
-  // function getFechaLargo(fechaCorta) {
-  //   const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
-
-  //   const fechaAnio = fechaArray[2];
-
-  //   const fechaJs = new Date(
-  //     fechaAnio.substring(0, 4),
-  //     fechaArray[1] - 1,
-  //     fechaArray[0]
-  //   );
-
-  //   return new Date(`${fechaJs}`);
-  // }
-
-  // async function getDocumento() {
-  //   //setLoadingTemplate(true);
-  //   try {
-  //     console.log(idDocumento);
-  //     let response = await obtenerDocumento(idDocumento);
-  //     if (response.data.CodRespuesta != "99") {
-  //       var body = response.data.Result[0];
-
-  //       // if (body.STR_PROVEEDOR.CardCode == "P99999999999") {
-  //       //   setProveedores((prevProveedores) =>
-  //       //     prevProveedores.map((prov) =>
-  //       //       prov.CardCode == "P99999999999"
-  //       //         ? {
-  //       //             ...prov,
-  //       //             CardName: body.STR_PROVEEDOR.CardName,
-  //       //             CardCode: body.STR_PROVEEDOR.CardCode,
-  //       //             LicTradNum: body.STR_PROVEEDOR.LicTradNum,
-  //       //           }
-  //       //         : prov
-  //       //     )
-  //       //   );
-  //       //   console.log(proveedores);
-  //       // }
-
-  //       if (body.STR_PROVEEDOR?.CardCode == "P99999999999") {
-  //         setProveedores((prevProveedores) => [
-  //           ...prevProveedores,
-  //           body.STR_PROVEEDOR,
-  //         ]);
-  //         console.log(proveedores);
-  //       }
-
-  //       setDocumento({
-  //         ...body,
-  //         STR_FECHA_CONTABILIZA: getFechaLargo(body.STR_FECHA_CONTABILIZA),
-  //         STR_FECHA_DOC: getFechaLargo(body.STR_FECHA_DOC),
-  //         STR_FECHA_VENCIMIENTO: getFechaLargo(body.STR_FECHA_VENCIMIENTO),
-  //       });
-
-  //       setDetalles(body.detalles);
-  //     }
-  //   } catch (error) {
-  //     showError("Error al obtener Documento");
-  //     console.log(error);
-  //   } finally {
-  //     setLoadingTemplate(false);
-  //     //setLoadingTemplate(false);
-  //   }
-  // }
 
   async function SetDropDowns() {
     setLoadingTemplate(true);
@@ -602,12 +413,10 @@ function FormularioRD() {
               break;
           }
         } else {
-          console.log(response, index);
           showError(DescRespuesta);
         }
       });
     } catch (error) {
-      console.log(error);
       showError("Error en el servidor");
     } finally {
       if (esModo === "Agregar") setLoadingTemplate(false);
@@ -615,107 +424,12 @@ function FormularioRD() {
     }
   }
 
-
-  // async function getAdjunto() {
-  //   let response = await obtieneAdjuntosDoc(idDocumento);
-  //   if (response.status < 300) {
-  //     let files = response.data.Result;
-
-  //     const newList = response.data.Result.map((e) => {
-  //       if (e.data != null) {
-  //         const base64Data = e.data;
-  //         const binaryData = atob(base64Data);
-  //         const arrayBuffer = new ArrayBuffer(binaryData.length);
-  //         const uint8Array = new Uint8Array(arrayBuffer);
-  //         for (let i = 0; i < binaryData.length; i++) {
-  //           uint8Array[i] = binaryData.charCodeAt(i);
-  //         }
-
-  //         // Crear un objeto Blob desde el array buffer
-  //         const blob = new Blob([arrayBuffer], {
-  //           type: e.type,
-  //         });
-  //         const blobUrl = URL.createObjectURL(blob);
-  //         //console.log(blobUrl);
-  //         e.objectURL = blobUrl;
-  //         /*
-  //         const blob = new Blob([blobData]);
-  //         const blobUrl = URL.createObjectURL(blob);
-  //         e.objectURL = blobUrl;
-  //         console.log(blobUrl);
-  //       */
-  //       }
-  //       return e;
-  //     });
-
-  //     setAnexos(newList);
-  //     setFiles(newList);
-  //   } else {
-  //     console.log("No tiene adjuntos");
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   console.log(fechaSolicitud, editable, tipoRendicion);
-  //   //setLoadingTemplate(true);
-  //   // if (!esModoRegistrar) {
-  //   //   getDocumento();
-  //   // } else {
-  //   SetDropDowns();
-  //   if (!esModoRegistrar) {
-  //     getDocumento();
-  //     getAdjunto();
-  //   }
-  //   //setLoadingTemplate(false);
-  //   //   console.log(config);
-  //   // }
-
-  //   const handleKeyDown = (event) => {
-  //     const isCtrlPressed = event.ctrlKey || event.metaKey;
-
-  //     if (isCtrlPressed) {
-  //       switch (event.key) {
-  //         case "ArrowLeft":
-  //           setActiveIndex((prevIndex) => Math.max(0, prevIndex - 1));
-  //           break;
-  //         case "ArrowRight":
-  //           setActiveIndex((prevIndex) =>
-  //             Math.min(
-  //               tabViewRef.current.props.children.filter((c) => c != false)
-  //                 .length - 1,
-  //               prevIndex + 1
-  //             )
-  //           );
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener("keydown", handleKeyDown);
-
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, []);
-
-  // if (loadingTemplate) {
-  //   return (
-  //     <div className="card flex justify-content-center">
-  //       <Toast ref={toast} />
-  //       <ProgressSpinner />
-  //     </div>
-  //   );
-  // }
-
   const registrarDocumento = async () => {
     setLoading(true);
 
     // let body = obtieneJsonAregistrar();
     try {
-      console.log("pinta1")
       if (id == null) {
-        console.log("pinta2")
         var response = await crearDocumento(documento);
 
         if (response.status < 300) {
@@ -758,7 +472,6 @@ function FormularioRD() {
   });
 
   const handleTotalChange = (nuevoTotal) => {
-    console.log("TOTAL FOOTER: ", nuevoTotal);
     setTotalRedondeado(nuevoTotal);
   }
 
@@ -930,28 +643,6 @@ function FormularioRD() {
             //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
             //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
-            {/*<Button 
-              label={"test"}
-              onClick={(e) =>{
-                const primeraLetra = documento.STR_SERIE_DOC.charAt(0).toUpperCase()
-                if ((documento.STR_TIPO_DOC.name === 'Factura') && (primeraLetra !== 'F' || primeraLetra !== 'E')) {
-                  console.log("ESPECTACULAR")
-                  e.preventDefault();
-                  showError("No se puede");
-                }
-                }
-              }
-            />*/}
-            {/* <Button
-                label="Exportar"
-                icon="pi pi-upload"
-                severity="info"
-                size="large"
-                style={{ backgroundColor: "black", borderColor: "black"  }}
-                onClick={() => {
-                    exportExcel();
-                }}
-            /> */}
             <Button
               label="Cancelar"
               severity="secondary"
@@ -965,32 +656,7 @@ function FormularioRD() {
             />
           </>
         }
-        {/* <Button
-          label={esModoRegistrar ? `Guardar Documento` : "Actualizar Documento"}
-          severity="info"
-          size="large"
-          style={{ backgroundColor: "black", borderColor: "black" }}
-          onClick={(e) => {
-            registrarDocumento();
-            // if (!esModoRegistrar) updateRD();
-            // else registrarRD();
-            // else registrarDocumento();
-          }}
-          loading={loading}
-          disabled={editable}
-        //disabled={!estadosEditables.includes(solicitudRD.estado)}
-        />
-        <Button
-          label="Cancelar"
-          severity="secondary"
-          size="large"
-          onClick={() => navigate(ruta + `/rendiciones/${id}/documentos`)}
-        /> */}
       </div>
-      {/* <FormDT
-        totalRedondeado={totalRedondeado}
-      >
-      </FormDT> */}
     </div>
   );
 }

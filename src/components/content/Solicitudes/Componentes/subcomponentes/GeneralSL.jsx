@@ -32,10 +32,8 @@ function GeneralSL({
         setEmpleados(listEmpleados);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
-        console.log("Termino de obtener Empleados");
       });
   }
 
@@ -47,13 +45,10 @@ function GeneralSL({
           name: e.Descripcion,
         }));
         setRuta(listRutas);
-        //console.log(listRutas);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
-        console.log("Termino de cargar rutas");
       });
   }
 

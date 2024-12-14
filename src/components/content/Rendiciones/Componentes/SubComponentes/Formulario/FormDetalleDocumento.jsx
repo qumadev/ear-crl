@@ -261,7 +261,6 @@ function FormDetalleDocumento({
 			setArticulos((prevState) =>
 				//prevState.map((item) => (item.Proyecto === detDoc.Proyecto? detDoc : item)),
 				prevState.map(item => (item.ID === detDoc.ID ? detDoc : item)),
-				console.log(detDoc)
 			);
 			onEdit(detDoc);
 			setProductDialog(false);
@@ -362,7 +361,6 @@ function FormDetalleDocumento({
 									Concepto: e.target.value.ItemName,
 									Almacen: e.target.value.WhsCode
 								}));
-								//console.log(e.target.value),
 
 								setCampoValido(prevState => ({
 									...prevState,
@@ -389,7 +387,6 @@ function FormDetalleDocumento({
 									...prevState,
 									Proyecto: Boolean(e.target.value)
 								}));
-								console.log("PROYECTO ID: ", e.target.value.id, "|| PROYEC NAME: ", e.target.value.name)
 							}}
 							options={proyectos}
 							filter

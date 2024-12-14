@@ -25,7 +25,6 @@ function VerSolicitud() {
 			var response = await createSolicitud(solicitudRD);
 		} catch (error) {
 			showError(error.Message);
-			console.log(error.Message);
 		}
 	}
 	const [tipos, setTipos] = useState(null);
@@ -39,10 +38,6 @@ function VerSolicitud() {
 		]);
 		setTipos(response[0].data.Result)
 		setMotivos(response[1].data.Result)
-
-		console.log(response[0].data.Result)
-		console.log(response[1].data.Result)
-		console.log(response[2].data.Result)
 
 		setSolicitud(response[2].data.Result[0])
 
@@ -106,9 +101,6 @@ function VerSolicitud() {
 	});
 
 	const showSolicitud = () => {
-		console.log(solicitud)
-		console.log(id)
-		// console.log(solicitud.STR_EMPLDREGI.nombres + ' ' + solicitud.STR_EMPLDREGI.apellidos)
 	}
 
 

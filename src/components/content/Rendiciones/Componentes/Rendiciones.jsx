@@ -119,11 +119,9 @@ function Rendiciones({
         //   );
         // }
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
       showError("Error interno");
     } finally {
       listarRendicionesLocal(true);
@@ -227,68 +225,16 @@ function Rendiciones({
     );
   };
 
-  // async function aceptarAprobacionLocal(
-  //   idSoli,
-  //   idUsr,
-  //   area,
-  //   estado,
-  //   rendicionId,
-  //   areas
-  // ) {
-  //   setLoading(true);
-  //   try {
-  //     let response = await aceptarAprobRendicion(
-  //       idSoli,
-  //       idUsr,
-  //       area,
-  //       estado,
-  //       rendicionId,
-  //       areas
-  //     );
-  //     if (response.status < 300) {
-  //       let body = response.data.Result[0];
-
-  //       if (body.AprobacionFinalizada == 0) {
-  //         showSuccess(`Se aprobó la rendición`);
-  //       } else {
-  //         showSuccess(
-  //           `Se migró a a SAP la rendición con número ${body.DocNum}`
-  //         );
-  //       }
-  //     } else {
-  //       console.log(response.Message);
-  //       showError(response.Message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.response.data.Message);
-  //     showError("Error interno");
-  //   } finally {
-  //     listarRendicionesLocal(true);
-  //     setLoading(false);
-  //   }
-  // }
-
-  // async function obtenerListaRendiciones() {
-  //   try {
-  //     const response = await listarRendiciones
-  //   } catch (error) {
-
-  //   }
-  // }
-
   async function obtenerDatosRendicion(id) {
     try {
       let response = await obtenerRendicion(id);
-      console.log("Respuesta de obtenerRendicion:", response);
 
       if (response && response.status < 300) {
-        console.log("Datos de la rendición:", response.data.Result[0]);
         return response.data.Result[0]; // Asumiendo que `data.Result` es el formato esperado
       } else {
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response ? error.response.data.Message : error.message);
       showError(error.response ? error.response.data.Message : "Error interno");
     }
     return null;
@@ -336,42 +282,6 @@ function Rendiciones({
     }
   }
 
-  // async function aceptarAprobacionLocal(rowData) {
-  //   setLoading(true);
-  //   console.log("ENVIR DATA: ", rowData);
-  //   try {
-  //     let response = await aceptarAprobRendicion(
-  //       rowData.SOLICITUDRD.ID,
-  //       usuario.sapID,
-  //       usuario.branch,
-  //       rowData.STR_ESTADO,
-  //       rowData.ID,
-  //       usuario.branch
-  //     );
-
-  //     if (response.status < 300) {
-  //       let body = response.data.Result[0];
-  //       console.log(response.data);
-
-  //       if (body.AprobacionFinalizada == 0) {
-  //         showSuccess(`Se aprobó la rendición`);
-  //       } else {
-  //         showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum}`);
-  //       }
-  //       await new Promise((resolve) => setTimeout(resolve, 3000));
-  //       navigate(ruta + "/rendiciones");
-  //     } else {
-  //       console.log(response.Message);
-  //       showError(response.Message);
-  //     }
-  //   } catch (error) {
-  //     console.log(error.response.data.Message);
-  //     showError(error.response.data.Message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
   async function ReversionAprobacionLocal(rendicionId) {
     setLoading(true);
     try {
@@ -387,11 +297,9 @@ function Rendiciones({
         //   );
         // }
       } else {
-        console.log(response.Message);
         showError(response.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
       showError("Error interno");
     } finally {
       listarRendicionesLocal(true);
@@ -425,7 +333,6 @@ function Rendiciones({
         showError(response.data.Message);
       }
     } catch (error) {
-      console.log(error.response.data.Message);
       showError("Error interno");
     } finally {
       listarRendicionesLocal(true);
@@ -451,24 +358,6 @@ function Rendiciones({
     });
   };
 
-  // const confirmReversion = (
-  //   id
-  // ) => {
-  //   confirmDialog({
-  //     message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
-  //     header: "Revertir Rendicion",
-  //     icon: "pi pi-exclamation-triangle",
-  //     defaultFocus: "accept",
-  //     acceptLabel: "Si",
-  //     rejectLabel: "No",
-  //     accept: () =>
-  //       ReversionAprobacionLocal(
-  //         id
-  //       ),
-  //     //reject,
-  //   });
-  // };
-
   const downloadAndOpenPdf = async (numRendi) => {
     setLoading(true);
     try {
@@ -492,34 +381,6 @@ function Rendiciones({
       setLoading(false);
     }
   };
-
-  // const confirmAceptacion = (
-  //   solicitud,
-  //   empId,
-  //   subGerencia,
-  //   estado,
-  //   id,
-  //   subGerencia2
-  // ) => {
-  //   confirmDialog({
-  //     message: `¿Estás seguro de aceptar la Rendición con código #${id}?`,
-  //     header: "Confirmación solicitud",
-  //     icon: "pi pi-exclamation-triangle",
-  //     defaultFocus: "accept",
-  //     acceptLabel: "Si",
-  //     rejectLabel: "No",
-  //     accept: () =>
-  //       aceptarAprobacionLocal(
-  //         solicitud,
-  //         empId,
-  //         subGerencia,
-  //         estado,
-  //         id,
-  //         subGerencia2
-  //       ),
-  //     //reject,
-  //   });
-  // };
 
   const confirmRechazo = (
     solicitud,
@@ -570,7 +431,6 @@ function Rendiciones({
     try {
       // Obtiene Documentos
       let response = await obtenerRendicion(data.ID);
-      console.log("ENVIAR A APROB: ", response);
       if (response.status < 300) {
         let _rendicion = response.data.Result[0];
         let todosDocumentosValidos = true;
@@ -581,15 +441,12 @@ function Rendiciones({
 
         for (const e of _rendicion.documentos) {
           try {
-            // setLoadingBtn(true);
-            // console.log(e);
             const response = await validacionDocumento(e.ID);
             if (response.status !== 200) {
               showError(response.Message);
               todosDocumentosValidos = false;
             }
           } catch (error) {
-            console.log(error.response.data.Message);
             showError(error.response.data.Message);
             todosDocumentosValidos = false;
           }
@@ -651,7 +508,6 @@ function Rendiciones({
       accept: async () => {
         await aceptarAprobacionLocal(rowData.ID);
       },
-      // reject: () => console.log('Rechazado')
     });
   };
 
@@ -689,14 +545,6 @@ function Rendiciones({
           confirmReversion(rowData)
         }
       }] : [])
-
-      // ...(showRevertirAprobacionButton ? [{
-      //   label: "ID",
-      //   icon: "pi pi-undo",
-      //   command: () => {
-      //     obtenerDatosRendicion(rowData.ID)
-      //   }
-      // }] : [])
     ];
 
     if (
@@ -731,74 +579,6 @@ function Rendiciones({
       });
     }
 
-    // if (true) {
-    //   items.push({
-    //     label: "Autorizar Reversion",
-    //     icon: "pi pi-check",
-    //     command: () => {
-    //       confirmAutorizarReversion(
-    //         rowData.ID
-    //       );
-    //     },
-    //   });
-    // }
-
-    // if (true) {
-    //   items.push({
-    //     label: "Confirmar Reversion",
-    //     icon: "pi pi-check",
-    //     command: () => {
-    //       confirmReversion(
-    //         rowData.ID
-    //       );
-    //     },
-    //   });
-    // }
-
-    console.log(usuario.TipoUsuario)
-    console.log(rowData.STR_ESTADO)
-    // if (
-    //   ((usuario.TipoUsuario != 1) &
-    //     ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-    //   (rowData.STR_ESTADO == 13)
-    // ) {
-    //   items.push({
-    //     label: "Aceptar",
-    //     icon: "pi pi-check",
-    //     command: () => {
-    //       confirmAceptacion(
-    //         rowData.STR_SOLICITUD,
-    //         usuario.empId,
-    //         usuario.SubGerencia,
-    //         rowData.STR_ESTADO_INFO.Id,
-    //         rowData.ID,
-    //         usuario.SubGerencia
-    //       );
-    //     },
-    //   });
-    // }
-
-    // if (
-    //   ((usuario.TipoUsuario != 1) &
-    //     ((rowData.STR_ESTADO == 10) | (rowData.STR_ESTADO == 11))) |
-    //   (rowData.STR_ESTADO == 13)
-    // ) {
-    //   items.push({
-    //     label: "Rechazar",
-    //     icon: "pi pi-times",
-    //     command: () => {
-    //       confirmRechazo(
-    //         rowData.STR_SOLICITUD,
-    //         usuario.empId,
-    //         usuario.SubGerencia,
-    //         rowData.STR_ESTADO_INFO.Id,
-    //         rowData.ID,
-    //         usuario.SubGerencia
-    //       );
-    //     },
-    //   });
-    // }
-
     if (
       ((rowData.STR_ESTADO == 1) | (rowData.STR_ESTADO == 5)) &
       (usuario.TipoUsuario == 1)
@@ -812,20 +592,6 @@ function Rendiciones({
       });
     }
 
-    // if (
-    //   (rowData.STR_ESTADO == 16) |
-    //   (rowData.STR_ESTADO == 18) |
-    //   (rowData.STR_ESTADO == 19)
-    // ) {
-    //   items.push({
-    //     label: "Descargar Liquidación",
-    //     icon: "pi pi-file-pdf",
-    //     command: () => {
-    //       downloadAndOpenPdf(rowData.STR_NRRENDICION);
-    //     },
-    //   });
-    // }
-
     if ((rowData.STR_ESTADO == 17) & (usuario.TipoUsuario == 4)) {
       items.push({
         label: "Reintentar Migracion",
@@ -845,17 +611,6 @@ function Rendiciones({
         },
       });
     }
-
-
-    // if ([10, 11, 13, 14, 16, 17, 18, 19].includes(rowData.STR_ESTADO)) {
-    //   items.push({
-    //     label: "Ver Aprobadores",
-    //     icon: "pi pi-eye",
-    //     command: () => {
-    //       navigate(ruta + `rendiciones/aprobadores/${rowData.ID}`);
-    //     },
-    //   });
-    // }
 
     if (usuario.TipoUsuario == 1 && rowData.STR_ESTADO == 9) {
       items.push({
@@ -878,11 +633,9 @@ function Rendiciones({
           );
         } else {
           showError(response.data.Message);
-          console.log(response.data);
         }
       } catch (error) {
         showError(error.response.data.Message);
-        console.log(error);
       } finally {
         listarRendicionesLocal();
         setLoading(false);
@@ -931,8 +684,7 @@ function Rendiciones({
     let empNombre = filtrado.empNombre || '';
     let fechaInicial = "";
     let fechaFin = "";
-    let numeroRendicion = filtrado.numeroSolicitudORendicion || ''; // Verificar si tiene un valor correcto
-    console.log("Filtrando por N° de Rendición:", numeroRendicion);
+    let numeroRendicion = filtrado.numeroSolicitudORendicion || '';
 
     let estado = filtrado.estados != null ? filtrado.estados.map((data) => data.id).join(",") : "";
 
@@ -940,20 +692,6 @@ function Rendiciones({
       fechaInicial = obtieneFecha(filtrado.rangoFecha[0]);
       fechaFin = obtieneFecha(filtrado.rangoFecha[1]);
     }
-
-    console.log("Parámetros enviados a la API:", {
-      sapID: usuario.sapID,
-      empleadoAsig: filtrado.empleadoAsig == null ? null : filtrado.empleadoAsig.id,
-      empNombre: filtrado.empNombre,
-      rolId: usuario.rol.id,
-      fechaInicial: fechaInicial,
-      fechaFin: fechaFin,
-      numeroRendicion: numeroRendicion,
-      estado: estado,
-      branch: usuario.branch
-    });
-
-    console.log("Estados para filtrar:", estado);
 
     await listarRendiciones(
       usuario.sapID,
@@ -971,14 +709,12 @@ function Rendiciones({
       usuario.branch
     )
       .then((response) => {
-        console.log("Respuesta de API para rendiciones filtradas:", response.data);
         setRendiciones(response.data.Result);
       })
       .catch((err) => {
         console.log(err.message);
       })
       .finally(() => {
-        console.log("Se terminó de traer rendicion");
         setLoading(false);
       });
   }
@@ -996,19 +732,6 @@ function Rendiciones({
     setProductDialog(true);
   };
 
-  // const pruebas{
-  console.log("ren", rendiciones)
-  // }
-  useEffect(() => {
-    //obtenerEstadoLocal();
-    console.log("USER: ", usuario.rol?.id)
-    console.log("LISTA: ", usuario.rol?.id === "2" ?
-      rendiciones.filter(rendicion => rendicion.STR_ESTADO > 10) :
-      usuario.rol?.id === "3" ?
-        rendiciones.filter(rendicion => rendicion.STR_ESTADO > 11) :
-        rendiciones)
-  }, [rendiciones]);
-
   const obtenerTotalRendido = async (rendicionId) => {
     try {
       const response = await obtenerRendicion(rendicionId);  // Llama a la API por ID
@@ -1016,9 +739,6 @@ function Rendiciones({
       const documentos = response.data.Result[0]?.documentos || [];
 
       const totalRendido = documentos.reduce((sum, doc) => sum + parseFloat(doc.STR_TOTALDOC || 0), 0);
-
-      // console.log(`Rendición ID: ${rendicionId}, Documentos:`, documentos);
-      // console.log(`Total rendido para la rendición ${rendicionId}:`, totalRendido);
 
       setMontosRendidos((prev) => ({ ...prev, [rendicionId]: totalRendido }));
     } catch (error) {
@@ -1141,7 +861,7 @@ function Rendiciones({
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
-          style={{ minWidth: "20rem" }}
+          style={{ minWidth: "12rem" }}
         ></Column>
         <Column
           header="Acciones"
@@ -1153,48 +873,7 @@ function Rendiciones({
           alignFrozen="right"
         ></Column>
       </DataTable>
-      {/* <Button
-        label="ver"
-        icon="pi pi-eye"
-        severity="success"
-        onClick={() => {
-          navigate(ruta + `/rendiciones/6/documentos/editar`);
-        }}
-      /> */}
-      {/* <Button
-        label="ver2"
-        icon="pi pi-eye"
-        severity="success"
-        onClick={() => {
-          navigate(ruta + `/rendiciones/info/1`);
-        }}
-      /> */}
-      {/* <div>
-      <Button
-      <div>
-        <Button label="ver" icon="pi pi-eye" severity="success"
-            onClick={() => {
-            navigate(ruta + "/rendiciones/8/documentos/agregar");
-          }}
-
-      {/* <Button label="ver" icon="pi pi-eye" severity="success"
-        onClick={() => {
-          navigate(ruta + "/rendiciones/8/documentos/detail");
-        }}
-
-      /> */}
-
-      {/* <button
-      consola
-      onClick={prueba}
-      >
-
-      </button> */}
-
     </div>
-
-
-
   );
 }
 

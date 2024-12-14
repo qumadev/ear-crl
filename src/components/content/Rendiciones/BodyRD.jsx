@@ -39,31 +39,7 @@ function BodyRD({ responsiveSizeMobile }) {
     );
 
     setEstados(estadosFiltrados);
-
-    console.log(estadosFiltrados);
-    // if (filtrado.estados == null && usuario.TipoUsuario == 2) {
-    //   setFiltrado((...prevFiltrado) => ({
-    //     ...prevFiltrado,
-    //     estados: [body[3], body[5]], // Pendiente y En Autorización SR (Autorizador)
-    //   }));
-    // } else if (filtrado.estados == null && usuario.TipoUsuario == 3) {
-    //   setFiltrado((...prevFiltrado) => ({
-    //     ...prevFiltrado,
-    //     estados: [body[2]], // Borrador y En Autorización SR (Usuario)
-    //   }));
-    // } else if (filtrado.estados == null && usuario.TipoUsuario == 1) {
-    //   // setFiltrado((...prevFiltrado) => ({
-    //   //   ...prevFiltrado,
-    //   //   estados: [body[0], body[1]], // Borrador y En Autorización SR (Usuario)
-    //   // }));
-    //   setFiltrado({
-    //     rangoFecha: [],
-    //     nrRendicion: null,
-    //     estados: [body[0], body[1]],
-    //   });
-    // }
   }
-  /*----------------------------- */
 
   const exportExcel = async () => {
     const XLSX = await import("xlsx");
