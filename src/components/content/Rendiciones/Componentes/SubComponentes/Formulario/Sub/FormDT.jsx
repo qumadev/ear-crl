@@ -44,8 +44,9 @@ export default function FormDT({ editable, totalRedondeado,
   const [detalles, setDetalles] = useState([]);
   const [dataForExport, setDataForExport] = useState([]);
   const [rendicionData, setRendicionData] = useState(null);
+  
+  const [montoSolicitado, setMontoSolicitado] = useState(0);
   const [montoRendido, setMontoRendido] = useState(0);
-  // const [dataEarExport, setDataEarExport] = useState([]);
 
   const [habilitado, setHabilitado] = useState(false);
 
@@ -141,25 +142,25 @@ export default function FormDT({ editable, totalRedondeado,
     if (diferencia < 0) {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
           <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
-          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con un <strong>reembolso</strong> de ${(-1) * diferencia}?</p>
+          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con un <strong>reembolso</strong> de ${(-1) * diferencia}?</p>
         </div>
       `;
     } else if (diferencia > 0) {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
           <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
-          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con una <strong>devolución</strong> de ${diferencia}?</p>
+          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con una <strong>devolución</strong> de ${diferencia}?</p>
         </div>
       `;
     } else {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${rendicion.SOLICITUDRD.STR_TOTALSOLICITADO}</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
           <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
-          <p>¿Estás seguro de enviar a aprobar el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong>?</p>
+          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong>?</p>
         </div>
       `;
     }
@@ -175,7 +176,6 @@ export default function FormDT({ editable, totalRedondeado,
       // reject,
     });
   };
-
 
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
@@ -651,13 +651,16 @@ export default function FormDT({ editable, totalRedondeado,
       if (response.status === 200 && response.data.Result && response.data.Result.length > 0) {
         const rendicion = response.data.Result[0];
 
-        const totalSTR_TOTALDOC = rendicion.documentos.reduce((sum, documento) => {
-          return sum + (documento.STR_TOTALDOC || 0); // Asegurarse de que no sea undefined
-        }, 0);
+        const totalSolicitado = parseFloat(rendicion?.SOLICITUDRD?.STR_TOTALSOLICITADO).toFixed(2);
+        const totalRendido = parseFloat(rendicion?.STR_TOTALRENDIDO).toFixed(2);
 
-        setMontoRendido(totalSTR_TOTALDOC);
+        console.log("total solicitado: ", totalSolicitado);
+        console.log("total rendido", totalRendido);
 
-        setRendicionData({ ...rendicion, totalSTR_TOTALDOC });
+        setMontoSolicitado(totalSolicitado);
+        setMontoRendido(totalRendido);
+
+        setRendicionData({ ...rendicion, totalRendido });
       } else {
       }
     } catch (error) {
