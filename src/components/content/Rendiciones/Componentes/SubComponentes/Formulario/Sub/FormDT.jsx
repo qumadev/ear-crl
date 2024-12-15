@@ -44,7 +44,7 @@ export default function FormDT({ editable, totalRedondeado,
   const [detalles, setDetalles] = useState([]);
   const [dataForExport, setDataForExport] = useState([]);
   const [rendicionData, setRendicionData] = useState(null);
-  
+
   const [montoSolicitado, setMontoSolicitado] = useState(0);
   const [montoRendido, setMontoRendido] = useState(0);
 
@@ -227,7 +227,7 @@ export default function FormDT({ editable, totalRedondeado,
               onClick={(e) => {
                 ValidacionEnvio();
               }}
-              disabled={rendicion?.STR_ESTADO === 10}
+              disabled={rendicion?.STR_ESTADO === 10 || rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16}
             />
           )}
           {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
@@ -239,15 +239,22 @@ export default function FormDT({ editable, totalRedondeado,
                 confirmAceptacion();
               }}
               loading={loadingBtn}
+              disabled={
+                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
+                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16)
+              }
             />
           )}
-          {usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
+          {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
             <Button
               label="Revertir Aprobación"
               size="large"
               style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
               onClick={() => confirmReversion(rendicion?.ID)}
-            // disabled={!estadosEditables.includes(solicitudRD.STR_ESTADO) || loading}
+              disabled={
+                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
+                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16)
+              }
             />
           )}
           {/* {usuario.rol?.id == "3" ? (
@@ -738,7 +745,7 @@ export default function FormDT({ editable, totalRedondeado,
             }}
             progressBarTemplate
             // disabled={validaEditable}
-            disabled={false}
+            disabled={rendicion?.STR_ESTADO >= 10}
           />
 
         </div>
