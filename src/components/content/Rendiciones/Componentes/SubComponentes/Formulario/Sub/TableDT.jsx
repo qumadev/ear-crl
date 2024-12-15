@@ -150,12 +150,22 @@ export default function TableDT({
     const filteredItems = showEditButton ? items : [];
     return (
       <div className="split-button">
-        <SplitButton
-          label='Ver'
-          icon='pi pi-eye'
-          model={filteredItems}
-          onClick={() => { navigate(ruta + `/rendiciones/${documentos.ID}/documentos/detail`); }}
-        />
+        {filteredItems.length > 0 ? (
+          <SplitButton
+            label="Ver"
+            icon="pi pi-eye"
+            model={filteredItems}
+            onClick={() => { navigate(ruta + `/rendiciones/${documentos.ID}/documentos/detail`); }}
+          />
+        ) : (
+          <Button
+            label="Ver"
+            icon="pi pi-eye"
+            className="button-left-align"
+            style={{ width: "118px" }}
+            onClick={() => { navigate(ruta + `/rendiciones/${documentos.ID}/documentos/detail`); }}
+          />
+        )}
       </div>
     );
   };

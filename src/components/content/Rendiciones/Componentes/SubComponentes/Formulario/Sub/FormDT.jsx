@@ -704,7 +704,7 @@ export default function FormDT({ editable, totalRedondeado,
             severity="success"
             onClick={() => {
               navigate(ruta +
-                `/ rendiciones / ${rendicion?.ID} /documentos/agregar`);
+                `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
 
 
