@@ -490,7 +490,7 @@ function Rendiciones({
 
   const confirmAceptacion = (rowData) => {
     confirmDialog({
-      message: `¿Estás seguro de aceptar la Rendición con código #${rowData.ID}?`,
+      message: `¿Estás seguro de aprobar la entrega a rendir #${rowData.STR_NRRENDICION}?`,
       header: "Confirmar Rendición",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
@@ -504,7 +504,7 @@ function Rendiciones({
 
   const confirmReversion = (rowData) => {
     confirmDialog({
-      message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${rowData.ID}?`,
+      message: `¿Estás seguro de revertir la aprobacion de la entrega a rendir #${rowData.STR_NRRENDICION}?`,
       header: "Revertir Rendicion",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
@@ -635,29 +635,26 @@ function Rendiciones({
 
     return (
       <div className="split-button">
-        <SplitButton
-          label="Ver"
-          icon="pi pi-eye"
-          onClick={() => { navigate(ruta + `/rendiciones/info/${rowData.ID}`,); }}
-        />
-        <div className="dropdown-content">
-          {items.map((data, key) => (
-            <Button
-              key={key}
-              onClick={() => {
-                data.command();
-              }}
-            >
-              <i className={`${data.icon}`} style={{ color: "black" }}></i>{" "}
-              {data.label}
-            </Button>
-          ))}
-        </div>
+        {items.length > 0 ? (
+          <SplitButton
+            label="Ver"
+            icon="pi pi-eye"
+            style={{ width: '118px' }}
+            model={items}
+            onClick={() => { navigate(ruta + `/rendiciones/info/${rowData.ID}`,); }}
+          />
+        ) : (
+          <Button
+            label="Ver"
+            icon="pi pi-eye"
+            className="button-left-align"
+            style={{ width: '118px' }}
+            onClick={() => { navigate(ruta + `/rendiciones/info/${rowData.ID}`,); }}
+          />
+        )}
       </div>
     );
   };
-
-
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);

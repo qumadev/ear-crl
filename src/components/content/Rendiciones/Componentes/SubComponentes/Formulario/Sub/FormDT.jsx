@@ -226,28 +226,10 @@ export default function FormDT({ editable, totalRedondeado,
               size="large"
               onClick={(e) => {
                 ValidacionEnvio();
-                /*
-                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
-                //if (true) {
-                  ValidacionEnvio();
-                } else {
-                  //ValidacionEnvio();
-                  e.preventDefault();
-                  confirmarDiferenciaMontos()
-                  //showError(`El Monto Rendido no es suficiente para cubrir el Monto Solicitado: ${ rendicion.SOLICITUDRD.STR_TOTALSOLICITADO } `);
-                }
-                */
               }}
-            // loading={loadingBtn}
-            // disabled={validaEditable}
+              disabled={rendicion?.STR_ESTADO === 10}
             />
           )}
-          {/* <Button
-            className='col-6 md:col-6 lg:col-12 flex align-items-center gap-5'
-            icon="pi pi-trash"
-            label=""
-            // onClick={() => { }}
-          /> */}
           {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
             <Button
               label={"Aceptar Aprobación"}
@@ -257,7 +239,6 @@ export default function FormDT({ editable, totalRedondeado,
                 confirmAceptacion();
               }}
               loading={loadingBtn}
-            // disabled={validaEditableBtn}
             />
           )}
           {usuario.rol?.id === "2" && rendicion?.STR_ESTADO <= 12 && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
@@ -356,7 +337,7 @@ export default function FormDT({ editable, totalRedondeado,
 
   const confirmAceptacion = () => {
     confirmDialog({
-      message: `¿Estás seguro de aceptar la Rendición con código #${rendicion.ID}?`,
+      message: `¿Estás seguro de aprobar la entrega a rendir #${rendicion.STR_NRRENDICION}?`,
       header: "Confirmación solicitud",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
@@ -620,9 +601,10 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO_INFO?.id < 10;
-  const confirmReversion = (id) => {
+
+  const confirmReversion = () => {
     confirmDialog({
-      message: `¿Estás seguro de revertir la aprobacion de Rendición con código #${id}?`,
+      message: `¿Estás seguro de revertir la aprobacion de la entrega a rendir #${rendicion?.STR_NRRENDICION}?`,
       header: "Revertir Rendicion",
       icon: "pi pi-exclamation-triangle",
       defaultFocus: "accept",
@@ -654,9 +636,6 @@ export default function FormDT({ editable, totalRedondeado,
         const totalSolicitado = parseFloat(rendicion?.SOLICITUDRD?.STR_TOTALSOLICITADO).toFixed(2);
         const totalRendido = parseFloat(rendicion?.STR_TOTALRENDIDO).toFixed(2);
 
-        console.log("total solicitado: ", totalSolicitado);
-        console.log("total rendido", totalRendido);
-
         setMontoSolicitado(totalSolicitado);
         setMontoRendido(totalRendido);
 
@@ -673,8 +652,6 @@ export default function FormDT({ editable, totalRedondeado,
       obtenerDataRendicion(id);
     }
   }, [id]);
-
-
 
   return (
     <>
