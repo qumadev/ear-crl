@@ -194,7 +194,7 @@ function FormularioSL() {
 
   const confirm1 = () => {
     confirmDialog({
-      message: `¿Estás seguro de Enviar a aprobar la solicitud de rendición?`,
+      message: `¿Estás seguro de enviar a aprobar la solicitud de rendición?`,
       header: "Confirmación solicitud",
       icon: "pi pi-check",
       defaultFocus: "accept",

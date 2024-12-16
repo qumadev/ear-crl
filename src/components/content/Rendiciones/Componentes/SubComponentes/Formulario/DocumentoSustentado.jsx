@@ -1013,7 +1013,7 @@ function DocumentoSustentado({
 						key={montoTotal}
 						sortMode="multiple"
 						paginator
-						rows={5}
+						rows={50}
 						rowsPerPageOptions={[5, 10, 25, 50]}
 						tableStyle={{ minWidth: "12rem" }}
 						header="Detalle de Documento Sustentado"
@@ -1120,7 +1120,10 @@ function DocumentoSustentado({
 						<Column
 							//field="Cantidad*Precio"
 							header="Subtotal"
-							body={(rowData) => rowData.Cantidad * rowData.Precio}
+							body={(rowData) => {
+								const subtotal = rowData.Cantidad * rowData.Precio;
+								return subtotal.toFixed(2);
+							}}
 							style={{ minWidth: "7rem" }}
 						></Column>
 						<Column

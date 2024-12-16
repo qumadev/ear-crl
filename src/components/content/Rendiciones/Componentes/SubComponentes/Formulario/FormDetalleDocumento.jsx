@@ -288,10 +288,15 @@ function FormDetalleDocumento({
 		if (!detDoc?.IndImpuesto) return 0;
 
 		let tasaImpuesto = 0;
+		
 		if (detDoc.IndImpuesto.name === "IGV (18%)") {
 			tasaImpuesto = 0.18;
 		} else if (detDoc.IndImpuesto.name === "IGV (10%)") {
 			tasaImpuesto = 0.10;
+		} else if (detDoc.IndImpuesto.name === "No domiciliados (24%)") {
+			tasaImpuesto = 0.24;
+		} else if (detDoc.IndImpuesto.name === "Recibo por honorarios (8%)") {
+			tasaImpuesto = 0.08;
 		}
 
 		return (detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto).toFixed(2);
@@ -493,6 +498,10 @@ function FormDetalleDocumento({
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
 								} else if (impuestoSeleccionado.name === "IGV (10%)") {
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2);
+								} else if (impuestoSeleccionado.name === "No domiciliados (24%)") {
+									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.24).toFixed(2);
+								} else if (impuestoSeleccionado.name === "Recibo por honorarios (8%)") {
+									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.08).toFixed(2);
 								}
 
 								setIndImp(impuestoSeleccionado);
@@ -521,6 +530,7 @@ function FormDetalleDocumento({
 									...prevState,
 									Precio: e.target.value,
 									Impuesto: detDoc?.IndImpuesto?.id == 'EXO' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.18).toFixed(2),
+
 									// Impuesto: detDoc?.IndImpuesto?.id == 'IGV10' || detDoc?.IndImpuesto == null ? 0 : (e.target.value * detDoc?.Cantidad * 0.10).toFixed(2),
 								}));
 								setCampoValido(prevState => ({
@@ -538,6 +548,7 @@ function FormDetalleDocumento({
 									...prevState,
 									Cantidad: e.target.value,
 									Impuesto: detDoc?.IndImpuesto.id == 'EXO' || null ? 0 : (e.target.value * detDoc?.Precio * 0.18).toFixed(2),
+
 									// Impuesto: detDoc?.IndImpuesto.id == 'IGV10' || null ? 0 : (e.target.value * detDoc?.Precio * 0.10).toFixed(2)
 								}));
 								setCampoValido(prevState => ({

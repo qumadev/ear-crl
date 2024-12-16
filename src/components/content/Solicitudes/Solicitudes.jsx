@@ -349,12 +349,12 @@ function Solicitudes({
     const showAprobacionButton =
       ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
         (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
-      rowData?.STR_ESTADO >= 2;
+      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5;
 
     const showRevertirAprobacionButton =
       ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
         (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
-      rowData?.STR_ESTADO >= 2;
+      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5;
 
     const items = [
       ...(showAprobacionButton ? [{
@@ -379,7 +379,7 @@ function Solicitudes({
 
     const confirm1 = (data) => {
       confirmDialog({
-        message: `¿Estás seguro de Enviar a aprobar la solicitud de rendición?`,
+        message: `¿Estás seguro de enviar a aprobar la solicitud de rendición?`,
         header: "Confirmación solicitud",
         icon: "pi pi-check",
         defaultFocus: "accept",
