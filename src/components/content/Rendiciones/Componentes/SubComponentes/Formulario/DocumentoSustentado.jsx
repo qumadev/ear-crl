@@ -126,15 +126,15 @@ function DocumentoSustentado({
 		const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
 		const idRend = documento.STR_RD_ID;
 
-		if (!idDet) {
+		if (!idDet || typeof idDet !== "number") {
 			// CASO 1: DETALLE SIN ID (no creado en la BD)
 			const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
 			setArticulos(updatedArticulos);
 
 			toast.current.show({
-				severity: "info",
-				summary: "Detalle eliminado",
-				detail: `Se eliminó el detalle en la posición ${rowIndex + 1}.`,
+				severity: "success",
+				summary: "Éxito",
+				detail: `Detalle eliminado correctamente`,
 				life: 3000,
 			});
 		} else {
@@ -576,7 +576,7 @@ function DocumentoSustentado({
 			<Row>
 				<Column
 					footer="Monto Total Base: "
-					colSpan={15}
+					colSpan={esModoValidate ? 14 : 15}
 					footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 				/>
 				<Column
@@ -601,7 +601,7 @@ function DocumentoSustentado({
 				<Row>
 					<Column
 						footer="Monto Total Convertido: "
-						colSpan={15}
+						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
 					<Column

@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
+import { v4 as uuidv4 } from 'uuid';
 import React, { useState, useEffect, useRef } from 'react';
 import { Toast } from "primereact/toast";
 
@@ -213,19 +214,17 @@ function FormDetalleDocumento({
 
 	const addDetDoc = () => {
 		if (validarCampos()) {
-			setArticulos([...articulos, detDoc]);
+			const nuevoDetalle = { ...detDoc, ID: uuidv4() }
+			setArticulos([...articulos, nuevoDetalle]);
 			setDocumento((prevState) => ({
 				...prevState,
-				DocumentoDet: articulos,
+				DocumentoDet: [...articulos, nuevoDetalle],
 			}));
 			setProductDialog(false);
 			setDetDoc(null);
 			showSuccess(`Detalle agregado correctamente`);
-
-			//alert('Detalle agregado correctamente');
 		} else {
 			showError(`Por favor complete todos los campos requeridos.`);
-			//alert('Por favor complete todos los campos requeridos.');
 		}
 	};
 
@@ -259,8 +258,7 @@ function FormDetalleDocumento({
 		if (validarCampos()) {
 			setEditing(false);
 			setArticulos((prevState) =>
-				//prevState.map((item) => (item.Proyecto === detDoc.Proyecto? detDoc : item)),
-				prevState.map(item => (item.ID === detDoc.ID ? detDoc : item)),
+				prevState.map((item) => (item.ID === detDoc.ID ? { ...detDoc } : item)),
 			);
 			onEdit(detDoc);
 			setProductDialog(false);
@@ -288,7 +286,7 @@ function FormDetalleDocumento({
 		if (!detDoc?.IndImpuesto) return 0;
 
 		let tasaImpuesto = 0;
-		
+
 		if (detDoc.IndImpuesto.name === "IGV (18%)") {
 			tasaImpuesto = 0.18;
 		} else if (detDoc.IndImpuesto.name === "IGV (10%)") {
