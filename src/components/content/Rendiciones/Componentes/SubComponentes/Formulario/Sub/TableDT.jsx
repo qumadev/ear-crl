@@ -202,7 +202,7 @@ export default function TableDT({
           ></Column>
           <Column
             field="STR_TOTALDOC"
-            header="Monto de comprobante"
+            header="Monto Total de comprobante"
             style={{ width: "3rem" }}
             body={(rowData) => {
               const moneda = rowData?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
@@ -212,7 +212,7 @@ export default function TableDT({
           />
           <Column
             field="STR_TOTALDOC_CONVERTIDO"
-            header="Monto de comprobante convertido"
+            header="Monto Total Rendido"
             style={{ width: "3rem" }}
             body={(rowData) => {
               const monedaRendicion = rendicion?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible

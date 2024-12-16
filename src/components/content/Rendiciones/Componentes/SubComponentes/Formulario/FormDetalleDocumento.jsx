@@ -80,10 +80,21 @@ function FormDetalleDocumento({
 	});
 
 	useEffect(() => {
+		console.log("selectedRowData:", selectedRowData);
+		console.log("detDoc:", detDoc);
+
 		if (editing && selectedRowData) {
+			const articuloSeleccionado = articles?.find(
+				item => item.ItemCode === selectedRowData?.Cod?.ItemCode
+			);
+
+			const impuestoSeleccionado = indImpuestos?.find(
+				item => item.id === selectedRowData?.IndImpuesto?.id
+			);
+
 			setDetDoc({
 				...selectedRowData,
-				Cod: selectedRowData?.Cod || null,
+				Cod: articuloSeleccionado || null,
 				// Concepto: selectedRowData?.Concepto || null,
 				// Almacen: selectedRowData?.Almacen || null,
 				Proyecto: selectedRowData?.Proyecto || null,
@@ -91,7 +102,7 @@ function FormDetalleDocumento({
 				Filial: selectedRowData?.Filial || null,
 				Areas: selectedRowData?.Areas || null,
 				CentroCosto: selectedRowData?.CentroCosto || null,
-				IndImpuesto: selectedRowData?.IndImpuesto || null,
+				IndImpuesto: impuestoSeleccionado || null,
 				Precio: selectedRowData?.Precio || null,
 				Cantidad: selectedRowData?.Cantidad || null,
 				Impuesto: selectedRowData?.Impuesto || null,
@@ -114,7 +125,7 @@ function FormDetalleDocumento({
 				"TotalDetalle": null
 			})
 		}
-	}, [editing, selectedRowData]);
+	}, [editing, selectedRowData, articles, indImpuestos]);
 
 	const selectedOptionTemplate = (option, props) => {
 		if (option) {
