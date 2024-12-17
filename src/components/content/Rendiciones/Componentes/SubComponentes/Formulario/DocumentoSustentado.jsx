@@ -100,7 +100,6 @@ function DocumentoSustentado({
 		const documentoMonedaCode = monedaDocumento?.Code;
 
 		if (apiMonedaId === documentoMonedaCode) {
-			console.log("Las monedas coinciden: ", apiMonedaId);
 		} else {
 			aplicarTipoCambiosSiEsNecesario();
 		}
@@ -118,7 +117,6 @@ function DocumentoSustentado({
 
 			setDocumento(documentoActualizado); // Actualiza el estado del documento
 		} else {
-			console.log("El tipo de cambio es 1, no se aplica conversion");
 		}
 	}
 
@@ -627,6 +625,74 @@ function DocumentoSustentado({
 							return formatCurrency(
 								totalConCambio.toFixed(2),
 								rendicion?.STR_MONEDA?.id || 'SOL'
+							);
+						}}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+				</Row>
+			)}
+			{(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+				<Row>
+					<Column
+						footer="Monto Total Rendido: "
+						colSpan={esModoValidate ? 14 : 15}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+					<Column
+						footer={() => {
+							console.log("=== INICIO CALCULO MONTO TOTAL RENDIDO ===");
+
+							// Calcular el monto base (Total Base)
+							const totalBase = articulos
+								.filter(item => item.FLG_ELIM !== 1)
+								.reduce((acc, articulo) => {
+									const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+									const impuesto = parseFloat(articulo.Impuesto) || 0;
+									return acc + subtotal + impuesto;
+								}, 0);
+
+							console.log("Total Base:", totalBase);
+
+							// Calcular "Monto Total Convertido" si monedas son diferentes
+							const tipoCambio = parseFloat(documento?.STR_TIPO_CAMBIO) || 1;
+							let totalConvertido = totalBase;
+
+							if (documento?.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+								totalConvertido = totalBase / tipoCambio;
+								console.log(`Convertido de SOL a USD: ${totalBase} / ${tipoCambio} = ${totalConvertido}`);
+							} else if (documento?.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+								totalConvertido = totalBase * tipoCambio;
+								console.log(`Convertido de USD a SOL: ${totalBase} * ${tipoCambio} = ${totalConvertido}`);
+							} else {
+								console.log("Monedas iguales, no se aplica conversión");
+							}
+
+							console.log("Total Convertido:", totalConvertido);
+
+							// Convertir a SOL si el monto convertido está en USD
+							const totalEnSoles = (rendicion?.STR_MONEDA?.id === 'USD')
+								? totalConvertido * tipoCambio
+								: totalConvertido;
+
+							console.log("Total en SOLES (para comparación):", totalEnSoles);
+
+							// Aplicar 3% si supera 700 SOL
+							const montoRendido = totalEnSoles > 700
+								? totalConvertido - (totalConvertido * 0.03) // Descontar 3% del convertido
+								: totalConvertido;
+
+							console.log("Monto Rendido (después de aplicar 3% si > 700):", montoRendido);
+
+							// Determinar la moneda final
+							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
+
+							console.log("Moneda Final:", monedaFinal);
+							console.log("=== FIN CALCULO MONTO TOTAL RENDIDO ===");
+
+							// Retornar el monto formateado
+							return formatCurrency(
+								montoRendido.toFixed(2),
+								monedaFinal
 							);
 						}}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}

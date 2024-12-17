@@ -338,6 +338,16 @@ function FormularioRD() {
           totalConvertido = totalDocumento * tipoCambio; // Convertir de USD a SOL
         }
 
+        const totalEnSoles = (rendicion?.STR_MONEDA?.id === 'USD')
+          ? totalConvertido * tipoCambio // Convertir USD a SOL
+          : totalConvertido;
+
+        if (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") {
+          if (totalEnSoles > 700) {
+            totalConvertido = totalConvertido - (totalConvertido * 0.03); // Aplicar 3% de retención
+          }
+        }
+
         let _documento = {
           ...documento,
           ID: id,

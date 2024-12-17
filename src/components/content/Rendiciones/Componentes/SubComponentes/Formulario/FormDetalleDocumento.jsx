@@ -1,4 +1,3 @@
-
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
@@ -80,9 +79,6 @@ function FormDetalleDocumento({
 	});
 
 	useEffect(() => {
-		console.log("selectedRowData:", selectedRowData);
-		console.log("detDoc:", detDoc);
-
 		if (editing && selectedRowData) {
 			const articuloSeleccionado = articles?.find(
 				item => item.ItemCode === selectedRowData?.Cod?.ItemCode
