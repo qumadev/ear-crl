@@ -634,7 +634,7 @@ function DocumentoSustentado({
 			{(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
-						footer="Monto Total Rendido: "
+						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -676,10 +676,15 @@ function DocumentoSustentado({
 
 							console.log("Total en SOLES (para comparación):", totalEnSoles);
 
-							// Aplicar 3% si supera 700 SOL
-							const montoRendido = totalEnSoles > 700
-								? totalConvertido - (totalConvertido * 0.03) // Descontar 3% del convertido
-								: totalConvertido;
+							let descuento = 0;
+							if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
+								descuento = 0.03; // 3% RETENCION
+							} else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
+								descuento = 0.10; // 10% DETRACCION
+							}
+
+							// Calcular el monto rendido después del descuento
+							const montoRendido = totalConvertido - (totalConvertido * descuento);
 
 							console.log("Monto Rendido (después de aplicar 3% si > 700):", montoRendido);
 

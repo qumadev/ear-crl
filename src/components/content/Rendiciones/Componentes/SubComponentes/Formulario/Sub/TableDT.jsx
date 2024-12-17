@@ -40,26 +40,6 @@ export default function TableDT({
     });
   };
 
-  const obtenerDocumentos = async () => {
-    try {
-      const documentosActualizados = await Promise.all(
-        rendicion.documentos.map(async (doc) => {
-          // Llama a la API para obtener los detalles de cada documento
-          const response = await obtenerDocumento(doc.ID);
-          const documentoActualizado = response.data.Result[0]; // Asegúrate de que el formato sea correcto
-          return { ...doc, STR_TOTALDOC: documentoActualizado.STR_TOTALDOC }; // Actualiza el documento con STR_TOTALDOC
-        })
-      );
-      // Actualiza la rendición con los documentos actualizados
-      setRendicion(prevRendicion => ({
-        ...prevRendicion,
-        documentos: documentosActualizados
-      }));
-    } catch (error) {
-      console.error('Error al obtener los documentos:', error);
-    }
-  };
-
   useEffect(() => {
     const obtenerDocumentosSiEsNecesario = async () => {
       if (rendicion?.documentos?.length > 0) {
@@ -96,12 +76,6 @@ export default function TableDT({
 
   ];
 
-  const formatMontoRendido = (rowData) => {
-    const moneda = rowData.STR_MONEDA?.name ?? 'N/A';
-    const monto = rowData.STR_TOTALDOC ? parseFloat(rowData.STR_TOTALDOC).toFixed(2) : '0'; // Asegúrate de mostrar solo STR_TOTALDOC
-    return `${moneda} ${monto}`;
-  };
-
   const eliminarDocumento = async (idDoc) => {
     setLoading(true);
     try {
@@ -110,7 +84,7 @@ export default function TableDT({
         const documentosRestantes = rendicion.documentos.filter(doc => doc.ID !== idDoc);
 
         // Recalcular el nuevo monto total
-        const nuevoTotalRendido = documentosRestantes.reduce((total, doc) => total + parseFloat(doc.STR_TOTALDOC), 0);
+        const nuevoTotalRendido = documentosRestantes.reduce((total, doc) => total + parseFloat(doc.STR_TOTALDOC_CONVERTIDO), 0);
 
         // Actualizar la rendición con los documentos restantes y el nuevo total
         setRendicion(prevRendicion => ({
@@ -140,7 +114,7 @@ export default function TableDT({
         },
       },
       {
-        label: 'Borrar',
+        label: 'Eliminar',
         icon: 'pi pi-trash',
         command: () => eliminarDocumento(rowData.ID),
       }

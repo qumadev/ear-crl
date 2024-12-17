@@ -228,6 +228,21 @@ function FormularioRD() {
         totalConvertido = totalDocumento * tipoCambio; // Convertir de USD a SOL
       }
 
+      // Convertir el monto a SOLES para validación
+      const totalEnSoles = (rendicion?.STR_MONEDA?.id === 'USD')
+        ? totalConvertido * tipoCambio // Convertir USD a SOL
+        : totalConvertido;
+
+      let descuento = 0;
+      if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
+        descuento = 0.03; // 3% para Retención si supera 700 SOL
+      } else if (documento?.STR_AFECTACION?.name === "Detraccion") {
+        descuento = 0.10; // 10% siempre para Detracción
+      }
+
+      // Aplicar el descuento al total convertido
+      totalConvertido = totalConvertido - (totalConvertido * descuento);
+
       let _documento = {
         ...documento,
         ID: id,
@@ -342,11 +357,14 @@ function FormularioRD() {
           ? totalConvertido * tipoCambio // Convertir USD a SOL
           : totalConvertido;
 
-        if (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") {
-          if (totalEnSoles > 700) {
-            totalConvertido = totalConvertido - (totalConvertido * 0.03); // Aplicar 3% de retención
-          }
+        let descuento = 0;
+        if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
+          descuento = 0.03; // 3% para Retención si supera 700 SOL
+        } else if (documento?.STR_AFECTACION?.name === "Detraccion") {
+          descuento = 0.10; // 10% siempre para Detracción
         }
+
+        totalConvertido = totalConvertido - (totalConvertido * descuento);
 
         let _documento = {
           ...documento,
