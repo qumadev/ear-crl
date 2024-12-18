@@ -569,6 +569,9 @@ function DocumentoSustentado({
 		setMontoTotal(totalRedondeado); // Actualizamos el monto total en el estado
 	}, [articulos]); // Se recalcula cada vez que cambian los artículos
 
+	const sonAmbasUSD = rendicion?.STR_MONEDA?.id === 'USD' && documento?.STR_MONEDA?.Code === 'USD';
+	const mostrarFooterConvertido = !sonAmbasUSD && (rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code);
+
 	const footerGroup = (
 		<ColumnGroup>
 			<Row>
@@ -596,7 +599,7 @@ function DocumentoSustentado({
 				/>
 			</Row>
 
-			{documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code && (
+			{mostrarFooterConvertido && (documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code) && (
 				<Row>
 					<Column
 						footer="Monto Total Convertido: "
@@ -632,7 +635,8 @@ function DocumentoSustentado({
 					/>
 				</Row>
 			)}
-			{(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+
+			{mostrarFooterConvertido && (documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code) && (
 				<Row>
 					<Column
 						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
@@ -692,6 +696,71 @@ function DocumentoSustentado({
 							// Determinar la moneda final
 							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
 
+							console.log("Moneda Final:", monedaFinal);
+							console.log("=== FIN CALCULO MONTO TOTAL RENDIDO ===");
+
+							// Retornar el monto formateado
+							return formatCurrency(
+								montoRendido.toFixed(2),
+								monedaFinal
+							);
+						}}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+				</Row>
+			)}
+
+			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+				<Row>
+					<Column
+						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						colSpan={esModoValidate ? 14 : 15}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+					<Column
+						footer={() => {
+							console.log("=== INICIO CALCULO MONTO TOTAL RENDIDO ===");
+
+							// 1. Calcular Monto Base
+							const totalBase = articulos
+								.filter(item => item.FLG_ELIM !== 1)
+								.reduce((acc, articulo) => {
+									const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+									const impuesto = parseFloat(articulo.Impuesto) || 0;
+									return acc + subtotal + impuesto;
+								}, 0);
+							console.log("Total Base (sin conversión):", totalBase);
+
+							// 2. Convertir a SOL si es necesario (Moneda USD -> SOL)
+							const tipoCambio = parseFloat(documento?.STR_TIPO_CAMBIO) || 1;
+							const totalEnSoles =
+								documento?.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'USD'
+									? totalBase / tipoCambio
+									: totalBase;
+							console.log("Tipo de Cambio:", tipoCambio);
+							console.log("Total en SOLES (convertido):", totalEnSoles);
+
+							// 3. Aplicar descuento solo si supera 700 SOL
+							let descuento = 0;
+							if (totalEnSoles > 700) {
+								console.log("El monto supera 700 SOL, aplicando descuento...");
+								if (documento?.STR_AFECTACION?.name === "Retencion") {
+									descuento = 0.03; // 3% RETENCION
+									console.log("Afectación: Retencion (3%)");
+								} else if (documento?.STR_AFECTACION?.name === "Detraccion") {
+									descuento = 0.10; // 10% DETRACCION
+									console.log("Afectación: Detraccion (10%)");
+								}
+							} else {
+								console.log("El monto NO supera 700 SOL. No se aplica descuento.");
+							}
+
+							// 4. Calcular el monto rendido
+							const montoRendido = totalBase - (totalBase * descuento);
+							console.log("Monto Rendido (con descuento):", montoRendido);
+
+							// 5. Determinar la moneda final
+							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
 							console.log("Moneda Final:", monedaFinal);
 							console.log("=== FIN CALCULO MONTO TOTAL RENDIDO ===");
 
