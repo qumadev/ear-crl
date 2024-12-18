@@ -636,7 +636,7 @@ function DocumentoSustentado({
 				</Row>
 			)}
 
-			{(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+			{mostrarFooterConvertido && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
 						footer={`Monto Total Rendido #1 (${documento?.STR_AFECTACION?.name}): `}
@@ -735,7 +735,7 @@ function DocumentoSustentado({
 							const tipoCambio = parseFloat(documento?.STR_TIPO_CAMBIO) || 1;
 							const totalEnSoles =
 								documento?.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'USD'
-									? totalBase / tipoCambio
+									? totalBase * tipoCambio
 									: totalBase;
 							console.log("Tipo de Cambio:", tipoCambio);
 							console.log("Total en SOLES (convertido):", totalEnSoles);
@@ -819,12 +819,38 @@ function DocumentoSustentado({
 	// Detectar el cambio de moneda y ajustar el tipo de cambio
 	useEffect(() => {
 		if (rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code) {
+			if (!documento?.STR_TIPO_CAMBIO || parseFloat(documento?.STR_TIPO_CAMBIO) === 1) {
+				setDocumento((prevState) => ({
+					...prevState,
+					STR_TIPO_CAMBIO: '1', // Establece el tipo de cambio a 1
+				}));
+			}
+		} else if (rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code) {
 			setDocumento((prevState) => ({
 				...prevState,
-				STR_TIPO_CAMBIO: '1', // Establece el tipo de cambio a 1
+				STR_TIPO_CAMBIO: '1',
 			}));
 		}
 	}, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
+
+	useEffect(() => {
+		// Si el tipo de documento NO es "Factura", se establece la Afectacion a '-'
+		if (documento?.STR_TIPO_DOC?.name !== 'Factura') {
+			setDocumento((prevState) => ({
+				...prevState,
+				STR_AFECTACION: { id: '3', name: '-' }
+			}));
+		}
+
+		// Si la afectación es '-' (por id o name), establece el tipo de cambio a 1
+		if (documento?.STR_AFECTACION?.id === '3' || documento?.STR_AFECTACION?.name === '-') {
+			setDocumento((prevState) => ({
+				...prevState,
+				STR_TIPO_CAMBIO: '1'  // Forzamos a '1' como tipo de cambio
+			}));
+		}
+	}, [documento?.STR_TIPO_DOC, documento?.STR_AFECTACION?.id]);
+
 
 	useEffect(() => {
 		const rendicionId = documento?.STR_RD_ID ?? id;
@@ -1059,7 +1085,7 @@ function DocumentoSustentado({
 							filter
 							filterBy='name'
 							placeholder='Seleccione Afectacion'
-							disabled={esModoValidate}
+							disabled={esModoValidate || documento?.STR_TIPO_DOC?.name !== 'Factura'}
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
