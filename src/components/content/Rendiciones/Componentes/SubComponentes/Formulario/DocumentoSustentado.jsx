@@ -596,44 +596,42 @@ function DocumentoSustentado({
 				/>
 			</Row>
 
-			{documento?.STR_MONEDA?.Code &&
-				rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code &&
-				rendicion?.STR_MONEDA?.id !== "USD" && (
-					<Row>
-						<Column
-							footer="Monto Total Convertido: "
-							colSpan={esModoValidate ? 14 : 15}
-							footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
-						/>
-						<Column
-							footer={() => {
-								const totalBase = articulos
-									.filter(item => item.FLG_ELIM !== 1) // Filtrar los artículos no eliminados
-									.reduce((acc, articulo) => {
-										const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
-										const impuesto = parseFloat(articulo.Impuesto) || 0;
-										return acc + subtotal + impuesto; // Sumar subtotal + impuesto
-									}, 0);
+			{documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code && (
+				<Row>
+					<Column
+						footer="Monto Total Convertido: "
+						colSpan={esModoValidate ? 14 : 15}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+					<Column
+						footer={() => {
+							const totalBase = articulos
+								.filter(item => item.FLG_ELIM !== 1) // Filtrar los artículos no eliminados
+								.reduce((acc, articulo) => {
+									const subtotal = parseFloat(articulo.Precio) * parseFloat(articulo.Cantidad) || 0;
+									const impuesto = parseFloat(articulo.Impuesto) || 0;
+									return acc + subtotal + impuesto; // Sumar subtotal + impuesto
+								}, 0);
 
-								const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
-								let totalConCambio = totalBase;
+							const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
+							let totalConCambio = totalBase;
 
-								// Lógica de conversión de monedas
-								if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
-									totalConCambio = totalBase / tipoCambio; // Dividir si documento en SOL y rendición en USD
-								} else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
-									totalConCambio = totalBase * tipoCambio; // Multiplicar si documento en USD y rendición en SOL
-								}
+							// Lógica de conversión de monedas
+							if (documento.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
+								totalConCambio = totalBase / tipoCambio; // Dividir si documento en SOL y rendición en USD
+							} else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
+								totalConCambio = totalBase * tipoCambio; // Multiplicar si documento en USD y rendición en SOL
+							}
 
-								return formatCurrency(
-									totalConCambio.toFixed(2),
-									rendicion?.STR_MONEDA?.id || 'SOL'
-								);
-							}}
-							footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
-						/>
-					</Row>
-				)}
+							return formatCurrency(
+								totalConCambio.toFixed(2),
+								rendicion?.STR_MONEDA?.id || 'SOL'
+							);
+						}}
+						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
+					/>
+				</Row>
+			)}
 			{(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
