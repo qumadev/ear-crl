@@ -410,6 +410,7 @@ export const extraerPlantilla = () => {
     },
   });
 };
+
 export const importarPlantilla = (file, id) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -420,6 +421,7 @@ export const importarPlantilla = (file, id) => {
     },
   });
 };
+
 export const actualizarSntDoc = (id, estado) => {
   return null;
 };
