@@ -34,7 +34,9 @@ function DocumentoSustentado({
 	esModo,
 	editable,
 	setCampoValidoCabecera,
-	onTotalChange
+	onTotalChange,
+	isTableEmpty,
+	setIsTableEmpty
 }) {
 	const { id } = useParams();
 
@@ -357,8 +359,8 @@ function DocumentoSustentado({
 		{ id: 'IGV', name: 'IGV (18%)' },
 		{ id: 'IGV_LEY', name: 'IGV (10%)' },
 		{ id: 'EXO', name: 'EXO' },
-		{ id: 'NDM', name: 'No domiciliados (24%)' },
-		{ id: 'RH', name: 'Recibo por honorarios (8%)' }
+		{ id: 'EXO', name: 'No domiciliados (24%)' },
+		{ id: 'EXO', name: 'Recibo por honorarios (8%)' }
 	];
 
 	const selectedOptionTemplate = (option, props) => {

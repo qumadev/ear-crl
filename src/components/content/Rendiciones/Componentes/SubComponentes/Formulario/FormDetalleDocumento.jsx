@@ -114,7 +114,7 @@ function FormDetalleDocumento({
 				"Filial": null,
 				"Areas": null,
 				"CentroCosto": null,
-				"IndImpuesto": { id: 'IGV', name: 'IGV (18%)' },
+				"IndImpuesto": { id: 'EXO', name: 'EXO' },
 				"Precio": null,
 				"Cantidad": null,
 				"Impuesto": null,
