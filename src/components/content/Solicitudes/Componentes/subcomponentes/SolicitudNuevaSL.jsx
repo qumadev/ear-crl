@@ -16,6 +16,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import FormDetalleNewSolicitud from "./FormDetalleNewSolicitud";
 import { Button } from "primereact/button";
+import { Calendar } from 'primereact/calendar';
 import { FormDetalle } from "../../../Rendiciones/Componentes/SubComponentes/Formulario/FormDetalle";
 import { AppContext } from "../../../../../App";
 import { Navigate } from "react-router-dom";
@@ -122,23 +123,66 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)Motivo:</label>
-          <Dropdown
-            value={solicitudRD.STR_MOTIVORENDICION}
-            onChange={(e) => {
-              setSolicitudRD((prevState) => ({
-                ...prevState,
-                STR_MOTIVORENDICION: e.value,
-              }));
-            }}
-            options={motivos}
-            optionLabel="name"
-            placeholder="Motivo"
-            disabled={
-              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
-              (usuario.rol.id != 1)
-            }
-          />
+          {/* Motivo + Fechas de Evento */}
+          <div className="flex align-items-center gap-5">
+            <div className="flex-grow-1">
+              <label htmlFor="">(*)Motivo:</label>
+              <Dropdown
+                value={solicitudRD.STR_MOTIVORENDICION}
+                onChange={(e) => {
+                  setSolicitudRD((prevState) => ({
+                    ...prevState,
+                    STR_MOTIVORENDICION: e.value,
+                  }));
+                }}
+                options={motivos}
+                optionLabel="name"
+                placeholder="Motivo"
+                disabled={
+                  !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+                  (usuario.rol.id != 1)
+                }
+              />
+              <div>
+                <label htmlFor="">(*)Fecha de Inicial del Evento:</label>
+                <Calendar
+                  value={solicitudRD.STR_FECHA_EVENTO_INICIAL}
+                  onChange={(e) => {
+                    setSolicitudRD((prevState) => ({
+                      ...prevState,
+                      STR_FECHA_EVENTO_INICIAL: e.value,
+                    }));
+                  }}
+                  dateFormat="dd/mm/yy"
+                  locale="es"
+                  placeholder="Seleccione Fecha Inicial del Evento"
+                  disabled={
+                    !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+                    (usuario.rol.id != 1)
+                  }
+                />
+              </div>
+              <div>
+                <label htmlFor="">(*)Fecha de Final del Evento:</label>
+                <Calendar
+                  value={solicitudRD.STR_FECHA_EVENTO_FINAL}
+                  onChange={(e) => {
+                    setSolicitudRD((prevState) => ({
+                      ...prevState,
+                      STR_FECHA_EVENTO_FINAL: e.value,
+                    }));
+                  }}
+                  dateFormat="dd/mm/yy"
+                  locale="es"
+                  placeholder="Seleccione Fecha Inicial del Evento"
+                  disabled={
+                    !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+                    (usuario.rol.id != 1)
+                  }
+                />
+              </div>
+            </div>
+          </div>
 
           <label htmlFor="">(*)Proyecto:</label>
           <InputText
