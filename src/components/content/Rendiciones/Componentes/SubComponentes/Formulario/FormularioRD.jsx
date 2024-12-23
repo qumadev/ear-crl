@@ -3,6 +3,7 @@ import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 import { TabPanel, TabView } from "primereact/tabview";
 import FormDT from "./Sub/FormDT";
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   useNavigate,
@@ -519,7 +520,7 @@ function FormularioRD() {
   }
 
   console.log("detalles para ver si hay o no:", detalle)
-  
+
   return (
     <div>
       <Toast ref={toast} />
@@ -605,10 +606,16 @@ function FormularioRD() {
               onClick={() => {
                 // Validar si hay detalles
                 if (esModo === "Editar") {
-                  if (!detalle || detalle.length === 0) {
-                    showError("Debe ingresar al menos un detalle para cancelar en modo edición.");
+                  // Filtrar detalles persistidos (IDs que no son generados con uuidv4, asumiendo que son numéricos)
+                  const detallesPersistidos = detalle.filter(
+                    (det) => det.ID && !String(det.ID).includes("-") // Convertir ID a string para usar includes
+                  );
+
+                  // Validar si hay al menos un detalle persistido
+                  if (detallesPersistidos.length === 0) {
+                    showError("Debe existir al menos un detalle registrado en la base de datos para cancelar en modo edición.");
                     setLoading(false); // Aseguramos que no quede en estado de carga
-                    return; // Detenemos la ejecución si no hay detalles
+                    return; // Salir si no hay detalles válidos
                   }
                 }
 
