@@ -293,6 +293,7 @@ function FormDetalleDocumento({
 		if (!detDoc?.IndImpuesto) return 0;
 
 		let tasaImpuesto = 0;
+		let esDescuento = false;
 
 		if (detDoc.IndImpuesto.name === "IGV (18%)") {
 			tasaImpuesto = 0.18;
@@ -300,17 +301,20 @@ function FormDetalleDocumento({
 			tasaImpuesto = 0.10;
 		} else if (detDoc.IndImpuesto.name === "No domiciliados (24%)") {
 			tasaImpuesto = 0.24;
+			esDescuento = true;
 		} else if (detDoc.IndImpuesto.name === "Recibo por honorarios (8%)") {
 			tasaImpuesto = 0.08;
+			esDescuento = true;
 		}
 
-		return (detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto).toFixed(2);
+		const impuesto = detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto;
+		return esDescuento ? impuesto * -1 : impuesto;
 	};
 
 	useEffect(() => {
 		setDetDoc(prevState => ({
 			...prevState,
-			Impuesto: calculateImpuesto(),
+			Impuesto: calculateImpuesto().toFixed(2),
 		}));
 	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto]);
 
@@ -321,8 +325,8 @@ function FormDetalleDocumento({
 
 			setDetDoc(prevState => ({
 				...prevState,
-				Impuesto: impuesto,
-				TotalDetalle: roundToTwo(parseFloat(subtotal) + impuesto)
+				Impuesto: impuesto.toFixed(2),
+				TotalDetalle: roundToTwo(parseFloat(subtotal) + impuesto).toFixed(2),
 			}));
 		}
 	}, [detDoc?.Precio, detDoc?.Cantidad, detDoc?.IndImpuesto, manualEdit]);

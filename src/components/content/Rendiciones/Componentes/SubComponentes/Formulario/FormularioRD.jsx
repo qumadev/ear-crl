@@ -519,8 +519,6 @@ function FormularioRD() {
     setTotalRedondeado(nuevoTotal);
   }
 
-  console.log("detalles para ver si hay o no:", detalle)
-
   return (
     <div>
       <Toast ref={toast} />
@@ -535,7 +533,7 @@ function FormularioRD() {
                 navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID)
             }}
           ></i>
-          <div>{esModo === "Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir - #{idDocumento}</div>
+          <div>{esModo === "Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir</div>
         </div>
       </div>
       <Divider />
