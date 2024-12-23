@@ -97,6 +97,10 @@ function Solicitudes({
     return <>{rowData.STR_FECHAREGIS}</>;
   };
 
+  const fechasEventoConcatenadas = (rowData) => {
+    return <>{rowData.STR_FECHA_EVENTO_INICIAL} - {rowData.STR_FECHA_EVENTO_FINAL}</>
+  }
+
   async function aceptacionLocal(data) {
     setLoading(true);
     setLoadingBtn(true);
@@ -682,6 +686,11 @@ function Solicitudes({
           header="Tipo"
           style={{ minWidth: "10rem" }}
           body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
+        ></Column>
+        <Column
+          header="Rango fecha del evento"
+          style={{ minWidth: "15rem" }}
+          body={fechasEventoConcatenadas}
         ></Column>
         <Column
           header="Motivo"
