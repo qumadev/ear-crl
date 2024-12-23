@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../../../../../../../App'
 import { SplitButton } from 'primereact/splitbutton'
 import { Toast } from 'primereact/toast'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import DocumentoSustentado from '../DocumentoSustentado'
 
 import { borrarDocumento, obtenerDocumento } from '../../../../../../../services/axios.service'
@@ -104,6 +105,17 @@ export default function TableDT({
     }
   }
 
+  const confirmarEliminacion = (idDoc) => {
+    confirmDialog({
+      message: "¿Estás seguro de eliminar este documento? Esta acción no se puede deshacer",
+      header: "Confirmación de eliminación",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Sí",
+      rejectLabel: "No",
+      accept: () => eliminarDocumento(idDoc),
+    });
+  };
+
   const actionverDoc = (rowData, documentos) => {
     const items = [
       {
@@ -116,7 +128,7 @@ export default function TableDT({
       {
         label: 'Eliminar',
         icon: 'pi pi-trash',
-        command: () => eliminarDocumento(rowData.ID),
+        command: () => confirmarEliminacion(rowData.ID),
       }
     ];
 
