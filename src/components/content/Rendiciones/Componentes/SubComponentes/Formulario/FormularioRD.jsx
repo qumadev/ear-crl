@@ -196,6 +196,12 @@ function FormularioRD() {
   const registrarRD = async () => {
     setLoading(true);
     try {
+      if (!detalle || detalle.length === 0) {
+        showError("Debe ingresar al menos un detalle para registrar el documento.");
+        setLoading(false);
+        return; // Termina la ejecución si no hay detalles
+      }
+
       const _detalles = detalle.map((detalle) => ({
         ID: detalle.ID ? detalle.ID : null,
         STR_CODARTICULO: detalle.Cod,
@@ -315,6 +321,12 @@ function FormularioRD() {
   const updateRD = async () => {
     setLoading(true);
     try {
+      if (!detalle || detalle.length === 0) {
+        showError("Debe ingresar al menos un detalle para actualizar el documento.");
+        setLoading(false);
+        return; // Termina la ejecución si no hay detalles
+      }
+
       if (detalle && detalle.length > 0) {
         const _detalles = detalle.map((detalle) => ({
           ID: detalle.ID ? detalle.ID : null,
@@ -506,6 +518,8 @@ function FormularioRD() {
     setTotalRedondeado(nuevoTotal);
   }
 
+  console.log("detalles para ver si hay o no:", detalle)
+  
   return (
     <div>
       <Toast ref={toast} />
@@ -588,12 +602,21 @@ function FormularioRD() {
               label="Cancelar"
               severity="secondary"
               size="large"
-              onClick={() =>
-                esModo === "Agregar" ?
-                  navigate(ruta + "/rendiciones/info/" + id)
-                  :
-                  navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID)
-              }
+              onClick={() => {
+                // Validar si hay detalles
+                if (esModo === "Editar") {
+                  if (!detalle || detalle.length === 0) {
+                    showError("Debe ingresar al menos un detalle para cancelar en modo edición.");
+                    setLoading(false); // Aseguramos que no quede en estado de carga
+                    return; // Detenemos la ejecución si no hay detalles
+                  }
+                }
+
+                // Continuar con la navegación
+                esModo === "Agregar"
+                  ? navigate(ruta + "/rendiciones/info/" + id)
+                  : navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
+              }}
             />
           </>
         }

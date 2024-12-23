@@ -638,7 +638,7 @@ function DocumentoSustentado({
 				</Row>
 			)}
 
-			{mostrarFooterConvertido && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+			{mostrarFooterConvertido || (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
 						footer={`Monto Total Rendido #1 (${documento?.STR_AFECTACION?.name}): `}
