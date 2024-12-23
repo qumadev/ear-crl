@@ -79,10 +79,11 @@ function FormularioSL() {
       id: "2",
       name: "EAR",
     },
-    STR_MOTIVORENDICION: {
-      id: "VIA",
-      name: "Viaticos",
-    },
+    // STR_MOTIVORENDICION: {
+    //   id: "VIA",
+    //   name: "Viaticos",
+    // },
+    STR_MOTIVORENDICION: null,
     STR_TOTALSOLICITADO: 0.0,
     STR_MOTIVOMIGR: null,
     STR_AREA: usuario.branch,
@@ -416,6 +417,20 @@ function FormularioSL() {
     return `${year}/${month}/${day}`;
   }
 
+  function getFechaLargo(fechaCorta) {
+    const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
+
+    const fechaAnio = fechaArray[2];
+
+    const fechaJs = new Date(
+      fechaAnio.substring(0, 4),
+      fechaArray[1] - 1,
+      fechaArray[0]
+    );
+
+    return new Date(`${fechaJs}`);
+  }
+
   async function obtenerSolicitudLocal() {
     if (id != null) {
       setLoadingSkeleton(true);
@@ -423,6 +438,10 @@ function FormularioSL() {
 
       if (response.status < 300) {
         let body = response.data.Result[0];
+
+        body.STR_FECHA_EVENTO_INICIAL = getFechaLargo(body.STR_FECHA_EVENTO_INICIAL)
+        body.STR_FECHA_EVENTO_FINAL = getFechaLargo(body.STR_FECHA_EVENTO_FINAL)
+
         setSolicitudRD(body);
 
         if (body.STR_ESTADO > 1) {

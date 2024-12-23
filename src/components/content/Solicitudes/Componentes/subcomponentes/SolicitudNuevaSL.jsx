@@ -124,8 +124,8 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }
           />
           {/* Motivo + Fechas de Evento */}
-          <div className="flex align-items-center gap-5">
-            <div className="flex-grow-1">
+          <div className="flex align-items-center gap-3">
+            <div>
               <label htmlFor="">(*)Motivo:</label>
               <Dropdown
                 value={solicitudRD.STR_MOTIVORENDICION}
@@ -138,49 +138,54 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
                 options={motivos}
                 optionLabel="name"
                 placeholder="Motivo"
+                style={{ width: '250px' }}
                 disabled={
                   !estadosEditables.includes(solicitudRD.STR_ESTADO) |
                   (usuario.rol.id != 1)
                 }
               />
-              <div>
-                <label htmlFor="">(*)Fecha de Inicial del Evento:</label>
-                <Calendar
-                  value={solicitudRD.STR_FECHA_EVENTO_INICIAL}
-                  onChange={(e) => {
-                    setSolicitudRD((prevState) => ({
-                      ...prevState,
-                      STR_FECHA_EVENTO_INICIAL: e.value,
-                    }));
-                  }}
-                  dateFormat="dd/mm/yy"
-                  locale="es"
-                  placeholder="Seleccione Fecha Inicial del Evento"
-                  disabled={
-                    !estadosEditables.includes(solicitudRD.STR_ESTADO) |
-                    (usuario.rol.id != 1)
-                  }
-                />
-              </div>
-              <div>
-                <label htmlFor="">(*)Fecha de Final del Evento:</label>
-                <Calendar
-                  value={solicitudRD.STR_FECHA_EVENTO_FINAL}
-                  onChange={(e) => {
-                    setSolicitudRD((prevState) => ({
-                      ...prevState,
-                      STR_FECHA_EVENTO_FINAL: e.value,
-                    }));
-                  }}
-                  dateFormat="dd/mm/yy"
-                  locale="es"
-                  placeholder="Seleccione Fecha Inicial del Evento"
-                  disabled={
-                    !estadosEditables.includes(solicitudRD.STR_ESTADO) |
-                    (usuario.rol.id != 1)
-                  }
-                />
-              </div>
+            </div>
+            <div className="flex-grow-1">
+              <label htmlFor="">(*)Fecha de Inicial del Evento:</label>
+              <Calendar
+                value={solicitudRD.STR_FECHA_EVENTO_INICIAL}
+                placeholder="Fecha Inicial del Evento"
+                onChange={(e) => {
+                  setSolicitudRD((prevState) => ({
+                    ...prevState,
+                    STR_FECHA_EVENTO_INICIAL: e.value,
+                  }));
+                }}
+                dateFormat="dd/mm/yy"
+                locale="es"
+                style={{ width: '250px' }}
+                disabled={
+                  !solicitudRD.STR_MOTIVORENDICION ||
+                  !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+                  (usuario.rol.id != 1)
+                }
+              />
+            </div>
+            <div className="flex-grow-1">
+              <label htmlFor="">(*)Fecha de Final del Evento:</label>
+              <Calendar
+                value={solicitudRD.STR_FECHA_EVENTO_FINAL}
+                placeholder="Fecha Final del Evento"
+                onChange={(e) => {
+                  setSolicitudRD((prevState) => ({
+                    ...prevState,
+                    STR_FECHA_EVENTO_FINAL: e.value,
+                  }));
+                }}
+                dateFormat="dd/mm/yy"
+                locale="es"
+                style={{ width: '250px' }}
+                disabled={
+                  !solicitudRD.STR_MOTIVORENDICION ||
+                  !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+                  (usuario.rol.id != 1)
+                }
+              />
             </div>
           </div>
 
@@ -277,7 +282,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
                 proveedores={proveedores}
             >
             </FormDetalleNewSolicitud> */}
-    </div>
+    </div >
   );
 }
 
