@@ -102,7 +102,7 @@ function FormularioSL() {
         var res = await createSolicitud(solicitudRD);
         if (res.status < 300) {
           let body = res.data.Result[0];
-          showSuccess(`Se creó la solicitud exitosamente con id: ${body.ID}`);
+          showSuccess(`Se ha creado la solicitud exitosamente`);
           ID = body.ID;
         } else {
           showError("Se tuvo un error al crear la solicitud");
@@ -122,7 +122,7 @@ function FormularioSL() {
       });
 
       if (response.status == 200) {
-        showSuccess(`Se envió la solicitud a los aprobadores con id: ${ID}`);
+        showSuccess(`Se ha enviado la solicitud hacia los aprobadores`);
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/solicitudes");
       } else {
@@ -169,7 +169,7 @@ function FormularioSL() {
 
         if (response.status < 300) {
           let body = response.data.Result[0];
-          showSuccess(`Se creó solicitud exitosamente con id ${body.ID}`);
+          showSuccess(`Se ha creado la solicitud exitosamente`);
           navigate(ruta + "/solicitudes");
           setLoading(false);
           return body.ID;
@@ -181,7 +181,7 @@ function FormularioSL() {
         var response = await actualizarSolicitud(solicitudRD);
         if (response.status < 300) {
 
-          showSuccess(`Se actualizo exitosamente solicitud #${solicitudRD.ID}`);
+          showSuccess(`Se ha actualizado la solicitud exitosamente`);
           navigate(ruta + "/solicitudes");
         } else {
           showError("Se tuvo un error al actualizar la solicitud");

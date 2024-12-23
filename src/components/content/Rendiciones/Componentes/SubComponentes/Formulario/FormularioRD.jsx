@@ -275,7 +275,7 @@ function FormularioRD() {
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
         var content = response.data.Result[0];
-        showSuccess(`Documento creado con ID: ${content.id}`);
+        showSuccess(`Documento creado exitosamente`);
 
         await new Promise((resolve) => setTimeout(resolve, 3000));
         navigate(ruta + "/rendiciones/info/" + id)
@@ -402,7 +402,7 @@ function FormularioRD() {
         let response = await actualizarDocumento(_documento); // _documento - Crea Documento
         if (response.CodRespuesta != "99") {
           var content = response.data.Result[0];
-          showSuccess(`Documento actualizado con ID: ${content.id}`);
+          showSuccess(`Documento actualizado exitosamente`);
           await new Promise((resolve) => setTimeout(resolve, 3000));
           navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
           //navigate(`/rendiciones/${id}/documentos`);
@@ -566,36 +566,26 @@ function FormularioRD() {
               //style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
                 const firstChar = documento.STR_SERIE_DOC.charAt(0).toUpperCase();
+                
+                if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' && firstChar !== 'E')) {
+                  e.preventDefault();
+                  showError("La serie de las facturas tienen que comenzar con 'F' o 'E'");
+                  return;
+                }
+                if ((documento.STR_SERIE_DOC.length !== 4)) {
+                  e.preventDefault();
+                  showError("La serie debe tener 4 dígitos");
+                  return;
+                }
+
                 if (esModo === "Agregar") {
-                  if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' && firstChar !== 'E')) {
-                    e.preventDefault();
-                    showError("La serie de las facturas tienen que comenzar con 'F' o 'E'");
-                    return;
-                  }
-                  if ((documento.STR_SERIE_DOC.length !== 4)) {
-                    e.preventDefault();
-                    showError("La serie debe tener 4 digitos");
-                    return;
-                  }
-                  // if ((documento.STR_TIPO_DOC.name === 'Boleta de venta') && (firstChar !== 'B')) {
-                  //   e.preventDefault();
-                  //   showError("La serie de las Boletas de venta tienen que comenzar con 'B'")
-                  //   return;
-                  // }
                   registrarRD();
                 } else {
                   updateRD();
                 }
-                //registrarDocumento();
-                //updateRD();
-                //  if (!esModoRegistrar) updateRD();
-                // else registrarRD();
-                // else registrarDocumento();
               }}
               loading={loading}
               disabled={esModo === "Agregar" && !Object.values(campoValidoCabecera).every(Boolean)}
-            //disabled={esModo==="Agregar" && !Object.values(campoValidoCabecera).every(Boolean) ? true : false}
-            //disabled={!estadosEditables.includes(solicitudRD.estado)}
             />
             <Button
               label="Cancelar"

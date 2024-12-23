@@ -85,7 +85,7 @@ export default function AnexPDF({
           const files = updatedFilesResponse.data.Result.map(file => ({ id: file.id, name: file.name }));
           setPdfFiles(files);
           fileUploadRef.current.clear(); // Limpiar los archivos pendientes tras la subida exitosa
-          showSuccess("Carga exitosa");
+          showSuccess("Carga de archivo exitosa");
         } else {
           showError("Error al obtener los archivos después de la carga");
         }

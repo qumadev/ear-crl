@@ -641,7 +641,7 @@ function DocumentoSustentado({
 			{mostrarFooterConvertido || (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido #1 (${documento?.STR_AFECTACION?.name}): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -715,7 +715,7 @@ function DocumentoSustentado({
 			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido #2 (${documento?.STR_AFECTACION?.name}): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>

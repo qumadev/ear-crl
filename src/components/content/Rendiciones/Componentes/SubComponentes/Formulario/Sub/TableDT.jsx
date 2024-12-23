@@ -94,7 +94,7 @@ export default function TableDT({
           STR_TOTALRENDIDO: nuevoTotalRendido // Actualizar el total monto rendido
         }));
 
-        showSuccess("Documento eliminado con éxito");
+        showSuccess("Documento eliminado exitosamente");
       } else {
         showError("Error al eliminar el documento");
       }
