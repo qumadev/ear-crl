@@ -749,6 +749,10 @@ function Rendiciones({
   //   }
   // }, [rendiciones]);
 
+  const fechasEventoConcatenadas = (rowData) => {
+    return <>{rowData.STR_FECHA_EVENTO_INICIAL} - {rowData.STR_FECHA_EVENTO_FINAL}</>
+  }
+
   return (
     <div>
       <Toast ref={toast} />
@@ -803,6 +807,12 @@ function Rendiciones({
           style={{ minWidth: "10rem" }}
           body={fecBodyTemplate}
         ></Column>
+        <Column
+          header="Rango fecha del evento"
+          style={{ minWidth: "15rem" }}
+          body={fechasEventoConcatenadas}
+        >
+        </Column>
         <Column
           field="STR_EMPLDASIG_NOMBRE"
           header="Empleado Asignado"
