@@ -182,6 +182,11 @@ export default function TableDT({
             style={{ width: "3rem" }}
           ></Column>
           <Column
+            header="Número de comprobante"
+            style={{ width: "3rem" }}
+            body={(rowData) => `${rowData.STR_SERIE_DOC || ''} - ${rowData.STR_CORR_DOC || ''}`}
+          ></Column>
+          <Column
             field='STR_FECHA_DOC'
             header="Fecha de comprobante"
             style={{ width: "3rem" }}
