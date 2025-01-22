@@ -50,19 +50,19 @@ export function BodySL({ responsiveSizeMobile }) {
 
     const solicitudesFiltradas = solicitudes.map((solicitud, index) => ({
       "#": index + 1 ,
-      "N° de la Solicitud": solicitud.STR_NRSOLICITUD,
-      "Fecha de la Solicitud": solicitud.STR_FECHAREGIS,
-      "Tipo": solicitud.STR_MOTIVORENDICION.name,
-      "Rango fecha del evento": `${solicitud.STR_FECHA_EVENTO_INICIAL || "Sin fecha"} - ${solicitud.STR_FECHA_EVENTO_FINAL || "Sin fecha"}`,
-      "Motivo": solicitud.STR_TIPORENDICION.name,
-      "Empleado Asignado": solicitud.STR_EMPLDREGI_NOMBRE,
-      "Monto Solicitado": solicitud.STR_TOTALSOLICITADO,
-      "Proyecto": solicitud.STR_PROYECTO,
-      "Centro de Costo (CeCo)": solicitud.STR_CENTRO_COSTO,
-      "N° de cuenta corriente y/o CCI": solicitud.STR_CCI,
-      "N° DNI, pasaporte, RUC o CE": solicitud.STR_TIPO_IDENTIFICACION,
-      "Comentario": solicitud.STR_COMENTARIO,
-      "Estado": solicitud.STR_ESTADO_INFO,
+      "N° de la Solicitud": solicitud?.STR_NRSOLICITUD || "",
+      "Fecha de la Solicitud": solicitud?.STR_FECHAREGIS || "",
+      "Tipo": solicitud?.STR_MOTIVORENDICION?.name || "",
+      "Rango fecha del evento": `${solicitud?.STR_FECHA_EVENTO_INICIAL || ""} - ${solicitud?.STR_FECHA_EVENTO_FINAL || ""}`,
+      "Motivo": solicitud?.STR_TIPORENDICION?.name || "",
+      "Empleado Asignado": solicitud?.STR_EMPLDREGI_NOMBRE || "",
+      "Monto Solicitado": `${solicitud?.STR_MONEDA?.name || ""} ${solicitud?.STR_TOTALSOLICITADO || ""}`,
+      "Proyecto": solicitud?.STR_PROYECTO,
+      "Centro de Costo (CeCo)": solicitud?.STR_CENTRO_COSTO,
+      "N° de cuenta corriente y/o CCI": solicitud?.STR_CCI,
+      "N° DNI, pasaporte, RUC o CE": solicitud?.STR_TIPO_IDENTIFICACION,
+      "Comentario": solicitud?.STR_COMENTARIO,
+      "Estado": solicitud?.STR_ESTADO_INFO,
     }))
 
     const worksheet = XLSX.utils.json_to_sheet(solicitudesFiltradas);

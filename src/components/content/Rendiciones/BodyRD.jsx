@@ -45,24 +45,26 @@ function BodyRD({ responsiveSizeMobile }) {
     const XLSX = await import("xlsx");
 
     const rendicionesFiltradas = rendiciones.map((rendicion, index) => {
-      const montoRendir = rendicion.STR_TOTALAPERTURA || 0;
-      const montoRendido = rendicion.STR_TOTALRENDIDO || 0;
-      const diferencia = montoRendir - montoRendido;
+      const montoRendir = (rendicion?.STR_TOTALAPERTURA || 0).toFixed(2);
+      const montoRendido = (rendicion?.STR_TOTALRENDIDO || 0).toFixed(2);
+      const diferencia = (montoRendir - montoRendido).toFixed(2);
 
       return {
         "#": index + 1,
-        "N° de la Rendición": rendicion.STR_NRRENDICION,
-        "N° de la Solicitud": rendicion.STR_SOLICITUD,
-        "Fecha de la Solicitud": rendicion.STR_FECHAREGIS,
-        "Fecha de la Rendición": rendicion.STR_FECHAREGIS,
-        "Rango fecha del evento": `${rendicion.STR_FECHA_EVENTO_INICIAL || "Sin fecha"} - ${rendicion.STR_FECHA_EVENTO_FINAL || "Sin fecha"}`,
-        "Empleado Asignado": rendicion.STR_EMPLDASIG_NOMBRE,
-        "Centro de Costo (CeCo)": rendicion.STR_CENTRO_COSTO,
-        "Proyecto": rendicion.STR_PROYECTO,
-        "Monto a Rendir": rendicion.STR_TOTALAPERTURA,
-        "Monto Rendido": rendicion.STR_TOTALRENDIDO,
-        "Diferencia": diferencia,
-        "Estado": rendicion.STR_ESTADO_INFO.name,
+        "N° de la Rendición": rendicion?.STR_NRRENDICION || "",
+        "N° de la Solicitud": rendicion?.STR_SOLICITUD || "",
+        "Fecha de la Solicitud": rendicion?.STR_FECHAREGIS || "",
+        "Fecha de la Rendición": rendicion?.STR_FECHAREGIS || "",
+        "Rango fecha del evento": `${rendicion?.STR_FECHA_EVENTO_INICIAL || ""} - ${rendicion?.STR_FECHA_EVENTO_FINAL || ""}`,
+        "Empleado Asignado": rendicion?.STR_EMPLDASIG_NOMBRE || "",
+        "Centro de Costo (CeCo)": rendicion?.STR_CENTRO_COSTO || "",
+        "Proyecto": rendicion?.STR_PROYECTO || "",
+        // "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${rendicion?.STR_TOTALAPERTURA || ""}`,
+        // "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${rendicion?.STR_TOTALRENDIDO || ""}`,
+        "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${montoRendir || ""}`,
+        "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${montoRendido || ""}`,
+        "Diferencia": `${rendicion?.STR_MONEDA?.name || ""} ${diferencia || ""}`,
+        "Estado": rendicion?.STR_ESTADO_INFO?.name || "",
       };
     });
 
