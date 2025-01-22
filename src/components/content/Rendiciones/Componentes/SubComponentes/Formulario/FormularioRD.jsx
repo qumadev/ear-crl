@@ -255,27 +255,27 @@ function FormularioRD() {
       totalConvertido = totalConvertido - (totalConvertido * descuento);
 
       let codigoRetencion = null;
-        switch (documento?.STR_AFECTACION?.name) {
-          case "Retencion":
-            codigoRetencion = 3;
-            break;
+      switch (documento?.STR_AFECTACION?.name) {
+        case "Retencion":
+          codigoRetencion = 3;
+          break;
 
-          case "Detraccion":
-            codigoRetencion = 10;
-            break;
+        case "Detraccion":
+          codigoRetencion = 10;
+          break;
 
-          case "No domiciliados":
-            codigoRetencion = 24;
-            break;
+        case "No domiciliados":
+          codigoRetencion = 24;
+          break;
 
-          case "Recibo por honorarios":
-            codigoRetencion = 8;
-            break;
+        case "Recibo por honorarios":
+          codigoRetencion = 8;
+          break;
 
-          default:
-            codigoRetencion = null;
-            break;
-        }
+        default:
+          codigoRetencion = null;
+          break;
+      }
 
       let _documento = {
         ...documento,
@@ -583,10 +583,25 @@ function FormularioRD() {
           <i
             className="pi pi-chevron-left cursor-pointer"
             onClick={() => {
-              esModo === "Agregar" ?
-                navigate(ruta + "/rendiciones/info/" + id)
-                :
-                navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID)
+              // Validar si hay detalles
+              if (esModo === "Editar") {
+                // Filtrar detalles persistidos (IDs que no son generados con uuidv4, asumiendo que son numéricos)
+                const detallesPersistidos = detalle.filter(
+                  (det) => det.ID && !String(det.ID).includes("-") // Convertir ID a string para usar includes
+                );
+
+                // Validar si hay al menos un detalle persistido
+                if (detallesPersistidos.length === 0) {
+                  showError("Debe existir al menos un detalle registrado en el sistema para cancelar en modo edición.");
+                  setLoading(false); // Aseguramos que no quede en estado de carga
+                  return; // Salir si no hay detalles válidos
+                }
+              }
+
+              // Continuar con la navegación
+              esModo === "Agregar"
+                ? navigate(ruta + "/rendiciones/info/" + id)
+                : navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
             }}
           ></i>
           <div>{esModo === "Detalle" ? "Detalle" : "Registro"} de Documentos a Rendir</div>
@@ -657,7 +672,7 @@ function FormularioRD() {
 
                   // Validar si hay al menos un detalle persistido
                   if (detallesPersistidos.length === 0) {
-                    showError("Debe existir al menos un detalle registrado en la base de datos para cancelar en modo edición.");
+                    showError("Debe existir al menos un detalle registrado en el sistema para cancelar en modo edición.");
                     setLoading(false); // Aseguramos que no quede en estado de carga
                     return; // Salir si no hay detalles válidos
                   }
