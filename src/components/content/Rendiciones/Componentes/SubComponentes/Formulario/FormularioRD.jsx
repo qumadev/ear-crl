@@ -243,8 +243,12 @@ function FormularioRD() {
       let descuento = 0;
       if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
         descuento = 0.03; // 3% para Retención si supera 700 SOL
-      } else if (documento?.STR_AFECTACION?.name === "Detraccion") {
+      } else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
         descuento = 0.10; // 10% siempre para Detracción
+      } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
+        descuento = 0.24
+      } else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
+        descuento = 0.08
       }
 
       // Aplicar el descuento al total convertido
@@ -373,8 +377,12 @@ function FormularioRD() {
         let descuento = 0;
         if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
           descuento = 0.03; // 3% para Retención si supera 700 SOL
-        } else if (documento?.STR_AFECTACION?.name === "Detraccion") {
+        } else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
           descuento = 0.10; // 10% siempre para Detracción
+        } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
+          descuento = 0.24
+        } else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
+          descuento = 0.08
         }
 
         totalConvertido = totalConvertido - (totalConvertido * descuento);

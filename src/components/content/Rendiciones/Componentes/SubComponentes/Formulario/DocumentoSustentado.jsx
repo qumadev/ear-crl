@@ -216,6 +216,14 @@ function DocumentoSustentado({
 			},
 			{
 				id: '3',
+				name: 'No domiciliados'
+			},
+			{
+				id: '4',
+				name: 'Recibo por honorarios'
+			},
+			{
+				id: '5',
 				name: '-'
 			}
 		];
@@ -264,7 +272,7 @@ function DocumentoSustentado({
 		if (esModo === "Agregar") {
 			setDocumento((prevState) => ({
 				...prevState,
-				STR_AFECTACION: { id: '3', name: '-' },
+				STR_AFECTACION: { id: '5', name: '-' },
 			}));
 		}
 
@@ -330,7 +338,7 @@ function DocumentoSustentado({
 		// Verifica y actualiza el estado de `STR_AFECTACION` si es necesario
 		if (subtotalTotal > 700 && documento.STR_TIPO_DOC?.name === "Factura") {
 			const afectacion = documento.STR_AFECTACION?.name;
-			if (afectacion !== 'Detraccion' && afectacion !== '-' && afectacion !== 'Retencion') {
+			if (afectacion !== 'Detraccion' && afectacion !== '-' && afectacion !== 'Retencion' && afectacion !== 'No domiciliados' && afectacion !== 'Recibo por honorarios') {
 				setDocumento(prevState => ({
 					...prevState,
 					STR_AFECTACION: { id: '1', name: 'Retencion' }
@@ -358,9 +366,7 @@ function DocumentoSustentado({
 	const indImpuestos = [
 		{ id: 'IGV', name: 'IGV (18%)' },
 		{ id: 'IGV_LEY', name: 'IGV (10%)' },
-		{ id: 'EXO', name: 'EXO' },
-		{ id: 'EXO', name: 'No domiciliados (24%)' },
-		{ id: 'EXO', name: 'Recibo por honorarios (8%)' }
+		{ id: 'EXO', name: 'EXO' }
 	];
 
 	const selectedOptionTemplate = (option, props) => {
@@ -638,7 +644,7 @@ function DocumentoSustentado({
 				</Row>
 			)}
 
-			{mostrarFooterConvertido || (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+			{mostrarFooterConvertido || (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
 						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
@@ -688,6 +694,10 @@ function DocumentoSustentado({
 								descuento = 0.03; // 3% RETENCION
 							} else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
 								descuento = 0.10; // 10% DETRACCION
+							} else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
+								descuento = 0.24
+							} else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
+								descuento = 0.08;
 							}
 
 							// Calcular el monto rendido después del descuento
@@ -712,7 +722,7 @@ function DocumentoSustentado({
 				</Row>
 			)}
 
-			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion") && (
+			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
 						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
@@ -748,10 +758,12 @@ function DocumentoSustentado({
 								console.log("El monto supera 700 SOL, aplicando descuento...");
 								if (documento?.STR_AFECTACION?.name === "Retencion") {
 									descuento = 0.03; // 3% RETENCION
-									console.log("Afectación: Retencion (3%)");
 								} else if (documento?.STR_AFECTACION?.name === "Detraccion") {
 									descuento = 0.10; // 10% DETRACCION
-									console.log("Afectación: Detraccion (10%)");
+								} else if (documento?.STR_AFECTACION?.name === "No domiciliados") {
+									descuento = 0.24; // 24% NO DOMICILIADOS
+								} else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios") {
+									descuento = 0.08 // 8% RECIBO POR HONORARIOS
 								}
 							} else {
 								console.log("El monto NO supera 700 SOL. No se aplica descuento.");
@@ -840,12 +852,12 @@ function DocumentoSustentado({
 		if (documento?.STR_TIPO_DOC?.name !== 'Factura') {
 			setDocumento((prevState) => ({
 				...prevState,
-				STR_AFECTACION: { id: '3', name: '-' }
+				STR_AFECTACION: { id: '5', name: '-' }
 			}));
 		}
 
 		// Si la afectación es '-' (por id o name), establece el tipo de cambio a 1
-		if (documento?.STR_AFECTACION?.id === '3' || documento?.STR_AFECTACION?.name === '-') {
+		if (documento?.STR_AFECTACION?.id === '5' || documento?.STR_AFECTACION?.name === '-') {
 			setDocumento((prevState) => ({
 				...prevState,
 				STR_TIPO_CAMBIO: '1'  // Forzamos a '1' como tipo de cambio
@@ -1153,7 +1165,7 @@ function DocumentoSustentado({
 								(!rendicion?.STR_MONEDA?.id || !documento?.STR_MONEDA?.Code) || // Monedas no definidas
 								(rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code && documento?.STR_MONEDA?.Code !== 'USD') || // Monedas coinciden pero no son USD
 								!(rendicion?.STR_MONEDA?.id === 'USD' && documento?.STR_MONEDA?.Code === 'USD' && // Monedas son USD
-									(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion")) && // Afectación específica
+									(documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios")) && // Afectación específica
 								rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code // Agregar condición para habilitar si monedas son distintas
 							}
 						/>

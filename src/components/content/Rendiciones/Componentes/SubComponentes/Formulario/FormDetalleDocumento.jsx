@@ -299,12 +299,6 @@ function FormDetalleDocumento({
 			tasaImpuesto = 0.18;
 		} else if (detDoc.IndImpuesto.name === "IGV (10%)") {
 			tasaImpuesto = 0.10;
-		} else if (detDoc.IndImpuesto.name === "No domiciliados (24%)") {
-			tasaImpuesto = 0.24;
-			esDescuento = true;
-		} else if (detDoc.IndImpuesto.name === "Recibo por honorarios (8%)") {
-			tasaImpuesto = 0.08;
-			esDescuento = true;
 		}
 
 		const impuesto = detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto;
@@ -507,10 +501,6 @@ function FormDetalleDocumento({
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
 								} else if (impuestoSeleccionado.name === "IGV (10%)") {
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2);
-								} else if (impuestoSeleccionado.name === "No domiciliados (24%)") {
-									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.24).toFixed(2);
-								} else if (impuestoSeleccionado.name === "Recibo por honorarios (8%)") {
-									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.08).toFixed(2);
 								}
 
 								setIndImp(impuestoSeleccionado);
