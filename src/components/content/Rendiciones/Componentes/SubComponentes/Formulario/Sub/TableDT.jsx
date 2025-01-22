@@ -44,26 +44,38 @@ export default function TableDT({
   useEffect(() => {
     const obtenerDocumentosSiEsNecesario = async () => {
       if (rendicion?.documentos?.length > 0) {
-        const documentosActualizados = await Promise.all(
-          rendicion.documentos.map(async (doc) => {
-            const response = await obtenerDocumento(doc.ID);
-            const documentoActualizado = response.data.Result[0];
-            return { ...doc, STR_TOTALDOC: documentoActualizado.STR_TOTALDOC };
-          })
-        );
+        setLoading(true);
+        try {
+          const documentosActualizados = await Promise.all(
+            rendicion.documentos.map(async (doc) => {
+              const response = await obtenerDocumento(doc.ID);
+              const documentoActualizado = response.data.Result[0];
+              return {
+                ...doc,
+                STR_TOTALDOC: documentoActualizado.STR_TOTALDOC,
+                STR_SERIE_DOC: documentoActualizado.STR_SERIE_DOC || '',
+                STR_CORR_DOC: documentoActualizado.STR_CORR_DOC || ''
+              };
+            })
+          );
 
-        // Solo actualiza el estado si los documentos realmente cambiaron
-        if (JSON.stringify(rendicion.documentos) !== JSON.stringify(documentosActualizados)) {
-          setRendicion(prevRendicion => ({
-            ...prevRendicion,
-            documentos: documentosActualizados
-          }));
+          // Solo actualiza el estado si los documentos realmente cambiaron
+          if (JSON.stringify(rendicion.documentos) !== JSON.stringify(documentosActualizados)) {
+            setRendicion(prevRendicion => ({
+              ...prevRendicion,
+              documentos: documentosActualizados
+            }));
+          }
+        } catch (error) {
+          console.error("Error al obtener los documentos:", error);
+        } finally {
+          setLoading(false);
         }
       }
     };
 
     obtenerDocumentosSiEsNecesario();
-  }, [rendicion?.documentos]); // Se ejecuta cuando cambian los documentos
+  }, [rendicion?.documentos, setRendicion]); // Se ejecuta cuando cambian los documentos
 
   const items = [
     {
@@ -162,6 +174,7 @@ export default function TableDT({
       <div className="card">
         <DataTable
           value={rendicion?.documentos}
+          loading={loading}
           sortField="ID"
           sortOrder={-1}
           sortMode="multiple"
@@ -183,8 +196,12 @@ export default function TableDT({
           ></Column>
           <Column
             header="Número de comprobante"
-            style={{ width: "3rem" }}
-            body={(rowData) => `${rowData.STR_SERIE_DOC || ''} - ${rowData.STR_CORR_DOC || ''}`}
+            style={{ width: "10rem" }}
+            body={(rowData) => {
+              const serieDoc = rowData?.STR_SERIE_DOC ?? '';
+              const corrDoc = rowData?.STR_CORR_DOC ?? '';
+              return `${serieDoc} - ${corrDoc}`
+            }}
           ></Column>
           <Column
             field='STR_FECHA_DOC'
