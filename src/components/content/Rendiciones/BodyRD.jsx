@@ -44,14 +44,46 @@ function BodyRD({ responsiveSizeMobile }) {
   const exportExcel = async () => {
     const XLSX = await import("xlsx");
 
-    const rendicionConFecha = rendiciones.map(rendicion => {
-      if (!rendicion.STR_FECHA_APROBACION) {
-        rendicion.STR_FECHA_APROBACION = "No se aprobó aún";
-      }
-      return rendicion;
+    const rendicionesFiltradas = rendiciones.map((rendicion, index) => {
+      const montoRendir = rendicion.STR_TOTALAPERTURA || 0;
+      const montoRendido = rendicion.STR_TOTALRENDIDO || 0;
+      const diferencia = montoRendir - montoRendido;
+
+      return {
+        "#": index + 1,
+        "N° de la Rendición": rendicion.STR_NRRENDICION,
+        "N° de la Solicitud": rendicion.STR_SOLICITUD,
+        "Fecha de la Solicitud": rendicion.STR_FECHAREGIS,
+        "Fecha de la Rendición": rendicion.STR_FECHAREGIS,
+        "Rango fecha del evento": `${rendicion.STR_FECHA_EVENTO_INICIAL || "Sin fecha"} - ${rendicion.STR_FECHA_EVENTO_FINAL || "Sin fecha"}`,
+        "Empleado Asignado": rendicion.STR_EMPLDASIG_NOMBRE,
+        "Centro de Costo (CeCo)": rendicion.STR_CENTRO_COSTO,
+        "Proyecto": rendicion.STR_PROYECTO,
+        "Monto a Rendir": rendicion.STR_TOTALAPERTURA,
+        "Monto Rendido": rendicion.STR_TOTALRENDIDO,
+        "Diferencia": diferencia,
+        "Estado": rendicion.STR_ESTADO_INFO.name,
+      };
     });
 
-    const worksheet = XLSX.utils.json_to_sheet(rendiciones);
+    const worksheet = XLSX.utils.json_to_sheet(rendicionesFiltradas);
+
+    worksheet["!cols"] = [
+      { wpx: 50 },
+      { wpx: 120 },
+      { wpx: 100 },
+      { wpx: 120 },
+      { wpx: 120 },
+      { wpx: 150 },
+      { wpx: 150 },
+      { wpx: 150 },
+      { wpx: 100 },
+      { wpx: 120 },
+      { wpx: 120 },
+      { wpx: 120 },
+      { wpx: 100 },
+    ]
+
     const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",

@@ -110,7 +110,6 @@ function FormularioSL() {
       } else {
         ID = solicitudRD.ID;
       }
-      let presupuestoSuficiente = true;
 
       let response = await enviarSolicitudAproba(ID, {
         usuarioId: usuario.sapID,
@@ -418,17 +417,30 @@ function FormularioSL() {
   }
 
   function getFechaLargo(fechaCorta) {
+    if (!fechaCorta || typeof fechaCorta !== "string") {
+      console.error("Fecha inválida:", fechaCorta);
+      return null; // O maneja el caso según la lógica del negocio
+    }
+  
     const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
-
-    const fechaAnio = fechaArray[2];
-
+  
+    if (fechaArray.length !== 3 || isNaN(fechaArray[0]) || isNaN(fechaArray[1]) || isNaN(fechaArray[2])) {
+      console.error("Formato de fecha inválido:", fechaCorta);
+      return null; // O maneja el caso según la lógica del negocio
+    }
+  
     const fechaJs = new Date(
-      fechaAnio.substring(0, 4),
-      fechaArray[1] - 1,
-      fechaArray[0]
+      parseInt(fechaArray[2], 10), // Año
+      parseInt(fechaArray[1], 10) - 1, // Mes (0 indexado)
+      parseInt(fechaArray[0], 10) // Día
     );
-
-    return new Date(`${fechaJs}`);
+  
+    if (isNaN(fechaJs.getTime())) {
+      console.error("Fecha no válida:", fechaCorta);
+      return null; // O maneja el caso según la lógica del negocio
+    }
+  
+    return fechaJs;
   }
 
   async function obtenerSolicitudLocal() {

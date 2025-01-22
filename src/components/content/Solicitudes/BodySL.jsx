@@ -48,14 +48,42 @@ export function BodySL({ responsiveSizeMobile }) {
   const exportExcel = async () => {
     const XLSX = await import("xlsx");
 
-    const solicitudesConFecha = solicitudes.map(solicitud => {
-      if (!solicitud.STR_FECHA_APROBACION) {
-        solicitud.STR_FECHA_APROBACION = "No se aprobó aún";  // Mensaje en caso de no haber fecha
-      }
-      return solicitud;
-    });
+    const solicitudesFiltradas = solicitudes.map((solicitud, index) => ({
+      "#": index + 1 ,
+      "N° de la Solicitud": solicitud.STR_NRSOLICITUD,
+      "Fecha de la Solicitud": solicitud.STR_FECHAREGIS,
+      "Tipo": solicitud.STR_MOTIVORENDICION.name,
+      "Rango fecha del evento": `${solicitud.STR_FECHA_EVENTO_INICIAL || "Sin fecha"} - ${solicitud.STR_FECHA_EVENTO_FINAL || "Sin fecha"}`,
+      "Motivo": solicitud.STR_TIPORENDICION.name,
+      "Empleado Asignado": solicitud.STR_EMPLDREGI_NOMBRE,
+      "Monto Solicitado": solicitud.STR_TOTALSOLICITADO,
+      "Proyecto": solicitud.STR_PROYECTO,
+      "Centro de Costo (CeCo)": solicitud.STR_CENTRO_COSTO,
+      "N° de cuenta corriente y/o CCI": solicitud.STR_CCI,
+      "N° DNI, pasaporte, RUC o CE": solicitud.STR_TIPO_IDENTIFICACION,
+      "Comentario": solicitud.STR_COMENTARIO,
+      "Estado": solicitud.STR_ESTADO_INFO,
+    }))
 
-    const worksheet = XLSX.utils.json_to_sheet(solicitudesConFecha);
+    const worksheet = XLSX.utils.json_to_sheet(solicitudesFiltradas);
+
+    worksheet["!cols"] = [
+      { wpx: 50 },
+      { wpx: 100 },
+      { wpx: 120 },
+      { wpx: 100 },
+      { wpx: 150 },
+      { wpx: 100 },
+      { wpx: 150 },
+      { wpx: 100 },
+      { wpx: 100 },
+      { wpx: 150 },
+      { wpx: 150 },
+      { wpx: 150 },
+      { wpx: 150 },
+      { wpx: 100 },
+    ]
+
     const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
