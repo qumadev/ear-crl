@@ -254,6 +254,29 @@ function FormularioRD() {
       // Aplicar el descuento al total convertido
       totalConvertido = totalConvertido - (totalConvertido * descuento);
 
+      let codigoRetencion = null;
+        switch (documento?.STR_AFECTACION?.name) {
+          case "Retencion":
+            codigoRetencion = 3;
+            break;
+
+          case "Detraccion":
+            codigoRetencion = 10;
+            break;
+
+          case "No domiciliados":
+            codigoRetencion = 24;
+            break;
+
+          case "Recibo por honorarios":
+            codigoRetencion = 8;
+            break;
+
+          default:
+            codigoRetencion = null;
+            break;
+        }
+
       let _documento = {
         ...documento,
         ID: id,
@@ -275,6 +298,7 @@ function FormularioRD() {
         STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         detalles: _detalles,
         STR_VALIDA_SUNAT: compExisteSunat,
+        STR_CODIGO_RETENCION: codigoRetencion,
       };
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
@@ -387,6 +411,29 @@ function FormularioRD() {
 
         totalConvertido = totalConvertido - (totalConvertido * descuento);
 
+        let codigoRetencion = null;
+        switch (documento?.STR_AFECTACION?.name) {
+          case "Retencion":
+            codigoRetencion = 3;
+            break;
+
+          case "Detraccion":
+            codigoRetencion = 10;
+            break;
+
+          case "No domiciliados":
+            codigoRetencion = 24;
+            break;
+
+          case "Recibo por honorarios":
+            codigoRetencion = 8;
+            break;
+
+          default:
+            codigoRetencion = null;
+            break;
+        }
+
         let _documento = {
           ...documento,
           ID: id,
@@ -404,6 +451,7 @@ function FormularioRD() {
           STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_VALIDA_SUNAT: compExisteSunat,
+          STR_CODIGO_RETENCION: codigoRetencion,
           detalles: _detalles, // Detalles
         };
 
@@ -574,7 +622,7 @@ function FormularioRD() {
               //style={{ backgroundColor: "black", borderColor: "black" }}
               onClick={(e) => {
                 const firstChar = documento.STR_SERIE_DOC.charAt(0).toUpperCase();
-                
+
                 if ((documento.STR_TIPO_DOC.name === 'Factura') && (firstChar !== 'F' && firstChar !== 'E')) {
                   e.preventDefault();
                   showError("La serie de las facturas tienen que comenzar con 'F' o 'E'");
