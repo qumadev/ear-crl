@@ -600,15 +600,12 @@ export const eliminarDetalleEnDocumento = async (idDet, idDoc, idRend) => {
   });
 };
 
-/*
-export const uploadAdjunto = (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  return API.post("/solicitud/upload", formData, {
+// Servicio API para exportar documentos con el diseño de CRL
+export const exportarDocumentosExcel = async (idRend) => {
+  return API.get(`/rendicion/exportar-excel/${idRend}`, {
+    responseType: 'arraybuffer', // Para manejar datos binarios
     validateStatus: function (status) {
       return status < 500;
     },
   });
 };
-*/

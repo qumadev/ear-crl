@@ -16,7 +16,7 @@ import {
   aceptarAprobRendicion, obtenerRendicion, autorizarReversionAprobRendicion,
   revertirAprobRendicion, validacionDocumento,
   enviarAprobRendicion, obtenerDocumento,
-  importarPlantilla
+  importarPlantilla, exportarDocumentosExcel
 }
   from '../../../../../../../services/axios.service';
 import { useState } from 'react';
@@ -28,6 +28,7 @@ import { Toolbar } from 'primereact/toolbar';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { FileUpload } from 'primereact/fileupload';
 import AnexPDF from './AnexPDF';
+import { toUnitless } from '@mui/material/styles/cssUtils';
 
 
 export default function FormDT({ editable, totalRedondeado,
@@ -531,81 +532,30 @@ export default function FormDT({ editable, totalRedondeado,
     }
   };
 
-  const exportExcel = () => {
-    const data = dataForExport.flatMap(doc =>
-      doc.detalles.map(detalle => ({
-        "N° Rendicion": doc.STR_RD_ID,
-        "N° documento": doc.ID,
-        "Tipo": doc.STR_TIPO_DOC.name,
-        "Serie": doc.STR_SERIE,
-        "Correlativo": doc.STR_CORR_DOC,
-        "RUC": doc.STR_PROVEEDOR.LicTradNum,
-        "Razon Social": doc.STR_PROVEEDOR.CardName,
-        "Direccion": doc.STR_DIRECCION,
-        "Motivo": doc.STR_MOTIVORENDICION.name,
-        "Moneda": doc.STR_MONEDA.name,
-        "Afectacion": doc.STR_AFECTACION.name,
-        "Fecha de Creacion": doc.STR_FECHA_DOC,
-        "Comentarios": doc.STR_COMENTARIOS,
-        "Importe Total Base": doc.STR_TOTALDOC,
-        "Import Total Convertido": doc.STR_TOTALDOC_CONVERTIDO,
-        "": "", // Columna en blanco
-        "Codigo de Articulo": detalle.COD_ARTICULO.ItemCode,
-        "Concepto": detalle.CONCEPTO,
-        "Almacen": detalle.ALMACEN,
-        "Proyecto": detalle.PROYECTO.name,
-        "Unidad de Negocio": detalle.UNIDAD_NEGOCIO.name,
-        "Filial": detalle.FILIAL.name,
-        "Area": detalle.AREA.name,
-        "Centro Costo": detalle.CENTRO_COSTO.name,
-        "Indicador Impuesto": detalle.IND_IMPUESTO.name,
-        "Precio": detalle.PRECIO,
-        "Cantidad": detalle.CANTIDAD,
-        "Impuesto": detalle.IMPUESTO
-      }))
-    );
-    const workSheet = XLSX.utils.json_to_sheet(data);
-    const workBook = XLSX.utils.book_new();
+  const handleExportExcel = async () => {
+    setLoading(true);
 
-    // Ajustar el ancho de las columnas
-    const columnWidths = [
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 15 }, // COLUMNA EN BLANCO
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-      { width: 20 },
-    ];
-
-    workSheet["!cols"] = columnWidths;
-
-    // const rendicionId = dataEarExport[0]?.N_EAR;
-    const fileName = `${rendicion.STR_NRRENDICION}.xlsx`;
-
-    XLSX.utils.book_append_sheet(workBook, workSheet, "DOCUMENTOS");
-    XLSX.writeFile(workBook, fileName);
-  };
+    try {
+      const response = await exportarDocumentosExcel(rendicion?.ID);
+      if (response.status === 200) {
+        const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${rendicion?.STR_NRRENDICION}.xlsx`); // Nombre del archivo
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showSuccess("Archivo exportado correctamente");
+      } else {
+        showError("Error al exportar el archivo. Inténtalo nuevamente.");
+      }
+    } catch (error) {
+      showError("Ocurrió un error al exportar el archivo.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const showEditButton = usuario.rol?.id == 1 && rendicion?.STR_ESTADO_INFO?.id < 10;
 
@@ -717,7 +667,7 @@ export default function FormDT({ editable, totalRedondeado,
             severity="secondary"
             style={{ backgroundColor: "black" }}
             onClick={() => {
-              exportExcel();
+              handleExportExcel();
             }}
           />
 
@@ -820,7 +770,7 @@ export default function FormDT({ editable, totalRedondeado,
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
-            Monto Total Rendido:
+              Monto Total Rendido:
             </label>
             <InputText
               value={`${rendicion?.STR_MONEDA?.name || ''} ${rendicion?.STR_TOTALRENDIDO.toFixed(2) || '0'} `}
