@@ -269,7 +269,7 @@ function FormularioRD() {
           break;
 
         case "Recibo por honorarios":
-          codigoRetencion = "DT8";
+          codigoRetencion = "R4CT";
           break;
 
         default:
@@ -298,7 +298,7 @@ function FormularioRD() {
         STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0], // aaaa-mm-dd
         detalles: _detalles,
         STR_VALIDA_SUNAT: compExisteSunat,
-        STR_CODIGO_RETENCION: codigoRetencion,
+        STR_CODIGO_RETENCION_DOC: codigoRetencion,
       };
       let response = await crearDocumento(_documento); // Crea Documento
       if (response.CodRespuesta != "99") {
@@ -426,7 +426,7 @@ function FormularioRD() {
             break;
   
           case "Recibo por honorarios":
-            codigoRetencion = "DT8";
+            codigoRetencion = "R4CT";
             break;
   
           default:
@@ -451,7 +451,7 @@ function FormularioRD() {
           STR_FECHA_DOC: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_VALIDA_SUNAT: compExisteSunat,
-          STR_CODIGO_RETENCION: codigoRetencion,
+          STR_CODIGO_RETENCION_DOC: codigoRetencion,
           detalles: _detalles, // Detalles
         };
 

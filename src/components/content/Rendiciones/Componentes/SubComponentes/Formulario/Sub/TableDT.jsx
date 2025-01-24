@@ -179,7 +179,7 @@ export default function TableDT({
           sortOrder={-1}
           sortMode="multiple"
           paginator
-          rows={5}
+          rows={50}
           rowsPerPageOptions={[5, 10, 25, 50]}
           tableStyle={{ minWidth: "100rem" }}
           emptyMessage="No se encontró Data"
