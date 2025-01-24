@@ -533,6 +533,11 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   const handleExportExcel = async () => {
+    if (!rendicion || !rendicion.documentos || rendicion.documentos.length === 0) {
+      showInfo("No hay documentos disponibles para exportar.");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -551,7 +556,7 @@ export default function FormDT({ editable, totalRedondeado,
         showError("Error al exportar el archivo. Inténtalo nuevamente.");
       }
     } catch (error) {
-      showError("Ocurrió un error al exportar el archivo.");
+      showError("Ocurrió un error al exportar el archivo. Cierra el archivo Excel de exportación de esta rendición si está abierto.");
     } finally {
       setLoading(false);
     }
