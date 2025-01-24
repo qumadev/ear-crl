@@ -580,7 +580,7 @@ function DocumentoSustentado({
 	}, [articulos]); // Se recalcula cada vez que cambian los artículos
 
 	const sonAmbasUSD = rendicion?.STR_MONEDA?.id === 'USD' && documento?.STR_MONEDA?.Code === 'USD';
-	const mostrarFooterConvertido = !sonAmbasUSD && (rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code);
+	const mostrarFooterConvertido = !sonAmbasUSD;
 
 	const footerGroup = (
 		<ColumnGroup>
@@ -646,10 +646,10 @@ function DocumentoSustentado({
 				</Row>
 			)}
 
-			{mostrarFooterConvertido || (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
+			{!sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido #1 (${documento?.STR_AFECTACION?.name}): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -706,6 +706,7 @@ function DocumentoSustentado({
 							const montoRendido = totalConvertido - (totalConvertido * descuento);
 
 							console.log("Monto Rendido (después de aplicar 3% si > 700):", montoRendido);
+							console.log("ESTE DEBERIA SALIR PERO NO SALE");
 
 							// Determinar la moneda final
 							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
@@ -727,7 +728,7 @@ function DocumentoSustentado({
 			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retencion" || documento?.STR_AFECTACION?.name === "Detraccion" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido #2 (${documento?.STR_AFECTACION?.name}): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>

@@ -257,23 +257,23 @@ function FormularioRD() {
       let codigoRetencion = null;
       switch (documento?.STR_AFECTACION?.name) {
         case "Retencion":
-          codigoRetencion = 3;
+          codigoRetencion = "RET3";
           break;
 
         case "Detraccion":
-          codigoRetencion = 10;
+          codigoRetencion = "DT10";
           break;
 
         case "No domiciliados":
-          codigoRetencion = 24;
+          codigoRetencion = "R24R";
           break;
 
         case "Recibo por honorarios":
-          codigoRetencion = 8;
+          codigoRetencion = "DT8";
           break;
 
         default:
-          codigoRetencion = null;
+          codigoRetencion = "";
           break;
       }
 
@@ -414,23 +414,23 @@ function FormularioRD() {
         let codigoRetencion = null;
         switch (documento?.STR_AFECTACION?.name) {
           case "Retencion":
-            codigoRetencion = 3;
+            codigoRetencion = "RET3";
             break;
-
+  
           case "Detraccion":
-            codigoRetencion = 10;
+            codigoRetencion = "DT10";
             break;
-
+  
           case "No domiciliados":
-            codigoRetencion = 24;
+            codigoRetencion = "R24R";
             break;
-
+  
           case "Recibo por honorarios":
-            codigoRetencion = 8;
+            codigoRetencion = "DT8";
             break;
-
+  
           default:
-            codigoRetencion = null;
+            codigoRetencion = "";
             break;
         }
 
