@@ -406,7 +406,6 @@ export function BodyDocs() {
       _body.STR_ESTADO = 9;
       await actualizaRendicion(_body);
     } catch (error) {
-      console.log(error);
     }
   }
 

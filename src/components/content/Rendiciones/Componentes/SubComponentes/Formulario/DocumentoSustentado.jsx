@@ -655,7 +655,6 @@ function DocumentoSustentado({
 					/>
 					<Column
 						footer={() => {
-							console.log("=== INICIO CALCULO MONTO TOTAL RENDIDO ===");
 
 							// Calcular el monto base (Total Base)
 							const totalBase = articulos
@@ -666,30 +665,21 @@ function DocumentoSustentado({
 									return acc + subtotal + impuesto;
 								}, 0);
 
-							console.log("Total Base:", totalBase);
-
 							// Calcular "Monto Total Convertido" si monedas son diferentes
 							const tipoCambio = parseFloat(documento?.STR_TIPO_CAMBIO) || 1;
 							let totalConvertido = totalBase;
 
 							if (documento?.STR_MONEDA?.Code === 'SOL' && rendicion?.STR_MONEDA?.id === 'USD') {
 								totalConvertido = totalBase / tipoCambio;
-								console.log(`Convertido de SOL a USD: ${totalBase} / ${tipoCambio} = ${totalConvertido}`);
 							} else if (documento?.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
 								totalConvertido = totalBase * tipoCambio;
-								console.log(`Convertido de USD a SOL: ${totalBase} * ${tipoCambio} = ${totalConvertido}`);
 							} else {
-								console.log("Monedas iguales, no se aplica conversión");
 							}
-
-							console.log("Total Convertido:", totalConvertido);
 
 							// Convertir a SOL si el monto convertido está en USD
 							const totalEnSoles = (rendicion?.STR_MONEDA?.id === 'USD')
 								? totalConvertido * tipoCambio
 								: totalConvertido;
-
-							console.log("Total en SOLES (para comparación):", totalEnSoles);
 
 							let descuento = 0;
 							if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
@@ -705,14 +695,8 @@ function DocumentoSustentado({
 							// Calcular el monto rendido después del descuento
 							const montoRendido = totalConvertido - (totalConvertido * descuento);
 
-							console.log("Monto Rendido (después de aplicar 3% si > 700):", montoRendido);
-							console.log("ESTE DEBERIA SALIR PERO NO SALE");
-
 							// Determinar la moneda final
 							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
-
-							console.log("Moneda Final:", monedaFinal);
-							console.log("=== FIN CALCULO MONTO TOTAL RENDIDO ===");
 
 							// Retornar el monto formateado
 							return formatCurrency(
@@ -734,7 +718,6 @@ function DocumentoSustentado({
 					/>
 					<Column
 						footer={() => {
-							console.log("=== INICIO CALCULO MONTO TOTAL RENDIDO ===");
 
 							// 1. Calcular Monto Base
 							const totalBase = articulos
@@ -744,7 +727,6 @@ function DocumentoSustentado({
 									const impuesto = parseFloat(articulo.Impuesto) || 0;
 									return acc + subtotal + impuesto;
 								}, 0);
-							console.log("Total Base (sin conversión):", totalBase);
 
 							// 2. Convertir a SOL si es necesario (Moneda USD -> SOL)
 							const tipoCambio = parseFloat(documento?.STR_TIPO_CAMBIO) || 1;
@@ -752,13 +734,10 @@ function DocumentoSustentado({
 								documento?.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'USD'
 									? totalBase * tipoCambio
 									: totalBase;
-							console.log("Tipo de Cambio:", tipoCambio);
-							console.log("Total en SOLES (convertido):", totalEnSoles);
 
 							// 3. Aplicar descuento solo si supera 700 SOL
 							let descuento = 0;
 							if (totalEnSoles > 700) {
-								console.log("El monto supera 700 SOL, aplicando descuento...");
 								if (documento?.STR_AFECTACION?.name === "Retencion") {
 									descuento = 0.03; // 3% RETENCION
 								} else if (documento?.STR_AFECTACION?.name === "Detraccion") {
@@ -769,17 +748,13 @@ function DocumentoSustentado({
 									descuento = 0.08 // 8% RECIBO POR HONORARIOS
 								}
 							} else {
-								console.log("El monto NO supera 700 SOL. No se aplica descuento.");
 							}
 
 							// 4. Calcular el monto rendido
 							const montoRendido = totalBase - (totalBase * descuento);
-							console.log("Monto Rendido (con descuento):", montoRendido);
 
 							// 5. Determinar la moneda final
 							const monedaFinal = rendicion?.STR_MONEDA?.id || 'SOL';
-							console.log("Moneda Final:", monedaFinal);
-							console.log("=== FIN CALCULO MONTO TOTAL RENDIDO ===");
 
 							// Retornar el monto formateado
 							return formatCurrency(

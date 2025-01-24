@@ -180,7 +180,6 @@ function Rendiciones({
       _body.STR_ESTADO = 9;
       await actualizaRendicion(_body);
     } catch (error) {
-      console.log(error);
     }
   }
 
@@ -470,7 +469,6 @@ function Rendiciones({
         }
       }
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -707,7 +705,6 @@ function Rendiciones({
         setRendiciones(response.data.Result);
       })
       .catch((err) => {
-        console.log(err.message);
       })
       .finally(() => {
         setLoading(false);

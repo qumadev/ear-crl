@@ -4,7 +4,6 @@ import "../../../Public/css/Login.css";
 
 export function Login({ config }) {
   useEffect(() => {
-    console.log(config);
   }, [config]);
 
   return (

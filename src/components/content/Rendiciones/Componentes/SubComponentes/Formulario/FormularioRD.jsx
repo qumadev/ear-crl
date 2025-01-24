@@ -467,7 +467,6 @@ function FormularioRD() {
         }
       }
     } catch (error) {
-      console.log("err: ", error);
     } finally {
       setLoading(false);
     }
@@ -554,7 +553,6 @@ function FormularioRD() {
         }
       }
     } catch (error) {
-      console.log(error.Message);
     } finally {
       setLoading(false);
     }

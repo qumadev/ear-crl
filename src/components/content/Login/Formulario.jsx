@@ -55,7 +55,6 @@ export function Formulario() {
         })
         .catch((error) => {
           showError("Usuario y/o contraseña son invalidas");
-          console.log(error);
         })
         .finally(() => {
           setLoading(false);
