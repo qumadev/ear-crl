@@ -94,6 +94,32 @@ function FormularioSL() {
 
   async function solicitarAprobacion() {
     setLoading(true);
+
+    const camposRequeridos = [
+      "STR_TIPORENDICION",
+      "STR_MONEDA",
+      "STR_TOTALSOLICITADO",
+      "STR_MOTIVORENDICION",
+      "STR_FECHA_EVENTO_INICIAL",
+      "STR_FECHA_EVENTO_FINAL",
+      "STR_PROYECTO",
+      "STR_CENTRO_COSTO",
+      "STR_CCI",
+      "STR_TIPO_IDENTIFICACION",
+      "STR_COMENTARIO"
+    ];
+
+    const faltantes = camposRequeridos.filter((campo) => {
+      const valor = campo.split('.').reduce((obj, key) => obj?.[key], solicitudRD);
+      return !valor || valor === "" || (typeof valor === "number" && valor <= 0);
+    });
+
+    if (faltantes.length > 0) {
+      showError("Por favor, complete todos los campos obligatorios.");
+      setLoading(false);
+      return;
+    }
+
     try {
       let ID;
 
@@ -162,31 +188,6 @@ function FormularioSL() {
 
   const registrarSR = async () => {
     setLoading(true);
-
-    const camposRequeridos = [
-      "STR_TIPORENDICION",
-      "STR_MONEDA",
-      "STR_TOTALSOLICITADO",
-      "STR_MOTIVORENDICION",
-      "STR_FECHA_EVENTO_INICIAL",
-      "STR_FECHA_EVENTO_FINAL",
-      "STR_PROYECTO",
-      "STR_CENTRO_COSTO",
-      "STR_CCI",
-      "STR_TIPO_IDENTIFICACION",
-      "STR_COMENTARIO"
-    ];
-
-    const faltantes = camposRequeridos.filter((campo) => {
-      const valor = campo.split('.').reduce((obj, key) => obj?.[key], solicitudRD);
-      return !valor || valor === "" || (typeof valor === "number" && valor <= 0);
-    });
-
-    if (faltantes.length > 0) {
-      showError("Por favor, complete todos los campos obligatorios.");
-      setLoading(false);
-      return;
-    }
 
     try {
       if (id == null) {
