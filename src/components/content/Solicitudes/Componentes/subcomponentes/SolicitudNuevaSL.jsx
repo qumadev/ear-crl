@@ -73,7 +73,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             value={solicitudRD.STR_EMPLDREGI?.nombres + ' ' + solicitudRD.STR_EMPLDREGI.apellidos}
             disabled={true}
           />
-          <label htmlFor="">(*)Tipo:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Tipo:
+          </label>
           <Dropdown
             value={solicitudRD.STR_TIPORENDICION}
             onChange={(e) => {
@@ -91,7 +93,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)Moneda:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Moneda:
+          </label>
           <Dropdown
             value={solicitudRD.STR_MONEDA?.id}
             onChange={(e) => {
@@ -107,7 +111,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)Monto:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Monto:
+          </label>
           <InputText
             value={solicitudRD.STR_TOTALSOLICITADO}
             onChange={(e) => {
@@ -126,7 +132,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
           {/* Motivo + Fechas de Evento */}
           <div className="flex align-items-center gap-3">
             <div>
-              <label htmlFor="">(*)Motivo:</label>
+              <label htmlFor="">
+                <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Motivo:
+              </label>
               <Dropdown
                 value={solicitudRD.STR_MOTIVORENDICION}
                 onChange={(e) => {
@@ -146,7 +154,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               />
             </div>
             <div className="flex-grow-1">
-              <label htmlFor="">(*)Fecha de Inicial del Evento:</label>
+              <label htmlFor="">
+                <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Fecha de Inicial del Evento:
+              </label>
               <Calendar
                 value={solicitudRD.STR_FECHA_EVENTO_INICIAL}
                 placeholder="Fecha Inicial del Evento"
@@ -167,7 +177,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               />
             </div>
             <div className="flex-grow-1">
-              <label htmlFor="">(*)Fecha de Final del Evento:</label>
+              <label htmlFor="">
+                <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Fecha de Final del Evento:
+              </label>
               <Calendar
                 value={solicitudRD.STR_FECHA_EVENTO_FINAL}
                 placeholder="Fecha Final del Evento"
@@ -189,7 +201,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             </div>
           </div>
 
-          <label htmlFor="">(*)Proyecto:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Proyecto:
+          </label>
           <InputText
             value={solicitudRD.STR_PROYECTO}
             onChange={(e) => {
@@ -205,7 +219,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)Centro de Costo (CeCo):</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Centro de Costo (CeCo):
+          </label>
           <InputText
             value={solicitudRD.STR_CENTRO_COSTO}
             onChange={(e) => {
@@ -221,7 +237,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)N° de cuenta corriente y/o CCI:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> N° de cuenta corriente y/o CCI:
+          </label>
           <InputText
             value={solicitudRD.STR_CCI}
             onChange={(e) => {
@@ -237,7 +255,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               (usuario.rol.id != 1)
             }
           />
-          <label htmlFor="">(*)Tipo de Identificación:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Tipo de Identificación:
+          </label>
           <InputText
             value={solicitudRD.STR_TIPO_IDENTIFICACION}
             onChange={(e) => {
@@ -254,7 +274,9 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }
           />
 
-          <label htmlFor="">(*)Comentario:</label>
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Comentario:
+          </label>
           <InputTextarea
             value={solicitudRD.STR_COMENTARIO}
             onChange={(e) => {
@@ -274,14 +296,6 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
           />
         </div>
       </div>
-
-      {/* <Button label="Guardar Borrador" onClick={crearSolicitud} /> */}
-      {/* <FormDetalleNewSolicitud
-                productDialog={productDialog}
-                setProductDialog={setProductDialog}
-                proveedores={proveedores}
-            >
-            </FormDetalleNewSolicitud> */}
     </div >
   );
 }
