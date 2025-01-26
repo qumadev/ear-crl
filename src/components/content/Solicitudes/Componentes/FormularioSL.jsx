@@ -162,6 +162,32 @@ function FormularioSL() {
 
   const registrarSR = async () => {
     setLoading(true);
+
+    const camposRequeridos = [
+      "STR_TIPORENDICION",
+      "STR_MONEDA",
+      "STR_TOTALSOLICITADO",
+      "STR_MOTIVORENDICION",
+      "STR_FECHA_EVENTO_INICIAL",
+      "STR_FECHA_EVENTO_FINAL",
+      "STR_PROYECTO",
+      "STR_CENTRO_COSTO",
+      "STR_CCI",
+      "STR_TIPO_IDENTIFICACION",
+      "STR_COMENTARIO"
+    ];
+
+    const faltantes = camposRequeridos.filter((campo) => {
+      const valor = campo.split('.').reduce((obj, key) => obj?.[key], solicitudRD);
+      return !valor || valor === "" || (typeof valor === "number" && valor <= 0);
+    });
+
+    if (faltantes.length > 0) {
+      showError("Por favor, complete todos los campos obligatorios.");
+      setLoading(false);
+      return;
+    }
+
     try {
       if (id == null) {
         var response = await createSolicitud(solicitudRD);
@@ -421,25 +447,25 @@ function FormularioSL() {
       console.error("Fecha inválida:", fechaCorta);
       return null; // O maneja el caso según la lógica del negocio
     }
-  
+
     const fechaArray = fechaCorta.split("/"); // Divide la cadena en un array [día, mes, año]
-  
+
     if (fechaArray.length !== 3 || isNaN(fechaArray[0]) || isNaN(fechaArray[1]) || isNaN(fechaArray[2])) {
       console.error("Formato de fecha inválido:", fechaCorta);
       return null; // O maneja el caso según la lógica del negocio
     }
-  
+
     const fechaJs = new Date(
       parseInt(fechaArray[2], 10), // Año
       parseInt(fechaArray[1], 10) - 1, // Mes (0 indexado)
       parseInt(fechaArray[0], 10) // Día
     );
-  
+
     if (isNaN(fechaJs.getTime())) {
       console.error("Fecha no válida:", fechaCorta);
       return null; // O maneja el caso según la lógica del negocio
     }
-  
+
     return fechaJs;
   }
 
