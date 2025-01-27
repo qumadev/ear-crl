@@ -1195,6 +1195,11 @@ function DocumentoSustentado({
 						rowsPerPageOptions={[5, 10, 25, 50]}
 						tableStyle={{ minWidth: "12rem" }}
 						header="Detalle de Documento Sustentado"
+						emptyMessage={
+							<div style={{ textAlign: 'center', padding: '10px' }}>
+								No hay detalles registrados para este documento
+							</div>
+						}
 						footerColumnGroup={footerGroup}
 					>
 						<Column
@@ -1284,7 +1289,11 @@ function DocumentoSustentado({
 							field="Precio"
 							header="Precio"
 							style={{ minWidth: "7rem" }}
-						></Column>
+							body={(rowData) => {
+								const precio = parseFloat(rowData.Precio);
+								return !isNaN(precio) ? precio.toFixed(2) : "0.00";
+							}}
+						/>
 						<Column
 							field="Cantidad"
 							header="Cantidad"

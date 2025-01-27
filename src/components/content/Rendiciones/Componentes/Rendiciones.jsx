@@ -770,6 +770,11 @@ function Rendiciones({
         tableStyle={{ minWidth: "12rem" }}
         header={header}
         loading={loading}
+        emptyMessage={
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            No se encontraron rendiciones registradas
+          </div>
+        }
       >
         <Column
           header="#"

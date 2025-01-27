@@ -45,7 +45,11 @@ function Aprobaciones({
       <DataTable
         value={aprobadores}
         tableStyle={{ minWidth: "50rem" }}
-        emptyMessage="No se encontraron aprobadores"
+        emptyMessage={
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            No se encontraron aprobadores
+          </div>
+        }
       >
         <Column field="orden" header="Nivel"></Column>
         <Column field="aprobadorNombre" header="Usuario"></Column>

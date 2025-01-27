@@ -123,19 +123,42 @@ function FormularioSL() {
     try {
       let ID;
 
-      // Guardar Borrador
-      if (esModoRegistrar) {
-        var res = await createSolicitud(solicitudRD);
-        if (res.status < 300) {
-          let body = res.data.Result[0];
-          showSuccess(`Se ha creado la solicitud exitosamente`);
-          ID = body.ID;
-        } else {
-          showError("Se tuvo un error al crear la solicitud");
+      // GUARDAR BORRADOR Y EDITAR
+      if (!esModoRegistrar) {
+        const updateResponse = await actualizarSolicitud(solicitudRD);
+        if (updateResponse.status >= 300) {
+          showError("Error al actualizar la solicitud antes de solicitar aprobación.");
+          setLoading(false);
+          return;
         }
-      } else {
+        showSuccess("Se ha actualizado la solicitud exitosamente.");
         ID = solicitudRD.ID;
+      } else {
+        // Crear la solicitud si está en modo registrar
+        const createResponse = await createSolicitud(solicitudRD);
+        if (createResponse.status >= 300) {
+          showError("Error al crear la solicitud.");
+          setLoading(false);
+          return;
+        }
+        const body = createResponse.data.Result[0];
+        ID = body.ID;
+        showSuccess("Se ha creado la solicitud exitosamente.");
       }
+
+      // // Guardar Borrador
+      // if (esModoRegistrar) {
+      //   var res = await createSolicitud(solicitudRD);
+      //   if (res.status < 300) {
+      //     let body = res.data.Result[0];
+      //     showSuccess(`Se ha creado la solicitud exitosamente`);
+      //     ID = body.ID;
+      //   } else {
+      //     showError("Se tuvo un error al crear la solicitud");
+      //   }
+      // } else {
+      //   ID = solicitudRD.ID;
+      // }
 
       let response = await enviarSolicitudAproba(ID, {
         usuarioId: usuario.sapID,

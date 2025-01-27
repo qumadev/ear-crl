@@ -231,34 +231,40 @@ function FormDetalleDocumento({
 			setDetDoc(null);
 			showSuccess(`Detalle agregado correctamente`);
 		} else {
-			showError(`Por favor complete todos los campos requeridos.`);
+			showError(`Por favor, complete todos los campos obligatorios marcados en rojo.`);
 		}
 	};
 
 	const [campoValido, setCampoValido] = useState({
-		Cod: false,
-		Proyecto: false,
-		UnidadNegocio: false,
-		Filial: false,
-		Areas: false,
-		CentroCosto: false,
-		Precio: false,
-		Cantidad: false,
+		Cod: true,
+		Proyecto: true,
+		UnidadNegocio: true,
+		Filial: true,
+		Areas: true,
+		CentroCosto: true,
+		IndImpuesto: true,
+		Precio: true,
+		Cantidad: true,
 	});
 
-
-
+	// Función para validar solo los campos obligatorios
 	const validarCampos = () => {
-		for (let campo in campoValido) {
-			if (!detDoc[campo]) {
-				setCampoValido((prevState) => ({
-					...prevState,
-					[campo]: false,
-				}));
-				return false;
-			}
-		}
-		return true;
+		const nuevosCamposValidos = {
+			Cod: Boolean(detDoc?.Cod),
+			Proyecto: Boolean(detDoc?.Proyecto),
+			UnidadNegocio: Boolean(detDoc?.UnidadNegocio),
+			Filial: Boolean(detDoc?.Filial),
+			Areas: Boolean(detDoc?.Areas),
+			CentroCosto: Boolean(detDoc?.CentroCosto),
+			IndImpuesto: Boolean(detDoc?.IndImpuesto),
+			Precio: Boolean(detDoc?.Precio),
+			Cantidad: Boolean(detDoc?.Cantidad),
+		};
+
+		setCampoValido(nuevosCamposValidos);
+
+		// Retorna true si todos los campos son válidos
+		return Object.values(nuevosCamposValidos).every(Boolean);
 	};
 
 	const handleEdit = () => {
@@ -273,8 +279,7 @@ function FormDetalleDocumento({
 
 			//alert('Detalle editado correctamente');
 		} else {
-			showError(`Por favor complete todos los campos requeridos.`);
-			//alert('Por favor complete todos los campos requeridos.');
+			showError(`Por favor, complete todos los campos obligatorios marcados en rojo.`);
 		}
 	};
 
@@ -362,7 +367,9 @@ function FormDetalleDocumento({
 
 				<div className="col-12 md:col-6 lg:col-12">
 					<div className="mb-3 flex flex-column gap-2">
-						<label htmlFor="">(*)Cod. Articulo/Servicio:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Cod. Articulo/Servicio:
+						</label>
 						<Dropdown
 							value={detDoc?.Cod}
 							onChange={(e) => {
@@ -386,7 +393,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedOptionTemplate}
 							itemTemplate={complementoOptionTemplate}
 						/>
-						<label htmlFor="">(*)Proyecto:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Proyecto:
+						</label>
 						<Dropdown
 							value={detDoc?.Proyecto}
 							onChange={(e) => {
@@ -407,7 +416,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedProyectoOptionTemplate}
 							itemTemplate={complementoProyectoOptionTemplate}
 						/>
-						<label htmlFor="">(*)Unidad de Negocio:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Unidad de Negocio:
+						</label>
 						<Dropdown
 							value={detDoc?.UnidadNegocio}
 							onChange={(e) => {
@@ -428,7 +439,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedUndOptionTemplate}
 							itemTemplate={completementoUndOptionTemplate}
 						/>
-						<label htmlFor="">(*)Filial:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Filial:
+						</label>
 						<Dropdown
 							value={detDoc?.Filial}
 							onChange={(e) => {
@@ -450,7 +463,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedFilialOptionTemplate}
 							itemTemplate={completementoFilialOptionTemplate}
 						/>
-						<label htmlFor="">(*)Area:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Area:
+						</label>
 						<Dropdown
 							value={detDoc?.Areas}
 							onChange={(e) => {
@@ -472,7 +487,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedAreaOptionTemplate}
 							itemTemplate={complementoAreaOptionTemplate}
 						/>
-						<label htmlFor="">(*)Centro Costo:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Centro Costo:
+						</label>
 						<Dropdown
 							value={detDoc?.CentroCosto}
 							onChange={(e) => {
@@ -494,7 +511,9 @@ function FormDetalleDocumento({
 							valueTemplate={selectedCeCoOptionTempalte}
 							itemTemplate={complementoCeCoOptionTemplate}
 						/>
-						<label htmlFor="">(*)Ind. Impuesto:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Ind. Impuesto:
+						</label>
 						<Dropdown
 							value={detDoc?.IndImpuesto}
 							onChange={(e) => {
@@ -528,7 +547,9 @@ function FormDetalleDocumento({
 							optionLabel="name"
 							placeholder='Seleccione Ind. Impuesto'
 						/>
-						<label htmlFor="">(*)Precio:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Precio:
+						</label>
 						<InputText
 							value={detDoc?.Precio}
 							onChange={(e) => {
@@ -546,7 +567,9 @@ function FormDetalleDocumento({
 								}));
 							}}
 						/>
-						<label htmlFor="">(*)Cantidad:</label>
+						<label htmlFor="">
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Cantidad:
+						</label>
 						<InputText
 							value={detDoc?.Cantidad}
 							onChange={(e) => {
@@ -564,7 +587,7 @@ function FormDetalleDocumento({
 								}));
 							}}
 						/>
-						<label htmlFor="">(*)Impuesto:</label>
+						<label htmlFor="">Impuesto:</label>
 						<InputText
 							value={detDoc?.Impuesto}
 							onChange={(e) => {
@@ -575,7 +598,7 @@ function FormDetalleDocumento({
 								}));
 							}}
 						/>
-						<label htmlFor="">(*)Total Detalle:</label>
+						<label htmlFor="">Total Detalle:</label>
 						<InputText
 							value={detDoc?.TotalDetalle}
 							onChange={(e) => {
@@ -598,23 +621,16 @@ function FormDetalleDocumento({
 								className="col-12"
 								label="Editar"
 								onClick={handleEdit}
+
 							/>
 							:
 							<Button
 								className='col-12'
-								// label="Agregar"
 								label="Agregar"
 								onClick={addDetDoc}
 								disabled={!Object.values(campoValido).every(Boolean)}
 							/>
 						}
-
-
-						{/* <Button
-                            className='col-12'
-                            label="mostrar"
-                            onClick={showCampos}
-                        /> */}
 					</div>
 				</div>
 			</Dialog>

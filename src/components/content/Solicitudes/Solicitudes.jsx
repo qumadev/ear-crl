@@ -662,7 +662,11 @@ function Solicitudes({
         tableStyle={{ minWidth: "12rem" }}
         header={header}
         loading={loading}
-        emptyMessage="No se encontraron Solicitudes"
+        emptyMessage={
+          <div style={{ textAlign: 'center', padding: '10px' }}>
+            No se encontraron solicitudes registradas
+          </div>
+        }
         cellStyle={{ border: '5px solid #ddd' }}
       >
         <Column
