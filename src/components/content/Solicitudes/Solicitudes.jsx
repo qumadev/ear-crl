@@ -117,7 +117,7 @@ function Solicitudes({
           );
         } else {
           showInfo(
-            "Se aceptó la primera aprobación, quedá pendiente de la segunda"
+            "Se aceptó la primera aprobación, queda pendiente de la segunda"
           );
         }
         await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -248,7 +248,7 @@ function Solicitudes({
         let body = response.data.Result[0];
 
         if (body.AprobacionFinalizada == 0) {
-          showSuccess("Se aceptó la primera aprobación, quedá pendiente de la segunda");
+          showSuccess("Se aceptó la primera aprobación, queda pendiente de la segunda");
         }
         if (body.AprobacionFinalizada == 1) {
           showSuccess(`Se migró a SAP la solicitud con número ${body.DocNum}`);

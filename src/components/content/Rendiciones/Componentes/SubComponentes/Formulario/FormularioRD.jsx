@@ -196,6 +196,37 @@ function FormularioRD() {
   /* Metodo para agregar */
   const registrarRD = async () => {
     setLoading(true);
+
+    const camposObligatorios = [
+      "STR_TIPO_DOC",
+      "STR_SERIE_DOC",
+      "STR_CORR_DOC",
+      "STR_PROVEEDOR",
+      "STR_MONEDA",
+      "STR_AFECTACION",
+      "STR_FECHA_DOC",
+      "STR_COMENTARIOS"
+    ];
+
+    // Validar campos obligatorios
+    const faltantes = camposObligatorios.filter((campo) => {
+      const valor = campo.split('.').reduce((obj, key) => obj?.[key], documento);
+      return !valor || valor === "" || (typeof valor === "number" && valor <= 0);
+    });
+
+    if (faltantes.length > 0) {
+      showError("Por favor, complete todos los campos obligatorios marcados en rojo.");
+      setLoading(false);
+      return;
+    }
+
+    // Validar que al menos exista un detalle
+    // if (!detalle || detalle.length === 0) {
+    //   showError("Debe ingresar al menos un detalle para registrar el documento.");
+    //   setLoading(false);
+    //   return; // Detener la ejecución si no hay detalles
+    // }
+
     try {
       if (!detalle || detalle.length === 0) {
         showError("Debe ingresar al menos un detalle para registrar el documento.");
@@ -317,31 +348,6 @@ function FormularioRD() {
     }
   };
 
-  const datosState = {
-    "ID": null,
-    "STR_RENDICION": null,
-    "STR_FECHA_CONTABILIZA": null,
-    "STR_FECHA_DOC": null,
-    "STR_FECHA_VENCIMIENTO": null,
-    "STR_PROVEEDOR": { "CardCode": null, "CardName": null, "LicTradNum": null },
-    "STR_MONEDA": { "id": null, "name": null },
-    "STR_COMENTARIOS": null,
-    "STR_TIPO_DOC": { "id": null, "name": null },
-    "STR_SERIE_DOC": null,
-    "STR_CORR_DOC": null,
-    "STR_VALIDA_SUNAT": null,
-    "STR_OPERACION": null,
-    "STR_PARTIDAFLUJO": null,
-    "STR_TOTALDOC": null,
-    "STR_RD_ID": null,
-    "STR_CANTIDAD": null,
-    "STR_ALMACEN": null,
-    "STR_RUC": null,
-    "STR_RAZONSOCIAL": null,
-    "STR_DIRECCION": null,
-    "detalles": []
-  }
-
   function formatDate(dateString) {
     const [day, month, year] = dateString.split('/').map(Number);
     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
@@ -349,6 +355,30 @@ function FormularioRD() {
 
   const updateRD = async () => {
     setLoading(true);
+
+    const camposObligatorios = [
+      "STR_TIPO_DOC",
+      "STR_SERIE_DOC",
+      "STR_CORR_DOC",
+      "STR_PROVEEDOR",
+      "STR_MONEDA",
+      "STR_AFECTACION",
+      "STR_FECHA_DOC",
+      "STR_COMENTARIOS"
+    ];
+
+    // Validar campos obligatorios
+    const faltantes = camposObligatorios.filter((campo) => {
+      const valor = campo.split('.').reduce((obj, key) => obj?.[key], documento);
+      return !valor || valor === "" || (typeof valor === "number" && valor <= 0);
+    });
+
+    if (faltantes.length > 0) {
+      showError("Por favor, complete todos los campos obligatorios marcados en rojo.");
+      setLoading(false);
+      return;
+    }
+
     try {
       if (!detalle || detalle.length === 0) {
         showError("Debe ingresar al menos un detalle para actualizar el documento.");
@@ -416,19 +446,19 @@ function FormularioRD() {
           case "Retencion":
             codigoRetencion = "RET3";
             break;
-  
+
           case "Detraccion":
             codigoRetencion = "DT10";
             break;
-  
+
           case "No domiciliados":
             codigoRetencion = "R24R";
             break;
-  
+
           case "Recibo por honorarios":
             codigoRetencion = "R4CT";
             break;
-  
+
           default:
             codigoRetencion = "";
             break;

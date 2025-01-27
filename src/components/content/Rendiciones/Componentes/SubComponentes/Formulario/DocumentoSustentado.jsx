@@ -925,14 +925,16 @@ function DocumentoSustentado({
 			<div className="col-12 md:col-12 lg:col-12">
 				<div className="mb-3 flex flex-column">
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)¿Es exterior?</label>
+						<label className='col-2'>¿Es exterior?</label>
 						<Checkbox
 							className='col-6'
 							disabled={esModoValidate}
 						></Checkbox>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Tipo</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Tipo
+						</label>
 						<Dropdown
 							className='col-6'
 							value={documento.STR_TIPO_DOC}
@@ -946,7 +948,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)N° de serie</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> N° de serie
+						</label>
 						<InputText
 							value={documento.STR_SERIE_DOC}
 							maxLength={4}
@@ -976,7 +980,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Correlativo</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Correlativo
+						</label>
 						<InputText
 							className='col-6'
 							placeholder='Correlativo'
@@ -1005,7 +1011,9 @@ function DocumentoSustentado({
 						{!esValido && <p style={{ color: 'red' }}>El número debe tener exactamente 8 dígitos.</p>}
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)RUC</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> RUC
+						</label>
 						<Dropdown
 							className='col-6'
 							value={documento.STR_PROVEEDOR}
@@ -1022,7 +1030,7 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Razon Social</label>
+						<label className='col-2'>Razon Social</label>
 						<InputText
 							className='col-6'
 							value={documento.STR_RAZONSOCIAL}
@@ -1030,7 +1038,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Moneda</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Moneda
+						</label>
 						{useEffect(() => {
 							if (documento.STR_MONEDA) {
 								const monedaEncontrada = monedas.find(
@@ -1058,7 +1068,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>Afectacion</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Afectacion
+						</label>
 						<Dropdown
 							className='col-6'
 							value={documento.STR_AFECTACION?.id}  // Usamos el id para manejar la selección
@@ -1081,7 +1093,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Fecha</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Fecha
+						</label>
 						<Calendar
 							className='col-6'
 							value={documento.STR_FECHA_DOC}
@@ -1104,7 +1118,9 @@ function DocumentoSustentado({
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
-						<label className='col-2'>(*)Comentario</label>
+						<label className='col-2'>
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Comentario
+						</label>
 						<InputTextarea
 							value={documento.STR_COMENTARIOS}
 							onChange={(e) => {

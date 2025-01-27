@@ -115,7 +115,7 @@ function FormularioSL() {
     });
 
     if (faltantes.length > 0) {
-      showError("Por favor, complete todos los campos obligatorios.");
+      showError("Por favor, complete todos los campos obligatorios marcados en rojo.");
       setLoading(false);
       return;
     }
@@ -416,7 +416,7 @@ function FormularioSL() {
           await new Promise((resolve) => setTimeout(resolve, 3000));
         } else {
           showInfo(
-            "Se aceptó la primera aprobación, quedá pendiente de la segunda"
+            "Se aceptó la primera aprobación, queda pendiente de la segunda"
           );
 
           await new Promise((resolve) => setTimeout(resolve, 3000));
