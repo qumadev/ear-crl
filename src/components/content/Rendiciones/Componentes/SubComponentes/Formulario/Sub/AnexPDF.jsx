@@ -112,7 +112,7 @@ export default function AnexPDF({
         // showError('Error al descargar el ar2chivo');
       }
     } catch (error) {
-      showError('Error al descargar el archivo');
+      // showError('Error al descargar el archivo');
     }
   };
 
