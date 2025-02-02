@@ -636,12 +636,26 @@ function Solicitudes({
 
   const comentarioBodyTemplate = (rowData) => {
     const comentario = rowData.STR_COMENTARIO || "";
-    const maxLength = 80;
+    const maxLength = 50;
 
-    return comentario.length > maxLength
-      ? comentario.substring(0, maxLength) + "..."
-      : comentario;
-  }
+    return (
+      <div
+        style={{
+          display: "-webkit-box",
+          WebkitLineClamp: 3, // Máximo 3 líneas
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          wordWrap: "break-word",
+          maxWidth: "15rem", // Ajusta el ancho si es necesario
+          whiteSpace: "normal",
+        }}
+      >
+        {comentario.length > maxLength ? comentario.substring(0, maxLength) + "..." : comentario}
+      </div>
+    );
+  };
+
 
   return (
     <div>
@@ -735,7 +749,7 @@ function Solicitudes({
           header="Comentario"
           style={{ minWidth: "15rem" }}
           body={comentarioBodyTemplate}
-        ></Column>
+        />
         <Column
           field="STR_ESTADO_INFO"
           header="Estado"

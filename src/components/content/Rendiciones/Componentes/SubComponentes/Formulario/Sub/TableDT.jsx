@@ -168,6 +168,29 @@ export default function TableDT({
     );
   };
 
+  const comentarioBodyTemplate = (rowData) => {
+    const comentario = rowData.STR_COMENTARIOS || "";
+    const maxLength = 50;
+
+    return (
+      <div
+        style={{
+          display: "-webkit-box",
+          WebkitLineClamp: 3, // Limita a 3 líneas
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          wordWrap: "break-word",
+          maxWidth: "12rem", // Ajusta el ancho según necesidad
+          whiteSpace: "normal",
+        }}
+      >
+        {comentario.length > maxLength ? comentario.substring(0, maxLength) + "..." : comentario}
+      </div>
+    );
+  };
+
+
   return (
     <>
       <Toast ref={toast} />
@@ -241,6 +264,7 @@ export default function TableDT({
             field='STR_COMENTARIOS'
             header="Comentario"
             style={{ width: "3rem" }}
+            body={comentarioBodyTemplate}
           ></Column>
           <Column
             header="Acciones"
