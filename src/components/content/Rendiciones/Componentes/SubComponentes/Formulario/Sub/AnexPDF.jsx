@@ -109,7 +109,7 @@ export default function AnexPDF({
         const fileName = filePath.split('/').pop();  // Extraer el nombre del archivo de la ruta
         saveAs(blob, fileName);  // Guardar el archivo
       } else {
-        showError('Error al descargar el archivo');
+        // showError('Error al descargar el ar2chivo');
       }
     } catch (error) {
       showError('Error al descargar el archivo');
