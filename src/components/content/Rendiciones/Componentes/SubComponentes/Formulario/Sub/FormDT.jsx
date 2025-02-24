@@ -68,7 +68,8 @@ export default function FormDT({ editable, totalRedondeado,
         STR_PROVEEDOR: doc.STR_PROVEEDOR,
         STR_COMENTARIOS: doc.STR_COMENTARIOS,
         STR_SERIE: doc.STR_SERIE_DOC,
-        STR_MONEDA: doc.STR_MONEDA
+        STR_MONEDA: doc.STR_MONEDA,
+        STR_NUM_COMPROBANTE: doc.STR_NUM_COMPROBANTE
       }))
 
       setRendicion({ ...response.data.Result[0], documentos: documentosFormateados });

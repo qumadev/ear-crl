@@ -222,13 +222,9 @@ export default function TableDT({
             style={{ width: "3rem" }}
           ></Column>
           <Column
+            field='STR_NUM_COMPROBANTE'
             header="Número de comprobante"
             style={{ width: "10rem" }}
-            body={(rowData) => {
-              const serieDoc = rowData?.STR_SERIE_DOC ?? '';
-              const corrDoc = rowData?.STR_CORR_DOC ?? '';
-              return `${serieDoc} - ${corrDoc}`
-            }}
           ></Column>
           <Column
             field='STR_FECHA_DOC'
