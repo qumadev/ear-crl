@@ -751,7 +751,7 @@ export default function FormDT({ editable, totalRedondeado,
               Emp.Asignado:
             </label>
             <InputText
-              value={rendicion?.STR_EMPLDASIG}
+              value={rendicion?.STR_EMPLD_NOMBRE}
               placeholder="Emp.Asignado"
               disabled
             />
