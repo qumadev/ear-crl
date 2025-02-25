@@ -832,6 +832,18 @@ function Rendiciones({
         >
         </Column>
         <Column
+          field="STR_TIPO_RENDICION.name"
+          header="Tipo"
+          style={{ minWidth: "15rem" }}
+        >
+        </Column>
+        <Column
+          field="STR_COMENTARIOS"
+          header="Comentario Solicitud"
+          style={{ minWidth: "15rem" }}
+        >
+        </Column>
+        <Column
           field="STR_TOTALAPERTURA"
           body={priceBodySolicitudTemplate}
           header="Monto a Rendir"
