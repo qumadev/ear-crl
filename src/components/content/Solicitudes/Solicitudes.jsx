@@ -727,12 +727,12 @@ function Solicitudes({
         ></Column>
         <Column
           header="Proyecto"
-          field="STR_PROYECTO"
+          field="STR_PROYECTO.name"
           style={{ minWidth: "10rem" }}
         ></Column>
         <Column
           header="Centro de Costo (CeCo)"
-          field="STR_CENTRO_COSTO"
+          field="STR_CENTRO_COSTO.name"
           style={{ minWidth: "10rem" }}
         ></Column>
         <Column

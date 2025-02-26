@@ -7,7 +7,9 @@ import {
   obtenerProveedores,
   obtenerTipoDocs,
   obtenerTipos,
-  obtenerTiposMonedas
+  obtenerTiposMonedas,
+  obtenerProyectos,
+  obtenerCentroCosto
 } from "../../../../../services/axios.service";
 import { Dropdown } from "primereact/dropdown";
 import "primeflex/primeflex.css";
@@ -27,6 +29,8 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
   const [tipos, setTipos] = useState(null);
   const [motivos, setMotivos] = useState(null);
   const [monedas, setMonedas] = useState(null)
+  const [proyectos, setProyectos] = useState(null);
+  const [centroCostos, setCentroCostos] = useState(null);
 
   const crearSolicitud = async () => {
     try {
@@ -38,10 +42,12 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
   };
 
   async function obtenerData() {
-    const response = await Promise.all([obtenerTipos(), obtenerMotivos(), obtenerTiposMonedas()]);
+    const response = await Promise.all([obtenerTipos(), obtenerMotivos(), obtenerTiposMonedas(), obtenerProyectos(), obtenerCentroCosto()]);
 
     setTipos(response[0].data.Result);
     setMotivos(response[1].data.Result);
+    setProyectos(response[3].data.Result);
+    setCentroCostos(response[4].data.Result)
 
     const monedasMapped = response[2].data.Result.map(moneda => ({
       label: moneda.Code, // LO QUE SE MUESTRA EN EL DROPDOWN
@@ -50,9 +56,42 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
 
     setMonedas(monedasMapped);
   }
+
   useEffect(() => {
     obtenerData();
   }, []);
+
+  const selectedProyectoOptionTemplate = (option, props) => {
+    if (option) {
+      return <div>{option.id}</div>;
+    }
+
+    return <span>{props.placeholder}</span>;
+  }
+
+  const complementoProyectoOptionTemplate = (option) => {
+    return (
+      <div>
+        {option.id} - {option.name}
+      </div>
+    );
+  };
+
+  const selectedCeCoOptionTempalte = (option, props) => {
+    if (option) {
+      return <div>{option.id}</div>;
+    }
+
+    return <span>{props.placeholder}</span>;
+  }
+
+  const complementoCeCoOptionTemplate = (option) => {
+    return (
+      <div>
+        {option.id} - {option.name}
+      </div>
+    );
+  }
 
   function obtieneFecha(fecha) {
     const date = new Date(fecha);
@@ -204,16 +243,22 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
           <label htmlFor="">
             <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Proyecto:
           </label>
-          <InputText
+          <Dropdown
             value={solicitudRD.STR_PROYECTO}
             onChange={(e) => {
               //setMonto(e.target.value);
               setSolicitudRD((prevState) => ({
                 ...prevState,
-                STR_PROYECTO: e.target.value,
+                STR_PROYECTO: e.target.value
               }));
             }}
-            placeholder="Proyecto"
+            options={proyectos}
+            filter
+            filterBy='id,name'
+            optionLabel="id"
+            placeholder="Seleccione Proyecto"
+            valueTemplate={selectedProyectoOptionTemplate}
+            itemTemplate={complementoProyectoOptionTemplate}
             disabled={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
               (usuario.rol.id != 1)
@@ -222,7 +267,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
           <label htmlFor="">
             <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Centro de Costo (CeCo):
           </label>
-          <InputText
+          <Dropdown
             value={solicitudRD.STR_CENTRO_COSTO}
             onChange={(e) => {
               //setMonto(e.target.value);
@@ -231,7 +276,13 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
                 STR_CENTRO_COSTO: e.target.value,
               }));
             }}
-            placeholder="Centro de Costo"
+            options={centroCostos}
+            placeholder="Seleccione Centro Costo"
+            filter
+            filterBy='id,name'
+            optionLabel="id"
+            valueTemplate={selectedCeCoOptionTempalte}
+            itemTemplate={complementoCeCoOptionTemplate}
             disabled={
               !estadosEditables.includes(solicitudRD.STR_ESTADO) |
               (usuario.rol.id != 1)
