@@ -821,12 +821,12 @@ function Rendiciones({
           style={{ minWidth: "15rem" }}
         ></Column>
         <Column
-          field="STR_CENTRO_COSTO"
+          field="STR_CENTRO_COSTO.name"
           header="Centro de Costo (CeCo)"
           style={{ minWidth: "15rem" }}
         ></Column>
         <Column
-          field="STR_PROYECTO"
+          field="STR_PROYECTO.name"
           header="Proyecto"
           style={{ minWidth: "15rem" }}
         >
