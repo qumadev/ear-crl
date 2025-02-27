@@ -231,7 +231,7 @@ export default function TableDT({
             header="Fecha de comprobante"
             style={{ width: "3rem" }}
           ></Column>
-          <Column
+          {/* <Column
             field="STR_TOTALDOC"
             header="Monto Total de comprobante"
             style={{ width: "3rem" }}
@@ -240,7 +240,7 @@ export default function TableDT({
               const monto = parseFloat(rowData.STR_TOTALDOC).toFixed(2); // Monto formateado
               return `${moneda} ${monto}`; // Mostrar moneda y monto juntos
             }}
-          />
+          /> */}
           <Column
             field="STR_TOTALDOC_CONVERTIDO"
             header="Monto Total Rendido"

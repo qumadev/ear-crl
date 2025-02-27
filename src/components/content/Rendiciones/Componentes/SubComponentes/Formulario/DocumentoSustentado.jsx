@@ -612,7 +612,7 @@ function DocumentoSustentado({
 			{mostrarFooterConvertido && (documento?.STR_MONEDA?.Code && rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code) && (
 				<Row>
 					<Column
-						footer="Monto Total Convertido: "
+						footer="Monto Total Convertido (Tipo de Cambio): "
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -627,6 +627,13 @@ function DocumentoSustentado({
 								}, 0);
 
 							const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
+
+							console.log("Propiedades para validar tipo de cambio:");
+							console.log("documento.STR_TIPO_CAMBIO:", documento.STR_TIPO_CAMBIO);
+							console.log("Tipo de Cambio usado:", tipoCambio);
+							console.log("documento.STR_MONEDA?.Code:", documento.STR_MONEDA?.Code);
+							console.log("rendicion?.STR_MONEDA?.id:", rendicion?.STR_MONEDA?.id);
+
 							let totalConCambio = totalBase;
 
 							// Lógica de conversión de monedas
@@ -635,6 +642,8 @@ function DocumentoSustentado({
 							} else if (documento.STR_MONEDA?.Code === 'USD' && rendicion?.STR_MONEDA?.id === 'SOL') {
 								totalConCambio = totalBase * tipoCambio; // Multiplicar si documento en USD y rendición en SOL
 							}
+
+							console.log("Total con tipo de cambio aplicado:", totalConCambio);
 
 							return formatCurrency(
 								totalConCambio.toFixed(2),
@@ -835,14 +844,22 @@ function DocumentoSustentado({
 		}
 
 		// Si la afectación es '-' (por id o name), establece el tipo de cambio a 1
-		if (documento?.STR_AFECTACION?.id === '5' || documento?.STR_AFECTACION?.name === '-') {
-			setDocumento((prevState) => ({
-				...prevState,
-				STR_TIPO_CAMBIO: '1'  // Forzamos a '1' como tipo de cambio
-			}));
-		}
+		// if (documento?.STR_AFECTACION?.id === '5' || documento?.STR_AFECTACION?.name === '-') {
+		// 	setDocumento((prevState) => ({
+		// 		...prevState,
+		// 		STR_TIPO_CAMBIO: '1'  // Forzamos a '1' como tipo de cambio
+		// 	}));
+		// }
 	}, [documento?.STR_TIPO_DOC, documento?.STR_AFECTACION?.id]);
 
+	useEffect(() => {
+		if (rendicion?.STR_MONEDA?.id === documento?.STR_MONEDA?.Code) {
+			setDocumento((prevState) => ({
+				...prevState,
+				STR_TIPO_CAMBIO: '1', // Si las monedas son iguales, siempre se establece en 1
+			}));
+		}
+	}, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
 
 	useEffect(() => {
 		const rendicionId = documento?.STR_RD_ID ?? id;
