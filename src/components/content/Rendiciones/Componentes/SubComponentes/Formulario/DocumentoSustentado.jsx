@@ -13,7 +13,8 @@ import {
 	obtenerAreas, obtenerArticulos, obtenerCentroCosto,
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
 	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas,
-	eliminarDetalleEnDocumento, obtenerRendicion
+	eliminarDetalleEnDocumento, obtenerRendicion,
+	obtenerDocumento
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -860,6 +861,33 @@ function DocumentoSustentado({
 			}));
 		}
 	}, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
+
+	// OJO AQUI, ESTE useEffect TRAE EL TIPO DE CAMBIO ALMACENADO DE LA API DE VUELTA CUANDO LAS MONEDAS NO COINCIDEN
+	// useEffect(() => {
+	// 	// Si las monedas son diferentes, obtener el tipo de cambio almacenado en la BD
+	// 	if (rendicion?.STR_MONEDA?.id !== documento?.STR_MONEDA?.Code) {
+	// 		const obtenerTipoCambioDesdeBD = async () => {
+	// 			try {
+	// 				const response = await obtenerDocumento(documento.ID); // Llamada a la API
+	// 				if (response.status < 300 && response.data) {
+	// 					const tipoCambioBD = response.data.Result[0]?.STR_TIPO_CAMBIO;
+	// 					if (tipoCambioBD) {
+	// 						setDocumento((prevState) => ({
+	// 							...prevState,
+	// 							STR_TIPO_CAMBIO: tipoCambioBD.toString(), // Guardamos el tipo de cambio en el estado
+	// 						}));
+	// 					}
+	// 				} else {
+	// 					console.error("No se pudo obtener el tipo de cambio desde la BD.");
+	// 				}
+	// 			} catch (error) {
+	// 				console.error("Error al obtener el tipo de cambio desde la BD:", error);
+	// 			}
+	// 		};
+
+	// 		obtenerTipoCambioDesdeBD();
+	// 	}
+	// }, [documento?.STR_MONEDA?.Code, rendicion?.STR_MONEDA?.id]);
 
 	useEffect(() => {
 		const rendicionId = documento?.STR_RD_ID ?? id;
