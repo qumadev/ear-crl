@@ -609,3 +609,13 @@ export const exportarDocumentosExcel = async (idRend) => {
     },
   });
 };
+
+
+// SERVICIO DE API PARA EXTRAER LOS IND.IMPUESTOS SEGUN EL TIPODOC Y AFECTACION
+export const obtenerIndImpuesto = async (tipoDocumento, afectacion) => {
+  return API.get(`/rendicion/documento/indicador-impuesto/${tipoDocumento}/${afectacion}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  })
+}

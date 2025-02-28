@@ -13,7 +13,7 @@ import {
 	obtenerAreas, obtenerArticulos, obtenerCentroCosto,
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
 	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas,
-	eliminarDetalleEnDocumento, obtenerRendicion,
+	eliminarDetalleEnDocumento, obtenerRendicion, obtenerIndImpuesto,
 	obtenerDocumento
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
@@ -24,6 +24,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 import { Toast } from 'primereact/toast';
+import { data } from 'autoprefixer';
 
 
 function DocumentoSustentado({
@@ -53,6 +54,7 @@ function DocumentoSustentado({
 	const [monedas, setMonedas] = useState([]);
 	const [selectedMoneda, setSelectedMoneda] = useState(null);
 	const [rendicion, setRendicion] = useState(null); // almacenar la rendcion
+	const [indImpuestos, setIndImpuestos] = useState([{ id: 'EXO', name: 'EXO' }]) // ESTADO INICIAL
 
 	const toast = useRef(null);
 
@@ -79,6 +81,24 @@ function DocumentoSustentado({
 			life: 5000,
 		});
 	};
+
+	const obtenerIndicadoresImpuestos = async () => {
+		if (documento.STR_TIPO_DOC && documento.STR_AFECTACION) {
+			try {
+				const response = await obtenerIndImpuesto(documento.STR_TIPO_DOC.name, documento.STR_AFECTACION.name);
+
+				if (response.status < 300 && response.data.Result) {
+					setIndImpuestos(response.data.Result)
+				} else {
+					setIndImpuestos([{ id: 'EXO', name: 'EXO' }])
+				}
+			}
+			catch {
+				console.error("Error obteniendo indicadores de impuesto:", error);
+				setIndImpuestos([{ id: 'EXO', name: 'EXO' }]);
+			}
+		}
+	}
 
 	const obtenerRendicionPorId = async (idRendicion) => {
 		try {
@@ -168,8 +188,9 @@ function DocumentoSustentado({
 	const [productDialog, setProductDialog] = useState(false);
 	const [visible, setVisible] = useState(false);
 
-	const openNew = () => {
+	const openNew = async () => {
 		setEditing(false);
+		await obtenerIndicadoresImpuestos();
 		setProductDialog(true);
 		//setDetalle(articulos);
 	};
@@ -363,14 +384,6 @@ function DocumentoSustentado({
 	useEffect(() => {
 		obtenerMonedas();
 	}, []);
-
-	const indImpuestos = [
-		{ id: 'IGV', name: 'IGV (18%)' },
-		{ id: 'IGV_LEY', name: 'IGV (10%)' },
-		{ id: 'IGV_MIXT', name: 'IGV MIXTO' },
-		{ id: 'IGV_GAST', name: 'IGV GASTO' },
-		{ id: 'EXO', name: 'EXO' },
-	];
 
 	const selectedOptionTemplate = (option, props) => {
 		if (option) {
