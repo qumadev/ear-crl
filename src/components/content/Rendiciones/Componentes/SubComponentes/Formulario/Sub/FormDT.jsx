@@ -776,6 +776,19 @@ export default function FormDT({ editable, totalRedondeado,
         <div className="col-12 md:col-5 lg:col-3">
           <div className="mb-3 flex flex-column  justify-content-center">
             <label htmlFor="buttondisplay" className="font-bold block mb-2">
+              Monto Total Base:
+            </label>
+            <InputText
+              value={`${rendicion?.STR_MONEDA?.name || ''} ${(rendicion?.documentos?.reduce((sum, doc) => sum + (doc.STR_TOTALDOC || 0), 0) ?? 0).toFixed(2)
+                }`}
+              placeholder="Monto Base"
+              disabled
+            />
+          </div>
+        </div>
+        <div className="col-12 md:col-5 lg:col-3">
+          <div className="mb-3 flex flex-column  justify-content-center">
+            <label htmlFor="buttondisplay" className="font-bold block mb-2">
               Monto Total Rendido:
             </label>
             <InputText

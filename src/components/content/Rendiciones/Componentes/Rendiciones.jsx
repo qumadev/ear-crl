@@ -750,6 +750,30 @@ function Rendiciones({
     return <>{rowData.STR_FECHA_EVENTO_INICIAL} - {rowData.STR_FECHA_EVENTO_FINAL}</>
   }
 
+  const comentarioSlctdTemplate = (rowData) => {
+    const comentarioSlctd = rowData.STR_COMENTARIOS || "";
+    const maxLength = 50;
+
+    return (
+      <div
+        title={comentarioSlctd} // Muestra el mensaje completo como tooltip
+        style={{
+          display: "-webkit-box",
+          WebkitLineClamp: 3, // Máximo 3 líneas
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          wordWrap: "break-word",
+          maxWidth: "15rem", // Ajusta el ancho si es necesario
+          whiteSpace: "normal",
+          cursor: "pointer", // Indica que se puede interactuar con el texto
+        }}
+      >
+        {comentarioSlctd.length > maxLength ? comentarioSlctd.substring(0, maxLength) + "..." : comentarioSlctd}
+      </div>
+    );
+  }
+
   return (
     <div>
       <Toast ref={toast} />
@@ -837,9 +861,9 @@ function Rendiciones({
           style={{ minWidth: "15rem" }}
         ></Column>
         <Column
-          field="STR_COMENTARIOS"
           header="Comentario Solicitud"
           style={{ minWidth: "15rem" }}
+          body={comentarioSlctdTemplate}
         ></Column>
         <Column
           field="STR_TOTALAPERTURA"

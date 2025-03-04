@@ -231,19 +231,19 @@ export default function TableDT({
             header="Fecha de comprobante"
             style={{ width: "3rem" }}
           ></Column>
-          {/* <Column
+          <Column
             field="STR_TOTALDOC"
-            header="Monto Total de comprobante"
+            header="Monto Base"
             style={{ width: "3rem" }}
             body={(rowData) => {
               const moneda = rowData?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
               const monto = parseFloat(rowData.STR_TOTALDOC).toFixed(2); // Monto formateado
               return `${moneda} ${monto}`; // Mostrar moneda y monto juntos
             }}
-          /> */}
+          />
           <Column
             field="STR_TOTALDOC_CONVERTIDO"
-            header="Monto Total Rendido"
+            header="Monto Rendido"
             style={{ width: "3rem" }}
             body={(rowData) => {
               const monedaRendicion = rendicion?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
