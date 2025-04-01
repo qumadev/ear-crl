@@ -190,6 +190,12 @@ export default function TableDT({
     );
   };
 
+  const formatCurrency = (value, currency) => {
+    return value.toLocaleString("es-PE", {
+      style: "currency",
+      currency: currency,
+    });
+  }
 
   return (
     <>
@@ -236,9 +242,9 @@ export default function TableDT({
             header="Monto Base"
             style={{ width: "3rem" }}
             body={(rowData) => {
-              const moneda = rowData?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
-              const monto = parseFloat(rowData.STR_TOTALDOC).toFixed(2); // Monto formateado
-              return `${moneda} ${monto}`; // Mostrar moneda y monto juntos
+              const moneda = rowData?.STR_MONEDA?.id ?? 'PEN';
+              const monto = rowData?.STR_TOTALDOC || 0;
+              return formatCurrency(monto, moneda);
             }}
           />
           <Column
@@ -246,9 +252,9 @@ export default function TableDT({
             header="Monto Rendido"
             style={{ width: "3rem" }}
             body={(rowData) => {
-              const monedaRendicion = rendicion?.STR_MONEDA?.name ?? ''; // Obtener la moneda si está disponible
-              const montoConvertido = parseFloat(rowData.STR_TOTALDOC_CONVERTIDO).toFixed(2); // Monto formateado
-              return `${monedaRendicion} ${montoConvertido}`;
+              const monedaRendicion = rendicion?.STR_MONEDA?.id ?? 'PEN';
+              const montoConvertido = rowData?.STR_TOTALDOC_CONVERTIDO || 0;
+              return formatCurrency(montoConvertido, monedaRendicion);
             }}
           ></Column>
           <Column

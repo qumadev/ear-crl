@@ -616,6 +616,13 @@ export default function FormDT({ editable, totalRedondeado,
     }
   }, [id]);
 
+  const formatCurrency = (value, currency) => {
+    return value.toLocaleString("es-PE", {
+      style: "currency",
+      currency: currency,
+    });
+  }
+
   return (
     <>
       <ConfirmDialog />
@@ -779,8 +786,12 @@ export default function FormDT({ editable, totalRedondeado,
               Monto Total Base:
             </label>
             <InputText
-              value={`${rendicion?.STR_MONEDA?.name || ''} ${(rendicion?.documentos?.reduce((sum, doc) => sum + (doc.STR_TOTALDOC || 0), 0) ?? 0).toFixed(2)
-                }`}
+              value={
+                formatCurrency(
+                  rendicion?.documentos?.reduce((sum, doc) => sum + (doc.STR_TOTALDOC || 0), 0) || 0,
+                  rendicion?.STR_MONEDA?.id || 'PEN'
+                )
+              }              
               placeholder="Monto Base"
               disabled
             />
@@ -792,7 +803,12 @@ export default function FormDT({ editable, totalRedondeado,
               Monto Total Rendido:
             </label>
             <InputText
-              value={`${rendicion?.STR_MONEDA?.name || ''} ${rendicion?.STR_TOTALRENDIDO.toFixed(2) || '0'} `}
+              value={
+                formatCurrency(
+                  rendicion?.STR_TOTALRENDIDO || 0,
+                  rendicion?.STR_MONEDA?.id || 'PEN'
+                )
+              }              
               placeholder="Monto Rendido"
               disabled
             />
