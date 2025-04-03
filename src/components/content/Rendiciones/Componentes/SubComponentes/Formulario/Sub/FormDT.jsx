@@ -715,115 +715,50 @@ export default function FormDT({ editable, totalRedondeado,
       </div>
 
       <Divider />
-      <div className="grid mt-3">
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              N° Rendición:
-            </label>
-            <InputText
-              value={rendicion?.STR_NRRENDICION}
-              placeholder=" N° Rendición"
-              disabled
-            />
-          </div>
-        </div>
+      <div className="flex justify-content-center">
+        <div style={{ maxWidth: '900px' }}>
+          <div className="grid mt-3">
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">N° de la SR:</label>
+              <InputText value={rendicion?.STR_SOLICITUD} disabled />
+            </div>
 
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              N° de la SR:
-            </label>
-            <InputText
-              value={rendicion?.STR_SOLICITUD}
-              placeholder="N° de la SR"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Estado:
-            </label>
-            <InputText
-              value={rendicion?.STR_ESTADO_INFO?.name}
-              placeholder="Estado"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Emp.Asignado:
-            </label>
-            <InputText
-              value={rendicion?.STR_EMPLD_NOMBRE}
-              placeholder="Emp.Asignado"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Fecha de Solicitud:
-            </label>
-            <InputText
-              value={rendicion?.SOLICITUDRD.STR_FECHAREGIS}
-              // onChange={(rendicion) => fecBodyTemplate(rendicion.value.)}
-              dateFormat="dd/mm/yy"
-              disabled
-              locale='es'
-              showIcon />
-            {/* <p>{fecBodyTemplate ? `Fecha seleccionada: ${ new Date(fecBodyTemplate).toLocaleDateString('es-ES') } ` : ''}</p> */}
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Monto Total Base:
-            </label>
-            <InputText
-              value={
-                formatCurrency(
-                  rendicion?.documentos?.reduce((sum, doc) => sum + (doc.STR_TOTALDOC || 0), 0) || 0,
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">Empleado:</label>
+              <InputText value={rendicion?.STR_EMPLD_NOMBRE} disabled />
+            </div>
+
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">Moneda:</label>
+              <InputText value={rendicion?.STR_MONEDA?.name} disabled />
+            </div>
+
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">Monto Solicitado:</label>
+              <InputText
+                value={formatCurrency(rendicion?.SOLICITUDRD?.STR_TOTALSOLICITADO || 0, rendicion?.STR_MONEDA?.id || 'PEN')}
+                disabled
+              />
+            </div>
+
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">Monto Rendido:</label>
+              <InputText
+                value={formatCurrency(rendicion?.STR_TOTALRENDIDO || 0, rendicion?.STR_MONEDA?.id || 'PEN')}
+                disabled
+              />
+            </div>
+
+            <div className="col-12 md:col-6 lg:col-4">
+              <label className="font-bold block mb-2">Diferencia:</label>
+              <InputText
+                value={formatCurrency(
+                  (rendicion?.SOLICITUDRD?.STR_TOTALSOLICITADO || 0) - (rendicion?.STR_TOTALRENDIDO || 0),
                   rendicion?.STR_MONEDA?.id || 'PEN'
-                )
-              }              
-              placeholder="Monto Base"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              Monto Total Rendido:
-            </label>
-            <InputText
-              value={
-                formatCurrency(
-                  rendicion?.STR_TOTALRENDIDO || 0,
-                  rendicion?.STR_MONEDA?.id || 'PEN'
-                )
-              }              
-              placeholder="Monto Rendido"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-12 md:col-5 lg:col-3">
-          <div className="mb-3 flex flex-column  justify-content-center">
-            <label htmlFor="buttondisplay" className="font-bold block mb-2">
-              FechaRD:
-            </label>
-            <InputText
-              value={rendicion?.STR_FECHAREGIS}
-              disabled
-              // onChange={(e) => setDate(e.value)} 
-              showIcon />
+                )}
+                disabled
+              />
+            </div>
           </div>
         </div>
       </div>
