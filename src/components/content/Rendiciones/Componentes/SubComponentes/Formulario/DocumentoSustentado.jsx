@@ -523,10 +523,11 @@ function DocumentoSustentado({
 	}
 	const [rowData, setRowData] = useState(null); // Define rowData state
 
-	const editDetallep = (rowData) => {
+	const editDetallep = async (rowData) => {
 		setRowData(rowData); // Update rowData state
 		setProductDialog(true);
 		setEditing(true);
+		await obtenerIndicadoresImpuestos();
 	};
 
 	const actionBodyTemplate = (rowData) => {
