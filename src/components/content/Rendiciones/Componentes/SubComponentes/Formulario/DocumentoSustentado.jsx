@@ -104,7 +104,7 @@ function DocumentoSustentado({
 
 	const obtenerAfectaciones = async () => {
 		if (documento.STR_TIPO_DOC) {
-			try{
+			try {
 				const response = await obtenerAfectacion(documento.STR_TIPO_DOC.id)
 
 				if (response.status < 300 && response.data.Result) {
@@ -961,14 +961,18 @@ function DocumentoSustentado({
 	const handleTipoDocChange = (e) => {
 		const tipoDocSeleccionado = e.target.value;
 
-		// Validar antes de cambiar el estado
+		// Validación boleta y proveedor
 		if (validarBoletaYProveedor(tipoDocSeleccionado, documento.STR_PROVEEDOR)) {
-			return;  // No se actualiza el estado si la validación falla
+			return;
 		}
+
+		// Forzar Afectación a 'Ninguno'
+		const afectacionDefault = { id: '5', name: 'Ninguno' };
 
 		setDocumento((prevState) => ({
 			...prevState,
 			STR_TIPO_DOC: tipoDocSeleccionado,
+			STR_AFECTACION: afectacionDefault
 		}));
 
 		setCampoValidoCabecera(prevState => ({
