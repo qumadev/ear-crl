@@ -81,7 +81,7 @@ function FormularioRD() {
   ];
 
   const [rendicion, setRendicion] = useState(null);
-  const [documento, setDocumento] = useState({ STR_AFECTACION: '-' });
+  const [documento, setDocumento] = useState({ STR_AFECTACION: 'Ninguno' });
 
   const obtenerRendicionPorId = async (idRendicion) => {
     try {
@@ -272,9 +272,9 @@ function FormularioRD() {
         : totalConvertido;
 
       let descuento = 0;
-      if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
+      if (documento?.STR_AFECTACION?.name === "Retención" && totalEnSoles > 700) {
         descuento = 0.03; // 3% para Retención si supera 700 SOL
-      } else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
+      } else if (documento?.STR_AFECTACION?.name === "Detracción" && totalEnSoles > 700) {
         descuento = 0.10; // 10% siempre para Detracción
       } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
         descuento = 0.24
@@ -287,11 +287,11 @@ function FormularioRD() {
 
       let codigoRetencion = null;
       switch (documento?.STR_AFECTACION?.name) {
-        case "Retencion":
+        case "Retención":
           codigoRetencion = "RET3";
           break;
 
-        case "Detraccion":
+        case "Detracción":
           codigoRetencion = "DT10";
           break;
 
@@ -429,9 +429,9 @@ function FormularioRD() {
           : totalConvertido;
 
         let descuento = 0;
-        if (documento?.STR_AFECTACION?.name === "Retencion" && totalEnSoles > 700) {
+        if (documento?.STR_AFECTACION?.name === "Retención" && totalEnSoles > 700) {
           descuento = 0.03; // 3% para Retención si supera 700 SOL
-        } else if (documento?.STR_AFECTACION?.name === "Detraccion" && totalEnSoles > 700) {
+        } else if (documento?.STR_AFECTACION?.name === "Detracción" && totalEnSoles > 700) {
           descuento = 0.10; // 10% siempre para Detracción
         } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
           descuento = 0.24
@@ -443,11 +443,11 @@ function FormularioRD() {
 
         let codigoRetencion = null;
         switch (documento?.STR_AFECTACION?.name) {
-          case "Retencion":
+          case "Retención":
             codigoRetencion = "RET3";
             break;
 
-          case "Detraccion":
+          case "Detracción":
             codigoRetencion = "DT10";
             break;
 

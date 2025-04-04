@@ -114,7 +114,7 @@ function FormDetalleDocumento({
 				"Filial": null,
 				"Areas": null,
 				"CentroCosto": null,
-				"IndImpuesto": { id: 'EXO', name: 'EXO' },
+				"IndImpuesto": { id: 'EXO', name: 'Exonerado' },
 				"Precio": null,
 				"Cantidad": null,
 				"Impuesto": null,
@@ -302,12 +302,8 @@ function FormDetalleDocumento({
 
 		if (detDoc.IndImpuesto.name === "IGV (18%)") {
 			tasaImpuesto = 0.18;
-		} else if (detDoc.IndImpuesto.name === "IGV (10%)") {
+		} else if (detDoc.IndImpuesto.name === "IGV LEY") {
 			tasaImpuesto = 0.10;
-		} else if (detDoc.IndImpuesto.name === "IGV MIXTO") {
-			tasaImpuesto = 0.18;
-		} else if (detDoc.IndImpuesto.name === "IGV GASTO") {
-			tasaImpuesto = 0.18;
 		}
 
 		const impuesto = detDoc?.Precio * detDoc?.Cantidad * tasaImpuesto;
@@ -522,12 +518,8 @@ function FormDetalleDocumento({
 
 								if (impuestoSeleccionado.name === "IGV (18%)") {
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
-								} else if (impuestoSeleccionado.name === "IGV (10%)") {
+								} else if (impuestoSeleccionado.name === "IGV LEY") {
 									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.10).toFixed(2);
-								} else if (impuestoSeleccionado.name === "IGV MIXTO") {
-									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
-								} else if (impuestoSeleccionado.name === "IGV GASTO") {
-									impuestoCalculado = (detDoc?.Precio * detDoc?.Cantidad * 0.18).toFixed(2);
 								}
 
 								setIndImp(impuestoSeleccionado);
