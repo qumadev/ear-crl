@@ -14,7 +14,7 @@ import {
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
 	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas,
 	eliminarDetalleEnDocumento, obtenerRendicion, obtenerIndImpuesto,
-	obtenerDocumento
+	obtenerDocumento, obtenerAfectacion
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -25,6 +25,7 @@ import { Divider } from 'primereact/divider';
 import { Toolbar } from 'primereact/toolbar';
 import { Toast } from 'primereact/toast';
 import { data } from 'autoprefixer';
+import { use } from 'react';
 
 
 function DocumentoSustentado({
@@ -54,6 +55,7 @@ function DocumentoSustentado({
 	const [monedas, setMonedas] = useState([]);
 	const [selectedMoneda, setSelectedMoneda] = useState(null);
 	const [rendicion, setRendicion] = useState(null); // almacenar la rendcion
+	const [afectacion, setAfectacion] = useState([{ id: '5', name: 'Ninguno' }]) // ESTADO INICIAL
 	const [indImpuestos, setIndImpuestos] = useState([{ id: 'EXO', name: 'EXO' }]) // ESTADO INICIAL
 
 	const toast = useRef(null);
@@ -96,6 +98,23 @@ function DocumentoSustentado({
 			catch {
 				console.error("Error obteniendo indicadores de impuesto:", error);
 				setIndImpuestos([{ id: 'EXO', name: 'EXO' }]);
+			}
+		}
+	}
+
+	const obtenerAfectaciones = async () => {
+		if (documento.STR_TIPO_DOC) {
+			try{
+				const response = await obtenerAfectacion(documento.STR_TIPO_DOC.id)
+
+				if (response.status < 300 && response.data.Result) {
+					setAfectacion(response.data.Result)
+				} else {
+					setAfectacion([{ id: '5', name: 'Ninguno' }])
+				}
+			} catch {
+				console.error("Error obteniendo afectaciones: ", error);
+				setAfectacion([{ id: '5', name: 'Ninguno' }])
 			}
 		}
 	}
@@ -196,7 +215,7 @@ function DocumentoSustentado({
 	};
 
 	const [tipos, setTipos] = useState(null);
-	const [afectacion, setAfectacion] = useState(null);
+	// const [afectacion, setAfectacion] = useState(null);
 	const [motivos, setMotivos] = useState(null);
 	const [proveedores, setProveedores] = useState(null);
 	const [articles, setArticles] = useState(null);
@@ -250,7 +269,7 @@ function DocumentoSustentado({
 			}
 		];
 
-		setAfectacion(dataafectacion)
+		// setAfectacion(dataafectacion)
 		setTipos(response[0].data.Result)
 		setMotivos(response[1].data.Result)
 		setProveedores(response[2].data.Result)
@@ -297,7 +316,6 @@ function DocumentoSustentado({
 				STR_AFECTACION: { id: '5', name: '-' },
 			}));
 		}
-
 	}, [])
 
 	const getTotalSubtotal = () => {
@@ -383,7 +401,10 @@ function DocumentoSustentado({
 
 	useEffect(() => {
 		obtenerMonedas();
-	}, []);
+		if (documento?.STR_TIPO_DOC?.id) {
+			obtenerAfectaciones();
+		}
+	}, [documento?.STR_TIPO_DOC?.id]);
 
 	const selectedOptionTemplate = (option, props) => {
 		if (option) {
@@ -1127,7 +1148,7 @@ function DocumentoSustentado({
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>
-							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Afectacion
+							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Afectación
 						</label>
 						<Dropdown
 							className='col-6'
@@ -1146,8 +1167,8 @@ function DocumentoSustentado({
 							optionValue="id"  // Usamos el 'id' para la comparación en el Dropdown
 							filter
 							filterBy='name'
-							placeholder='Seleccione Afectacion'
-							disabled={esModoValidate || documento?.STR_TIPO_DOC?.name !== 'Factura'}
+							placeholder='Seleccione Afectación'
+							disabled={esModoValidate || !documento?.STR_TIPO_DOC}
 						/>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">

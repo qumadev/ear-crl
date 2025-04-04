@@ -600,7 +600,7 @@ export const eliminarDetalleEnDocumento = async (idDet, idDoc, idRend) => {
   });
 };
 
-// Servicio API para exportar documentos con el diseño de CRL
+// API EXPORT CRL POR DISEÑO DE ELLOS
 export const exportarDocumentosExcel = async (idRend) => {
   return API.get(`/rendicion/exportar-excel/${idRend}`, {
     responseType: 'arraybuffer', // Para manejar datos binarios
@@ -611,9 +611,18 @@ export const exportarDocumentosExcel = async (idRend) => {
 };
 
 
-// SERVICIO DE API PARA EXTRAER LOS IND.IMPUESTOS SEGUN EL TIPODOC Y AFECTACION
+// API GET IND.IMPUESTOS SEGUN EL TIPODOC Y AFECTACION
 export const obtenerIndImpuesto = async (tipoDocumento, afectacion) => {
   return API.get(`/rendicion/documento/indicador-impuesto/${tipoDocumento}/${afectacion}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  })
+}
+
+// API GET AFECTACION
+export const obtenerAfectacion = async (tipoDocumento) => {
+  return API.get(`/rendicion/documento/get-afectacion/${tipoDocumento}`, {
     validateStatus: function (status) {
       return status < 500;
     }
