@@ -486,17 +486,29 @@ function FormularioRD() {
         };
 
         let response = await actualizarDocumento(_documento); // _documento - Crea Documento
-        if (response.CodRespuesta != "99") {
-          var content = response.data.Result[0];
-          showSuccess(`Documento actualizado exitosamente`);
+        if (response.status < 300 && response.data?.CodRespuesta !== "99") {
+          const content = response.data.Result?.[0];
+          showSuccess("Documento actualizado exitosamente");
           await new Promise((resolve) => setTimeout(resolve, 3000));
           navigate(ruta + "/rendiciones/info/" + documento.STR_RD_ID);
-          //navigate(`/rendiciones/${id}/documentos`);
         } else {
-          showError("Error al Actualizar documento");
+          const mensajeError =
+            response?.data?.Message ||
+            response?.data?.DescRespuesta ||
+            "Error al actualizar documento";
+          showError(mensajeError);
         }
       }
     } catch (error) {
+      console.error("Error al actualizar RD:", error);
+
+      const mensajeError =
+        error?.response?.data?.Message ||
+        error?.response?.data?.DescRespuesta ||
+        error?.message ||
+        "Error al actualizar documento";
+
+      showError(mensajeError);
     } finally {
       setLoading(false);
     }
