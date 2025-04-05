@@ -628,3 +628,12 @@ export const obtenerAfectacion = async (tipoDocumento) => {
     }
   })
 }
+
+// API BORRADO MASIVO DE DOCUMENTOS
+export const eliminarDocumentosMasivo = async (documentos) => {
+  return API.post(`/rendicion/documento/borrado-masivo`, documentos, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  })
+}

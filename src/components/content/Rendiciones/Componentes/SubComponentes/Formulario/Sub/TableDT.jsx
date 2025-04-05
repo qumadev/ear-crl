@@ -9,7 +9,7 @@ import { Toast } from 'primereact/toast'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import DocumentoSustentado from '../DocumentoSustentado'
 
-import { borrarDocumento, obtenerDocumento } from '../../../../../../../services/axios.service'
+import { borrarDocumento, obtenerDocumento, eliminarDocumentosMasivo } from '../../../../../../../services/axios.service'
 import { comma } from 'postcss/lib/list'
 
 export default function TableDT({
@@ -20,6 +20,7 @@ export default function TableDT({
   const navigate = useNavigate();
   const { usuario, ruta } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
+  const [documentosSeleccionados, setDocumentosSeleccionados] = useState([]);
 
   const toast = useRef(null);
 
@@ -117,6 +118,41 @@ export default function TableDT({
     }
   }
 
+  const eliminarDocumentosSeleccionados = async () => {
+    setLoading(true);
+    try {
+      const response = await eliminarDocumentosMasivo(documentosSeleccionados);
+
+      if (response.status === 200 && response.data?.CodRespuesta === "00") {
+        const idsEliminados = response.data.Result.map(r => parseInt(r.id));
+
+        const documentosRestantes = rendicion.documentos.filter(doc =>
+          !idsEliminados.includes(doc.ID)
+        );
+
+        const nuevoTotal = documentosRestantes.reduce((total, doc) =>
+          total + parseFloat(doc.STR_TOTALDOC_CONVERTIDO || 0), 0
+        );
+
+        setRendicion(prev => ({
+          ...prev,
+          documentos: documentosRestantes,
+          STR_TOTALRENDIDO: nuevoTotal
+        }));
+
+        setDocumentosSeleccionados([]);
+        showSuccess("Documentos eliminados correctamente");
+      } else {
+        showError(response.data?.DescRespuesta || "No se pudieron eliminar los documentos");
+      }
+    } catch (error) {
+      console.error("Error al eliminar documentos seleccionados", error);
+      showError("Error al eliminar documentos seleccionados");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const confirmarEliminacion = (idDoc) => {
     confirmDialog({
       message: "¿Estás seguro de eliminar este documento? Esta acción no se puede deshacer",
@@ -201,8 +237,34 @@ export default function TableDT({
     <>
       <Toast ref={toast} />
       <div className="card">
+
+        {/* 🔽 Botón para eliminar seleccionados */}
+        {documentosSeleccionados.length > 0 && (
+          <div style={{ marginBottom: '1rem' }}>
+            <Button
+              label={`Eliminar seleccionados (${documentosSeleccionados.length})`}
+              icon="pi pi-trash"
+              className="p-button-danger"
+              onClick={() => {
+                confirmDialog({
+                  message: `¿Estás seguro de eliminar los ${documentosSeleccionados.length} documentos seleccionados?`,
+                  header: "Confirmación de eliminación masiva",
+                  icon: "pi pi-exclamation-triangle",
+                  acceptLabel: "Sí",
+                  rejectLabel: "No",
+                  accept: eliminarDocumentosSeleccionados,
+                });
+              }}
+            />
+          </div>
+        )}
+
         <DataTable
           value={rendicion?.documentos}
+          selection={documentosSeleccionados}
+          onSelectionChange={(e) => setDocumentosSeleccionados(e.value)}
+          dataKey="ID"
+          selectionMode="multiple"
           loading={loading}
           sortField="ID"
           sortOrder={-1}
@@ -221,6 +283,10 @@ export default function TableDT({
             header="#"
             headerStyle={{ width: "3rem" }}
             body={(data, options) => options.rowIndex + 1}
+          ></Column>
+          <Column
+            selectionMode="multiple"
+            headerStyle={{ width: '3rem' }}
           ></Column>
           <Column
             field='STR_TIPO_DOC.name'
