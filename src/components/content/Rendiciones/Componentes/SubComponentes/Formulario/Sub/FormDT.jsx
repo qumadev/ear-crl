@@ -494,6 +494,18 @@ export default function FormDT({ editable, totalRedondeado,
     }
   }
 
+  const confirmarImportacion = (event) => {
+    confirmDialog({
+      message: "¿Estás seguro de importar la plantilla? Verifica que la información del archivo sea correcta antes de continuar.",
+      header: "Confirmación de Importación",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Sí, importar",
+      rejectLabel: "No",
+      accept: () => handleUpload(event),
+      //reject: () => {}, // opcional
+    });
+  }
+
   const handleUpload = (event) => {
     setLoading(true);
     const allowedExtensions = ["xlsx"];
@@ -700,7 +712,8 @@ export default function FormDT({ editable, totalRedondeado,
             accept=".xlsx"
             customUpload
             maxFileSize={1000000}
-            uploadHandler={handleUpload}
+            uploadHandler={(e) => confirmarImportacion(e)}
+            // uploadHandler={handleUpload}
             className="justify-content-center text-base"
             chooseLabel="Importar Plantilla"
             chooseOptions={{
