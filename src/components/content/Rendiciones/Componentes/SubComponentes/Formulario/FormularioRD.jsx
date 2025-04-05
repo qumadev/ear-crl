@@ -331,18 +331,30 @@ function FormularioRD() {
         STR_VALIDA_SUNAT: compExisteSunat,
         STR_CODIGO_RETENCION_DOC: codigoRetencion,
       };
-      let response = await crearDocumento(_documento); // Crea Documento
-      if (response.CodRespuesta != "99") {
-        var content = response.data.Result[0];
-        showSuccess(`Documento creado exitosamente`);
 
+      let response = await crearDocumento(_documento); // Crea Documento
+      if (response.status < 300 && response.data?.CodRespuesta !== "99") {
+        const content = response.data?.Result?.[0];
+        showSuccess("Documento creado exitosamente");
         await new Promise((resolve) => setTimeout(resolve, 3000));
-        navigate(ruta + "/rendiciones/info/" + id)
+        navigate(ruta + "/rendiciones/info/" + id);
       } else {
-        showError("Error al crear documento");
+        const mensajeError =
+          response?.data?.Message ||
+          response?.data?.DescRespuesta ||
+          "Error al crear documento";
+        showError(mensajeError);
       }
     } catch (error) {
-      showError("Error al crear documento");
+      console.error("Error al crear RD:", error);
+
+      const mensajeError =
+        error?.response?.data?.Message ||
+        error?.response?.data?.DescRespuesta ||
+        error?.message ||
+        "Error al crear documento";
+
+      showError(mensajeError);
     } finally {
       setLoading(false);
     }
