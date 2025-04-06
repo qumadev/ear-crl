@@ -100,6 +100,8 @@ export default function TableDT({
         // Recalcular el nuevo monto total
         const nuevoTotalRendido = documentosRestantes.reduce((total, doc) => total + parseFloat(doc.STR_TOTALDOC_CONVERTIDO), 0);
 
+        const nuevaSeleccion = documentosSeleccionados.filter(doc => doc.ID !== idDoc);
+
         // Actualizar la rendición con los documentos restantes y el nuevo total
         setRendicion(prevRendicion => ({
           ...prevRendicion,
@@ -107,6 +109,7 @@ export default function TableDT({
           STR_TOTALRENDIDO: nuevoTotalRendido // Actualizar el total monto rendido
         }));
 
+        setDocumentosSeleccionados(nuevaSeleccion);
         showSuccess("El documento ha sido eliminado exitosamente");
       } else {
         showError("Error al eliminar el documento");
@@ -267,7 +270,7 @@ export default function TableDT({
           onSelectionChange={(e) => setDocumentosSeleccionados(e.value)}
           dataKey="ID"
           selectionMode="multiple"
-          loading={loading}
+          loading={loading} f
           sortField="ID"
           sortOrder={-1}
           sortMode="multiple"
