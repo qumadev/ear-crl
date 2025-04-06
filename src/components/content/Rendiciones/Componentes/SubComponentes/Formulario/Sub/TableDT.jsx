@@ -233,13 +233,15 @@ export default function TableDT({
     });
   }
 
+  const esEditable = usuario.rol?.id == 1 && rendicion?.STR_ESTADO <= 9;
+
   return (
     <>
       <Toast ref={toast} />
       <div className="card">
 
-        {/* 🔽 Botón para eliminar seleccionados */}
-        {documentosSeleccionados.length > 0 && (
+        {/* Botón para eliminar seleccionados */}
+        {esEditable && documentosSeleccionados.length > 0 && (
           <div style={{ marginBottom: '1rem' }}>
             <Button
               label={`Eliminar seleccionados (${documentosSeleccionados.length})`}
@@ -261,7 +263,7 @@ export default function TableDT({
 
         <DataTable
           value={rendicion?.documentos}
-          selection={documentosSeleccionados}
+          selection={esEditable ? documentosSeleccionados : []}
           onSelectionChange={(e) => setDocumentosSeleccionados(e.value)}
           dataKey="ID"
           selectionMode="multiple"
@@ -284,10 +286,12 @@ export default function TableDT({
             headerStyle={{ width: "3rem" }}
             body={(data, options) => options.rowIndex + 1}
           ></Column>
-          <Column
-            selectionMode="multiple"
-            headerStyle={{ width: '3rem' }}
-          ></Column>
+          {esEditable && (
+            <Column
+              selectionMode="multiple"
+              headerStyle={{ width: '3rem' }}
+            />
+          )}
           <Column
             field='STR_TIPO_DOC.name'
             header="Tipo de comprobante"
