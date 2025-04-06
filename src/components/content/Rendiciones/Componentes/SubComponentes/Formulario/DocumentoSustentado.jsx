@@ -1355,7 +1355,7 @@ function DocumentoSustentado({
 						<Column
 							field="Areas.name"
 							// body={priceBodyTemplate}
-							header="Areas"
+							header="Área"
 							style={{ minWidth: "12rem" }}
 						></Column>
 						<Column
