@@ -1179,7 +1179,7 @@ function DocumentoSustentado({
 						/>
 
 						{/* ComboBox adicional al costado */}
-						<div className="flex align-items-center" style={{ gap: '0.25rem' }}>
+						{/* <div className="flex align-items-center" style={{ gap: '0.25rem' }}>
 							<Dropdown
 								value={documento.ComboAdicional}
 								onChange={(e) => {
@@ -1198,7 +1198,7 @@ function DocumentoSustentado({
 								disabled={esModoValidate}
 							/>
 							<span style={{ fontWeight: 'bold', fontSize: '1rem' }}>%</span>
-						</div>
+						</div> */}
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>
