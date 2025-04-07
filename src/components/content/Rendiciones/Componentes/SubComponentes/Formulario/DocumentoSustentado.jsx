@@ -125,20 +125,21 @@ function DocumentoSustentado({
 			try {
 				const response = await getPorcentajeAfectacion(documento.STR_AFECTACION.id)
 
-				if (response.status < 300 && response.data.Result) {
+				if (response.status < 300 && response.data.Result?.length > 0) {
 					const lista = response.data.Result;
-					setPorcentajes(lista)
-
-					if (lista.length === 1) {
-						setDocumento(prev => ({
-							...prev,
-							STR_PORCENTAJE: lista[0].name
-						}));
-					}
-
 					setPorcentajes(lista);
+
+					// Seleccionar automáticamente el primero, sea 1 o más elementos
+					setDocumento(prev => ({
+						...prev,
+						STR_PORCENTAJE: lista[0].name
+					}));
 				} else {
-					setPorcentajes([{ id: 'DEFAULT', name: '0.00' }])
+					setPorcentajes([{ id: 'DEFAULT', name: '0.00' }]);
+					setDocumento(prev => ({
+						...prev,
+						STR_PORCENTAJE: '0.00'
+					}));
 				}
 			} catch {
 				console.error("Error obteniendo porcenajes: ", error);
