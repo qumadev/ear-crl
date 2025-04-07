@@ -114,6 +114,7 @@ export default function FormDT({ editable, totalRedondeado,
     } catch (error) {
     } finally {
       setLoading(false);
+      setLoadingBtn(false);
       navigate(ruta + "/rendiciones");
     }
   }
@@ -175,12 +176,15 @@ export default function FormDT({ editable, totalRedondeado,
       acceptLabel: "Confirmar",
       rejectLabel: "Cancelar",
       accept: accept,
-      // reject,
+      reject: () => {
+        setLoadingBtn(false);
+      }
     });
   };
 
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
+
   async function ValidacionEnvio() {
     const todosValidados = rendicion.documentos.every(
       (doc) => doc.STR_VALIDA_SUNAT === true
@@ -189,9 +193,10 @@ export default function FormDT({ editable, totalRedondeado,
 
       let todosDocumentosValidos = true;
 
+      setLoadingBtn(true);
+
       for (const e of rendicion.documentos) {
         try {
-          setLoadingBtn(true);
           const response = await validacionDocumento(e.ID);
           if (response.status !== 200) {
             showError(response.Message);
@@ -206,10 +211,12 @@ export default function FormDT({ editable, totalRedondeado,
       if (todosDocumentosValidos) {
         confirmarDiferenciaMontos()
         //confirm1();
+      } else {
+        setLoadingBtn(false); // Cancelamos loading si hubo error
       }
-      setLoadingBtn(false);
     } else {
       showError("Tienes que tener todos los documentos validados ante SUNAT");
+      setLoadingBtn(false);
     }
   }
   const leftToolbarTemplate = () => {
@@ -229,7 +236,13 @@ export default function FormDT({ editable, totalRedondeado,
               onClick={(e) => {
                 ValidacionEnvio();
               }}
-              disabled={rendicion?.STR_ESTADO === 10 || rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16}
+              loading={loadingBtn}
+              disabled={
+                loadingBtn ||
+                rendicion?.STR_ESTADO === 10 ||
+                rendicion?.STR_ESTADO === 11 ||
+                rendicion?.STR_ESTADO === 16
+              }
             />
           )}
           {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
