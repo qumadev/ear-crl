@@ -184,6 +184,9 @@ export default function FormDT({ editable, totalRedondeado,
 
   //Solicitar Aprobacion
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [loadingAceptacion, setLoadingAceptacion] = useState(false);
+  const [loadingReversion, setLoadingReversion] = useState(false);
+  const [loadingExport, setLoadingExport] = useState(false);
 
   async function ValidacionEnvio() {
     const todosValidados = rendicion.documentos.every(
@@ -253,10 +256,10 @@ export default function FormDT({ editable, totalRedondeado,
               onClick={(e) => {
                 confirmAceptacion();
               }}
-              loading={loadingBtn}
+              loading={loadingAceptacion}
               disabled={
                 (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
-                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16)
+                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16) || loadingAceptacion || loadingReversion
               }
             />
           )}
@@ -266,34 +269,14 @@ export default function FormDT({ editable, totalRedondeado,
               size="large"
               style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
               onClick={() => confirmReversion(rendicion?.ID)}
+              loading={loadingReversion}
               disabled={
                 (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
-                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16)
+                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16) || loadingReversion || loadingAceptacion
               }
             />
           )}
-          {/* {usuario.rol?.id == "3" ? (
-              <Button
-                label="Autorizar Edicion"
-                severity="danger"
-                size="large"
-                onClick={() => confirmAutorizarReversion(rendicion?.ID)}
-
-              />
-            ) : ""} */}
         </div>
-        {/*<div className="d-flex col-12 md:col-12 lg:col-12">
-          <Button 
-              label={"test"}
-              onClick={(e) => {
-                if (rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - rendicion.STR_TOTALRENDIDO === 0) {
-                  alert("asies")
-                } else {
-                  alert("ono")
-                };
-              }}
-          />
-        </div>*/}
       </div>
     );
   };
@@ -327,7 +310,9 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   async function aceptarAprobacionLocal() {
-    setLoading(true);
+    setLoadingAceptacion(true);
+    setLoadingReversion(true);
+
     try {
       let response = await aceptarAprobRendicion(
         rendicion.SOLICITUDRD.ID,
@@ -353,7 +338,8 @@ export default function FormDT({ editable, totalRedondeado,
     } catch (error) {
       showError(error.response.data.Message);
     } finally {
-      setLoading(false);
+      setLoadingAceptacion(false);
+      setLoadingReversion(false);
     }
   }
 
@@ -371,27 +357,23 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   async function ReversionAprobacionLocal(rendicionId) {
-    setLoading(true);
+    setLoadingReversion(true);
+    setLoadingAceptacion(true);
+
     try {
       let response = await revertirAprobRendicion(rendicionId);
       if (response.status < 300) {
-        //let body = response.data.Result[0];
-        // if (body.AprobacionFinalizada == 0) {
         showSuccess(`Se revertio la aprobacion de la rendición`);
-        // } else {
-        //   showSuccess(
-        //     `Se migró a a SAP la rendición con número ${ body.DocNum } `
-        //   );
-        // }
         await new Promise((resolve) => setTimeout(resolve, 3000));
+        navigate(ruta + "/rendiciones");
       } else {
         showError(response.Message);
       }
     } catch (error) {
       showError("Error interno");
     } finally {
-      navigate(ruta + "/rendiciones");
-      setLoading(false);
+      setLoadingReversion(false);
+      setLoadingAceptacion(false);
     }
   }
   // confirmacion
@@ -691,12 +673,9 @@ export default function FormDT({ editable, totalRedondeado,
             icon="pi pi-plus"
             severity="success"
             onClick={() => {
-              navigate(ruta +
-                `/rendiciones/${rendicion?.ID}/documentos/agregar`);
+              navigate(ruta + `/rendiciones/${rendicion?.ID}/documentos/agregar`);
             }}
-
-
-            disabled={!showEditButton}
+            disabled={!showEditButton || loadingBtn}
           />
 
           <Button
@@ -734,7 +713,7 @@ export default function FormDT({ editable, totalRedondeado,
             }}
             progressBarTemplate
             // disabled={validaEditable}
-            disabled={rendicion?.STR_ESTADO >= 10}
+            disabled={rendicion?.STR_ESTADO >= 10 || loadingBtn}
           />
 
         </div>
