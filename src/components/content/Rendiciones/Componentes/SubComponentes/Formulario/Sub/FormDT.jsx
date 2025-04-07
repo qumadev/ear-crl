@@ -258,8 +258,8 @@ export default function FormDT({ editable, totalRedondeado,
               }}
               loading={loadingAceptacion}
               disabled={
-                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
-                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16) || loadingAceptacion || loadingReversion
+                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17)) ||
+                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17) || loadingAceptacion || loadingReversion
               }
             />
           )}
