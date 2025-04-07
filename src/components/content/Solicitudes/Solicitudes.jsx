@@ -256,14 +256,13 @@ function Solicitudes({
           showSuccess('Se envió a su correo la aprobación de dicha solicitud');
         }
 
-        listarSolicitudes();
-
       } else {
         showError(response.Message);
       }
     } catch (error) {
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
+      listarSolicitudes();
       setLoading(false);
     }
   }
@@ -353,7 +352,7 @@ function Solicitudes({
     const showAprobacionButton =
       ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
         (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
-      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5;
+      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5 && rowData?.STR_ESTADO !== 7;
 
     const showRevertirAprobacionButton =
       ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||

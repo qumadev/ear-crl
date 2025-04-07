@@ -518,7 +518,7 @@ export default function FormDT({ editable, totalRedondeado,
 
           if (response.status < 300) {
             if (response.data.Result.CodRespuesta != "99") {
-              showSuccess("Se agregó exitosamente");
+              showSuccess("Se importó los documentos exitosamente");
               obtenerRendicionLocal();
             } else {
               showError(response.data.Result.DescRespuesta);
