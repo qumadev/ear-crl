@@ -1155,6 +1155,8 @@ function DocumentoSustentado({
 						<label className='col-2'>
 							<span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Afectación
 						</label>
+
+						{/* Afectación Dropdown */}
 						<Dropdown
 							className='col-6'
 							value={documento.STR_AFECTACION?.id}  // Usamos el id para manejar la selección
@@ -1175,6 +1177,28 @@ function DocumentoSustentado({
 							placeholder='Seleccione Afectación'
 							disabled={esModoValidate || !documento?.STR_TIPO_DOC}
 						/>
+
+						{/* ComboBox adicional al costado */}
+						<div className="flex align-items-center" style={{ gap: '0.25rem' }}>
+							<Dropdown
+								value={documento.ComboAdicional}
+								onChange={(e) => {
+									setDocumento((prevState) => ({
+										...prevState,
+										ComboAdicional: e.value
+									}));
+								}}
+								options={[
+									{ label: 'Opción A', value: 'A' },
+									{ label: 'Opción B', value: 'B' },
+									{ label: 'Opción C', value: 'C' },
+								]}
+								placeholder="%"
+								style={{ width: '6rem', fontSize: '0.75rem', padding: '0.25rem' }}
+								disabled={esModoValidate}
+							/>
+							<span style={{ fontWeight: 'bold', fontSize: '1rem' }}>%</span>
+						</div>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>
