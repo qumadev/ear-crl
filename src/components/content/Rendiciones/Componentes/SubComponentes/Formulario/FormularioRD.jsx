@@ -275,7 +275,8 @@ function FormularioRD() {
       if (documento?.STR_AFECTACION?.name === "Retención" && totalEnSoles > 700) {
         descuento = 0.03; // 3% para Retención si supera 700 SOL
       } else if (documento?.STR_AFECTACION?.name === "Detracción" && totalEnSoles > 700) {
-        descuento = 0.10; // 10% siempre para Detracción
+        const porcentajeDetraccion = parseFloat(documento?.STR_PORCENTAJE) || 0;
+        descuento = porcentajeDetraccion / 100; // PORCENTAJE DINAMICO PARA DETRACCION
       } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
         descuento = 0.24
       } else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
@@ -321,6 +322,7 @@ function FormularioRD() {
           name: documento.STR_MONEDA?.name || documento.STR_MONEDA?.Code
         },
         STR_TIPO_CAMBIO: documento.STR_TIPO_CAMBIO,
+        STR_PORCENTAJE: documento.STR_PORCENTAJE,
         STR_TOTALDOC: totalDocumento,
         STR_TOTALDOC_CONVERTIDO: totalConvertido,
         STR_CANTIDAD: null,
@@ -444,7 +446,8 @@ function FormularioRD() {
         if (documento?.STR_AFECTACION?.name === "Retención" && totalEnSoles > 700) {
           descuento = 0.03; // 3% para Retención si supera 700 SOL
         } else if (documento?.STR_AFECTACION?.name === "Detracción" && totalEnSoles > 700) {
-          descuento = 0.10; // 10% siempre para Detracción
+          const porcentajeDetraccion = parseFloat(documento?.STR_PORCENTAJE) || 0;
+          descuento = porcentajeDetraccion / 100; // PORCENTAJE DINAMICO PARA DETRACCION
         } else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
           descuento = 0.24
         } else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
@@ -494,6 +497,7 @@ function FormularioRD() {
           STR_FECHA_VENCIMIENTO: new Date(documento.STR_FECHA_DOC).toISOString().split('T')[0],
           STR_VALIDA_SUNAT: compExisteSunat,
           STR_CODIGO_RETENCION_DOC: codigoRetencion,
+          STR_PORCENTAJE: documento.STR_PORCENTAJE,
           detalles: _detalles, // Detalles
         };
 

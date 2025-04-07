@@ -708,11 +708,11 @@ function DocumentoSustentado({
 
 							const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1;
 
-							console.log("Propiedades para validar tipo de cambio:");
-							console.log("documento.STR_TIPO_CAMBIO:", documento.STR_TIPO_CAMBIO);
-							console.log("Tipo de Cambio usado:", tipoCambio);
-							console.log("documento.STR_MONEDA?.Code:", documento.STR_MONEDA?.Code);
-							console.log("rendicion?.STR_MONEDA?.id:", rendicion?.STR_MONEDA?.id);
+							// console.log("Propiedades para validar tipo de cambio:");
+							// console.log("documento.STR_TIPO_CAMBIO:", documento.STR_TIPO_CAMBIO);
+							// console.log("Tipo de Cambio usado:", tipoCambio);
+							// console.log("documento.STR_MONEDA?.Code:", documento.STR_MONEDA?.Code);
+							// console.log("rendicion?.STR_MONEDA?.id:", rendicion?.STR_MONEDA?.id);
 
 							let totalConCambio = totalBase;
 
@@ -738,7 +738,7 @@ function DocumentoSustentado({
 			{!sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retención" || documento?.STR_AFECTACION?.name === "Detracción" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name} - ${documento?.STR_PORCENTAJE || '0'}%): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -771,10 +771,12 @@ function DocumentoSustentado({
 								: totalConvertido;
 
 							let descuento = 0;
+							const porcentajeSeleccionado = parseFloat(documento?.STR_PORCENTAJE) || 0;
+
 							if (documento?.STR_AFECTACION?.name === "Retención" && totalEnSoles > 700) {
 								descuento = 0.03; // 3% RETENCION
 							} else if (documento?.STR_AFECTACION?.name === "Detracción" && totalEnSoles > 700) {
-								descuento = 0.10; // 10% DETRACCION
+								descuento = porcentajeSeleccionado / 100; // PORCENTAJE DINAMICO SELECCIONADO
 							} else if (documento?.STR_AFECTACION?.name === "No domiciliados" && totalEnSoles > 700) {
 								descuento = 0.24
 							} else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios" && totalEnSoles > 700) {
@@ -801,7 +803,7 @@ function DocumentoSustentado({
 			{sonAmbasUSD && (documento?.STR_AFECTACION?.name === "Retención" || documento?.STR_AFECTACION?.name === "Detracción" || documento?.STR_AFECTACION?.name === "No domiciliados" || documento?.STR_AFECTACION?.name === "Recibo por honorarios") && (
 				<Row>
 					<Column
-						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name}): `}
+						footer={`Monto Total Rendido (${documento?.STR_AFECTACION?.name} - ${documento?.STR_PORCENTAJE || '0'}%): `}
 						colSpan={esModoValidate ? 14 : 15}
 						footerStyle={{ textAlign: 'right', fontWeight: 'bold' }}
 					/>
@@ -826,11 +828,13 @@ function DocumentoSustentado({
 
 							// 3. Aplicar descuento solo si supera 700 SOL
 							let descuento = 0;
+							const porcentajeSeleccionado = parseFloat(documento?.STR_PORCENTAJE) || 0;
+
 							if (totalEnSoles > 700) {
 								if (documento?.STR_AFECTACION?.name === "Retención") {
 									descuento = 0.03; // 3% RETENCION
 								} else if (documento?.STR_AFECTACION?.name === "Detracción") {
-									descuento = 0.10; // 10% DETRACCION
+									descuento = porcentajeSeleccionado / 100; // PORCENTAJE DINAMICO SELECCIONADO
 								} else if (documento?.STR_AFECTACION?.name === "No domiciliados") {
 									descuento = 0.24; // 24% NO DOMICILIADOS
 								} else if (documento?.STR_AFECTACION?.name === "Recibo por honorarios") {
