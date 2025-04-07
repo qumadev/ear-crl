@@ -637,3 +637,12 @@ export const eliminarDocumentosMasivo = async (documentos) => {
     }
   })
 }
+
+// API GET PORCENTAJES POR AFECTACION ID
+export const getPorcentajeAfectacion = async (afectacionId) => {
+  return API.get(`/rendicion/documento/get-percent/${afectacionId}`, {
+    validateStatus: function (status){
+      return status < 500;
+    }
+  })
+}

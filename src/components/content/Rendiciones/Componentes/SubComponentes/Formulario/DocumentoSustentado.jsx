@@ -14,7 +14,7 @@ import {
 	obtenerFilial, obtenerMotivos, obtenerProveedores, obtenerProyectos,
 	obtenerTipoDocs, obtenerTipos, obtenerUnidadNegocio, obtenerTiposMonedas,
 	eliminarDetalleEnDocumento, obtenerRendicion, obtenerIndImpuesto,
-	obtenerDocumento, obtenerAfectacion
+	obtenerDocumento, obtenerAfectacion, getPorcentajeAfectacion
 } from '../../../../../../services/axios.service';
 import { Calendar } from 'primereact/calendar';
 import FormDetalleDocumento from './FormDetalleDocumento';
@@ -57,6 +57,7 @@ function DocumentoSustentado({
 	const [rendicion, setRendicion] = useState(null); // almacenar la rendcion
 	const [afectacion, setAfectacion] = useState([{ id: '5', name: 'Ninguno' }]) // ESTADO INICIAL
 	const [indImpuestos, setIndImpuestos] = useState([{ id: 'EXO', name: 'Exonerado' }]) // ESTADO INICIAL
+	const [porcentajes, setPorcentajes] = useState([{ id: 'DEFAULT', name: '0.00' }]) // ESTADO INICIAL
 
 	const toast = useRef(null);
 
@@ -115,6 +116,33 @@ function DocumentoSustentado({
 			} catch {
 				console.error("Error obteniendo afectaciones: ", error);
 				setAfectacion([{ id: '5', name: 'Ninguno' }])
+			}
+		}
+	}
+
+	const obtenerPorcentajes = async () => {
+		if (documento.STR_AFECTACION) {
+			try {
+				const response = await getPorcentajeAfectacion(documento.STR_AFECTACION.id)
+
+				if (response.status < 300 && response.data.Result) {
+					const lista = response.data.Result;
+					setPorcentajes(lista)
+
+					if (lista.length === 1) {
+						setDocumento(prev => ({
+							...prev,
+							STR_PORCENTAJE: lista[0].name
+						}));
+					}
+
+					setPorcentajes(lista);
+				} else {
+					setPorcentajes([{ id: 'DEFAULT', name: '0.00' }])
+				}
+			} catch {
+				console.error("Error obteniendo porcenajes: ", error);
+				setPorcentajes([{ id: 'DEFAULT', name: '0.00' }])
 			}
 		}
 	}
@@ -405,6 +433,21 @@ function DocumentoSustentado({
 			obtenerAfectaciones();
 		}
 	}, [documento?.STR_TIPO_DOC?.id]);
+
+	useEffect(() => {
+		if (documento?.STR_AFECTACION?.id) {
+			if (documento.STR_AFECTACION.id === '5') {
+				// Si es "Ninguno", seteamos un valor fijo de porcentaje 0
+				setPorcentajes([{ id: 'DEFAULT', name: '0.00' }]);
+				setDocumento(prev => ({
+					...prev,
+					STR_PORCENTAJE: '0.00' // Opcional: puedes cambiarlo si usas otro campo
+				}));
+			} else {
+				obtenerPorcentajes(); // Llama a la API si es otra afectación
+			}
+		}
+	}, [documento?.STR_AFECTACION?.id]);
 
 	const selectedOptionTemplate = (option, props) => {
 		if (option) {
@@ -1179,26 +1222,31 @@ function DocumentoSustentado({
 						/>
 
 						{/* ComboBox adicional al costado */}
-						{/* <div className="flex align-items-center" style={{ gap: '0.25rem' }}>
+						<div className="flex align-items-center" style={{ gap: '0.25rem' }}>
+							{/* ComboBox adicional al costado - Porcentaje */}
 							<Dropdown
-								value={documento.ComboAdicional}
+								className="col-2"
+								value={documento.STR_PORCENTAJE}
 								onChange={(e) => {
 									setDocumento((prevState) => ({
 										...prevState,
-										ComboAdicional: e.value
+										STR_PORCENTAJE: e.value
 									}));
 								}}
-								options={[
-									{ label: 'Opción A', value: 'A' },
-									{ label: 'Opción B', value: 'B' },
-									{ label: 'Opción C', value: 'C' },
-								]}
+								options={porcentajes.map(p => ({
+									label: parseFloat(p.name) === 0 ? '-' : `${p.name}`,
+									value: p.name
+								}))}
 								placeholder="%"
-								style={{ width: '6rem', fontSize: '0.75rem', padding: '0.25rem' }}
-								disabled={esModoValidate}
+								style={{ width: '7rem', fontSize: '0.75rem', padding: '0.25rem' }}
+								disabled={
+									esModoValidate ||
+									documento.STR_AFECTACION?.id === '5' ||
+									porcentajes.length === 1
+								}
 							/>
 							<span style={{ fontWeight: 'bold', fontSize: '1rem' }}>%</span>
-						</div> */}
+						</div>
 					</div>
 					<div className="flex col-12 align-items-center gap-5">
 						<label className='col-2'>
