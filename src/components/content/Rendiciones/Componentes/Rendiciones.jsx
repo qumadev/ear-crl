@@ -261,7 +261,7 @@ function Rendiciones({
         }
 
         // Aquí haces la recarga de la lista desde la API para obtener los datos actualizados
-        listarRendicionesLocal();  // Llama a tu función para listar rendiciones actualizadas desde la API
+        // listarRendicionesLocal();  // Llama a tu función para listar rendiciones actualizadas desde la API
 
       } else {
         showError(response.Message);
@@ -269,6 +269,7 @@ function Rendiciones({
     } catch (error) {
       showError(error.response ? error.response.data.Message : "Error interno");
     } finally {
+      listarRendicionesLocal();
       setLoading(false);
     }
   }
