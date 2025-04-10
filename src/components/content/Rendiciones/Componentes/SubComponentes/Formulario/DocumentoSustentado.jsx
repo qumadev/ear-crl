@@ -139,7 +139,7 @@ function DocumentoSustentado({
 					if (!existeEnLista) {
 						setDocumento(prev => ({
 							...prev,
-							STR_PORCENTAJE: lista[0].name.toString()
+							STR_PORCENTAJE: lista[0].name
 						}));
 					}
 				} else {
