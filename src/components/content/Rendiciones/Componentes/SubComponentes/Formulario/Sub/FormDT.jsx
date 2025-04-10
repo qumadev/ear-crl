@@ -559,7 +559,7 @@ export default function FormDT({ editable, totalRedondeado,
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        showSuccess("Archivo exportado correctamente");
+        showSuccess("Documentos exportados exitosamente.");
       } else {
         showError("Error al exportar el archivo. Inténtalo nuevamente.");
       }
@@ -679,7 +679,7 @@ export default function FormDT({ editable, totalRedondeado,
           />
 
           <Button
-            label="Exportar"
+            label="Exportar Documentos"
             icon="pi pi-upload"
             severity="secondary"
             style={{ backgroundColor: "black" }}

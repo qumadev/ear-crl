@@ -57,7 +57,7 @@ function DocumentoSustentado({
 	const [rendicion, setRendicion] = useState(null); // almacenar la rendcion
 	const [afectacion, setAfectacion] = useState([{ id: '5', name: 'Ninguno' }]) // ESTADO INICIAL
 	const [indImpuestos, setIndImpuestos] = useState([{ id: 'EXO', name: 'Exonerado' }]) // ESTADO INICIAL
-	const [porcentajes, setPorcentajes] = useState([{ id: 'DEFAULT', name: '0.00' }]) // ESTADO INICIAL
+	const [porcentajes, setPorcentajes] = useState([{ id: 'DEFAULT', name: 0.00 }]) // ESTADO INICIAL
 
 	const toast = useRef(null);
 
@@ -129,13 +129,21 @@ function DocumentoSustentado({
 					const lista = response.data.Result;
 					setPorcentajes(lista);
 
-					// Seleccionar automáticamente el primero, sea 1 o más elementos
-					setDocumento(prev => ({
-						...prev,
-						STR_PORCENTAJE: lista[0].name
-					}));
+					// Buscar si el valor actual existe en la nueva lista
+					const valorActual = documento.STR_PORCENTAJE;
+					const existeEnLista = lista.some(item =>
+						parseFloat(item.name) === parseFloat(valorActual)
+					);
+
+					// Solo establecer el primero si no existe el valor actual
+					if (!existeEnLista) {
+						setDocumento(prev => ({
+							...prev,
+							STR_PORCENTAJE: lista[0].name.toString()
+						}));
+					}
 				} else {
-					setPorcentajes([{ id: 'DEFAULT', name: '0.00' }]);
+					setPorcentajes([{ id: 'DEFAULT', name: 0.00 }]);
 					setDocumento(prev => ({
 						...prev,
 						STR_PORCENTAJE: '0.00'
@@ -143,7 +151,7 @@ function DocumentoSustentado({
 				}
 			} catch {
 				console.error("Error obteniendo porcenajes: ", error);
-				setPorcentajes([{ id: 'DEFAULT', name: '0.00' }])
+				setPorcentajes([{ id: 'DEFAULT', name: 0.00 }])
 			}
 		}
 	}
@@ -439,10 +447,10 @@ function DocumentoSustentado({
 		if (documento?.STR_AFECTACION?.id) {
 			if (documento.STR_AFECTACION.id === '5') {
 				// Si es "Ninguno", seteamos un valor fijo de porcentaje 0
-				setPorcentajes([{ id: 'DEFAULT', name: '0.00' }]);
+				setPorcentajes([{ id: 'DEFAULT', name: 0.00 }]);
 				setDocumento(prev => ({
 					...prev,
-					STR_PORCENTAJE: '0.00' // Opcional: puedes cambiarlo si usas otro campo
+					STR_PORCENTAJE: 0.00 // Opcional: puedes cambiarlo si usas otro campo
 				}));
 			} else {
 				obtenerPorcentajes(); // Llama a la API si es otra afectación
@@ -1239,7 +1247,7 @@ function DocumentoSustentado({
 									}));
 								}}
 								options={porcentajes.map(p => ({
-									label: parseFloat(p.name) === 0 ? '-' : `${p.name}`,
+									label: parseFloat(p.name) === 0 ? '-' : parseFloat(p.name).toFixed(2),
 									value: p.name
 								}))}
 								placeholder="%"
