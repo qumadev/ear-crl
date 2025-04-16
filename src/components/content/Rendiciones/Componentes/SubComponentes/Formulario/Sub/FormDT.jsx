@@ -632,6 +632,16 @@ export default function FormDT({ editable, totalRedondeado,
     }
   }, [id]);
 
+  useEffect(() => {
+    if (rendicion) {
+      const totalSolicitado = parseFloat(rendicion?.SOLICITUDRD?.STR_TOTALSOLICITADO || 0).toFixed(2);
+      const totalRendido = parseFloat(rendicion?.STR_TOTALRENDIDO || 0).toFixed(2);
+
+      setMontoSolicitado(totalSolicitado);
+      setMontoRendido(totalRendido);
+    }
+  }, [rendicion]); // <- Esto reacciona a cada cambio de rendicion
+
   const formatCurrency = (value, currency) => {
     return value.toLocaleString("es-PE", {
       style: "currency",
