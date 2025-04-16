@@ -184,6 +184,9 @@ export default function FormDT({ editable, totalRedondeado,
       accept: accept,
       reject: () => {
         setLoadingBtn(false);
+      },
+      onHide: () => {
+        setLoadingBtn(false);
       }
     });
   };
