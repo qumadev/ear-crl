@@ -511,22 +511,27 @@ function DocumentoSustentado({
 			const impuestoValue = articulo.Impuesto ? articulo.Impuesto : '';
 
 			return {
-				...articulo,
-				Cod: codValue,
-				Concepto: conceptoValue,
-				Almacen: almacenValue,
-				Proyecto: proyectoValue,
-				UnidadNegocio: unidadNegocioValue,
-				Filial: filialValue,
-				Areas: areasValue,
-				CentroCosto: centroCostoValue,
-				IndImpuesto: indImpuestoValue,
-				Precio: precioValue,
-				Cantidad: cantidadValue,
-				Impuesto: impuestoValue,
+				"Cod. Artículo/Servicio": codValue,
+				"Concepto": conceptoValue,
+				"Almacén": almacenValue,
+				"Proyecto": proyectoValue,
+				"Unidad de Negocio": unidadNegocioValue,
+				"Filial": filialValue,
+				"Área": areasValue,
+				"Centro Costo": centroCostoValue,
+				"Ind. Impuesto": indImpuestoValue,
+				"Precio": precioValue,
+				"Cantidad": cantidadValue,
+				"Impuesto": parseFloat(impuestoValue || 0).toFixed(2),
+				"Subtotal": (parseFloat(articulo?.Precio || 0) * parseFloat(articulo?.Cantidad || 0)).toFixed(2),
+				"Total Detalle": (
+					parseFloat(articulo?.Precio || 0) * parseFloat(articulo?.Cantidad || 0) +
+					parseFloat(articulo?.Impuesto || 0)
+				).toFixed(2),
 			};
 		});
 	};
+
 	// Expotar detalle
 	const exportExcel = async () => {
 		const XLSX = await import("xlsx");
@@ -539,6 +544,7 @@ function DocumentoSustentado({
 		});
 		saveAsExcelFile(excelBuffer, "detalle");
 	};
+
 	const saveAsExcelFile = async (buffer, fileName) => {
 		const FileSaver = await import("file-saver");
 
@@ -1416,7 +1422,7 @@ function DocumentoSustentado({
 							style={{ minWidth: "12rem" }}
 						></Column>
 						<Column
-							field="Cod.WhsCode"
+							field="Almacen"
 							header="Almacen"
 							style={{ minWidth: "8rem" }}
 						// body={statusBodyTemplate}

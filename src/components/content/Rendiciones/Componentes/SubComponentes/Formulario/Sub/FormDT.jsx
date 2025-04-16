@@ -138,31 +138,37 @@ export default function FormDT({ editable, totalRedondeado,
   };
 
   const confirmarDiferenciaMontos = () => {
-    let diferencia = rendicion.SOLICITUDRD.STR_TOTALSOLICITADO - montoRendido;
+    let diferencia = parseFloat((rendicion.SOLICITUDRD.STR_TOTALSOLICITADO || 0)) - parseFloat((montoRendido || 0));
     diferencia = parseFloat(diferencia.toFixed(2)); // Redondear a dos decimales
+
     let mensaje;
+
+    const moneda = rendicion?.STR_MONEDA?.id || 'PEN';
+    const montoSolicitadoFormatted = formatCurrency(parseFloat(montoSolicitado || 0), moneda);
+    const montoRendidoFormatted = formatCurrency(parseFloat(montoRendido || 0), moneda);
+    const diferenciaFormatted = formatCurrency(Math.abs(diferencia), moneda);
 
     if (diferencia < 0) {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
-          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
-          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con un <strong>reembolso</strong> de ${(-1) * diferencia}?</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitadoFormatted}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendidoFormatted}</p>
+          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con un <strong>reembolso</strong> de ${diferenciaFormatted}?</p>
         </div>
       `;
     } else if (diferencia > 0) {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
-          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
-          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con una <strong>devolución</strong> de ${diferencia}?</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitadoFormatted}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendidoFormatted}</p>
+          <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong> con una <strong>devolución</strong> de ${diferenciaFormatted}?</p>
         </div>
       `;
     } else {
       mensaje = `
         <div style="line-height: 1.6; font-size: 14px;">
-          <p><strong>Monto Solicitado:</strong> ${montoSolicitado}</p>
-          <p><strong>Monto Rendido:</strong> ${montoRendido}</p>
+          <p><strong>Monto Solicitado:</strong> ${montoSolicitadoFormatted}</p>
+          <p><strong>Monto Rendido:</strong> ${montoRendidoFormatted}</p>
           <p>¿Estás seguro de solicitar aprobación para el número de entrega a rendir <strong>#${rendicion.STR_NRRENDICION}</strong>?</p>
         </div>
       `;
