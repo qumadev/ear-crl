@@ -338,6 +338,7 @@ export default function FormDT({ editable, totalRedondeado,
           showSuccess(`Se migró a a SAP la rendición con número ${body.DocNum} `);
         }
         await new Promise((resolve) => setTimeout(resolve, 3000));
+        // await obtenerRendicionLocal();
         navigate(ruta + "/rendiciones");
       } else {
         showError(response.Message);
@@ -347,6 +348,7 @@ export default function FormDT({ editable, totalRedondeado,
     } finally {
       setLoadingAceptacion(false);
       setLoadingReversion(false);
+      await obtenerRendicionLocal();
     }
   }
 
