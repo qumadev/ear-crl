@@ -121,6 +121,7 @@ export default function FormDT({ editable, totalRedondeado,
 
   // aceptar
   const accept = () => {
+    setLoadingBtn(true);
     EnviarSolicitud();
   };
   // confirmacion 
@@ -184,9 +185,6 @@ export default function FormDT({ editable, totalRedondeado,
       accept: accept,
       reject: () => {
         setLoadingBtn(false);
-      },
-      onHide: () => {
-        setLoadingBtn(false);
       }
     });
   };
@@ -205,7 +203,7 @@ export default function FormDT({ editable, totalRedondeado,
 
       let todosDocumentosValidos = true;
 
-      setLoadingBtn(true);
+      // setLoadingBtn(true);
 
       for (const e of rendicion.documentos) {
         try {
@@ -224,7 +222,7 @@ export default function FormDT({ editable, totalRedondeado,
         confirmarDiferenciaMontos()
         //confirm1();
       } else {
-        setLoadingBtn(false); // Cancelamos loading si hubo error
+        // setLoadingBtn(false); // Cancelamos loading si hubo error
       }
     } else {
       showError("Tienes que tener todos los documentos validados ante SUNAT");
