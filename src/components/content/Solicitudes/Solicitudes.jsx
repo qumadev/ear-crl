@@ -93,6 +93,14 @@ function Solicitudes({
     return formatCurrency(rowData.STR_TOTALSOLICITADO, currency);
   };
 
+  const presupuestadoBodyTemplate = (rowData) => {
+    return (
+      <span style={{ fontWeight: "bold" }}>
+        {rowData.STR_PRESUPUESTADO ? "Sí" : "No"}
+      </span>
+    )
+  }
+
   const fecBodyTemplate = (rowData) => {
     return <>{rowData.STR_FECHAREGIS}</>;
   };
@@ -723,6 +731,11 @@ function Solicitudes({
           body={priceBodyTemplate}
           header="Monto Solicitado"
           style={{ minWidth: "12rem" }}
+        ></Column>
+        <Column
+          header="Presupuestado"
+          style={{ minWidth: "15rem" }}
+          body={presupuestadoBodyTemplate}
         ></Column>
         <Column
           header="Proyecto"

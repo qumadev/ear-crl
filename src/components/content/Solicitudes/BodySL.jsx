@@ -57,6 +57,7 @@ export function BodySL({ responsiveSizeMobile }) {
       "Motivo": solicitud?.STR_TIPORENDICION?.name || "",
       "Empleado Asignado": solicitud?.STR_EMPLDREGI_NOMBRE || "",
       "Monto Solicitado": `${solicitud?.STR_MONEDA?.name || ""} ${solicitud?.STR_TOTALSOLICITADO || ""}`,
+      "Presupuestado": solicitud?.STR_PRESUPUESTADO ? "Sí" : "No",
       "Proyecto": solicitud?.STR_PROYECTO?.name,
       "Centro de Costo (CeCo)": solicitud?.STR_CENTRO_COSTO?.name,
       "N° de cuenta corriente y/o CCI": solicitud?.STR_CCI,

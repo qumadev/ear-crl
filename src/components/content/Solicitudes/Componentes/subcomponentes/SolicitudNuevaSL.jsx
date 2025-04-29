@@ -16,6 +16,7 @@ import "primeflex/primeflex.css";
 import Input from "postcss/lib/input";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { InputSwitch } from 'primereact/inputswitch';
 import FormDetalleNewSolicitud from "./FormDetalleNewSolicitud";
 import { Button } from "primereact/button";
 import { Calendar } from 'primereact/calendar';
@@ -239,6 +240,23 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
               />
             </div>
           </div>
+
+          <label htmlFor="">
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Presupuestado:
+          </label>
+          <InputSwitch
+            checked={solicitudRD.STR_PRESUPUESTADO}
+            onChange={(e) =>
+              setSolicitudRD((prevState) => ({
+                ...prevState,
+                STR_PRESUPUESTADO: e.value,
+              }))
+            }
+            disabled={
+              !estadosEditables.includes(solicitudRD.STR_ESTADO) |
+              (usuario.rol.id != 1)
+            }
+          />
 
           <label htmlFor="">
             <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Proyecto:
