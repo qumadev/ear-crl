@@ -293,7 +293,20 @@ function FormularioRD() {
           break;
 
         case "Detracción":
-          codigoRetencion = "DT10";
+          const porcentaje = parseFloat(documento?.STR_PORCENTAJE) || 0;
+
+          if (porcentaje === 1.5) {
+            codigoRetencion = "DT1";
+          } else if (porcentaje === 10) {
+            codigoRetencion = "DT10";
+          } else if (porcentaje === 12) {
+            codigoRetencion = "DT12";
+          } else if (porcentaje === 4) {
+            codigoRetencion = "DT4";
+          } else {
+            codigoRetencion = "DT10";
+          }
+
           break;
 
         case "No domiciliados":
@@ -463,7 +476,20 @@ function FormularioRD() {
             break;
 
           case "Detracción":
-            codigoRetencion = "DT10";
+            const porcentaje = parseFloat(documento?.STR_PORCENTAJE) || 0;
+
+            if (porcentaje === 1.5) {
+              codigoRetencion = "DT1";
+            } else if (porcentaje === 10) {
+              codigoRetencion = "DT10";
+            } else if (porcentaje === 12) {
+              codigoRetencion = "DT12";
+            } else if (porcentaje === 4) {
+              codigoRetencion = "DT4";
+            } else {
+              codigoRetencion = "DT10";
+            }
+
             break;
 
           case "No domiciliados":
