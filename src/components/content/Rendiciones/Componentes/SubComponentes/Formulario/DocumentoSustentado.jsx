@@ -1411,13 +1411,13 @@ function DocumentoSustentado({
 							: null
 						}
 						<Column
-							field="STR_ITEMCODE"
+							field="Cod.ItemCode"
 							header="Cod. Articulo/Servicio"
 							style={{ width: "3rem" }}
 							className="font-bold"
 						></Column>
 						<Column
-							field="STR_ITEMNAME"
+							field="Cod.ItemName"
 							header="Concepto"
 							style={{ minWidth: "12rem" }}
 						></Column>
