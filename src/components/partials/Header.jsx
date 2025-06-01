@@ -31,11 +31,11 @@ export function Header({
     switch (perfil) {
       case "1":
         return "Usuario";
-      case 2:
+      case "2":
         return "Autorizador";
-      case 3:
+      case "3":
         return "Contable";
-      case 4:
+      case "4":
         return "Administrador";
       default:
         return "No definido";

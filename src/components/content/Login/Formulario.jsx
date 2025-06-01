@@ -145,11 +145,11 @@ export function Formulario() {
                 options={sociedades}
                 optionLabel="name"
                 placeholder=" Sociedad"
-                className="w-full md:w-14rem"
+                className="w-full md:w-24rem"
                 tabIndex={3}
               />
             </div>
-            <div className="flex my-1">
+            {/* <div className="flex my-1">
               <Button
                 label="¿Olvidó su contraseña?"
                 className="w-full"
@@ -159,7 +159,7 @@ export function Formulario() {
                 }}
                 tabIndex={4}
               />
-            </div>
+            </div> */}
           </div>
           <div className="flex justify-content-center">
             <Button
