@@ -75,7 +75,9 @@ function FormDetalleDocumento({
 		Precio: null,
 		Cantidad: null,
 		Impuesto: null,
-		TotalDetalle: null
+		TotalDetalle: null,
+		STR_ITEMCODE: null,
+		STR_ITEMNAME: null
 	});
 
 	useEffect(() => {
@@ -221,7 +223,12 @@ function FormDetalleDocumento({
 
 	const addDetDoc = () => {
 		if (validarCampos()) {
-			const nuevoDetalle = { ...detDoc, ID: uuidv4() }
+			const nuevoDetalle = {
+				...detDoc,
+				ID: uuidv4(),
+				STR_ITEMCODE: detDoc?.Cod?.ItemCode || "",
+				STR_ITEMNAME: detDoc?.Cod?.ItemName || ""
+			}
 			setArticulos([...articulos, nuevoDetalle]);
 			setDocumento((prevState) => ({
 				...prevState,
@@ -269,6 +276,9 @@ function FormDetalleDocumento({
 
 	const handleEdit = () => {
 		if (validarCampos()) {
+			detDoc.STR_ITEMCODE = detDoc?.Cod?.ItemCode || "";
+			detDoc.STR_ITEMNAME = detDoc?.Cod?.ItemName || "";
+
 			setEditing(false);
 			setArticulos((prevState) =>
 				prevState.map((item) => (item.ID === detDoc.ID ? { ...detDoc } : item)),

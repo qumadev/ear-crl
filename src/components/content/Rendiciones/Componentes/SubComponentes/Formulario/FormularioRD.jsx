@@ -252,6 +252,8 @@ function FormularioRD() {
         STR_PRECIO: detalle.Precio,
         STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
         STR_IMPUESTO: detalle.Impuesto,
+        STR_ITEMCODE: detalle.STR_ITEMCODE,
+        STR_ITEMNAME: detalle.STR_ITEMNAME,
       }));
       let subtotalTotal = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0);
       let totalImpuestos = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0);
@@ -433,6 +435,8 @@ function FormularioRD() {
           STR_PRECIO: detalle.Precio,
           STR_IMPUESTO: detalle.Impuesto,
           STR_SUBTOTAL: detalle.Precio * detalle.Cantidad,
+          STR_ITEMCODE: detalle.STR_ITEMCODE,
+          STR_ITEMNAME: detalle.STR_ITEMNAME,
           FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
 

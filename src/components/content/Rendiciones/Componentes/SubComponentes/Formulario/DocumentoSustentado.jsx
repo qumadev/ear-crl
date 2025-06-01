@@ -337,7 +337,9 @@ function DocumentoSustentado({
 				IndImpuesto: detalle.STR_INDIC_IMPUESTO,
 				Precio: detalle.STR_PRECIO,
 				Cantidad: detalle.STR_CANTIDAD,
-				Impuesto: detalle.STR_IMPUESTO
+				Impuesto: detalle.STR_IMPUESTO,
+				STR_ITEMCODE: detalle.STR_ITEMCODE,
+				STR_ITEMNAME: detalle.STR_ITEMNAME
 			}));
 			setArticulos(articles);
 		} else {
