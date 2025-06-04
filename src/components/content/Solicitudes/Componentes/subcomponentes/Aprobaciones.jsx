@@ -28,8 +28,8 @@ function Aprobaciones({
             style={{ fontSize: "1.5rem", color: "green" }}
           ></i>
         ) : aprobadores.filter(
-            (e) => e.orden === rowData.orden && e.finalizado === 1
-          ).length > 0 ? (
+          (e) => e.orden === rowData.orden && e.finalizado === 1
+        ).length > 0 ? (
           <i className="pi pi-minus" style={{ fontSize: "1.5rem" }}></i>
         ) : (
           <i
@@ -40,10 +40,13 @@ function Aprobaciones({
       </>
     );
   };
+
+  const aprobadoresAprobados = aprobadores.filter((a) => a.finalizado === 1);
+
   return (
     <div className="card">
       <DataTable
-        value={aprobadores}
+        value={aprobadoresAprobados}
         tableStyle={{ minWidth: "50rem" }}
         emptyMessage={
           <div style={{ textAlign: 'center', padding: '10px' }}>
