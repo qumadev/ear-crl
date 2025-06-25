@@ -806,12 +806,13 @@ function Rendiciones({
           headerStyle={{ width: "3rem" }}
           body={(data, options) => options.rowIndex + 1}
         ></Column>
-        {/* <Column
+        <Column
           field="ID"
           header="Código"
           style={{ width: "3rem" }}
           className="font-bold"
-        ></Column> */}
+          bodyClassName="text-center"
+        ></Column>
         <Column
           field="STR_NRRENDICION"
           header="N° de la Rendición"

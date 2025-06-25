@@ -696,6 +696,13 @@ function Solicitudes({
           body={(data, options) => options.rowIndex + 1}
         ></Column>
         <Column
+          field="ID"
+          header="Código"
+          style={{ width: "3rem" }}
+          className="font-bold"
+          bodyClassName="text-center"
+        ></Column>
+        <Column
           field="STR_NRSOLICITUD"
           header="N° de la Solicitud"
           style={{ minWidth: "12rem", textAlign: "center" }}
