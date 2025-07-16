@@ -2,24 +2,59 @@ import React, { useState } from "react";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../../services/axios.service";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import "./ResetPassword.css";
+
+const MySwal = withReactContent(Swal);
 
 export default function ResetPassword() {
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 	const token = searchParams.get("token");
 	const [password, setPassword] = useState("");
-	const [mensaje, setMensaje] = useState("");
 	const [loading, setLoading] = useState(false);
 
 	const handleReset = async (e) => {
 		e.preventDefault();
+
+		// Mostrar SweetAlert de cargando
+		MySwal.fire({
+			title: 'Procesando...',
+			text: 'Estamos cambiando tu contraseña',
+			allowOutsideClick: false,
+			didOpen: () => {
+				MySwal.showLoading();
+			}
+		});
+
 		setLoading(true);
 		const resp = await resetPassword(token, password);
-		if (resp.data && resp.data.mensaje) {
-			setMensaje(resp.data.mensaje);
+
+		MySwal.close();
+
+		if (resp.data && resp.data.mensaje && resp.data.mensaje.toLowerCase().includes("correcta")) {
+			// Exito: contraseña cambiada
+			MySwal.fire({
+				icon: 'success',
+				title: '¡Contraseña cambiada!',
+				text: 'Serás redirigido al menú principal del portal.',
+				timer: 2200,
+				showConfirmButton: false
+			});
+			setTimeout(() => {
+				navigate("/ear/login");
+			}, 2200);
 		} else {
-			setMensaje("Ocurrió un error. Intenta nuevamente.");
+			// Error: muestra mensaje recibido o uno por defecto
+			MySwal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: resp?.data?.mensaje || "Ocurrió un error. Intenta nuevamente.",
+				confirmButtonText: 'Aceptar'
+			});
 		}
 		setLoading(false);
 	};
@@ -34,6 +69,7 @@ export default function ResetPassword() {
 				justifyContent: "center"
 			}}
 		>
+			<img src="/public/green_waves.png" alt="Fondo decorativo" className="wave-bg" />
 			<Card
 				style={{
 					width: "400px",
@@ -67,7 +103,6 @@ export default function ResetPassword() {
 						>
 							Nueva contraseña
 						</label>
-						{/* El wrapper es relativo para el panel de feedback */}
 						<div style={{ position: "relative", width: "100%" }}>
 							<Password
 								id="newPassword"
@@ -78,6 +113,7 @@ export default function ResetPassword() {
 								required
 								placeholder="Ingrese una contraseña segura"
 								autoComplete="new-password"
+								disabled={loading}
 							/>
 						</div>
 					</div>
@@ -91,13 +127,7 @@ export default function ResetPassword() {
 						style={{ marginTop: 16 }}
 					/>
 				</form>
-				{mensaje && (
-					<div className="mt-4 text-center" style={{ color: "#36b654" }}>
-						{mensaje}
-					</div>
-				)}
 			</Card>
 		</div>
 	);
-
 }

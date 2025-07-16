@@ -115,118 +115,116 @@ export function Formulario() {
     <>
       <Toast ref={toast} />
       <div className="p-5">
-        <form>
-          <div className="flex justify-content-center">
-            <Image
-              //src="https://media.licdn.com/dms/image/D4E0BAQHXNK-UJQ81Gw/company-logo_200_200/0/1698942464169?e=2147483647&v=beta&t=5miWMzDnKFjQ19LtpGkDYaHpPavXmphP57WVyePWQh0"
-              src={config?.LOGO_LOGIN}
-              alt="Image"
-              width="150"
+        <div className="flex justify-content-center">
+          <Image
+            //src="https://media.licdn.com/dms/image/D4E0BAQHXNK-UJQ81Gw/company-logo_200_200/0/1698942464169?e=2147483647&v=beta&t=5miWMzDnKFjQ19LtpGkDYaHpPavXmphP57WVyePWQh0"
+            src={config?.LOGO_LOGIN}
+            alt="Image"
+            width="150"
+          />
+        </div>
+        <div className="flex justify-content-center">
+          <h2 className="text-gray-700">Bienvenido</h2>
+        </div>{" "}
+        <div className="flex justify-content-center">
+          <p className="text-gray-700" style={{ fontSize: "1.2em" }}>
+            Inicio de sesión: Acceda con sus credenciales
+          </p>
+        </div>
+        <div className="card flex flex-column align-items-center gap-3 ">
+          <div className="my-1">
+            <InputText
+              type="text"
+              className="p-inputtext-lg w-full"
+              placeholder="Ingrese usuario"
+              value={usuario?.usuario || ""}
+              onChange={(e) => {
+                setUsuario((prevUsuario) => ({
+                  ...prevUsuario,
+                  usuario: e.target.value,
+                }));
+              }}
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  buttonRef.current.click();
+                }
+              }}
+              tabIndex={1}
             />
           </div>
-          <div className="flex justify-content-center">
-            <h2 className="text-gray-700">Bienvenido</h2>
-          </div>{" "}
-          <div className="flex justify-content-center">
-            <p className="text-gray-700" style={{ fontSize: "1.2em" }}>
-              Inicio de sesión: Acceda con sus credenciales
-            </p>
+          <div className="my-1">
+            <Password
+              //value={pass}
+              placeholder="Ingrese contraseña"
+              value={usuario?.pass || ""}
+              className="p-inputtext-lg w-full"
+              onChange={(e) => {
+                setUsuario((prevUsuario) => ({
+                  ...prevUsuario,
+                  pass: e.target.value,
+                }));
+              }}
+              feedback={false}
+              tabIndex={2}
+              onkey
+              onKeyDown={(e) => {
+                if (e.code === "Enter") {
+                  buttonRef.current.click();
+                }
+              }}
+            />
           </div>
-          <div className="card flex flex-column align-items-center gap-3 ">
-            <div className="my-1">
-              <InputText
-                type="text"
-                className="p-inputtext-lg w-full"
-                placeholder="Ingrese usuario"
-                value={usuario?.usuario || ""}
-                onChange={(e) => {
-                  setUsuario((prevUsuario) => ({
-                    ...prevUsuario,
-                    usuario: e.target.value,
-                  }));
-                }}
-                onKeyDown={(e) => {
-                  if (e.code === "Enter") {
-                    buttonRef.current.click();
-                  }
-                }}
-                tabIndex={1}
-              />
-            </div>
-            <div className="my-1">
-              <Password
-                //value={pass}
-                placeholder="Ingrese contraseña"
-                value={usuario?.pass || ""}
-                className="p-inputtext-lg w-full"
-                onChange={(e) => {
-                  setUsuario((prevUsuario) => ({
-                    ...prevUsuario,
-                    pass: e.target.value,
-                  }));
-                }}
-                feedback={false}
-                tabIndex={2}
-                onkey
-                onKeyDown={(e) => {
-                  if (e.code === "Enter") {
-                    buttonRef.current.click();
-                  }
-                }}
-              />
-            </div>
+        </div>
+        <div className="flex flex-row">
+          <div className="flex card justify-content-center my-2">
+            <Dropdown
+              //defaultValue={sociedades[0]}
+              value={selectSociedad}
+              onChange={(e) => setSelectSociedad(e.value)}
+              options={sociedades}
+              optionLabel="name"
+              placeholder=" Sociedad"
+              className="w-full md:w-14rem"
+              tabIndex={3}
+            />
           </div>
-          <div className="flex flex-row">
-            <div className="flex card justify-content-center my-2">
-              <Dropdown
-                //defaultValue={sociedades[0]}
-                value={selectSociedad}
-                onChange={(e) => setSelectSociedad(e.value)}
-                options={sociedades}
-                optionLabel="name"
-                placeholder=" Sociedad"
-                className="w-full md:w-14rem"
-                tabIndex={3}
-              />
-            </div>
-            <div className="flex my-1">
-              <Button
-                label="¿Olvidó su contraseña?"
-                className="w-full"
-                link
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowModalRecover(true);
-                }}
-                tabIndex={4}
-              />
-            </div>
-          </div>
-          <div className="flex justify-content-center">
+          <div className="flex my-1">
             <Button
-              ref={buttonRef}
-              severity="success"
-              rounded
-              size="large"
-              event
-              className="w-2/3"
+              label="¿Olvidó su contraseña?"
+              className="w-full"
+              link
               onClick={(e) => {
                 e.preventDefault();
-                obtieneSesion();
+                setShowModalRecover(true);
               }}
-              tabIndex={5}
-            >
-              {loading ? (
-                <i
-                  className="pi pi-spin pi-spinner"
-                  style={{ fontSize: "2rem" }}
-                ></i>
-              ) : (
-                "Iniciar sesión"
-              )}
-            </Button>
+              tabIndex={4}
+            />
           </div>
-        </form>
+        </div>
+        <div className="flex justify-content-center">
+          <Button
+            ref={buttonRef}
+            severity="success"
+            rounded
+            size="large"
+            event
+            className="w-2/3"
+            onClick={(e) => {
+              e.preventDefault();
+              obtieneSesion();
+            }}
+            tabIndex={5}
+          >
+            {loading ? (
+              <i
+                className="pi pi-spin pi-spinner"
+                style={{ fontSize: "2rem" }}
+              ></i>
+            ) : (
+              "Iniciar sesión"
+            )}
+          </Button>
+        </div>
       </div>
 
       <ModalRecoverPassword
