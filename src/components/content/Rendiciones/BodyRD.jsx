@@ -51,6 +51,7 @@ function BodyRD({ responsiveSizeMobile }) {
 
       return {
         "#": index + 1,
+        "Código": rendicion?.ID || "",
         "N° de la Rendición": rendicion?.STR_NRRENDICION || "",
         "N° de la Solicitud": rendicion?.STR_SOLICITUD || "",
         "Fecha de la Solicitud": rendicion?.STR_FECHAREGIS || "",

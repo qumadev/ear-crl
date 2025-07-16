@@ -50,6 +50,7 @@ export function BodySL({ responsiveSizeMobile }) {
 
     const solicitudesFiltradas = solicitudes.map((solicitud, index) => ({
       "#": index + 1 ,
+      "Código": solicitud?.ID || "",
       "N° de la Solicitud": solicitud?.STR_NRSOLICITUD || "",
       "Fecha de la Solicitud": solicitud?.STR_FECHAREGIS || "",
       "Tipo": solicitud?.STR_MOTIVORENDICION?.name || "",
