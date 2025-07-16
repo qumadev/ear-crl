@@ -316,10 +316,7 @@ export default function MyApp() {
                 </Componente>
               }
             />
-            <Route
-              path="/reset-password"
-              element={<ResetPassword />}
-            />
+            <Route path={ruta + "/reset-password"} element={<ResetPassword />} />
             <Route path={ruta + "/not-found"} element={<NotFound />} />
             {/*      <Route path="/*" element={<Navigate to="/not-found" />} /> */}
           </Routes>

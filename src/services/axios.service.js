@@ -666,10 +666,10 @@ export const forgotPassword = async (email) => {
 };
 
 // RESET PASSWORD
-export const resetPassword = async(token, newPass) => {
+export const resetPassword = async (token, newPass) => {
   return API.post("/usuario/reset-password", {
     token: token,
-    newPassword: newPassword
+    newPassword: newPass
   }, {
     validateStatus: function (status) {
       return status < 500;
