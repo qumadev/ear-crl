@@ -641,7 +641,16 @@ export const eliminarDocumentosMasivo = async (documentos) => {
 // API GET PORCENTAJES POR AFECTACION ID
 export const getPorcentajeAfectacion = async (afectacionId) => {
   return API.get(`/rendicion/documento/get-percent/${afectacionId}`, {
-    validateStatus: function (status){
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  })
+}
+
+// CAMBIAR CONTRASEÑA
+export const updatePassword = async (id, oldPass, newPass) => {
+  return API.patch(`/usuario/update-password?id=${id}&oldPass=${oldPass}&newPass=${newPass}`, {
+    validateStatus: function (status) {
       return status < 500;
     }
   })

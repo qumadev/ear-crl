@@ -7,6 +7,7 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
     inicio: true,
     solicitudes: false,
     rendiciones: false,
+    configuracion: false,
   });
   const { ruta } = useContext(AppContext);
   const navigate = useNavigate();
@@ -19,9 +20,8 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
           <ul className="p-0">
             <li className="list-none">
               <a
-                className={`flex align-items-center relative outline-none cursor-pointer gap-2 pt-3 w-full hover:text-primary-600 ${
-                  modulos.inicio ? "text-primary-600" : ""
-                } no-underline`}
+                className={`flex align-items-center relative outline-none cursor-pointer gap-2 pt-3 w-full hover:text-primary-600 ${modulos.inicio ? "text-primary-600" : ""
+                  } no-underline`}
                 style={{
                   padding: ".75rem 1rem",
                   borderRadius: "10px",
@@ -51,9 +51,8 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
           <ul className="p-0">
             <li className="list-none">
               <a
-                className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3 w-full ${
-                  modulos.solicitudes ? "text-primary-600" : ""
-                }`}
+                className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3 w-full ${modulos.solicitudes ? "text-primary-600" : ""
+                  }`}
                 style={{
                   padding: ".75rem 1rem",
                   borderRadius: "10px",
@@ -77,9 +76,8 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
             </li>
             <li className="list-none">
               <a
-                className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3  w-full ${
-                  modulos.rendiciones ? "text-primary-600" : ""
-                }`}
+                className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3  w-full ${modulos.rendiciones ? "text-primary-600" : ""
+                  }`}
                 style={{
                   padding: ".75rem 1rem",
                   borderRadius: "10px",
@@ -99,6 +97,32 @@ function SideBar({ responsiveSize, setSideBarActive, SideBarActive }) {
               >
                 <i className="pi pi-dollar"></i>
                 <span>Rendiciones</span>
+              </a>
+            </li>
+            <li className="list-none">
+              <a
+                className={`flex align-items-center relative outline-none hover:text-primary-600 cursor-pointer gap-2 pt-3 w-full ${modulos.configuraciones ? "text-primary-600" : ""
+                  }`}
+                style={{
+                  padding: ".75rem 1rem",
+                  borderRadius: "10px",
+                  transition: "background-color .2s,box-shadow .2s",
+                }}
+                onClick={() => {
+                  setModulos({
+                    inicio: false,
+                    solicitudes: false,
+                    rendiciones: false,
+                    configuraciones: true,
+                  });
+                  navigate(ruta + "/configuracion");
+                  if (responsiveSize) {
+                    setSideBarActive(!SideBarActive);
+                  }
+                }}
+              >
+                <i className="pi pi-cog"></i>
+                <span>Configuración</span>
               </a>
             </li>
           </ul>

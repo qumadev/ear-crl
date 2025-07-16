@@ -307,7 +307,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }
           />
           <label htmlFor="">
-            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> N° de cuenta corriente y/o CCI:
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Nombres y apellidos / Cta. Cte. / CCI del beneficiario:
           </label>
           <InputText
             value={solicitudRD.STR_CCI}
@@ -325,7 +325,7 @@ function SolicitudNuevaSL({ solicitudRD, setSolicitudRD, estadosEditables }) {
             }
           />
           <label htmlFor="">
-            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Tipo de Identificación:
+            <span style={{ color: "red", fontWeight: "bold" }}>(*)</span> Tipo y N° de documento de identidad del beneficiario:
           </label>
           <InputText
             value={solicitudRD.STR_TIPO_IDENTIFICACION}

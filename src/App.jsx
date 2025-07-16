@@ -4,7 +4,7 @@ import "../node_modules/primeflex/primeflex.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "../node_modules/primeicons/primeicons.css";
 import { Header } from "./components/partials/Header";
-import { Config } from "./components/content/Configuraciones/Config";
+import { UserConfig } from '../src/components/content/Configuracion/UserConfig'
 import { NotFound } from "./components/content/NotFound";
 import { Toast } from "primereact/toast";
 import { Componente } from "./components/Componente";
@@ -22,7 +22,6 @@ import TokenCorreo from "./components/content/Correo/TokenCorreo";
 import VerSolicitud from "./components/content/Solicitudes/Componentes/subcomponentes/VerSolicitud";
 import DocumentoSustentado from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/DocumentoSustentado";
 import FormDT from "./components/content/Rendiciones/Componentes/SubComponentes/Formulario/Sub/FormDT";
-import NuevaContraseña from "./components/content/Configuraciones/BodyConfig/NuevaContraseña";
 
 export const AppContext = createContext(null);
 
@@ -312,23 +311,7 @@ export default function MyApp() {
               path={ruta + "/configuracion"}
               element={
                 <Componente>
-                  <Config />{" "}
-                </Componente>
-              }
-            />
-            <Route 
-              path={ruta + "/configuracion/actualizar"}
-              element={
-                <Componente>
-                  <NuevaContraseña />
-                </Componente>
-              }
-            />
-            <Route
-              path={ruta + "/pruebas"}
-              element={
-                <Componente>
-                  <Direccion />{" "}
+                  <UserConfig />{" "}
                 </Componente>
               }
             />
