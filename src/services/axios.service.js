@@ -655,3 +655,24 @@ export const updatePassword = async (id, oldPass, newPass) => {
     }
   })
 }
+
+// OLVIDO CONTRASEÑA
+export const forgotPassword = async (email) => {
+  return API.post("/usuario/forgot-password", { Email: email }, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  });
+};
+
+// RESET PASSWORD
+export const resetPassword = async(token, newPass) => {
+  return API.post("/usuario/reset-password", {
+    token: token,
+    newPassword: newPassword
+  }, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  });
+}

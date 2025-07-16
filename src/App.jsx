@@ -5,6 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "../node_modules/primeicons/primeicons.css";
 import { Header } from "./components/partials/Header";
 import { UserConfig } from '../src/components/content/Configuracion/UserConfig'
+import ResetPassword from '../src/components/content/Login/ResetPassword'
 import { NotFound } from "./components/content/NotFound";
 import { Toast } from "primereact/toast";
 import { Componente } from "./components/Componente";
@@ -274,7 +275,7 @@ export default function MyApp() {
                   <FormularioRD />{" "}
                 </Componente>
               }
-            /> 
+            />
             <Route
               path={ruta + "/rendiciones/:id/documentos/detail"}
               element={
@@ -314,6 +315,10 @@ export default function MyApp() {
                   <UserConfig />{" "}
                 </Componente>
               }
+            />
+            <Route
+              path="/reset-password"
+              element={<ResetPassword />}
             />
             <Route path={ruta + "/not-found"} element={<NotFound />} />
             {/*      <Route path="/*" element={<Navigate to="/not-found" />} /> */}

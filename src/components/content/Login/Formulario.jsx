@@ -9,9 +9,13 @@ import { Toast } from "primereact/toast";
 import { AppContext } from "../../../App";
 import { useNavigate } from "react-router-dom";
 import { addLocale } from "primereact/api";
+import { forgotPassword } from "../../../services/axios.service";
+import ModalRecoverPassword from "../Login/ModalRecoverPassword"
 
 export function Formulario() {
   const [loading, setLoading] = useState(false);
+  const [loadingRecover, setLoadingRecover] = useState(false);
+  const [showModalRecover, setShowModalRecover] = useState(false);
   const { setUsuario, usuario, ruta, config } = useContext(AppContext);
   const toast = useRef(null);
   const sociedades = [{ name: "REGATAS", code: "ELPTSERVER" }];
@@ -70,6 +74,42 @@ export function Formulario() {
       navigate(ruta + "/inicio", { replace: true });
     }
   }, [usuario]);
+
+  const handleForgotPassword = async (email) => {
+    setLoadingRecover(true);
+    try {
+      const resp = await forgotPassword(email);
+      if (resp?.status < 300) {
+        toast.current.show({
+          severity: "success",
+          summary: "Correo enviado",
+          detail:
+            resp.data?.mensaje ||
+            "Si tu correo es válido, recibirás un enlace para restablecer tu contraseña.",
+          life: 5000,
+        });
+        setShowModalRecover(false); // Cierra el modal al éxito
+      } else {
+        toast.current.show({
+          severity: "warn",
+          summary: "Atención",
+          detail:
+            resp.data?.mensaje ||
+            "Si tu correo es válido, recibirás un enlace para restablecer tu contraseña.",
+          life: 5000,
+        });
+      }
+    } catch (error) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "No se pudo enviar el correo. Intenta de nuevo.",
+        life: 5000,
+      });
+    } finally {
+      setLoadingRecover(false);
+    }
+  };
 
   return (
     <>
@@ -145,21 +185,22 @@ export function Formulario() {
                 options={sociedades}
                 optionLabel="name"
                 placeholder=" Sociedad"
-                className="w-full md:w-24rem"
+                className="w-full md:w-14rem"
                 tabIndex={3}
               />
             </div>
-            {/* <div className="flex my-1">
+            <div className="flex my-1">
               <Button
                 label="¿Olvidó su contraseña?"
                 className="w-full"
                 link
                 onClick={(e) => {
                   e.preventDefault();
+                  setShowModalRecover(true);
                 }}
                 tabIndex={4}
               />
-            </div> */}
+            </div>
           </div>
           <div className="flex justify-content-center">
             <Button
@@ -187,6 +228,13 @@ export function Formulario() {
           </div>
         </form>
       </div>
+
+      <ModalRecoverPassword
+        visible={showModalRecover}
+        onHide={() => setShowModalRecover(false)}
+        onSubmit={handleForgotPassword}
+        loading={loadingRecover}
+      />
     </>
   );
 }
