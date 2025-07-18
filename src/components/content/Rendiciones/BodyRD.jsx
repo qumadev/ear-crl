@@ -45,9 +45,9 @@ function BodyRD({ responsiveSizeMobile }) {
     const XLSX = await import("xlsx");
 
     const rendicionesFiltradas = rendiciones.map((rendicion, index) => {
-      const montoRendir = (rendicion?.STR_TOTALAPERTURA || 0).toFixed(2);
-      const montoRendido = (rendicion?.STR_TOTALRENDIDO || 0).toFixed(2);
-      const diferencia = (montoRendir - montoRendido).toFixed(2);
+      const totalApertura = Number(rendicion?.STR_TOTALAPERTURA ?? 0);
+      const totalRendido = Number(rendicion?.STR_TOTALRENDIDO ?? 0);
+      const diferencia = totalApertura - totalRendido;
 
       return {
         "#": index + 1,
@@ -60,11 +60,10 @@ function BodyRD({ responsiveSizeMobile }) {
         "Empleado Asignado": rendicion?.STR_EMPLDASIG_NOMBRE || "",
         "Centro de Costo (CeCo)": rendicion?.STR_CENTRO_COSTO?.name || "",
         "Proyecto": rendicion?.STR_PROYECTO?.name || "",
-        // "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${rendicion?.STR_TOTALAPERTURA || ""}`,
-        // "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${rendicion?.STR_TOTALRENDIDO || ""}`,
-        "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${montoRendir || ""}`,
-        "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${montoRendido || ""}`,
-        "Diferencia": `${rendicion?.STR_MONEDA?.name || ""} ${diferencia || ""}`,
+        "Moneda": rendicion?.STR_MONEDA?.id || "",
+        "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${totalApertura.toFixed(2)}`,
+        "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${totalRendido.toFixed(2)}`,
+        "Diferencia": `${rendicion?.STR_MONEDA?.name || ""} ${diferencia.toFixed(2)}`,
         "Estado": rendicion?.STR_ESTADO_INFO?.name || "",
       };
     });
@@ -73,16 +72,16 @@ function BodyRD({ responsiveSizeMobile }) {
 
     worksheet["!cols"] = [
       { wpx: 50 },
+      { wpx: 50 },
       { wpx: 120 },
-      { wpx: 100 },
+      { wpx: 120 },
       { wpx: 120 },
       { wpx: 120 },
       { wpx: 150 },
       { wpx: 150 },
       { wpx: 150 },
-      { wpx: 100 },
       { wpx: 120 },
-      { wpx: 120 },
+      { wpx: 50 },
       { wpx: 120 },
       { wpx: 100 },
     ]

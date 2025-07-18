@@ -49,7 +49,7 @@ export function BodySL({ responsiveSizeMobile }) {
     const XLSX = await import("xlsx");
 
     const solicitudesFiltradas = solicitudes.map((solicitud, index) => ({
-      "#": index + 1 ,
+      "#": index + 1,
       "Código": solicitud?.ID || "",
       "N° de la Solicitud": solicitud?.STR_NRSOLICITUD || "",
       "Fecha de la Solicitud": solicitud?.STR_FECHAREGIS || "",
@@ -57,7 +57,8 @@ export function BodySL({ responsiveSizeMobile }) {
       "Rango fecha del evento": `${solicitud?.STR_FECHA_EVENTO_INICIAL || ""} - ${solicitud?.STR_FECHA_EVENTO_FINAL || ""}`,
       "Motivo": solicitud?.STR_TIPORENDICION?.name || "",
       "Empleado Asignado": solicitud?.STR_EMPLDREGI_NOMBRE || "",
-      "Monto Solicitado": `${solicitud?.STR_MONEDA?.name || ""} ${solicitud?.STR_TOTALSOLICITADO || ""}`,
+      "Moneda": solicitud?.STR_MONEDA?.id || "",
+      "Monto Solicitado": `${solicitud?.STR_MONEDA?.name || ""} ${(solicitud?.STR_TOTALSOLICITADO ?? 0).toFixed(2)}`,
       "Presupuestado": solicitud?.STR_PRESUPUESTADO ? "Sí" : "No",
       "Proyecto": solicitud?.STR_PROYECTO?.name,
       "Centro de Costo (CeCo)": solicitud?.STR_CENTRO_COSTO?.name,
@@ -70,6 +71,7 @@ export function BodySL({ responsiveSizeMobile }) {
     const worksheet = XLSX.utils.json_to_sheet(solicitudesFiltradas);
 
     worksheet["!cols"] = [
+      { wpx: 50 },
       { wpx: 50 },
       { wpx: 100 },
       { wpx: 120 },
@@ -84,6 +86,8 @@ export function BodySL({ responsiveSizeMobile }) {
       { wpx: 150 },
       { wpx: 150 },
       { wpx: 100 },
+      { wpx: 150 },
+      { wpx: 100 }
     ]
 
     const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
