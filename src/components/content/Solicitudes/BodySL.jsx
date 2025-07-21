@@ -58,7 +58,7 @@ export function BodySL({ responsiveSizeMobile }) {
       "Motivo": solicitud?.STR_TIPORENDICION?.name || "",
       "Empleado Asignado": solicitud?.STR_EMPLDREGI_NOMBRE || "",
       "Moneda": solicitud?.STR_MONEDA?.id || "",
-      "Monto Solicitado": `${solicitud?.STR_MONEDA?.name || ""} ${(solicitud?.STR_TOTALSOLICITADO ?? 0).toFixed(2)}`,
+      "Monto Solicitado": `${(solicitud?.STR_TOTALSOLICITADO ?? 0).toFixed(2)}`,
       "Presupuestado": solicitud?.STR_PRESUPUESTADO ? "Sí" : "No",
       "Proyecto": solicitud?.STR_PROYECTO?.name,
       "Centro de Costo (CeCo)": solicitud?.STR_CENTRO_COSTO?.name,

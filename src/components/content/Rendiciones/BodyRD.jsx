@@ -61,9 +61,9 @@ function BodyRD({ responsiveSizeMobile }) {
         "Centro de Costo (CeCo)": rendicion?.STR_CENTRO_COSTO?.name || "",
         "Proyecto": rendicion?.STR_PROYECTO?.name || "",
         "Moneda": rendicion?.STR_MONEDA?.id || "",
-        "Monto a Rendir": `${rendicion?.STR_MONEDA?.name || ""} ${totalApertura.toFixed(2)}`,
-        "Monto Rendido": `${rendicion?.STR_MONEDA?.name || ""} ${totalRendido.toFixed(2)}`,
-        "Diferencia": `${rendicion?.STR_MONEDA?.name || ""} ${diferencia.toFixed(2)}`,
+        "Monto a Rendir": `${totalApertura.toFixed(2)}`,
+        "Monto Rendido": `${totalRendido.toFixed(2)}`,
+        "Diferencia": `${diferencia.toFixed(2)}`,
         "Estado": rendicion?.STR_ESTADO_INFO?.name || "",
       };
     });
