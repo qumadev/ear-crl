@@ -359,7 +359,11 @@ export const reintentarEnvio = (id) => {
 };
 
 export const reintentarRendi = (id) => {
-  return null;
+  return API.patch(`rendicion/aprobacion/reintentar/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    }
+  });
 };
 
 // export const obtenerRendicion = (id) => {
@@ -674,14 +678,5 @@ export const resetPassword = async (token, newPass) => {
     validateStatus: function (status) {
       return status < 500;
     }
-  });
-}
-
-// REINTENTAR MIGRACIÓN DE SOLICITUDES
-export const reintentarMigrSolicitud = async (id) => {
-  return API.patch(`/solicitudEar/aprobacion/reintentar/${id}`, {
-    validateStatus: function (status) {
-      return status < 500;
-    },
   });
 }

@@ -524,7 +524,9 @@ function Rendiciones({
     const showRevertirAprobacionButton =
       (usuario.rol?.id === "3" ||
         (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 11)) &&
-        (rowData?.STR_ESTADO <= 12 || rowData?.STR_ESTADO === 17);
+      (rowData?.STR_ESTADO <= 12 || rowData?.STR_ESTADO === 17);
+
+    const showReintentarMigracionButton = (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 17);
 
     const items = [
       ...(showAprobacionButton ? [{
@@ -541,7 +543,15 @@ function Rendiciones({
         command: () => {
           confirmReversion(rowData)
         }
-      }] : [])
+      }] : []),
+
+      ...(showReintentarMigracionButton ? [{
+        label: "Reintentar Migración",
+        icon: "pi pi-refresh",
+        command: () => {
+          reintentarMigracion(rowData.ID);
+        }
+      }] : []),
     ];
 
     if (
