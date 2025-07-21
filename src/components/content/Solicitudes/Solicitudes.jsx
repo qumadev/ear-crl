@@ -367,6 +367,8 @@ function Solicitudes({
         (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
       rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5;
 
+    const showReintentarMigracionButton = (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 7);
+
     const items = [
       ...(showAprobacionButton ? [{
         label: "Aprobar Solicitud",
@@ -381,6 +383,14 @@ function Solicitudes({
         icon: "pi pi-undo",
         command: () => {
           rechazarAceptacion(rowData)
+        }
+      }] : []),
+
+      ...(showReintentarMigracionButton ? [{
+        label: "Reintentar Migración",
+        icon: "pi pi-refresh",
+        command: () => {
+          reintentarMigracion(rowData.ID);
         }
       }] : []),
     ];

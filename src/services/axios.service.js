@@ -449,7 +449,7 @@ export const enviarAprobRendicion = (
   );
 };
 
-//--modificacion de fiorella  para formDt
+
 export const aceptarAprobRendicion = (
   solicitudId,
   aprobadorId,
@@ -674,5 +674,14 @@ export const resetPassword = async (token, newPass) => {
     validateStatus: function (status) {
       return status < 500;
     }
+  });
+}
+
+// REINTENTAR MIGRACIÓN DE SOLICITUDES
+export const reintentarMigrSolicitud = async (id) => {
+  return API.patch(`/solicitudEar/aprobacion/reintentar/${id}`, {
+    validateStatus: function (status) {
+      return status < 500;
+    },
   });
 }
