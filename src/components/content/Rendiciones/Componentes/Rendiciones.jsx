@@ -517,14 +517,16 @@ function Rendiciones({
 
   const actionBodyTemplate = (rowData) => {
     const showAprobacionButton =
-      (usuario.rol?.id === "3" ||
-        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 11)) &&
-      rowData?.STR_ESTADO <= 12;
+      (usuario.rol?.id === "3"
+        ? rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 9 && rowData?.STR_ESTADO !== 10
+        : usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 11
+      );
 
     const showRevertirAprobacionButton =
-      (usuario.rol?.id === "3" ||
-        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 11)) &&
-      (rowData?.STR_ESTADO <= 12 || rowData?.STR_ESTADO === 17);
+      (usuario.rol?.id === "3"
+        ? rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 9 && rowData?.STR_ESTADO !== 10
+        : usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 11
+      );
 
     const showReintentarMigracionButton = (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 17);
 
@@ -790,13 +792,18 @@ function Rendiciones({
       <Toast ref={toast} />
       <ConfirmDialog />
       <DataTable
+        // value={
+        //   // rendiciones
+        //   usuario.rol?.id === "2" ?
+        //     rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 10) :
+        //     usuario.rol?.id === "3" ?
+        //       rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 11) :
+        //       rendiciones
+        // }
         value={
-          // rendiciones
-          usuario.rol?.id === "2" ?
-            rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 10) :
-            usuario.rol?.id === "3" ?
-              rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 11) :
-              rendiciones
+          usuario.rol?.id === "2"
+            ? rendiciones.filter(rendicion => rendicion.STR_ESTADO >= 10)
+            : rendiciones
         }
         sortMode="multiple"
         paginator
