@@ -255,34 +255,40 @@ export default function FormDT({ editable, totalRedondeado,
               }
             />
           )}
-          {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( //Verificar si el usuario es de rol 2
-            <Button
-              label={"Aceptar Aprobación"}
-              size="large"
-              className="mr-5"
-              onClick={(e) => {
-                confirmAceptacion();
-              }}
-              loading={loadingAceptacion}
-              disabled={
-                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17)) ||
-                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17) || loadingAceptacion || loadingReversion
-              }
-            />
-          )}
-          {(usuario.rol?.id === "2" || usuario.rol?.id === "3") && ( // Verificar si el usuario es de rol 2 y el estado es menor o igual a 12
-            <Button
-              label="Revertir Aprobación"
-              size="large"
-              style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
-              onClick={() => confirmReversion(rendicion?.ID)}
-              loading={loadingReversion}
-              disabled={
-                (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
-                (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16) || loadingReversion || loadingAceptacion
-              }
-            />
-          )}
+          {(
+            (usuario.rol?.id === "2" && ![11, 16, 17].includes(rendicion?.STR_ESTADO)) ||
+            (usuario.rol?.id === "3" && ![9, 10, 16, 17].includes(rendicion?.STR_ESTADO))
+          ) && (
+              <Button
+                label={"Aceptar Aprobación"}
+                size="large"
+                className="mr-5"
+                onClick={(e) => {
+                  confirmAceptacion();
+                }}
+                loading={loadingAceptacion}
+                disabled={
+                  (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17)) ||
+                  (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16 || rendicion?.STR_ESTADO === 17) || loadingAceptacion || loadingReversion
+                }
+              />
+            )}
+          {(
+            (usuario.rol?.id === "2" && ![11, 16, 17].includes(rendicion?.STR_ESTADO)) ||
+            (usuario.rol?.id === "3" && ![9, 10, 16, 17].includes(rendicion?.STR_ESTADO))
+          ) && (
+              <Button
+                label="Revertir Aprobación"
+                size="large"
+                style={{ borderColor: "#1686CB", backgroundColor: "#1686CB" }}
+                onClick={() => confirmReversion(rendicion?.ID)}
+                loading={loadingReversion}
+                disabled={
+                  (usuario.rol?.id === "2" && (rendicion?.STR_ESTADO === 11 || rendicion?.STR_ESTADO === 16)) ||
+                  (usuario.rol?.id === "3" && rendicion?.STR_ESTADO === 16) || loadingReversion || loadingAceptacion
+                }
+              />
+            )}
         </div>
       </div>
     );
@@ -732,7 +738,12 @@ export default function FormDT({ editable, totalRedondeado,
             }}
             progressBarTemplate
             // disabled={validaEditable}
-            disabled={rendicion?.STR_ESTADO >= 10 || loadingBtn}
+            disabled={
+              rendicion?.STR_ESTADO >= 10 ||
+              loadingBtn ||
+              usuario.rol?.id === "2" ||
+              usuario.rol?.id === "3"
+            }
           />
 
         </div>
