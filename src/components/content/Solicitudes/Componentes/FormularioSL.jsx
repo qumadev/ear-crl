@@ -595,8 +595,13 @@ function FormularioSL() {
             }}
             loading={loading}
             disabled={
-              solicitudRD.STR_ESTADO === 3 &&
-              usuario.rol.id === "2" ||
+              // Deshabilitar para rol 3 si está en estado 1 o 2
+              (usuario.rol.id === "3" && (solicitudRD.STR_ESTADO === 1 || solicitudRD.STR_ESTADO === 2))
+              ||
+              // Deshabilitar para rol 2 si está en estado 3
+              (usuario.rol.id === "2" && solicitudRD.STR_ESTADO === 3)
+              ||
+              // Deshabilitar si el estado es mayor a 3 o igual a 1
               (solicitudRD.STR_ESTADO > 3 || solicitudRD.STR_ESTADO === 1)
             }
           />
@@ -617,9 +622,14 @@ function FormularioSL() {
             size="large"
             onClick={confirmRechazo}
             disabled={
-              (solicitudRD.STR_ESTADO === 3 && usuario.rol.id === "2") ||
-              solicitudRD.STR_ESTADO > 3 ||
-              solicitudRD.STR_ESTADO === 1
+              // Deshabilitar para rol 3 si está en estado 1 o 2
+              (usuario.rol.id === "3" && (solicitudRD.STR_ESTADO === 1 || solicitudRD.STR_ESTADO === 2))
+              ||
+              // Deshabilitar para rol 2 si está en estado 3
+              (usuario.rol.id === "2" && solicitudRD.STR_ESTADO === 3)
+              ||
+              // Deshabilitar si el estado es mayor a 3 o igual a 1
+              (solicitudRD.STR_ESTADO > 3 || solicitudRD.STR_ESTADO === 1)
             }
             loading={loading}
           />

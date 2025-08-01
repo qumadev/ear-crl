@@ -358,14 +358,21 @@ function Solicitudes({
 
   const actionBodyTemplate = (rowData) => {
     const showAprobacionButton =
-      ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
-        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
-      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5 && rowData?.STR_ESTADO !== 7;
+      (
+        (usuario.rol?.id === "3" && ![1, 2, 6].includes(rowData?.STR_ESTADO)) ||
+        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)
+      ) &&
+      rowData?.STR_ESTADO >= 2 &&
+      rowData?.STR_ESTADO !== 5 &&
+      rowData?.STR_ESTADO !== 7;
 
     const showRevertirAprobacionButton =
-      ((usuario.rol?.id === "3" && rowData?.STR_ESTADO !== 6) ||
-        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)) &&
-      rowData?.STR_ESTADO >= 2 && rowData?.STR_ESTADO !== 5;
+      (
+        (usuario.rol?.id === "3" && ![1, 2, 6].includes(rowData?.STR_ESTADO)) ||
+        (usuario.rol?.id === "2" && rowData?.STR_ESTADO !== 3 && rowData?.STR_ESTADO !== 6)
+      ) &&
+      rowData?.STR_ESTADO >= 2 &&
+      rowData?.STR_ESTADO !== 5;
 
     const showReintentarMigracionButton = (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 7);
 
@@ -683,7 +690,7 @@ function Solicitudes({
           switch (usuario.rol?.id) {
             case "1": return true;
             case "2": return rowData.STR_ESTADO >= 2;
-            case "3": return rowData.STR_ESTADO >= 3;
+            case "3": return true;
           }
         })}
         sortMode="multiple"
