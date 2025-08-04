@@ -526,7 +526,7 @@ function Rendiciones({
       (usuario.rol?.id === "3"
         ? rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 9 && rowData?.STR_ESTADO !== 10
         : usuario.rol?.id === "2" && rowData?.STR_ESTADO <= 12 && rowData?.STR_ESTADO !== 11
-      );
+      ) || (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 17);
 
     const showReintentarMigracionButton = (usuario.rol?.id === "3" && rowData?.STR_ESTADO === 17);
 
