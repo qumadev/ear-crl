@@ -275,7 +275,7 @@ export default function FormDT({ editable, totalRedondeado,
             )}
           {(
             (usuario.rol?.id === "2" && ![11, 16, 17].includes(rendicion?.STR_ESTADO)) ||
-            (usuario.rol?.id === "3" && ![9, 10, 16, 17].includes(rendicion?.STR_ESTADO))
+            (usuario.rol?.id === "3" && ![9, 10, 16].includes(rendicion?.STR_ESTADO))
           ) && (
               <Button
                 label="Revertir Aprobación"
