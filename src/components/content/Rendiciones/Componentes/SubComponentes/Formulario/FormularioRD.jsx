@@ -454,8 +454,10 @@ function FormularioRD() {
           FLG_ELIM: detalle.FLG_ELIM === 1 ? 1 : 0,
         }));
 
-        let subtotalTotal = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_SUBTOTAL || 0), 0);
-        let totalImpuestos = _detalles.reduce((total, detalle) => total + parseFloat(detalle.STR_IMPUESTO || 0), 0);
+        const _detallesVigentes = _detalles.filter(d => d.FLG_ELIM !== 1);
+
+        let subtotalTotal = _detallesVigentes.reduce((total, d) => total + parseFloat(d.STR_SUBTOTAL || 0), 0);
+        let totalImpuestos = _detallesVigentes.reduce((total, d) => total + parseFloat(d.STR_IMPUESTO || 0), 0);
 
         // Aquí sumamos el subtotal más los impuestos sin duplicarlos
         let totalDocumento = subtotalTotal + totalImpuestos

@@ -254,7 +254,7 @@ function DocumentoSustentado({
 			toast.current.show({
 				severity: "success",
 				summary: "Éxito",
-				detail: `Detalle eliminado correctamente (no persistido)`,
+				detail: `Detalle eliminado correctamente`,
 				life: 3000,
 			});
 		} else {
