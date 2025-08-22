@@ -39,7 +39,9 @@ function DocumentoSustentado({
 	setCampoValidoCabecera,
 	onTotalChange,
 	isTableEmpty,
-	setIsTableEmpty
+	setIsTableEmpty,
+	pendientesBorrar,
+	setPendientesBorrar
 }) {
 	const { id } = useParams();
 
@@ -199,47 +201,79 @@ function DocumentoSustentado({
 		}
 	}
 
-	const handleEliminarDetalle = async (detalle, rowIndex) => {
-		const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
-		const idRend = documento.STR_RD_ID;
+	// const handleEliminarDetalle = async (detalle, rowIndex) => {
+	// 	const { ID: idDet, STR_DOC_ID: idDoc } = detalle;
+	// 	const idRend = documento.STR_RD_ID;
 
-		if (!idDet || typeof idDet !== "number") {
-			// CASO 1: DETALLE SIN ID (no creado en la BD)
+	// 	if (!idDet || typeof idDet !== "number") {
+	// 		// CASO 1: DETALLE SIN ID (no creado en la BD)
+	// 		const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
+	// 		setArticulos(updatedArticulos);
+
+	// 		toast.current.show({
+	// 			severity: "success",
+	// 			summary: "Éxito",
+	// 			detail: `Detalle eliminado correctamente`,
+	// 			life: 3000,
+	// 		});
+	// 	} else {
+	// 		//CASO 2: DETALLE CON ID (creado en la BD)
+	// 		try {
+	// 			const response = await eliminarDetalleEnDocumento(idDet, idDoc, idRend);
+
+	// 			if (response.status < 300) {
+	// 				const updatedArticulos = articulos.filter((item) => item.ID !== idDet);
+	// 				setArticulos(updatedArticulos);
+
+	// 				toast.current.show({
+	// 					severity: "success",
+	// 					summary: "Éxito",
+	// 					detail: "Detalle eliminado correctamente",
+	// 					life: 3000,
+	// 				});
+
+	// 				calcularMontoTotal();
+	// 			} else {
+	// 				showError("Error al eliminar el detalle en la base de datos")
+	// 			}
+	// 		} catch (error) {
+	// 			console.error("Error al eliminar el detalle:", error);
+	// 			showError("Ocurrió un error al intentar eliminar el detalle.");
+	// 		}
+	// 	}
+	// }
+
+	const handleEliminarDetalle = async (detalle, rowIndex) => {
+		const { ID: idDet } = detalle;
+
+		if (!idDet || String(idDet).includes("-")) {
+			// CASO 1: DETALLE SIN ID (no creado en la BD, UUID temporal)
 			const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
 			setArticulos(updatedArticulos);
 
 			toast.current.show({
 				severity: "success",
 				summary: "Éxito",
-				detail: `Detalle eliminado correctamente`,
+				detail: `Detalle eliminado correctamente (no persistido)`,
 				life: 3000,
 			});
 		} else {
-			//CASO 2: DETALLE CON ID (creado en la BD)
-			try {
-				const response = await eliminarDetalleEnDocumento(idDet, idDoc, idRend);
+			// CASO 2: DETALLE CON ID (persistido en BD)
+			// En vez de borrar directo → lo marcamos con flag
+			setArticulos((prev) =>
+				prev.map((item) =>
+					item.ID === idDet ? { ...item, FLG_ELIM: 1 } : item
+				)
+			);
 
-				if (response.status < 300) {
-					const updatedArticulos = articulos.filter((item) => item.ID !== idDet);
-					setArticulos(updatedArticulos);
-
-					toast.current.show({
-						severity: "success",
-						summary: "Éxito",
-						detail: "Detalle eliminado correctamente",
-						life: 3000,
-					});
-
-					calcularMontoTotal();
-				} else {
-					showError("Error al eliminar el detalle en la base de datos")
-				}
-			} catch (error) {
-				console.error("Error al eliminar el detalle:", error);
-				showError("Ocurrió un error al intentar eliminar el detalle.");
-			}
+			toast.current.show({
+				severity: "info",
+				summary: "Pendiente de eliminación",
+				detail: "El detalle será eliminado al actualizar el documento",
+				life: 3000,
+			});
 		}
-	}
+	};
 
 	const [productDialog, setProductDialog] = useState(false);
 	const [visible, setVisible] = useState(false);

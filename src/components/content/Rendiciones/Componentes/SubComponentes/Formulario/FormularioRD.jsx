@@ -13,6 +13,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import {
+  eliminarDetalleEnDocumento,
   actualizaDocumento,
   actualizarDocumento,
   actualizarSolicitud,
@@ -53,6 +54,7 @@ function FormularioRD() {
   const editable = location.state && location.state.editable;
   const fechaSolicitud = location.state && location.state.fechaSolicitud;
   const [totalRedondeado, setTotalRedondeado] = useState(0);
+  const [pendientesBorrar, setPendientesBorrar] = useState([]);
 
   const { id } = useParams();
   /* Agentes */
@@ -414,6 +416,22 @@ function FormularioRD() {
       }
 
       if (detalle && detalle.length > 0) {
+        const idsAEliminar = (pendientesBorrar || []).filter(id => Number.isInteger(id));
+        if (idsAEliminar.length > 0) {
+          try {
+            await Promise.all(
+              idsAEliminar.map(idDet =>
+                eliminarDetalleEnDocumento(idDet, id, documento.STR_RD_ID)
+              )
+            );
+            setPendientesBorrar([]);
+          } catch (err) {
+            showError("No se pudo eliminar uno o más detalles. Intente nuevamente.");
+            setLoading(false);
+            return;
+          }
+        }
+
         const _detalles = detalle.map((detalle) => ({
           ID: detalle.ID ? detalle.ID : null,
           STR_CODARTICULO: detalle.Cod,
@@ -706,6 +724,8 @@ function FormularioRD() {
             esModo={esModo}
             setCampoValidoCabecera={setCampoValidoCabecera}
             onTotalChange={handleTotalChange}
+            pendientesBorrar={pendientesBorrar}
+            setPendientesBorrar={setPendientesBorrar}
           />
         </TabPanel>
       </TabView>
