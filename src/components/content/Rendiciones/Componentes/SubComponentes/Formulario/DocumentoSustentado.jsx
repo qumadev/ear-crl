@@ -243,13 +243,13 @@ function DocumentoSustentado({
 	// 	}
 	// }
 
-	const handleEliminarDetalle = async (detalle, rowIndex) => {
+	const handleEliminarDetalle = async (detalle /* , rowIndex */) => {
 		const { ID: idDet } = detalle;
 
 		if (!idDet || String(idDet).includes("-")) {
-			// CASO 1: DETALLE SIN ID (no creado en la BD, UUID temporal)
-			const updatedArticulos = articulos.filter((_, index) => index !== rowIndex);
-			setArticulos(updatedArticulos);
+			// CASO 1: DETALLE SIN ID (no creado en BD, UUID o null)
+			// CHANGE: elimina por referencia (evita desincronización con el índice de la tabla filtrada)
+			setArticulos((prev) => prev.filter((item) => item !== detalle));
 
 			toast.current.show({
 				severity: "success",
@@ -259,11 +259,9 @@ function DocumentoSustentado({
 			});
 		} else {
 			// CASO 2: DETALLE CON ID (persistido en BD)
-			// En vez de borrar directo → lo marcamos con flag
+			// Se marca con flag para eliminar en el update
 			setArticulos((prev) =>
-				prev.map((item) =>
-					item.ID === idDet ? { ...item, FLG_ELIM: 1 } : item
-				)
+				prev.map((item) => (item.ID === idDet ? { ...item, FLG_ELIM: 1 } : item))
 			);
 
 			toast.current.show({
@@ -1421,7 +1419,7 @@ function DocumentoSustentado({
 							<Column
 								header="Acciones"
 								headerStyle={{ width: "3rem" }}
-								body={(rowData, { rowIndex }) => (  // Accedemos a rowIndex
+								body={(rowData /*, { rowIndex } */) => (  // Accedemos a rowIndex
 									<React.Fragment>
 										<Button
 											icon={"pi pi-pencil"}
@@ -1435,7 +1433,7 @@ function DocumentoSustentado({
 											rounded
 											outlined
 											severity="danger"
-											onClick={() => handleEliminarDetalle(rowData, rowIndex)}  // Eliminar usando el índice
+											onClick={() => handleEliminarDetalle(rowData)}  // Eliminar usando el índice
 											disabled={editable}
 										/>
 									</React.Fragment>

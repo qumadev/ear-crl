@@ -412,7 +412,7 @@ function FormularioRD() {
       if (!detalle || detalle.length === 0) {
         showError("Debe ingresar al menos un detalle para actualizar el documento.");
         setLoading(false);
-        return; // Termina la ejecución si no hay detalles
+        return;
       }
 
       if (detalle && detalle.length > 0) {
@@ -455,12 +455,15 @@ function FormularioRD() {
         }));
 
         const _detallesVigentes = _detalles.filter(d => d.FLG_ELIM !== 1);
+        if (_detallesVigentes.length === 0) {
+          showError("Debe existir al menos un detalle vigente (no eliminado) para actualizar el documento.");
+          setLoading(false);
+          return;
+        }
 
         let subtotalTotal = _detallesVigentes.reduce((total, d) => total + parseFloat(d.STR_SUBTOTAL || 0), 0);
         let totalImpuestos = _detallesVigentes.reduce((total, d) => total + parseFloat(d.STR_IMPUESTO || 0), 0);
-
-        // Aquí sumamos el subtotal más los impuestos sin duplicarlos
-        let totalDocumento = subtotalTotal + totalImpuestos
+        let totalDocumento = subtotalTotal + totalImpuestos;
 
         const tipoCambio = parseFloat(documento.STR_TIPO_CAMBIO) || 1; // Tipo de cambio
         let totalConvertido = totalDocumento;
@@ -687,16 +690,13 @@ function FormularioRD() {
             onClick={() => {
               // Validar si hay detalles
               if (esModo === "Editar") {
-                // Filtrar detalles persistidos (IDs que no son generados con uuidv4, asumiendo que son numéricos)
-                const detallesPersistidos = detalle.filter(
-                  (det) => det.ID && !String(det.ID).includes("-") // Convertir ID a string para usar includes
-                );
+                const hayVigente =
+                  Array.isArray(detalle) && detalle.some(d => d?.FLG_ELIM !== 1); // undefined cuenta como vigente
 
-                // Validar si hay al menos un detalle persistido
-                if (detallesPersistidos.length === 0) {
-                  showError("Debe existir al menos un detalle registrado en el sistema para cancelar en modo edición.");
-                  setLoading(false); // Aseguramos que no quede en estado de carga
-                  return; // Salir si no hay detalles válidos
+                if (!hayVigente) {
+                  showError("Debe existir al menos un detalle vigente (no eliminado) para cancelar en modo edición.");
+                  setLoading(false);
+                  return;
                 }
               }
 
@@ -769,16 +769,13 @@ function FormularioRD() {
               onClick={() => {
                 // Validar si hay detalles
                 if (esModo === "Editar") {
-                  // Filtrar detalles persistidos (IDs que no son generados con uuidv4, asumiendo que son numéricos)
-                  const detallesPersistidos = detalle.filter(
-                    (det) => det.ID && !String(det.ID).includes("-") // Convertir ID a string para usar includes
-                  );
+                  const hayVigente =
+                    Array.isArray(detalle) && detalle.some(d => d?.FLG_ELIM !== 1);
 
-                  // Validar si hay al menos un detalle persistido
-                  if (detallesPersistidos.length === 0) {
-                    showError("Debe existir al menos un detalle registrado en el sistema para cancelar en modo edición.");
-                    setLoading(false); // Aseguramos que no quede en estado de carga
-                    return; // Salir si no hay detalles válidos
+                  if (!hayVigente) {
+                    showError("Debe existir al menos un detalle vigente (no eliminado) para cancelar en modo edición.");
+                    setLoading(false);
+                    return;
                   }
                 }
 
