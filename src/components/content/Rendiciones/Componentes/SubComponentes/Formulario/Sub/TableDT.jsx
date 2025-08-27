@@ -283,37 +283,38 @@ export default function TableDT({
               No hay documentos registrados para esta rendición
             </div>
           }
+          className="p-datatable-gridlines"
         >
           <Column
             header="#"
-            headerStyle={{ width: "3rem" }}
+            headerStyle={{ width: "3rem", textAlign: "center" }}
             body={(data, options) => options.rowIndex + 1}
           ></Column>
           {esEditable && (
             <Column
               selectionMode="multiple"
-              headerStyle={{ width: '3rem' }}
+              headerStyle={{ width: '3rem', textAlign: "center" }}
             />
           )}
           <Column
             field='STR_TIPO_DOC.name'
             header="Tipo de comprobante"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
           ></Column>
           <Column
             field='STR_NUM_COMPROBANTE'
             header="Número de comprobante"
-            style={{ width: "10rem" }}
+            style={{ width: "10rem", textAlign: "center" }}
           ></Column>
           <Column
             field='STR_FECHA_DOC'
             header="Fecha de comprobante"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
           ></Column>
           <Column
             field="STR_TOTALDOC"
             header="Monto Base"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
             body={(rowData) => {
               const moneda = rowData?.STR_MONEDA?.id ?? 'PEN';
               const monto = rowData?.STR_TOTALDOC || 0;
@@ -323,7 +324,7 @@ export default function TableDT({
           <Column
             field="STR_TOTALDOC_CONVERTIDO"
             header="Monto Rendido"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
             body={(rowData) => {
               const monedaRendicion = rendicion?.STR_MONEDA?.id ?? 'PEN';
               const montoConvertido = rowData?.STR_TOTALDOC_CONVERTIDO || 0;
@@ -333,17 +334,17 @@ export default function TableDT({
           <Column
             field='STR_PROVEEDOR.CardName'
             header="Proveedor"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
           ></Column>
           <Column
             field='STR_COMENTARIOS'
             header="Comentario"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
             body={comentarioBodyTemplate}
           ></Column>
           <Column
             header="Acciones"
-            style={{ width: "3rem" }}
+            style={{ width: "3rem", textAlign: "center" }}
             body={(rowData) => actionverDoc(rowData, rowData)}
             exportable={false}
             frozen

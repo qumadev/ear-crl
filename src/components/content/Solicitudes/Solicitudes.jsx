@@ -706,6 +706,7 @@ function Solicitudes({
           </div>
         }
         cellStyle={{ border: '5px solid #ddd' }}
+        className="p-datatable-gridlines"
       >
         <Column
           header="#"
@@ -715,7 +716,7 @@ function Solicitudes({
         <Column
           field="ID"
           header="Código"
-          style={{ width: "3rem" }}
+          style={{ width: "3rem", textAlign: "center" }}
           className="font-bold"
           bodyClassName="text-center"
         ></Column>
@@ -727,69 +728,69 @@ function Solicitudes({
         <Column
           field="STR_FECHAREGIS"
           header="Fecha de Solicitud"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={fecBodyTemplate}
         ></Column>
         <Column
           header="Tipo"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           body={(rowData) => rowData.STR_MOTIVORENDICION?.name}
         ></Column>
         <Column
           header="Rango fecha del evento"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={fechasEventoConcatenadas}
         ></Column>
         <Column
           header="Motivo"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           body={(rowData) => rowData.STR_TIPORENDICION?.name}
         ></Column>
         <Column
           field="STR_EMPLDASIG_NOMBRE"
           header="Empleado Asignado"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_TOTALSOLICITADO"
           body={priceBodyTemplate}
           header="Monto Solicitado"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           header="Presupuestado"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={presupuestadoBodyTemplate}
         ></Column>
         <Column
           header="Proyecto"
           field="STR_PROYECTO.name"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
         ></Column>
         <Column
           header="Centro de Costo (CeCo)"
           field="STR_CENTRO_COSTO.name"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
         ></Column>
         <Column
           header="N° de cuenta corriente y/o CCI"
           field="STR_CCI"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
         ></Column>
         <Column
           header="N° DNI, pasaporte, RUC o CE"
           field="STR_TIPO_IDENTIFICACION"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
         ></Column>
         <Column
           header="Comentario"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={comentarioBodyTemplate}
         />
         <Column
           field="STR_ESTADO_INFO"
           header="Estado"
-          style={{ minWidth: "9rem" }}
+          style={{ minWidth: "9rem", textAlign: "center" }}
           body={statusBodyTemplate}
         ></Column>
         {/* <Column
@@ -800,7 +801,7 @@ function Solicitudes({
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         // frozen={true}
         // alignFrozen="right"
         ></Column>
@@ -808,7 +809,7 @@ function Solicitudes({
           header="Acciones"
           body={actionBodyTemplate}
           exportable={false}
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           // frozen={true}
           rowSpan={3}
         // alignFrozen="right"

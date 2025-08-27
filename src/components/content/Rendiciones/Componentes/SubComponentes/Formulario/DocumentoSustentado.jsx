@@ -1408,17 +1408,18 @@ function DocumentoSustentado({
 							</div>
 						}
 						footerColumnGroup={footerGroup}
+						className="p-datatable-gridlines"
 					>
 						<Column
 							header="N°"
-							headerStyle={{ width: "3rem" }}
+							headerStyle={{ width: "3rem", textAlign: "center" }}
 							body={(data, options) => options.rowIndex + 1}
 						>
 						</Column>
 						{!esModoValidate && usuario.rol?.id == 1 && true ?
 							<Column
 								header="Acciones"
-								headerStyle={{ width: "3rem" }}
+								headerStyle={{ width: "3rem", textAlign: "center" }}
 								body={(rowData /*, { rowIndex } */) => (  // Accedemos a rowIndex
 									<React.Fragment>
 										<Button
@@ -1445,57 +1446,57 @@ function DocumentoSustentado({
 						<Column
 							field="Cod.ItemCode"
 							header="Cod. Articulo/Servicio"
-							style={{ width: "3rem" }}
+							style={{ width: "3rem", textAlign: "center" }}
 							className="font-bold"
 						></Column>
 						<Column
 							field="Cod.ItemName"
 							header="Concepto"
-							style={{ minWidth: "12rem" }}
+							style={{ minWidth: "12rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="Almacen"
 							header="Almacen"
-							style={{ minWidth: "8rem" }}
+							style={{ minWidth: "8rem", textAlign: "center" }}
 						// body={statusBodyTemplate}
 						></Column>
 						<Column
 							field="Proyecto.name"
 							header="Proyecto"
-							style={{ minWidth: "5rem" }}
+							style={{ minWidth: "5rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="UnidadNegocio.name"
 							header="Unidad de Negocio"
-							style={{ minWidth: "8rem" }}
+							style={{ minWidth: "8rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="Filial.name"
 							header="Filial"
-							style={{ minWidth: "10rem" }}
+							style={{ minWidth: "10rem", textAlign: "center" }}
 						// body={fecBodyTemplate}
 						></Column>
 						<Column
 							field="Areas.name"
 							// body={priceBodyTemplate}
 							header="Área"
-							style={{ minWidth: "12rem" }}
+							style={{ minWidth: "12rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="CentroCosto.name"
 							header="Centro Costo"
-							style={{ minWidth: "10rem" }}
+							style={{ minWidth: "10rem", textAlign: "center" }}
 						// body={fecBodyTemplate}
 						></Column>
 						<Column
 							field="IndImpuesto.name"
 							header="Ind. Impuesto"
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="Precio"
 							header="Precio"
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 							body={(rowData) => {
 								const precio = parseFloat(rowData.Precio);
 								return !isNaN(precio) ? precio.toFixed(2) : "0.00";
@@ -1504,12 +1505,12 @@ function DocumentoSustentado({
 						<Column
 							field="Cantidad"
 							header="Cantidad"
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 						></Column>
 						<Column
 							field="Impuesto"
 							header="Impuesto"
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 						></Column>
 						<Column
 							//field="Cantidad*Precio"
@@ -1518,11 +1519,11 @@ function DocumentoSustentado({
 								const subtotal = rowData.Cantidad * rowData.Precio;
 								return subtotal.toFixed(2);
 							}}
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 						></Column>
 						<Column
 							header="Total Detalle"
-							style={{ minWidth: "7rem" }}
+							style={{ minWidth: "7rem", textAlign: "center" }}
 							body={(rowData) => {
 								const subtotal = rowData.Cantidad && rowData.Precio ? parseFloat(rowData.Cantidad) * parseFloat(rowData.Precio) : 0;
 								const impuesto = rowData.Impuesto ? parseFloat(rowData.Impuesto) : 0;

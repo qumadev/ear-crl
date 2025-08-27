@@ -817,101 +817,102 @@ function Rendiciones({
             No se encontraron rendiciones registradas
           </div>
         }
+        className="p-datatable-gridlines"
       >
         <Column
           header="#"
-          headerStyle={{ width: "3rem" }}
+          headerStyle={{ width: "3rem", textAlign: "center" }}
           body={(data, options) => options.rowIndex + 1}
         ></Column>
         <Column
           field="ID"
           header="Código"
-          style={{ width: "3rem" }}
+          style={{ width: "3rem", textAlign: "center" }}
           className="font-bold"
           bodyClassName="text-center"
         ></Column>
         <Column
           field="STR_NRRENDICION"
           header="N° de la Rendición"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_SOLICITUD"
           header="N° de la Solicitud"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_FECHAREGIS"
           header="Fecha de Solicitud"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           body={fecBodyTemplate}
         ></Column>
         <Column
           field="STR_FECHAREGIS"
           header="Fecha de Rendición"
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           body={fecBodyTemplate}
         ></Column>
         <Column
           header="Rango fecha del evento"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={fechasEventoConcatenadas}
         >
         </Column>
         <Column
           field="STR_EMPLDASIG_NOMBRE"
           header="Empleado Asignado"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_CENTRO_COSTO.name"
           header="Centro de Costo (CeCo)"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_PROYECTO.name"
           header="Proyecto"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
         >
         </Column>
         <Column
           field="STR_TIPO_RENDICION.name"
           header="Tipo Solicitud"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
         ></Column>
         <Column
           header="Comentario Solicitud"
-          style={{ minWidth: "15rem" }}
+          style={{ minWidth: "15rem", textAlign: "center" }}
           body={comentarioSlctdTemplate}
         ></Column>
         <Column
           field="STR_TOTALAPERTURA"
           body={priceBodySolicitudTemplate}
           header="Monto a Rendir"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_TOTALRENDIDO"
           body={priceBodyTemplate}
           header="Monto Rendido"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_TOTALAPERTURA"
           body={priceDiferenciaTemplate}
           header="Diferencia"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           field="STR_ESTADO"
           header="Estado"
-          style={{ minWidth: "8rem" }}
+          style={{ minWidth: "8rem", textAlign: "center" }}
           body={statusBodyTemplate}
         ></Column>
         <Column
           field="STR_NRCARGA"
           header="DocNum"
-          style={{ minWidth: "7rem" }}
+          style={{ minWidth: "7rem", textAlign: "center" }}
         ></Column>
         {/* <Column
           field="STR_DOCENTRY"
@@ -921,14 +922,14 @@ function Rendiciones({
         <Column
           field="STR_MOTIVOMIGR"
           header="Mensaje de Migración"
-          style={{ minWidth: "12rem" }}
+          style={{ minWidth: "12rem", textAlign: "center" }}
         ></Column>
         <Column
           header="Acciones"
           body={actionBodyTemplate}
           // body={actionBodyTemplate}
           exportable={false}
-          style={{ minWidth: "10rem" }}
+          style={{ minWidth: "10rem", textAlign: "center" }}
           frozen
           alignFrozen="right"
         ></Column>

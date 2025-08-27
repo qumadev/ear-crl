@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import SideBar from "./subpartials/SideBar";
-import { Button } from "primereact/button";
-import { Avatar } from "primereact/avatar";
-import { Ripple } from "primereact/Ripple";
-import { StyleClass } from "primereact/StyleClass";
 import { Sidebar } from "primereact/sidebar";
 
 function Modulos({
@@ -15,15 +11,15 @@ function Modulos({
   return (
     <>
       <div
-        className={`fixed flex w-18rem z-5 overflow-y-auto  bg-white border-round-lg shadow-1 ${
-          !SideBarActive ? "-translate-x-100" : ""
-        } layout_modulos `}
+        className={`fixed flex z-5 overflow-y-auto bg-white border-round-lg shadow-1 ${!SideBarActive ? "-translate-x-100" : ""
+          } layout_modulos `}
         style={{
           top: "7rem",
           left: "2rem",
           height: "calc(100vh - 9rem)",
           transition: "transform .2s, left .2s",
           padding: ".5rem 1.5rem",
+          width: "240px"   // ancho fijo
         }}
       >
         <SideBar />
@@ -34,7 +30,7 @@ function Modulos({
           className="layout_menu"
           visible={!SideBarActive}
           onHide={() => setSideBarActive(!SideBarActive)}
-          content={({}) => (
+          content={({ }) => (
             <div
               className={`fixed flex w-18rem z-5 overflow-y-auto  bg-white `}
               style={{
