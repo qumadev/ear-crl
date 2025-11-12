@@ -195,40 +195,52 @@ export default function FormDT({ editable, totalRedondeado,
   const [loadingReversion, setLoadingReversion] = useState(false);
   const [loadingExport, setLoadingExport] = useState(false);
 
+  // async function ValidacionEnvio() {
+  //   const todosValidados = rendicion.documentos.every(
+  //     (doc) => doc.STR_VALIDA_SUNAT === true
+  //   );
+  //   if (true) {
+
+  //     let todosDocumentosValidos = true;
+
+  //     // setLoadingBtn(true);
+
+  //     for (const e of rendicion.documentos) {
+  //       try {
+  //         const response = await validacionDocumento(e.ID);
+  //         if (response.status !== 200) {
+  //           showError(response.Message);
+  //           todosDocumentosValidos = false;
+  //         }
+  //       } catch (error) {
+  //         showError(error.response.data.Message);
+  //         todosDocumentosValidos = false;
+  //       }
+  //     }
+
+  //     if (todosDocumentosValidos) {
+  //       confirmarDiferenciaMontos()
+  //       //confirm1();
+  //     } else {
+  //       // setLoadingBtn(false); // Cancelamos loading si hubo error
+  //     }
+  //   } else {
+  //     showError("Tienes que tener todos los documentos validados ante SUNAT");
+  //     setLoadingBtn(false);
+  //   }
+  // }
+
   async function ValidacionEnvio() {
-    const todosValidados = rendicion.documentos.every(
-      (doc) => doc.STR_VALIDA_SUNAT === true
-    );
-    if (true) {
-
-      let todosDocumentosValidos = true;
-
-      // setLoadingBtn(true);
-
-      for (const e of rendicion.documentos) {
-        try {
-          const response = await validacionDocumento(e.ID);
-          if (response.status !== 200) {
-            showError(response.Message);
-            todosDocumentosValidos = false;
-          }
-        } catch (error) {
-          showError(error.response.data.Message);
-          todosDocumentosValidos = false;
-        }
-      }
-
-      if (todosDocumentosValidos) {
-        confirmarDiferenciaMontos()
-        //confirm1();
-      } else {
-        // setLoadingBtn(false); // Cancelamos loading si hubo error
-      }
-    } else {
-      showError("Tienes que tener todos los documentos validados ante SUNAT");
+    try {
+      // Omite toda validación ante SUNAT o validaciónDocumento
+      confirmarDiferenciaMontos();
+    } catch (error) {
+      console.error("Error al ejecutar ValidacionEnvio:", error);
+    } finally {
       setLoadingBtn(false);
     }
   }
+
   const leftToolbarTemplate = () => {
     return (
       <div className="">
